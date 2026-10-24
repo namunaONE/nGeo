@@ -7,12 +7,12 @@ package adheres to [Semantic Versioning](https://semver.org/).
 ## 2.8.0 — 2026-10-24
 
 The boundaries release. Palika polygons ship again — this time as pure-Dart
-data inside the package: 86.7 KB for all 753 palikas, no assets, no
+data inside the package: 91.4 KB for all 753 palikas, no assets, no
 downloads, no runtime dependencies.
 
 ### Added
 - **`lib/src/geo/palika_boundaries.dart`** — every palika boundary as a
-  generated Dart literal (86.7 KB, under the 100 KB budget pinned in tests).
+  generated Dart literal (91.4 KB, under the 100 KB budget pinned in tests).
   Coordinates are quantised to 1e-4 degrees (~11 m) and stored as
   zigzag-VLQ deltas in format version 1. The round trip against
   `docs/palika-boundaries.geojson` is bit-exact — nothing is simplified.
@@ -51,7 +51,7 @@ downloads, no runtime dependencies.
   it violated RFC 7946 on 4,477 of 4,478 rings and could not be verified;
   this one is reproducible from the pinned upstream commit, its rings are
   closed, its join to the roster is measured and reported, and the size
-  cost is honest: ~87 KB of Dart for all 753 palikas.
+  cost is honest: ~91 KB of Dart for all 753 palikas.
 
 ## 2.7.3 — 2026-10-15
 

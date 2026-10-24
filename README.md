@@ -32,7 +32,7 @@ Pure Dart package. Zero runtime dependencies. Data ships in the box.
 | **Ward counts** | 745/753 palikas with verified ward counts; declared vs substantiated totals reported side by side; 8 documented roster-defect gaps |
 | **Administrative attributes** | District HQ, area and website (77/77); province capital, area and website (7/7); palika website/email/phone and postal codes |
 | **Map coordinates** | 726/753 palikas with approximate centroids (`lat`/`lng` + `geoSource`); `hasCoordinates`, `whereMapped` |
-| **Boundary polygons** | All 753 palika boundaries as pure-Dart data (~87 KB, zero assets/downloads); 746/753 joined to the roster, 7 published separately; lossless ~11 m quantisation |
+| **Boundary polygons** | All 753 palika boundaries as pure-Dart data (~91 KB, zero assets/downloads); 746/753 joined to the roster, 7 published separately; lossless ~11 m quantisation |
 | **Type-safe models** | `Province`, `District`, `LocalBody`, `LocalBodyType`, `CbsCodeConfidence` enums |
 | **Hierarchical queries** | Navigate province → district → local body with typed accessors |
 | **Typed search** | Disambiguates duplicate names by district/province context, by `fullPath`, or by district-scoped lookup |
