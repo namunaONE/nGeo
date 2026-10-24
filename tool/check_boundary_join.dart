@@ -369,8 +369,7 @@ void main() {
     problems.add('rows: ${rows.length} (expected $expectedRows)');
   }
   if (features.length != expectedFeatures) {
-    problems.add(
-        'features: ${features.length} (expected $expectedFeatures)');
+    problems.add('features: ${features.length} (expected $expectedFeatures)');
   }
   if (joinedCount != expectedJoins) {
     problems.add('joined: $joinedCount (expected $expectedJoins)');
