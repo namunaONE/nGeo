@@ -52,8 +52,16 @@ jobs:
               # language version applies), then diff against the original.
               tmp=".fmt-check-tmp.dart"
               cp "$f" "$tmp"
-              dart format "$tmp" >/dev/null 2>&1
-              msg="$(diff -u "$f" "$tmp" | head -c 500 || true)"
+              # A file dart format cannot parse makes it exit 65. Under the
+              # step shell default `bash -e`, that unguarded call aborted this
+              # loop right here and filed a bare, file-less "exit code 65" -
+              # the exact silence this annotation loop exists to prevent.
+              # Capture the formatter complaint and report it like a diff.
+              if fmt_out="$(dart format "$tmp" 2>&1)"; then
+                msg="$(diff -u "$f" "$tmp" | head -c 500 || true)"
+              else
+                msg="dart format could not process this file: ${fmt_out:0:400}"
+              fi
               rm -f "$tmp"
               msg="${msg//%/%25}"
               msg="${msg//$'\r'/%0D}"
