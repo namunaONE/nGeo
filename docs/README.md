@@ -5,7 +5,7 @@ Static documentation site deployed via GitHub Pages from `docs/`.
 - **Live:** https://namunaONE.github.io/Nepal-Local-Government-Data/
 - **Pages:** `index.html` (landing), `api.html` (reference),
   `explorer.html` (interactive table + centroid map over `data.json`),
-  `brand.html` (Brand System v2 showcase over `brand-tokens.css`)
+  `brand.html` (Design System v3 showcase over `brand-tokens.css`)
 - **Assets:** `logo.svg` (icon), `logo-full.svg` (icon + wordmark),
   `favicon.svg`, `styles.css`, `app.js`, `data.json`
 - **Cache policy:** asset URLs carry `?v=N` (bump on every visual/data
@@ -15,7 +15,7 @@ Static documentation site deployed via GitHub Pages from `docs/`.
 
 ## Design system
 
-`styles.css` is the single source of truth (Design System v1.1):
+`styles.css` is the single source of truth (Design System v1.1, palette remapped to Design System v3 — accessible blue `#1D4ED8` primary, growth green `#4FD166` accent, brand blue `#3B82F6` for large graphics):
 
 1. **Primitive tokens** — palette scales (`--slate-*`, `--nepal-*`,
    status scales). Never use directly in components.
@@ -57,6 +57,9 @@ Dark mode: `html.dark` class (JS toggle + `localStorage`), with
   media fallback for no-JS.
 - Header uses `logo.svg` + stacked wordmark; hero uses `logo-full.svg`;
   footer reuses `logo.svg`.
+- v3 keeps the logo unchanged by design — the double-pennon crimson
+  `#DC143C` × Nepal blue `#003893` is national symbolism, not the
+  product palette.
 
 ## AI docs (llms.txt)
 

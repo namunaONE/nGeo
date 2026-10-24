@@ -3,8 +3,8 @@
 <head>
 <meta charset="utf-8">
 <meta name="viewport" content="width=device-width, initial-scale=1">
-<title>Brand System v2 — Himalayan Trust × Everest Growth</title>
-<link rel="stylesheet" href="styles.css">
+<title>Design System v3 — Himalayan Trust × Everest Growth</title>
+<link rel="stylesheet" href="styles.css?v=5">
 <link rel="stylesheet" href="brand-tokens.css">
 <style>
 .swatch-grid{display:grid;grid-template-columns:repeat(auto-fill,minmax(150px,1fr));gap:12px;margin:16px 0}
@@ -24,7 +24,7 @@
 </head>
 <body>
 <header class="header"><div class="header-inner"><nav class="nav container">
-<a class="logo" href="index.html"><span class="logo-text"><span class="logo-title">nepal_admin_api</span><span class="logo-sub">Brand System v2</span></span></a>
+<a class="logo" href="index.html"><span class="logo-text"><span class="logo-title">nepal_admin_api</span><span class="logo-sub">Design System v3</span></span></a>
 <div class="nav-links"><a class="nav-link" href="index.html">Home</a><a class="nav-link active" href="brand.html">Brand</a><a class="nav-link" href="api.html">API</a><a class="nav-link" href="explorer.html">Explorer</a></div>
 <div class="nav-actions"><button class="theme-toggle" id="themeToggle" aria-label="Toggle theme">◐</button></div>
 </nav></div></header>
@@ -32,68 +32,74 @@
 <main class="container">
 <section class="hero-demo brand-hero">
 <h1>Himalayan Trust × Everest Growth</h1>
-<p>Primary seed <code>#002C6D</code> (navy depth) + Secondary seed <code>#4FD166</code> (growth green). Material 3 tonalSpot, dual-seed premium mapping.</p>
-<div class="cluster"><a class="btn btn-primary" href="#roles">M3 roles</a><a class="btn btn-brand-green" href="#tonal">Full tonal</a><span class="badge-verified badge">✓ VERIFIED DUALLY-ATTESTED</span></div>
+<p>Brand blue <code>#3B82F6</code> + brand green <code>#4FD166</code> are accents; accessible blue <code>#1D4ED8</code> (6.70:1) and accessible green <code>#15803D</code> (5.02:1) carry actions and text. Material 3 seed + override, three-layer tokens.</p>
+<div class="cluster"><a class="btn btn-primary" href="#roles">M3 roles</a><a class="btn btn-brand-green" href="#ramps">Full ramps</a><span class="badge-verified badge">✓ CBS CODES · CHECKED · 5 SOURCES</span></div>
 </section>
 
 <section id="roles">
 <h2>1 · M3 roles (use these, never raw tones)</h2>
 <div class="table-scroll"><table class="role-table">
 <tr><th>Role</th><th>Light</th><th>Dark</th><th>Use</th></tr>
-<tr><td><span class="chip" style="background:#475D92"></span>primary / onPrimary</td><td><code>#475D92 / #FFFFFF</code></td><td><code>#B0C6FF / #152E60</code></td><td>CTA, links, FAB, focus</td></tr>
-<tr><td><span class="chip" style="background:#D9E2FF"></span>primaryContainer</td><td><code>#D9E2FF / #2E4578</code></td><td><code>#2E4578 / #D9E2FF</code></td><td>Highlight sections</td></tr>
-<tr><td><span class="chip" style="background:#006E27"></span>secondary ★ brand</td><td><code>#006E27 / #FFFFFF</code></td><td><code>#5EE072 / #003910</code></td><td>Verified, progress, filters</td></tr>
-<tr><td><span class="chip" style="background:#7CFD8C"></span>secondaryContainer ★</td><td><code>#7CFD8C / #002107</code></td><td><code>#00531B / #EBFFE6</code></td><td>Badges (dark text on neon!)</td></tr>
-<tr><td><span class="chip" style="background:#725572"></span>tertiary</td><td><code>#725572 / #FFFFFF</code></td><td><code>#E0BBDE / #412742</code></td><td>Maps, illustrations</td></tr>
-<tr><td><span class="chip" style="background:#BA1A1A"></span>error</td><td><code>#BA1A1A / #FFFFFF</code></td><td><code>#FFB4AB / #690005</code></td><td>Errors only</td></tr>
-<tr><td><span class="chip" style="background:#FAF8FF;border-color:#C5C6D0"></span>surface</td><td><code>#FAF8FF / #1A1B20</code></td><td><code>#121318 / #E2E2E9</code></td><td>Page bg + body text</td></tr>
-<tr><td><span class="chip" style="background:#EEEDF4"></span>containers</td><td><code>#FFFFFF→#E2E2E9</code> 5 steps</td><td><code>#0C0E13→#33353A</code> 5 steps</td><td>Card layering lowest→highest</td></tr>
+<tr><td><span class="chip" style="background:#1D4ED8"></span>primary / onPrimary</td><td><code>#1D4ED8 / #FFFFFF</code></td><td><code>#93C5FD / #0B1220</code></td><td>CTA, links, FAB, focus</td></tr>
+<tr><td><span class="chip" style="background:#EFF6FF"></span>primaryContainer</td><td><code>#EFF6FF / #1E3A8A</code></td><td><code>#1E3A8A / #DBEAFE</code></td><td>Highlight sections, chips</td></tr>
+<tr><td><span class="chip" style="background:#15803D"></span>secondary ★</td><td><code>#15803D / #FFFFFF</code></td><td><code>#86EFAC / #0B1220</code></td><td>Success, attestation, progress</td></tr>
+<tr><td><span class="chip" style="background:#F0FDF4"></span>secondaryContainer ★</td><td><code>#F0FDF4 / #14532D</code></td><td><code>#14532D / #DCFCE7</code></td><td>Badges, selected filters</td></tr>
+<tr><td><span class="chip" style="background:#3B82F6"></span>tertiary (brand blue)</td><td><code>#3B82F6 / #0B1220</code></td><td><code>#60A5FA / #0B1220</code></td><td>Large graphics, selected states</td></tr>
+<tr><td><span class="chip" style="background:#B91C1C"></span>error</td><td><code>#B91C1C / #FFFFFF</code></td><td><code>#FCA5A5 / #0B1220</code></td><td>Errors only</td></tr>
+<tr><td><span class="chip" style="background:#FAFAF9;border-color:#E7E5E4"></span>surface</td><td><code>#FAFAF9 / #1C1917</code></td><td><code>#0C0A09 / #FAFAF9</code></td><td>Page bg + body text</td></tr>
+<tr><td><span class="chip" style="background:#F5F5F4"></span>containers</td><td><code>#FFFFFF→#D6D3D1</code> 5 steps</td><td><code>#0C0A09→#57534E</code> 5 steps</td><td>Card layering lowest→highest</td></tr>
 </table></div>
-<p>★ = premium override: Flutter default secondary would be grey <code>#575E71</code>. Verified: <code>secondary: Color(0xFF4FD166)</code> alone uses raw green (white text fails) — <code>example/brand_theme.dart</code> applies <code>copyWith</code> with tonal roles.</p>
+<p>★ = premium override: the blue seed generates a muted blue-grey secondary by default; v3 maps secondary to accessible green <code>#15803D</code>. Brand green <code>#4FD166</code> stays fill-only — 1.97:1 on white, never text. Brand blue <code>#3B82F6</code> (3.68:1 on white) is large-graphics/UI only. <code>example/brand_theme.dart</code> applies <code>copyWith</code>.</p>
 </section>
 
-<section id="tonal">
-<h2>2 · Full tonal palettes</h2>
-<h3>Primary — navy #002C6D (c36)</h3>
+<section id="ramps">
+<h2>2 · Full ramps (primitives — design-system internals only)</h2>
+<h3>Blue — brand #3B82F6 · accessible #1D4ED8</h3>
 <div class="tone-row" id="pRow"></div>
-<h3>Secondary — green #4FD166 raw (c68) ★ used for secondary roles</h3>
+<h3>Green — brand #4FD166 · accessible #15803D</h3>
 <div class="tone-row" id="gRow"></div>
-<h3>Neutral — surfaces (c6) · NeutralVariant — borders (c8)</h3>
+<h3>Stone — surfaces &amp; borders</h3>
 <div class="tone-row" id="nRow"></div>
-<h3>Tertiary plum · Error red</h3>
+<h3>Status — amber &amp; red</h3>
 <div class="tone-row" id="tRow"></div>
 </section>
 
 <section>
 <h2>3 · Components</h2>
 <div class="grid-auto">
-<div class="card card-premium"><h3>Premium card</h3><p>Lowest surface + navy glow. Borders use <code>outlineVariant</code>, never pure grey.</p><div class="cluster"><span class="badge">NAVY BADGE</span><span class="badge-verified badge">✓ GREEN VERIFIED</span></div></div>
-<div class="card"><h3>Actions</h3><div class="cluster"><button class="btn btn-primary">Navy primary</button><button class="btn btn-brand-green">Green secondary</button><button class="btn btn-secondary">Surface</button></div></div>
+<div class="card card-premium"><h3>Deep card</h3><p>Tonal surface + 1px <code>outlineVariant</code> border + soft glow. Borders over heavy shadows — cheap on low-end devices, keeps text contrast stable.</p><div class="cluster"><span class="badge">BLUE BADGE</span><span class="badge-verified badge">✓ CBS code · checked 11 Oct 2026</span></div></div>
+<div class="card"><h3>Actions</h3><div class="cluster"><button class="btn btn-primary">Blue primary</button><button class="btn btn-brand-green">Green secondary</button><button class="btn btn-secondary">Surface</button><button class="btn btn-ghost">Ghost</button></div></div>
+<div class="card"><h3>Trust labels</h3><p>Never a bare checkmark — icon + text + scope + date. Verified is scoped information (blue), not success green.</p><div class="cluster"><span class="badge-verified badge">✓ Checked · 2 sources</span><span class="badge badge-neutral">Owner-stated · not checked</span></div></div>
 <div class="card"><h3>Flutter snippet</h3><div class="code-block"><pre><code>ColorScheme.fromSeed(
-  seedColor: Color(0xFF002C6D),
+  seedColor: Color(0xFF3B82F6),
 ).copyWith(
-  secondary: Color(0xFF006E27),
-  secondaryContainer: Color(0xFF7CFD8C),
-  onSecondaryContainer: Color(0xFF002107),
+  primary: Color(0xFF1D4ED8),
+  onPrimary: Colors.white,
+  secondary: Color(0xFF15803D),
+  tertiary: Color(0xFF3B82F6),
+  onTertiary: Color(0xFF0B1220),
 )</code></pre></div></div>
 </div>
 </section>
 
 <section><h2>4 · Rules</h2>
 <ul>
-<li>Navy owns nav, headers, primary buttons, links, focus rings. Green owns success/verified/progress.</li>
-<li>Green container <code>#7CFD8C</code> needs dark text <code>#002107</code> (≈12:1) — never white.</li>
-<li>Hero gradient only: <code>135deg, #002C6D → #004616 → #15A742</code>. 60/30/10.</li>
+<li>Accessible blue <code>#1D4ED8</code> owns primary actions, links, focus rings (6.70:1 with white). Brand blue <code>#3B82F6</code> owns large graphics, fills, selected states — never body text (3.68:1).</li>
+<li>Accessible green <code>#15803D</code> carries success and attestation text (5.02:1). Brand green <code>#4FD166</code> is fill-only with ink text <code>#052E16</code> (7.56:1) — never green on white (1.97:1).</li>
+<li>Never color alone: pair status with icon + text + scope. "Verified" says what was checked, by whom, when.</li>
+<li>Dark ink <code>#0B1220</code> on brand-blue fills (5.09:1); white text only on accessible blue/green.</li>
+<li>Hero gradient only: <code>135deg, #1E3A8A → #1D4ED8 → #15803D</code>. 60/30/10.</li>
+<li>Spacing 4-pt base, 8-pt rhythm · touch targets 48 · radius 12 buttons / 16 cards · motion 150–300ms, reduce-motion respected.</li>
 <li>Full spec: <code>doc/brand-system.md</code> · tokens: <code>brand-tokens.css</code> · Flutter: <code>example/brand_theme.dart</code>.</li>
 </ul></section>
 </main>
 
 <script>
 const T={
-p:[["0","#000000","#fff"],["5","#000F30","#fff"],["10","#001945","#fff"],["20","#152E60","#fff"],["30","#2E4578","#fff"],["40","#475D92","#fff"],["50","#6076AC","#fff"],["60","#7990C8","#000"],["70","#94AAE4","#000"],["80","#B0C6FF","#000"],["90","#D9E2FF","#000"],["95","#EEF0FF","#000"],["98","#FAF8FF","#000"]],
-g:[["0","#000000","#fff"],["10","#002107","#fff"],["20","#003910","#fff"],["30","#00531B","#fff"],["40","#006E27","#fff"],["50","#008A33","#fff"],["60","#15A742","#000"],["70","#3FC35A","#000"],["80","#5EE072","#000"],["90","#7CFD8C","#000"],["95","#C7FFC4","#000"],["98","#EBFFE6","#000"]],
-n:[["6","#121318","#fff"],["10","#1A1B20","#fff"],["30","#45464C","#fff"],["50","#76777D","#fff"],["80","#C6C6CD","#000"],["90","#E2E2E9","#000"],["95","#F1F0F7","#000"],["98","#FAF8FF","#000"]],
-t:[["20","#412742","#fff"],["40","#725572","#fff"],["80","#E0BBDE","#000"],["90","#FDD7FA","#000"],["40E","#BA1A1A","#fff"],["80E","#FFB4AB","#000"]]};
+p:[["50","#EFF6FF","#1E3A8A"],["100","#DBEAFE","#1E3A8A"],["200","#BFDBFE","#1E3A8A"],["300","#93C5FD","#0B1220"],["400","#60A5FA","#0B1220"],["500","#3B82F6","#0B1220"],["600","#2563EB","#FFFFFF"],["700","#1D4ED8","#FFFFFF"],["800","#1E40AF","#FFFFFF"],["900","#1E3A8A","#FFFFFF"],["950","#172554","#FFFFFF"]],
+g:[["50","#F0FDF4","#14532D"],["100","#DCFCE7","#14532D"],["200","#BBF7D0","#14532D"],["300","#86EFAC","#052E16"],["400","#4ADE80","#052E16"],["500","#4FD166","#052E16"],["600","#16A34A","#052E16"],["700","#15803D","#FFFFFF"],["800","#166534","#FFFFFF"],["900","#14532D","#FFFFFF"],["950","#052E16","#FFFFFF"]],
+n:[["0","#FFFFFF","#1C1917"],["50","#FAFAF9","#1C1917"],["100","#F5F5F4","#1C1917"],["200","#E7E5E4","#1C1917"],["300","#D6D3D1","#1C1917"],["400","#A8A29E","#1C1917"],["600","#57534E","#FFFFFF"],["800","#292524","#FFFFFF"],["900","#1C1917","#FFFFFF"],["950","#0C0A09","#FFFFFF"]],
+t:[["amber800","#92400E","#FFFFFF"],["amber600","#D97706","#FFFFFF"],["amber300","#FCD34D","#1C1917"],["red700","#B91C1C","#FFFFFF"],["red600","#DC2626","#FFFFFF"],["red300","#FCA5A5","#1C1917"]]};
 function row(id,arr){const el=document.getElementById(id);el.innerHTML=arr.map(([t,c,fg])=>`<div class="tone" style="background:${c};color:${fg}"><b>${t}</b>${c}</div>`).join('');}
 row('pRow',T.p);row('gRow',T.g);row('nRow',T.n);row('tRow',T.t);
 const b=document.getElementById('themeToggle');
