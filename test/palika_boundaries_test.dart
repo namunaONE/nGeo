@@ -79,8 +79,8 @@ void main() {
   });
 
   test('lookups are case-insensitive and null for unknown names', () {
-    expect(NepalAdminApi.getLocalBodyBoundary('chitwan', 'bharatpur'),
-        isNotNull);
+    expect(
+        NepalAdminApi.getLocalBodyBoundary('chitwan', 'bharatpur'), isNotNull);
     expect(NepalAdminApi.getLocalBodyBoundary('Chitwan', 'Nowhere'), isNull);
     expect(
       NepalAdminApi.getLocalBodyBoundary('Atlantis', 'Bharatpur'),

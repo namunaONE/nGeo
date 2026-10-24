@@ -205,6 +205,16 @@ void main(List<String> args) {
   // ── 7. Emit the Dart literal ──
   final out = StringBuffer();
   void w(String line) => out.writeln(line);
+
+  /// Emits one map entry, wrapping long values like dart-format does.
+  String entryLine(int indent, String key, String value) {
+    final pad = ' ' * indent;
+    final inline = '$pad$key: $value';
+    if (inline.length <= 80) return inline;
+    final valuePad = ' ' * (indent + 4);
+    return '$pad$key:\n$valuePad$value';
+  }
+
   w('// GENERATED FILE - DO NOT EDIT.');
   w('//');
   w('// Lossless boundary geometry for all 753 local bodies (palikas) of '
@@ -251,7 +261,7 @@ void main(List<String> args) {
       final key = '$district|${rows[i].name}';
       if (f != null && !seen.contains(key)) {
         seen.add(key);
-        entries.add("    '${_esc(rows[i].name)}': '${f.enc}',");
+        entries.add(entryLine(4, "'${_esc(rows[i].name)}'", "'${f.enc}',"));
         emitted++;
       }
       i++;
@@ -274,7 +284,7 @@ void main(List<String> args) {
   } else {
     w('const Map<String, String> kUnmatchedPalikaBoundaries = {');
     for (final f in unmatched) {
-      w("  '${_esc(f.districtId)}|${_esc(f.nameEn)}': '${f.enc}',");
+      w(entryLine(2, "'${_esc(f.districtId)}|${_esc(f.nameEn)}'", "'${f.enc}',"));
     }
     w('};');
   }

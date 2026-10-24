@@ -1155,4 +1155,3 @@ extension LocalBodyListX on List<LocalBody> {
           if (b.cbsCode != null) b.cbsCode!: b,
       };
 }
-
