@@ -223,6 +223,8 @@ function initExplorer() {
       filteredData = [...data];
       window.__explorerByCbs = (cbs) =>
         allData.find(d => String(d.cbsCode) === String(cbs)) || null;
+      // Choropleth boundary join needs the full unfiltered dataset.
+      window.__explorerAll = () => allData;
       populateFilters();
       render();
     })
@@ -401,6 +403,15 @@ function initExplorer() {
   provinceFilter.addEventListener('change', applyFilters);
   districtFilter.addEventListener('change', applyFilters);
   typeFilter.addEventListener('change', applyFilters);
+
+  // Figure-shown-on-the-map metric selector (wards / type / cbs / dots).
+  const metricFilter = document.getElementById('metric-filter');
+  if (metricFilter) {
+    metricFilter.addEventListener('change', () => {
+      setMapMetric(metricFilter.value);
+      render();
+    });
+  }
 }
 
 function debounce(fn, delay) {
@@ -501,10 +512,387 @@ function markerColor(item) {
   return TYPE_COLORS[item.type] || '#64748b';
 }
 
+// ---- Figure shown on the map: palika boundary choropleth ----
+// Boundary geometry: nepali-geo-pro-max (MIT) at a pinned commit, fetched
+// lazily at runtime (jsDelivr first, raw.githubusercontent fallback). If
+// boundaries cannot load, the selector falls back to the dot map, so the
+// explorer always keeps a working figure.
+var PALIKA_BOUNDARIES_URLS = [
+  'https://cdn.jsdelivr.net/gh/l3lackcurtains/nepali-geo-pro-max@117fd0f3d2dabae3bd86bfe9e4c57098ffe56669/src/geo/local-units.geo.ts',
+  'https://raw.githubusercontent.com/l3lackcurtains/nepali-geo-pro-max/117fd0f3d2dabae3bd86bfe9e4c57098ffe56669/src/geo/local-units.geo.ts',
+];
+// data.json rows carry district NAMES; boundary properties carry districtId
+// keys (P#.D##). This map bridges the two. Derived from the boundary data
+// itself (unique-name votes per districtId, cross-checked against row
+// isoCode provinces): 77/77 districts, zero mismatches.
+var DISTRICT_ID_BY_NAME = {
+  Achham: 'P7.D01', Arghakhanchi: 'P5.D01', Baglung: 'P4.D01', Baitadi: 'P7.D02',
+  Bajhang: 'P7.D03', Bajura: 'P7.D04', Banke: 'P5.D02', Bara: 'P2.D01',
+  Bhaktapur: 'P3.D01', Bhojpur: 'P1.D01', Chitwan: 'P3.D02', Dadeldhura: 'P7.D05',
+  Dailekh: 'P6.D01', Dang: 'P5.D04', Darchula: 'P7.D06', Dhading: 'P3.D03',
+  Dhankuta: 'P1.D02', Dhanusha: 'P2.D02', Dolakha: 'P3.D04', Dolpa: 'P6.D02',
+  Doti: 'P7.D07', Gorkha: 'P4.D02', Gulmi: 'P5.D06', Humla: 'P6.D03',
+  Ilam: 'P1.D03', Jajarkot: 'P6.D04', Jhapa: 'P1.D04', Jumla: 'P6.D05',
+  Kailali: 'P7.D08', Kalikot: 'P6.D06', Kanchanpur: 'P7.D09', Kapilvastu: 'P5.D07',
+  Kaski: 'P4.D03', Kathmandu: 'P3.D05', Kavrepalanchok: 'P3.D06', Khotang: 'P1.D05',
+  Lalitpur: 'P3.D07', Lamjung: 'P4.D04', Mahottari: 'P2.D03', Makwanpur: 'P3.D08',
+  Manang: 'P4.D05', Morang: 'P1.D06', Mugu: 'P6.D07', Mustang: 'P4.D06',
+  Myagdi: 'P4.D07', Nawalpur: 'P4.D08', Nuwakot: 'P3.D09', Okhaldhunga: 'P1.D07',
+  Palpa: 'P5.D08', Panchthar: 'P1.D08', 'Parasi (Nawalparasi West)': 'P5.D09',
+  Parbat: 'P4.D09', Parsa: 'P2.D04', Pyuthan: 'P5.D10', Ramechhap: 'P3.D10',
+  Rasuwa: 'P3.D11', Rautahat: 'P2.D05', Rolpa: 'P5.D11', 'Rukum East': 'P5.D05',
+  'Rukum West': 'P6.D10', Rupandehi: 'P5.D12', Salyan: 'P6.D08',
+  Sankhuwasabha: 'P1.D09', Saptari: 'P2.D06', Sarlahi: 'P2.D07',
+  Sindhuli: 'P3.D12', Sindhupalchok: 'P3.D13', Siraha: 'P2.D08',
+  Solukhumbu: 'P1.D10', Sunsari: 'P1.D11', Surkhet: 'P6.D09', Syangja: 'P4.D10',
+  Tanahun: 'P4.D11', Taplejung: 'P1.D12', Terhathum: 'P1.D13', Udayapur: 'P1.D14',
+};
+// What the figure encodes. Wards use the v3 blue ramp (brand green is
+// 1.97:1 on white — fill only, never data-by-text). CBS confidence follows
+// the trust rules: verified is scoped blue, single-source neutral stone,
+// unverified amber.
+var MAP_METRICS = {
+  wards: {
+    label: 'Wards per local level',
+    entries: [
+      { label: '5–9', color: '#DBEAFE' },
+      { label: '10–14', color: '#93C5FD' },
+      { label: '15–19', color: '#3B82F6' },
+      { label: '20–24', color: '#1D4ED8' },
+      { label: '25+', color: '#1E3A8A' },
+      { label: 'n/a', color: '#E7E5E4' },
+    ],
+  },
+  type: {
+    label: 'Local level type',
+    entries: [
+      { label: 'Metro', color: '#dc2626' },
+      { label: 'Sub-metro', color: '#ea580c' },
+      { label: 'Municipality', color: '#2563eb' },
+      { label: 'Rural', color: '#16a34a' },
+    ],
+  },
+  cbs: {
+    label: 'CBS code confidence',
+    entries: [
+      { label: '✓ Verified', color: '#1D4ED8' },
+      { label: '~ Single source', color: '#A8A29E' },
+      { label: '— No code', color: '#D97706' },
+    ],
+  },
+};
+var DOTS_LEGEND_HTML =
+  '<span class="legend-chip"><i class="dot dot-metro"></i>Metro</span>' +
+  '<span class="legend-chip"><i class="dot dot-sub"></i>Sub-metro</span>' +
+  '<span class="legend-chip"><i class="dot dot-mun"></i>Municipality</span>' +
+  '<span class="legend-chip"><i class="dot dot-rural"></i>Rural</span>' +
+  '<span class="legend-chip"><i class="dot dot-unverified"></i>Unverified</span>';
+var _mapMetric = 'wards';
+var _boundaries = null;        // parsed FeatureCollection (753 palikas)
+var _boundariesReady = null;   // in-flight load promise
+var _boundaryByKey = null;     // districtId|normName -> feature
+var _boundaryLayer = null;     // L.geoJSON layer
+var _boundaryDataAdded = false;
+var _activeRows = new Set();
+
+function setMapMetric(metric) {
+  if (metric !== 'dots' && !MAP_METRICS[metric]) return;
+  _mapMetric = metric;
+  renderMapLegend();
+  if (_boundaryLayer) restyleBoundaryLayer();
+}
+
+// Join keys normalize both scripts: lowercase, fold dashes, keep [a-z0-9]
+// and Devanagari, drop official-type suffixes, then collapse spaces so
+// "Kumakh Malika" === "Kumakhmalika". Validated against the boundary
+// source: 592 name joins + 154 point-in-polygon joins = 746/753.
+function normPalikaName(s) {
+  return String(s == null ? '' : s).toLowerCase()
+    .replace(/[\u2013\u2014]/g, '-')
+    .replace(/[^a-z0-9\u0900-\u097F]+/g, ' ')
+    .trim()
+    .replace(/ (rural municipality|municipality|sub metropolis|sub metropolitan city|metropolitan city|metropolis|gaunpalika|nagarpalika|upamahanagarpalika|mahanagarpalika)$/g, '')
+    .replace(/ /g, '');
+}
+
+function districtIdFor(item) {
+  return DISTRICT_ID_BY_NAME[item.district] || '';
+}
+
+function pointInRing(x, y, ring) {
+  var inside = false;
+  for (var i = 0, j = ring.length - 1; i < ring.length; j = i++) {
+    var xi = ring[i][0], yi = ring[i][1];
+    var xj = ring[j][0], yj = ring[j][1];
+    if (((yi > y) !== (yj > y)) && (x < (xj - xi) * (y - yi) / (yj - yi) + xi)) inside = !inside;
+  }
+  return inside;
+}
+
+function pointInGeometry(x, y, geom) {
+  if (!geom) return false;
+  var polys = geom.type === 'Polygon' ? [geom.coordinates]
+    : geom.type === 'MultiPolygon' ? geom.coordinates : [];
+  for (var p = 0; p < polys.length; p++) {
+    var poly = polys[p];
+    if (pointInRing(x, y, poly[0])) {
+      var inHole = false;
+      for (var h = 1; h < poly.length; h++) {
+        if (pointInRing(x, y, poly[h])) { inHole = true; break; }
+      }
+      if (!inHole) return true;
+    }
+  }
+  return false;
+}
+
+// The boundary source is a TS module (export const ... = {...} as const;),
+// not raw JSON: slice the object literal out, then strip the trailing
+// commas the TS style permits.
+function parseBoundaryModule(text) {
+  var eq = text.indexOf('=');
+  var start = text.indexOf('{', eq);
+  var end = text.lastIndexOf('}');
+  if (eq < 0 || start < 0 || end <= start) throw new Error('boundary module shape not recognized');
+  return JSON.parse(text.slice(start, end + 1).replace(/,\s*([\]}])/g, '$1'));
+}
+
+function buildBoundaryIndex(rows) {
+  if (!_boundaries) return;
+  if (!_boundaryByKey) {
+    _boundaryByKey = new Map();
+    for (const f of _boundaries.features) {
+      const p = f.properties || {};
+      const key = (p.districtId || '') + '|' + normPalikaName(p.nameEn);
+      if (!_boundaryByKey.has(key)) _boundaryByKey.set(key, f);
+    }
+  }
+  // 1) name join within the district
+  for (const r of rows) {
+    if (r.__feature) continue;
+    const f = _boundaryByKey.get((districtIdFor(r) || '') + '|' + normPalikaName(r.name));
+    if (f && !f.__row) { r.__feature = f; f.__row = r; }
+  }
+  // 2) centroid-in-own-polygon fallback, same district first
+  for (const r of rows) {
+    if (r.__feature || r.lat == null || r.lng == null) continue;
+    const did = districtIdFor(r) || '';
+    let hit = null;
+    for (const f of _boundaries.features) {
+      if (f.__row) continue;
+      if (did && (f.properties || {}).districtId !== did) continue;
+      if (pointInGeometry(r.lng, r.lat, f.geometry)) { hit = f; break; }
+    }
+    if (!hit) {
+      for (const f of _boundaries.features) {
+        if (f.__row) continue;
+        if (pointInGeometry(r.lng, r.lat, f.geometry)) { hit = f; break; }
+      }
+    }
+    if (hit) { r.__feature = hit; hit.__row = r; }
+  }
+}
+
+function loadBoundaries() {
+  if (_boundaries) return Promise.resolve(_boundaries);
+  if (_boundariesReady) return _boundariesReady;
+  _boundariesReady = (async () => {
+    let lastErr = null;
+    for (const url of PALIKA_BOUNDARIES_URLS) {
+      try {
+        const res = await fetch(url);
+        if (!res.ok) throw new Error('HTTP ' + res.status + ' loading boundaries');
+        const text = await res.text();
+        const fc = parseBoundaryModule(text);
+        if (!fc || !Array.isArray(fc.features) || !fc.features.length) {
+          throw new Error('boundary payload parsed to 0 features');
+        }
+        _boundaries = fc;
+        return fc;
+      } catch (err) {
+        lastErr = err;
+      }
+    }
+    _boundariesReady = null;
+    throw lastErr || new Error('palika boundaries unavailable');
+  })();
+  return _boundariesReady;
+}
+
+// Shared popup for boundaries and dots, so both views tell the same story.
+function itemPopupHtml(item) {
+  const cbs = item.cbsCode != null ? '<code>' + item.cbsCode + '</code>' : '—';
+  const wards = item.wards != null ? item.wards + ' wards' : 'wards n/a';
+  const tier = confidenceMeta(item);
+  const tierShort = { verified: '✓ verified', singleSource: '~ single-source', unverified: '— no code' }[tier.cls];
+  let html = '<strong>' + escapeHtmlAttr(item.name) + '</strong>';
+  if (item.nameNe) html += '<span class="popup-ne">' + escapeHtmlAttr(item.nameNe) + '</span><br>';
+  else html += '<br>';
+  html += escapeHtmlAttr(item.district) + ', ' + escapeHtmlAttr(item.province) + '<br>';
+  html += 'CBS: ' + cbs + ' (' + tierShort + ') · ' + wards;
+  if (item.lat != null && item.lng != null) {
+    html += '<br><span style="color:#64748b;font-size:12px">' +
+      item.lat.toFixed(3) + ', ' + item.lng.toFixed(3) + ' · ' +
+      escapeHtmlAttr(item.geoSource || 'compiled') + '</span>';
+  }
+  return html;
+}
+
+function metricColorFor(item) {
+  if (_mapMetric === 'type') {
+    return TYPE_COLORS[item.type] || '#64748b';
+  }
+  if (_mapMetric === 'cbs') {
+    const tier = confidenceMeta(item);
+    return tier.cls === 'verified' ? '#1D4ED8' : tier.cls === 'singleSource' ? '#A8A29E' : '#D97706';
+  }
+  var w = item.wards;
+  if (w == null) return '#E7E5E4';
+  if (w >= 25) return '#1E3A8A';
+  if (w >= 20) return '#1D4ED8';
+  if (w >= 15) return '#3B82F6';
+  if (w >= 10) return '#93C5FD';
+  return '#DBEAFE';
+}
+
+function boundaryStyle(feature) {
+  const row = feature && feature.__row;
+  const active = row && _activeRows.has(row);
+  if (!row || !active) {
+    // Filtered out (or not matched to a row): dim instead of hide, so the
+    // national figure keeps its context.
+    return { color: '#a8a29e', weight: 0.5, opacity: 0.6, fillColor: '#d6d3d1', fillOpacity: 0.08 };
+  }
+  return { color: '#57534e', weight: 0.8, opacity: 0.9, fillColor: metricColorFor(row), fillOpacity: 0.85 };
+}
+
+function restyleBoundaryLayer() {
+  if (!_boundaryLayer) return;
+  _boundaryLayer.eachLayer((layer) => {
+    if (layer.feature) layer.setStyle(boundaryStyle(layer.feature));
+  });
+}
+
+function boundaryTip(feature) {
+  const p = feature.properties || {};
+  const row = feature.__row;
+  let html = '<strong>' + escapeHtmlAttr(p.nameEn || '') + '</strong>';
+  if (p.nameNe) html += '<span class="popup-ne">' + escapeHtmlAttr(p.nameNe) + '</span>';
+  if (row) {
+    html += '<br>' + escapeHtmlAttr(row.district);
+    if (row.wards != null) html += ' · ' + row.wards + ' wards';
+    const tier = confidenceMeta(row);
+    html += '<br><span style="font-size:11px;color:#64748b">' + escapeHtmlAttr(tier.label) + '</span>';
+  }
+  return html;
+}
+
+function wireBoundaryFeature(feature, layer) {
+  layer.bindTooltip(boundaryTip(feature), {
+    className: 'palika-tip',
+    sticky: true,
+    direction: 'top',
+  });
+  if (feature.__row) {
+    layer.bindPopup(itemPopupHtml(feature.__row));
+  } else {
+    const p = feature.properties || {};
+    layer.bindPopup('<strong>' + escapeHtmlAttr(p.nameEn || 'Palika') + '</strong>' +
+      '<br><span style="color:#64748b;font-size:12px">Boundary not matched to a table row</span>');
+  }
+}
+
+function renderMapLegend() {
+  const el = document.getElementById('map-legend');
+  if (!el) return;
+  if (_mapMetric === 'dots') { el.innerHTML = DOTS_LEGEND_HTML; return; }
+  const m = MAP_METRICS[_mapMetric];
+  if (!m) return;
+  let html = '<span class="legend-title">' + m.label + '</span>';
+  for (const e of m.entries) {
+    html += '<span class="legend-chip"><i class="legend-swatch" style="background:' + e.color + '"></i>' + e.label + '</span>';
+  }
+  el.innerHTML = html;
+}
+
+function updateChoroplethStatus(items) {
+  const status = document.getElementById('map-status');
+  if (!status || !_boundaries) return;
+  let joined = 0, shaded = 0;
+  for (const f of _boundaries.features) {
+    if (f.__row) {
+      joined++;
+      if (_activeRows.has(f.__row)) shaded++;
+    }
+  }
+  let text = shaded + ' of ' + items.length + ' shaded on the map · ' + joined + '/753 boundaries joined';
+  if (items.length > shaded) text += ' · rest table-only (no coordinates or unmatched name)';
+  status.textContent = text;
+}
+
+function syncChoropleth(items) {
+  if (!document.getElementById('map')) return;
+  _activeRows = new Set(items);
+  const status = document.getElementById('map-status');
+  if (status && !_boundaryDataAdded) status.textContent = 'Loading palika boundaries…';
+  ensureMap()
+    .then(() => {
+      if (!_map) return null;
+      return loadBoundaries();
+    })
+    .then((fc) => {
+      if (!fc || !_map) return;
+      if (_map.hasLayer(_cluster)) _map.removeLayer(_cluster);
+      buildBoundaryIndex((window.__explorerAll && window.__explorerAll()) || items);
+      if (!_boundaryLayer) {
+        _boundaryLayer = window.L.geoJSON(null, {
+          style: boundaryStyle,
+          onEachFeature: wireBoundaryFeature,
+        });
+      }
+      if (!_boundaryDataAdded) {
+        _boundaryLayer.addData(_boundaries);
+        _boundaryDataAdded = true;
+        if (!_map.hasLayer(_boundaryLayer)) _map.addLayer(_boundaryLayer);
+        if (!_map.__fitted) {
+          _map.__fitted = true;
+          try { _map.fitBounds(_boundaryLayer.getBounds().pad(0.05)); } catch (e) { /* keep default view */ }
+        }
+      } else if (!_map.hasLayer(_boundaryLayer)) {
+        _map.addLayer(_boundaryLayer);
+      }
+      renderMapLegend();
+      restyleBoundaryLayer();
+      updateChoroplethStatus(items);
+    })
+    .catch((err) => {
+      // Boundaries unfetchable: keep the explorer useful — classic dots.
+      console.error('Boundary load failed:', err);
+      const sel = document.getElementById('metric-filter');
+      if (sel) sel.value = 'dots';
+      _mapMetric = 'dots';
+      renderMapLegend();
+      syncDotsMap(items);
+      const st = document.getElementById('map-status');
+      if (st) st.textContent = 'Boundaries unavailable — showing centroid dots.';
+    });
+}
+
+
 function syncMap(items) {
+  // Dispatcher: render the map per the selected figure metric — the
+  // palika-boundary choropleth (wards / type / cbs) or the classic dots.
+  if (!document.getElementById('map')) return;
+  if (_mapMetric === 'dots') { syncDotsMap(items); return; }
+  syncChoropleth(items);
+}
+
+function syncDotsMap(items) {
   if (!document.getElementById('map')) return;
   ensureMap().then(() => {
     if (!_map || !_cluster) return;
+    if (_boundaryLayer && _map.hasLayer(_boundaryLayer)) _map.removeLayer(_boundaryLayer);
+    if (!_map.hasLayer(_cluster)) _map.addLayer(_cluster);
     _cluster.clearLayers();
     const pts = items.filter(d => d.lat != null && d.lng != null);
     const markers = pts.map((item) => {
@@ -517,17 +905,7 @@ function syncMap(items) {
         fillColor: color,
         fillOpacity: item.cbsCode != null ? 0.85 : 0.2,
       });
-      const cbs = item.cbsCode != null ? `<code>${item.cbsCode}</code>` : '—';
-      const wards = item.wards != null ? `${item.wards} wards` : 'wards n/a';
-      const tier = confidenceMeta(item);
-      const tierShort = { verified: '✓ verified', singleSource: '~ single-source', unverified: '— no code' }[tier.cls];
-      m.bindPopup(
-        `<strong>${escapeHtmlAttr(item.name)}</strong>` +
-        (item.nameNe ? `<span class="popup-ne">${escapeHtmlAttr(item.nameNe)}</span><br>` : '') +
-        `${escapeHtmlAttr(item.district)}, ${escapeHtmlAttr(item.province)}<br>` +
-        `CBS: ${cbs} (${tierShort}) · ${wards}<br>` +
-        `<span style="color:#64748b;font-size:12px">${item.lat.toFixed(3)}, ${item.lng.toFixed(3)} · ${escapeHtmlAttr(item.geoSource || 'compiled')}</span>`
-      );
+      m.bindPopup(itemPopupHtml(item));
       return m;
     });
     _cluster.addLayers(markers);

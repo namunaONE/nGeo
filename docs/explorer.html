@@ -15,7 +15,7 @@
   <title>Data Explorer - Nepal Administrative Data by namunaONE</title>
   <link rel="icon" type="image/svg+xml" href="favicon.svg?v=4">
   <link rel="apple-touch-icon" href="logo.svg?v=4">
-  <link rel="stylesheet" href="styles.css?v=5">
+  <link rel="stylesheet" href="styles.css?v=6">
   <link rel="preconnect" href="https://fonts.googleapis.com">
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
   <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&family=JetBrains+Mono:wght@400;500&display=swap" rel="stylesheet">
@@ -69,16 +69,25 @@
     <div class="container">
       <section style="margin-bottom: 32px;">
         <h1>Data Explorer</h1>
-        <p style="color: var(--color-text-secondary); margin-bottom: 0;">Explore all 753 local bodies with CBS codes, ward counts, filters, search and an interactive centroid map. Data sourced from official CBS/NSO codes (v2.3.0 gains verified ward counts for 745/753 palikas).</p>
+        <p style="color: var(--color-text-secondary); margin-bottom: 0;">Explore all 753 local bodies with CBS codes, ward counts, filters, search and a figure-on-the-map view: all 753 palika boundaries shaded by wards, type, or CBS code confidence. Data sourced from official CBS/NSO codes (v2.3.0 gains verified ward counts for 745/753 palikas).</p>
       </section>
 
-      <section class="map-card" aria-label="Palika centroid map">
+      <section class="map-card" aria-label="Palika figure map">
         <div class="map-head">
           <div>
-            <h2 class="map-title">Centroid map</h2>
+            <h2 class="map-title">Local level map</h2>
             <p class="map-sub" id="map-status" aria-live="polite">Loading map…</p>
           </div>
-          <div class="map-legend" aria-label="Map legend">
+                    <label class="map-figure" for="metric-filter">
+            <span>Figure shown on the map</span>
+            <select id="metric-filter" aria-label="Map metric">
+              <option value="wards" selected>Wards per local level</option>
+              <option value="type">Local level type</option>
+              <option value="cbs">CBS code confidence</option>
+              <option value="dots">Classic centroid dots</option>
+            </select>
+          </label>
+          <div class="map-legend" id="map-legend" aria-label="Map legend">
             <span class="legend-chip"><i class="dot dot-metro"></i>Metro</span>
             <span class="legend-chip"><i class="dot dot-sub"></i>Sub-metro</span>
             <span class="legend-chip"><i class="dot dot-mun"></i>Municipality</span>
@@ -87,7 +96,7 @@
           </div>
         </div>
         <div id="map" class="map" role="application" aria-label="Interactive map of Nepal local bodies"></div>
-        <p class="map-attrib-note">Centroids: open-admin-data vendored extract (see SOURCES). Basemap © <a href="https://www.openstreetmap.org/copyright" target="_blank" rel="noopener">OpenStreetMap</a> contributors.</p>
+        <p class="map-attrib-note">Palika boundaries: nepali-geo-pro-max (MIT) — simplified official map. Centroids: open-admin-data vendored extract (see SOURCES). Basemap © <a href="https://www.openstreetmap.org/copyright" target="_blank" rel="noopener">OpenStreetMap</a> contributors.</p>
       </section>
 
       <div class="explorer-toolbar">
@@ -136,6 +145,6 @@
     </div>
   </footer>
 
-  <script src="app.js?v=4"></script>
+  <script src="app.js?v=5"></script>
 </body>
 </html>
