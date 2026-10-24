@@ -229,10 +229,8 @@ void main() {
 
   test('roster palikas without geometry expose it honestly', () {
     expect(NepalAdminApi.getLocalBodyBoundary('Manang', 'Naraphu'), isNull);
-    final missing = NepalAdminApi
-        .getAllLocalBodies()
-        .where((b) => !b.hasBoundary)
-        .toList();
+    final missing =
+        NepalAdminApi.getAllLocalBodies().where((b) => !b.hasBoundary).toList();
     expect(missing.length, 7);
     for (final b in missing) {
       expect(b.boundary, isNull, reason: '${b.name} should not decode');
