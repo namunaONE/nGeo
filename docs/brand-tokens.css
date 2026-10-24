@@ -1,102 +1,195 @@
 /* ==========================================================================
-   Brand System v2 — Himalayan Trust (#002C6D) x Everest Growth (#4FD166)
-   M3 roles as CSS vars. Import AFTER styles.css:
+   Design System v3 — Himalayan Trust × Everest Growth
+   Brand blue #3B82F6 (accent) · accessible blue #1D4ED8 (primary)
+   Brand green #4FD166 (fill) · accessible green #15803D (success)
+   Import AFTER styles.css:
      <link rel="stylesheet" href="brand-tokens.css">
    Light = :root, Dark = html.dark / [data-theme="dark"]
-   Tones verified via material_color_utilities 0.13.1 (tonalSpot).
+   Contrast pairs measured (doc/brand-system.md §2). Do not use primitives
+   in feature markup; consume --nb-* semantic tokens.
    ========================================================================== */
 
 :root {
   /* ---- Seeds ---- */
-  --brand-navy-seed: #002C6D;
+  --brand-blue-seed: #3B82F6;
   --brand-green-seed: #4FD166;
 
-  /* ---- Primitive tonal: primary (navy, c36) ---- */
-  --p-0:#000000; --p-5:#000F30; --p-10:#001945; --p-15:#062355; --p-20:#152E60;
-  --p-25:#223A6C; --p-30:#2E4578; --p-35:#3A5185; --p-40:#475D92; --p-50:#6076AC;
-  --p-60:#7990C8; --p-70:#94AAE4; --p-80:#B0C6FF; --p-90:#D9E2FF; --p-95:#EEF0FF;
-  --p-98:#FAF8FF; --p-99:#FEFBFF; --p-100:#FFFFFF;
+  /* ---- Primitive ramp: blue ---- */
+  --blue-50:#EFF6FF; --blue-100:#DBEAFE; --blue-200:#BFDBFE; --blue-300:#93C5FD;
+  --blue-400:#60A5FA; --blue-500:#3B82F6; --blue-600:#2563EB; --blue-700:#1D4ED8;
+  --blue-800:#1E40AF; --blue-900:#1E3A8A; --blue-950:#172554;
 
-  /* ---- Primitive tonal: growth green (raw #4FD166, h148 c68) ---- */
-  --g-0:#000000; --g-5:#001503; --g-10:#002107; --g-15:#002D0B; --g-20:#003910;
-  --g-25:#004616; --g-30:#00531B; --g-35:#006021; --g-40:#006E27; --g-50:#008A33;
-  --g-60:#15A742; --g-70:#3FC35A; --g-80:#5EE072; --g-90:#7CFD8C; --g-95:#C7FFC4;
-  --g-98:#EBFFE6; --g-99:#F6FFF1; --g-100:#FFFFFF;
+  /* ---- Primitive ramp: green ---- */
+  --green-50:#F0FDF4; --green-100:#DCFCE7; --green-200:#BBF7D0; --green-300:#86EFAC;
+  --green-400:#4ADE80; --green-500:#4FD166; --green-600:#16A34A; --green-700:#15803D;
+  --green-800:#166534; --green-900:#14532D; --green-950:#052E16;
 
-  /* ---- Primitive tonal: tertiary plum / neutral / variant / error ---- */
-  --t-20:#412742; --t-30:#593D5A; --t-40:#725572; --t-80:#E0BBDE; --t-90:#FDD7FA;
-  --n-6:#121318; --n-10:#1A1B20; --n-98:#FAF8FF;
-  --nv-30:#44464F; --nv-40:#5C5E67; --nv-50:#757780; --nv-60:#8F9099;
-  --nv-80:#C5C6D0; --nv-90:#E1E2EC;
-  --e-40:#BA1A1A; --e-80:#FFB4AB; --e-90:#FFDAD6;
+  /* ---- Primitive ramp: stone (surfaces) ---- */
+  --stone-0:#FFFFFF; --stone-50:#FAFAF9; --stone-100:#F5F5F4; --stone-200:#E7E5E4;
+  --stone-300:#D6D3D1; --stone-400:#A8A29E; --stone-500:#78716C; --stone-550:#6B655F;
+  --stone-600:#57534E; --stone-700:#44403C; --stone-800:#292524; --stone-900:#1C1917;
+  --stone-950:#0C0A09;
 
-  /* ---- M3 roles: LIGHT (premium dual-seed) ---- */
-  --md-primary:#475D92; --md-on-primary:#FFFFFF;
-  --md-primary-container:#D9E2FF; --md-on-primary-container:#2E4578;
-  --md-secondary:#006E27; --md-on-secondary:#FFFFFF;
-  --md-secondary-container:#7CFD8C; --md-on-secondary-container:#002107;
-  --md-tertiary:#725572; --md-on-tertiary:#FFFFFF;
-  --md-tertiary-container:#FDD7FA; --md-on-tertiary-container:#593D5A;
-  --md-error:#BA1A1A; --md-on-error:#FFFFFF;
-  --md-error-container:#FFDAD6; --md-on-error-container:#93000A;
-  --md-surface-dim:#DAD9E0; --md-surface:#FAF8FF; --md-surface-bright:#FAF8FF;
-  --md-lowest:#FFFFFF; --md-low:#F4F3FA; --md-container:#EEEDF4;
-  --md-high:#E8E7EF; --md-highest:#E2E2E9;
-  --md-on-surface:#1A1B20; --md-on-surface-variant:#44464F;
-  --md-outline:#757780; --md-outline-variant:#C5C6D0;
-  --md-inverse-surface:#2F3036; --md-inverse-on-surface:#F1F0F7;
-  --md-inverse-primary:#B0C6FF; --md-surface-tint:#475D92;
-  --md-scrim:#000000; --md-shadow:#000000;
+  /* ---- Ink + status primitives ---- */
+  --ink-900:#0B1220;
+  --red-50:#FEF2F2; --red-100:#FEE2E2; --red-600:#DC2626; --red-700:#B91C1C; --red-800:#991B1B;
+  --amber-50:#FFFBEB; --amber-100:#FEF3C7; --amber-300:#FCD34D; --amber-600:#D97706;
+  --amber-700:#B45309; --amber-800:#92400E; --amber-900:#78350F;
 
-  /* ---- Brand gradients / premium surfaces ---- */
-  --brand-hero-gradient: linear-gradient(135deg, #002C6D 0%, #004616 55%, #15A742 100%);
-  --brand-glow-green: 0 0 0 1px rgb(79 209 102 / 0.35), 0 8px 30px -8px rgb(79 209 102 / 0.45);
-  --brand-glow-navy: 0 10px 30px -12px rgb(0 44 109 / 0.55);
+  /* ---- Semantic — actions (light) ---- */
+  --nb-action-primary: var(--blue-700);
+  --nb-action-primary-fg: #FFFFFF;
+  --nb-action-primary-hover: var(--blue-800);
+  --nb-action-primary-pressed: var(--blue-900);
+  --nb-action-primary-subtle: var(--blue-50);
+  --nb-action-secondary: var(--green-700);
+  --nb-action-secondary-fg: #FFFFFF;
+  --nb-action-secondary-subtle: var(--green-50);
+  --nb-accent-brand: var(--blue-500);
+  --nb-accent-brand-fg: var(--ink-900);
+  --nb-accent-green: var(--green-500);
+  --nb-accent-green-fg: var(--green-950);
 
-  /* ---- Map: brand remap (rural=green, mun=navy) ---- */
-  --map-metro:#BA1A1A; --map-sub:#EA580C; --map-mun:#2E4578; --map-rural:#006E27;
+  /* ---- Semantic — surfaces, text, borders (light) ---- */
+  --nb-surface-canvas: var(--stone-50);
+  --nb-surface-raised: var(--stone-0);
+  --nb-surface-subtle: var(--stone-100);
+  --nb-surface-muted: var(--stone-200);
+  --nb-text-primary: var(--stone-900);
+  --nb-text-secondary: var(--stone-600);
+  --nb-text-tertiary: var(--stone-550);
+  --nb-text-on-brand-blue: var(--ink-900);
+  --nb-text-on-brand-green: var(--green-950);
+  --nb-border-default: var(--stone-200);
+  --nb-border-strong: var(--stone-400);
+  --nb-border-focus: var(--blue-700);
 
-  /* ---- Bridge onto existing Design System v1 ---- */
-  --color-primary: var(--md-primary);
-  --color-primary-dark: var(--p-30);
-  --color-primary-light: var(--p-90);
-  --color-border-focus: var(--md-primary);
-  --color-success: var(--md-secondary);
-  --color-success-bg: var(--g-90);
-  --focus-ring: 0 0 0 3px color-mix(in srgb, var(--md-primary) 25%, transparent);
+  /* ---- Semantic — status (light) ---- */
+  --nb-status-success: var(--green-700);
+  --nb-status-success-container: var(--green-50);
+  --nb-status-on-success-container: var(--green-900);
+  --nb-status-warning: var(--amber-800);
+  --nb-status-warning-container: var(--amber-50);
+  --nb-status-on-warning-container: var(--amber-900);
+  --nb-status-danger: var(--red-700);
+  --nb-status-danger-container: var(--red-50);
+  --nb-status-on-danger-container: var(--red-800);
+  --nb-status-info: var(--blue-700);
+  --nb-status-info-container: var(--blue-50);
+  --nb-status-on-info-container: var(--blue-900);
+
+  /* ---- Semantic — trust (light). Verified is scoped blue info, never success green. ---- */
+  --nb-trust-verified: var(--blue-700);
+  --nb-trust-verified-container: var(--blue-50);
+  --nb-trust-on-verified-container: var(--blue-900);
+  --nb-trust-owner-stated: var(--stone-600);
+  --nb-trust-owner-stated-container: var(--stone-100);
+  --nb-trust-on-owner-stated-container: var(--stone-900);
+  --nb-trust-pending: var(--amber-800);
+  --nb-trust-pending-container: var(--amber-50);
+  --nb-trust-on-pending-container: var(--amber-900);
+  --nb-trust-expired: var(--stone-600);
+  --nb-trust-revoked: var(--red-700);
+
+  /* ---- M3 roles: LIGHT (seed #3B82F6 + overrides, doc/brand-system.md §6) ---- */
+  --md-primary:#1D4ED8; --md-on-primary:#FFFFFF;
+  --md-primary-container:#EFF6FF; --md-on-primary-container:#1E3A8A;
+  --md-secondary:#15803D; --md-on-secondary:#FFFFFF;
+  --md-secondary-container:#F0FDF4; --md-on-secondary-container:#14532D;
+  --md-tertiary:#3B82F6; --md-on-tertiary:#0B1220;
+  --md-tertiary-container:#DBEAFE; --md-on-tertiary-container:#1E3A8A;
+  --md-error:#B91C1C; --md-on-error:#FFFFFF;
+  --md-error-container:#FEF2F2; --md-on-error-container:#991B1B;
+  --md-surface-dim:#D6D3D1; --md-surface:#FAFAF9; --md-surface-bright:#FFFFFF;
+  --md-lowest:#FFFFFF; --md-low:#FAFAF9; --md-container:#F5F5F4;
+  --md-high:#E7E5E4; --md-highest:#D6D3D1;
+  --md-on-surface:#1C1917; --md-on-surface-variant:#57534E;
+  --md-outline:#A8A29E; --md-outline-variant:#E7E5E4;
+  --md-inverse-surface:#1C1917; --md-inverse-on-surface:#FAFAF9;
+  --md-inverse-primary:#93C5FD; --md-surface-tint:#1D4ED8;
+  --md-scrim:#0C0A09; --md-shadow:#000000;
+
+  /* ---- Spacing / radius / motion (4-pt base, 8-pt rhythm) ---- */
+  --nb-space-1: 4px; --nb-space-2: 8px; --nb-space-3: 12px; --nb-space-4: 16px;
+  --nb-space-6: 24px; --nb-space-8: 32px; --nb-space-12: 48px; --nb-space-16: 64px;
+  --nb-radius-sm: 8px; --nb-radius-md: 12px; --nb-radius-lg: 16px; --nb-radius-xl: 24px;
+  --nb-motion-fast: 150ms; --nb-motion-standard: 200ms; --nb-motion-emphasized: 300ms;
+
+  /* ---- Brand gradient / premium surfaces ---- */
+  --brand-hero-gradient: linear-gradient(135deg, #1E3A8A 0%, #1D4ED8 45%, #15803D 100%);
+  --brand-glow-blue: 0 10px 30px -12px rgb(29 78 216 / 0.35);
+  --brand-glow-green: 0 0 0 1px rgb(79 209 102 / 0.35), 0 8px 30px -8px rgb(79 209 102 / 0.4);
+
+  /* ---- Map: category remap (rural=green, mun=blue) ---- */
+  --map-metro:#B91C1C; --map-sub:#D97706; --map-mun:#1D4ED8; --map-rural:#15803D;
+
+  /* ---- Bridge onto site Design System v1 semantic tokens ---- */
+  --color-primary: var(--nb-action-primary);
+  --color-primary-dark: var(--nb-action-primary-hover);
+  --color-primary-light: var(--nb-action-primary-subtle);
+  --color-border-focus: var(--nb-border-focus);
+  --color-success: var(--nb-status-success);
+  --color-success-bg: var(--nb-status-success-container);
+  --focus-ring: 0 0 0 3px color-mix(in srgb, var(--nb-action-primary) 25%, transparent);
 }
 
 html.dark,
 html[data-theme="dark"] {
-  --md-primary:#B0C6FF; --md-on-primary:#152E60;
-  --md-primary-container:#2E4578; --md-on-primary-container:#D9E2FF;
-  --md-secondary:#5EE072; --md-on-secondary:#003910;
-  --md-secondary-container:#00531B; --md-on-secondary-container:#EBFFE6;
-  --md-tertiary:#E0BBDE; --md-on-tertiary:#412742;
-  --md-tertiary-container:#593D5A; --md-on-tertiary-container:#FDD7FA;
-  --md-error:#FFB4AB; --md-on-error:#690005;
-  --md-error-container:#93000A; --md-on-error-container:#FFDAD6;
-  --md-surface-dim:#121318; --md-surface:#121318; --md-surface-bright:#38393F;
-  --md-lowest:#0C0E13; --md-low:#1A1B20; --md-container:#1E1F25;
-  --md-high:#282A2F; --md-highest:#33353A;
-  --md-on-surface:#E2E2E9; --md-on-surface-variant:#C5C6D0;
-  --md-outline:#8F9099; --md-outline-variant:#44464F;
-  --md-inverse-surface:#E2E2E9; --md-inverse-on-surface:#2F3036;
-  --md-inverse-primary:#475D92; --md-surface-tint:#B0C6FF;
+  /* ---- Semantic — dark (built separately, never inverted) ---- */
+  --nb-action-primary: #93C5FD; --nb-action-primary-fg: #0B1220;
+  --nb-action-primary-hover: #BFDBFE; --nb-action-primary-pressed: #DBEAFE;
+  --nb-action-primary-subtle: #1E3A8A;
+  --nb-action-secondary: #86EFAC; --nb-action-secondary-fg: #0B1220;
+  --nb-action-secondary-subtle: #14532D;
+  --nb-accent-brand: #60A5FA; --nb-accent-brand-fg: #0B1220;
+  --nb-accent-green: #4FD166; --nb-accent-green-fg: #052E16;
+  --nb-surface-canvas: #0C0A09; --nb-surface-raised: #1C1917;
+  --nb-surface-subtle: #292524; --nb-surface-muted: #44403C;
+  --nb-text-primary: #FAFAF9; --nb-text-secondary: #D6D3D1; --nb-text-tertiary: #A8A29E;
+  --nb-border-default: #44403C; --nb-border-strong: #57534E; --nb-border-focus: #93C5FD;
+  --nb-status-success: #86EFAC; --nb-status-success-container: #14532D; --nb-status-on-success-container: #DCFCE7;
+  --nb-status-warning: #FCD34D; --nb-status-warning-container: #78350F; --nb-status-on-warning-container: #FEF3C7;
+  --nb-status-danger: #FCA5A5; --nb-status-danger-container: #7F1D1D; --nb-status-on-danger-container: #FEE2E2;
+  --nb-status-info: #93C5FD; --nb-status-info-container: #1E3A8A; --nb-status-on-info-container: #DBEAFE;
+  --nb-trust-verified: #93C5FD; --nb-trust-verified-container: #1E3A8A; --nb-trust-on-verified-container: #DBEAFE;
+  --nb-trust-owner-stated: #D6D3D1; --nb-trust-owner-stated-container: #292524; --nb-trust-on-owner-stated-container: #FAFAF9;
+  --nb-trust-pending: #FCD34D; --nb-trust-pending-container: #78350F; --nb-trust-on-pending-container: #FEF3C7;
+  --nb-trust-expired: #A8A29E; --nb-trust-revoked: #FCA5A5;
 
-  --color-primary:#B0C6FF; --color-primary-dark:#94AAE4;
-  --color-primary-light:#223A6C;
-  --color-success:#5EE072; --color-success-bg:#004616;
-  --brand-hero-gradient: linear-gradient(135deg, #001945 0%, #002D0B 60%, #00531B 100%);
+  /* ---- M3 roles: DARK ---- */
+  --md-primary:#93C5FD; --md-on-primary:#0B1220;
+  --md-primary-container:#1E3A8A; --md-on-primary-container:#DBEAFE;
+  --md-secondary:#86EFAC; --md-on-secondary:#0B1220;
+  --md-secondary-container:#14532D; --md-on-secondary-container:#DCFCE7;
+  --md-tertiary:#60A5FA; --md-on-tertiary:#0B1220;
+  --md-tertiary-container:#1E40AF; --md-on-tertiary-container:#DBEAFE;
+  --md-error:#FCA5A5; --md-on-error:#0B1220;
+  --md-error-container:#7F1D1D; --md-on-error-container:#FEE2E2;
+  --md-surface-dim:#0C0A09; --md-surface:#0C0A09; --md-surface-bright:#44403C;
+  --md-lowest:#0C0A09; --md-low:#1C1917; --md-container:#292524;
+  --md-high:#44403C; --md-highest:#57534E;
+  --md-on-surface:#FAFAF9; --md-on-surface-variant:#D6D3D1;
+  --md-outline:#78716C; --md-outline-variant:#44403C;
+  --md-inverse-surface:#FAFAF9; --md-inverse-on-surface:#1C1917;
+  --md-inverse-primary:#1D4ED8; --md-surface-tint:#93C5FD;
+
+  /* ---- Bridge (dark) ---- */
+  --color-primary:#93C5FD; --color-primary-dark:#BFDBFE; --color-primary-light:#1E3A8A;
+  --color-border-focus:#93C5FD;
+  --color-success:#86EFAC; --color-success-bg:#14532D;
+  --brand-hero-gradient: linear-gradient(135deg, #172554 0%, #1D4ED8 50%, #166534 100%);
 }
 
+/* First-visit system preference (only when no explicit choice stored) */
 @media (prefers-color-scheme: dark) {
   html:not([data-theme]) {
-    --md-primary:#B0C6FF; --md-on-primary:#152E60;
-    --md-primary-container:#2E4578; --md-on-primary-container:#D9E2FF;
-    --md-secondary:#5EE072; --md-on-secondary:#003910;
-    --md-secondary-container:#00531B; --md-on-secondary-container:#EBFFE6;
-    --md-surface:#121318; --md-on-surface:#E2E2E9;
+    --md-primary:#93C5FD; --md-on-primary:#0B1220;
+    --md-primary-container:#1E3A8A; --md-on-primary-container:#DBEAFE;
+    --md-secondary:#86EFAC; --md-on-secondary:#0B1220;
+    --md-secondary-container:#14532D; --md-on-secondary-container:#DCFCE7;
+    --md-surface:#0C0A09; --md-on-surface:#FAFAF9;
+    --nb-action-primary:#93C5FD; --nb-action-primary-fg:#0B1220;
+    --color-primary:#93C5FD; --color-border-focus:#93C5FD;
   }
 }
 
@@ -106,25 +199,26 @@ html[data-theme="dark"] {
   color: #fff;
 }
 .brand-hero :is(h1,h2,h3,p) { color: #fff; }
-.brand-hero .stat-value { color: #7CFD8C; }
+.brand-hero .stat-value { color: var(--nb-accent-green); }
 .btn-brand-green {
   background: var(--md-secondary); color: var(--md-on-secondary);
   box-shadow: var(--brand-glow-green);
 }
 .btn-brand-green:hover { filter: brightness(1.08); color: var(--md-on-secondary); }
+/* Trust labels: scoped, blue info treatment — never a green "verified" chip. */
 .badge-verified {
-  background: var(--md-secondary-container);
-  color: var(--md-on-secondary-container);
-  border: 1px solid color-mix(in srgb, var(--md-secondary) 40%, transparent);
+  background: var(--nb-trust-verified-container);
+  color: var(--nb-trust-on-verified-container);
+  border: 1px solid color-mix(in srgb, var(--nb-trust-verified) 40%, transparent);
 }
 .card-premium {
   background: var(--md-lowest, var(--color-surface));
   border: 1px solid var(--md-outline-variant);
-  box-shadow: var(--brand-glow-navy);
+  box-shadow: var(--brand-glow-blue);
 }
 .dot-mun { background: var(--map-mun); }
 .dot-rural { background: var(--map-rural); }
-.type-mun { background: var(--p-90); color: var(--p-30); }
-.type-rural { background: var(--g-90); color: var(--g-10); }
-html.dark .type-mun, html[data-theme="dark"] .type-mun { background: #223A6C; color: #B0C6FF; }
-html.dark .type-rural, html[data-theme="dark"] .type-rural { background: #004616; color: #7CFD8C; }
+.type-mun { background: var(--blue-100); color: var(--blue-900); }
+.type-rural { background: var(--green-100); color: var(--green-900); }
+html.dark .type-mun, html[data-theme="dark"] .type-mun { background: #1E3A8A; color: #93C5FD; }
+html.dark .type-rural, html[data-theme="dark"] .type-rural { background: #14532D; color: #86EFAC; }

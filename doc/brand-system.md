@@ -1,234 +1,189 @@
-# Brand System v2 — Himalayan Trust × Everest Growth
+# Design System v3 — Himalayan Trust × Everest Growth
 
-Seed colors:
+> **Status:** active proposal · **Supersedes:** Brand System v2 (navy #002C6D × green #4FD166)
+> **Owner:** Design + Engineering (namunaONE) · **Last reviewed:** 2026-10-24
+>
+> **Rules:** this file · **Web tokens:** `docs/brand-tokens.css` · **Flutter theme:** `example/brand_theme.dart` · **Showcase:** `docs/brand.html`
 
-- **Primary seed (Trust Navy):** `#002C6D` — HCT h268.6 c43.2 t19.7
-- **Secondary seed (Growth Green):** `#4FD166` — HCT h148.5 c68.6 t75.0
+The system's job is the same as v2's — one visual language across the
+package, the docs site, and Flutter apps built on `nepal_admin_widgets` —
+with two upgrades: **measured contrast pairs** for every
+foreground/background combination, and **trust semantics** so attestation
+claims ("CBS code, doubly-attested") can never look stronger than the
+evidence behind them.
 
-This document explains how Flutter Material 3 (M3) turns seeds into
-a full tonal system, and how this repo maps it to web (CSS) + Flutter.
+## 1. What changed from v2
 
-## 1. How Flutter M3 works (mental model)
-
-`ColorScheme.fromSeed(seedColor: ...)` does NOT use the seed directly
-as `primary`. It:
-
-1. Converts seed to HCT (Hue-Chroma-Tone).
-2. Builds 5 `TonalPalette`s (each 13 tones: 0–100):
-   - `primary` — hue of seed, chroma max(48, seed chroma)
-   - `secondary` — hue of seed, chroma 16 (muted harmony)
-   - `tertiary` — hue + 60, chroma 24 (contrast accent)
-   - `neutral` — hue of seed, chroma 6 (surfaces)
-   - `neutralVariant` — hue of seed, chroma 8 (borders)
-   - `error` — fixed hue 25, chroma 84
-3. Picks fixed tones per role. Light vs dark swaps tones.
-
-If you pass `secondary:` to `fromSeed`, Flutter replaces the
-`secondary` palette with `TonalPalette.of(secondarySeed)` — full
-chroma. That is what the premium brand does.
-
-### TonalSpot (Flutter default, `Variant.tonalSpot`)
-
-| Palette | Hue | Chroma | Source |
+| Job | v2 | v3 | Why |
 |---|---|---|---|
-| primary | 268.6 | 36.0 | `#002C6D` |
-| secondary | 268.6 | 16.0 | `#002C6D` (default) |
-| tertiary | 328.6 | 24.0 | hue+60 |
-| neutral | 268.6 | 6.0 | `#002C6D` |
-| neutralVariant | 268.6 | 8.0 | `#002C6D` |
-| error | 25 | 84 | fixed |
+| Primary action / links / focus | navy #475D92 (M3 tone 40 of #002C6D) | **accessible blue #1D4ED8** | 6.70:1 with white — AA normal text |
+| Secondary / success | green #006E27 | **accessible green #15803D** | 5.02:1 with white — AA |
+| Brand accent fills | navy #002C6D + green #4FD166 | **brand blue #3B82F6** + brand green #4FD166 | identity kept, demoted to fills/graphics only |
+| Tertiary | plum #725572 | brand blue #3B82F6 with ink text | one hue family; plum removed |
+| Surfaces | blue-tinted neutrals | **stone** #FAFAF9 → #0C0A09 | calm canvas; text contrast first |
+| Text on brand-blue fill | white (3.68:1 fails) | **ink #0B1220** (5.09:1) | white on #3B82F6 fails AA |
+| "Verified" badge | green + checkmark | **blue scoped label** (icon + text + scope + date) | verified is scoped information, not success |
 
-> Premium override: `secondary` palette = raw `#4FD166`
-> (h148.5, c68.6) — see §3.
+## 2. Brand colors and measured contrast
 
-## 2. M3 color roles (what each does)
+| Foreground | Background | Ratio | Verdict |
+|---|---|---:|---|
+| #1D4ED8 | #FFFFFF | 6.70:1 | AA normal text |
+| #FFFFFF | #1D4ED8 | 6.70:1 | AA normal text |
+| #15803D | #FFFFFF | 5.02:1 | AA normal text |
+| #3B82F6 | #FFFFFF | 3.68:1 | large text / UI only |
+| #0B1220 | #3B82F6 | 5.09:1 | AA (ink on brand-blue fill) |
+| #4FD166 | #FFFFFF | 1.97:1 | **fail — never text on white** |
+| #052E16 | #4FD166 | 7.56:1 | AA (ink on brand-green fill) |
+| #92400E | #FFFBEB | 6.84:1 | AA (warning pair) |
+| #B91C1C | #FEF2F2 | 5.91:1 | AA (danger pair) |
+| #1D4ED8 | #EFF6FF | 6.16:1 | AA (info pair) |
 
-Accent:
+Brand blue and brand green are the identity; the accessible blue and
+accessible green are the product tokens. Related, not identical.
 
-- `primary` — main CTA, active states, FAB. White/black text via `onPrimary`.
-- `onPrimary` — text/icon on `primary`.
-- `primaryContainer` — highlighted section bg. Text via `onPrimaryContainer`.
-- `onPrimaryContainer` — text on container.
-- `primaryFixed` / `onPrimaryFixed` / `primaryFixedDim` /
-  `onPrimaryFixedVariant` — fixed-step宣传, same in light+dark (calendars, badges).
+## 3. Token architecture
 
-Secondary (support actions, chips, filters):
+Primitive → Semantic → Component.
 
-- `secondary`, `onSecondary`, `secondaryContainer`,
-  `onSecondaryContainer`, + `*Fixed` variants — same pattern.
+- **Primitives** are ramps (`--blue-*`, `--green-*`, `--stone-*`, status)
+  — used only by design-system internals, never in feature markup/widgets.
+- **Semantic tokens** name a job, not a hue (`--nb-action-primary`,
+  `--nb-trust-verified`, `space.4`) — what components consume.
+- **Component tokens** alias a semantic token for one component family.
 
-Tertiary (contrast accent, maps, illustrations):
+In CSS the naming is `--nb-<role>`. In Dart the equivalents are
+`NbPrimitives` (primitives), `NbSemanticColors` (a `ThemeExtension`),
+`NbSpacing`, and `NbShape`.
 
-- `tertiary`, `onTertiary`, `tertiaryContainer`, `onTertiaryContainer`.
+## 4. Semantic roles — light
 
-Error:
+- Actions: primary `#1D4ED8` / foreground `#FFFFFF`; hover `#1E40AF`;
+  subtle `#EFF6FF`. Secondary `#15803D` (white) / subtle `#F0FDF4`.
+- Accents: brand blue `#3B82F6` with ink `#0B1220`; brand green
+  `#4FD166` with `#052E16`.
+- Surfaces: canvas `#FAFAF9`, raised `#FFFFFF`, subtle `#F5F5F4`,
+  muted `#E7E5E4`.
+- Text: primary `#1C1917`, secondary `#57534E`, tertiary `#6B655F`.
+- Borders: default `#E7E5E4`, strong `#A8A29E`, focus `#1D4ED8`.
+- Status: success `#15803D` / container `#F0FDF4`; warning `#92400E` /
+  `#FFFBEB`; danger `#B91C1C` / `#FEF2F2`; info `#1D4ED8` / `#EFF6FF`.
+- Trust: verified `#1D4ED8` / `#EFF6FF`; ownerStated `#57534E` /
+  `#F5F5F4`; pending `#92400E` / `#FFFBEB`; expired `#57534E`; revoked
+  `#B91C1C`.
 
-- `error`, `onError`, `errorContainer`, `onErrorContainer`.
+## 5. Semantic roles — dark
 
-Surfaces (backgrounds — M3 Expressive adds 5 levels):
+Dark is built separately, never inverted: primary `#93C5FD` with ink
+text, secondary `#86EFAC` with ink text, brand accent `#60A5FA`, canvas
+`#0C0A09`, raised `#1C1917`, borders `#44403C`, focus `#93C5FD`,
+success text `#86EFAC`, warning `#FCD34D`, danger `#FCA5A5`,
+trust.verified `#93C5FD`. Trust semantics stay identical across themes.
 
-- `surfaceDim`, `surface`, `surfaceBright`
-- `surfaceContainerLowest/Low/Container/High/Highest` — layered cards.
-- `onSurface`, `onSurfaceVariant` — body + secondary text.
-- `outline`, `outlineVariant` — borders/dividers.
-- `inverseSurface`, `onInverseSurface`, `inversePrimary` — tooltips, snackbars.
-- `surfaceTint` — tint overlay (usually `primary`).
-- `scrim`, `shadow` — overlays.
+## 6. Material 3 mapping
 
-Rule: never use palette tones directly in UI. Always use roles.
-Tones are primitives; roles are semantics.
+`ColorScheme.fromSeed` converts the seed to HCT, builds tonal palettes,
+and picks tones per role; the generated `primary` is a tone of the seed,
+not the seed itself. v3 seeds with **#3B82F6** for harmony, then overrides:
 
-## 3. Full tonal tables (verified via `material_color_utilities` 0.13.1)
+| M3 role | Light | Dark |
+|---|---|---|
+| primary / onPrimary | #1D4ED8 / #FFFFFF | #93C5FD / #0B1220 |
+| primaryContainer | #EFF6FF / #1E3A8A | #1E3A8A / #DBEAFE |
+| secondary ★ | #15803D / #FFFFFF | #86EFAC / #0B1220 |
+| secondaryContainer ★ | #F0FDF4 / #14532D | #14532D / #DCFCE7 |
+| tertiary (brand accent) | #3B82F6 / #0B1220 | #60A5FA / #0B1220 |
+| error | #B91C1C / #FFFFFF | #FCA5A5 / #0B1220 |
+| surface | #FAFAF9 / #1C1917 | #0C0A09 / #FAFAF9 |
+| surface containers (5 steps) | #FFFFFF → #D6D3D1 | #0C0A09 → #57534E |
+| outline / outlineVariant | #A8A29E / #E7E5E4 | #78716C / #44403C |
+| inverseSurface / inversePrimary | #1C1917 / #93C5FD | #FAFAF9 / #1D4ED8 |
 
-### 3a. Primary raw (`#002C6D`, h268.6 c43.2)
+★ = brand override. `tertiary` is a brand accent, **not** a warning role —
+warning and danger live in semantic tokens (`NbSemanticColors` /
+`--nb-*`), which Material does not model.
 
-| Tone | Hex |
-|---|---|
-| 0 | `#000000` |
-| 5 | `#000F30` |
-| 10 | `#001945` |
-| 15 | `#002359` |
-| 20 | `#012D6E` |
-| 25 | `#153879` |
-| 30 | `#234485` |
-| 35 | `#315092` |
-| 40 | `#3E5C9F` |
-| 50 | `#5875BA` |
-| 60 | `#728FD5` |
-| 70 | `#8CAAF2` |
-| 80 | `#B0C6FF` |
-| 90 | `#D9E2FF` |
-| 95 | `#EEF0FF` |
-| 98 | `#FAF8FF` |
-| 99 | `#FEFBFF` |
-| 100 | `#FFFFFF` |
+## 7. Typography
 
-### 3b. Secondary raw (`#4FD166`, h148.5 c68.6)
+- Latin: **Plus Jakarta Sans** (400/600/700). Devanagari: **Noto Sans
+  Devanagari** (bundle both; never depend on runtime download).
+- Set the fallback once on the base style, not per widget:
+  `TextStyle(fontFamily: 'PlusJakartaSans', fontFamilyFallback: ['NotoSansDevanagari'])`
+  — see `nbTextTheme` in `example/brand_theme.dart`.
+- Bilingual rules: no uppercase or letter-spacing on Devanagari; looser
+  line heights for Nepali (matras need vertical room); emphasis via weight,
+  never italic; design buttons and cards for two-line Nepali labels.
 
-| Tone | Hex |
-|---|---|
-| 0 | `#000000` |
-| 5 | `#001503` |
-| 10 | `#002107` |
-| 15 | `#002D0B` |
-| 20 | `#003910` |
-| 25 | `#004616` |
-| 30 | `#00531B` |
-| 35 | `#006021` |
-| 40 | `#006E27` |
-| 50 | `#008A33` |
-| 60 | `#15A742` |
-| 70 | `#3FC35A` |
-| 80 | `#5EE072` |
-| 90 | `#7CFD8C` |
-| 95 | `#C7FFC4` |
-| 98 | `#EBFFE6` |
-| 99 | `#F6FFF1` |
-| 100 | `#FFFFFF` |
+## 8. Spacing, radius, elevation, motion
 
-### 3c. Derived tonalSpot palettes from `#002C6D`
+- Spacing: 4-pt base, 8-pt rhythm (4/8/12/16/20/24/32/40/48/64).
+- Radius: 8 inputs · 12 buttons/fields · 16 cards/dialogs · 24 sheets ·
+  999 reserved for chips/avatars.
+- Elevation: prefer tonal surfaces + borders over heavy shadows — cheap on
+  low-end devices and keeps text contrast stable. Shadow opacity stays low.
+- Motion: 150 / 200 / 300 ms, standard easing, respect reduce-motion, no
+  infinite decorative animation.
+- Touch targets: 48 recommended, 44 absolute minimum.
 
-Primary (c36):
+## 9. Component rules
 
-`0 #000000, 5 #000F30, 10 #001945, 15 #062355, 20 #152E60, 25 #223A6C, 30 #2E4578, 35 #3A5185, 40 #475D92, 50 #6076AC, 60 #7990C8, 70 #94AAE4, 80 #B0C6FF, 90 #D9E2FF, 95 #EEF0FF, 98 #FAF8FF, 99 #FEFBFF, 100 #FFFFFF`
+- **Buttons**: primary = accessible blue, one per view; secondary = green
+  or outlined surface; destructive confirms and names the object; minimum
+  height 48; labels are verbs; loading keeps the label readable.
+- **Deep card** (`.card-premium`): raised surface + 1px `outlineVariant`
+  border + soft glow; title ≤ 2 lines; facts wrap, never truncate.
+- **Chips**: 32 visual height, 48 tap target; selected state = color +
+  icon + text.
+- **Trust badges**: icon + text + scope + date. Never a bare checkmark,
+  never seal/medal styling, never green for "verified". Verified is blue
+  (scoped info); owner-stated is neutral.
+- **Inputs**: label above the field (never placeholder-only), min height
+  52, focus ring 2px `--nb-border-focus`, error replaces helper text
+  without layout shift.
+- **Tables**: tabular figures, right-aligned numeric columns; status as
+  icon + text, never color alone.
 
-Secondary (h268.6 c16):
+## 10. Status and trust color rules
 
-`0 #000000, 5 #091121, 10 #141B2C, 15 #1F2536, 20 #293042, 25 #343B4D, 30 #404659, 35 #4B5265, 40 #575E71, 50 #70778B, 60 #8A90A5, 70 #A4ABC0, 80 #C0C6DC, 90 #DCE2F9, 95 #EEF0FF, 98 #FAF8FF, 99 #FEFBFF, 100 #FFFFFF`
+1. Never color as the only signal — pair with icon and text.
+2. "Verified" is scoped information, not automatically "success".
+3. No green badge implying data is guaranteed.
+4. Pending is amber, not red.
+5. Expired is neutral, not danger.
+6. Owner-stated claims are neutral, never success green.
+7. Brand green is never used for errors or warnings.
+8. Brand blue is never used for success.
+9. Disabled is exempt from contrast but must remain readable.
+10. Re-check every pair after any value change.
 
-Tertiary (h328.6 c24):
+## 11. Governance
 
-`0 #000000, 5 #1E0821, 10 #2A132C, 15 #351D37, 20 #412742, 25 #4D324E, 30 #593D5A, 35 #654966, 40 #725572, 50 #8C6D8C, 60 #A786A6, 70 #C3A0C2, 80 #E0BBDE, 90 #FDD7FA, 95 #FFEBFB, 98 #FFF7FA, 99 #FFFBFF, 100 #FFFFFF`
+- Rules: this file. Web values: `docs/brand-tokens.css`. Flutter:
+  `example/brand_theme.dart`. No third token table in a feature doc.
+- Token changes require a contrast re-check and a changelog entry.
+- Deprecate with a migration note; do not silently rename.
+- Next step: `brand/tokens.json` as the single source, generating Dart and
+  CSS with a CI drift check (mirrors the data-bindings pipeline).
 
-Neutral (c6):
+## 12. Migration notes (v2 → v3)
 
-`0 #000000, 5 #0F1116, 10 #1A1B20, 15 #24262B, 20 #2F3036, 25 #3A3B41, 30 #45464C, 35 #515258, 40 #5D5E64, 50 #76777D, 60 #909097, 70 #ABABB1, 80 #C6C6CD, 90 #E2E2E9, 95 #F1F0F7, 98 #FAF8FF, 99 #FEFBFF, 100 #FFFFFF`
+- **Flutter**: class names kept (`NepalBrandSeeds`, `NepalBrandScheme`,
+  `NepalBrandTheme`). `NepalBrandSeeds.navy` and `.green` are
+  deprecated aliases — no API break for existing users. New APIs:
+  `NbPrimitives`, `NbSemanticColors`, `NbSpacing`, `NbShape`.
+- **CSS**: all `--md-*` variables and helper class names kept; values
+  remapped. `.badge-verified` is now the blue scoped-trust treatment
+  (was green) per §10.
+- **Docs site**: `styles.css` semantic tokens remapped (crimson →
+  accessible blue, success → #15803D); primitives, class names, and layout
+  unchanged; asset cache versions bumped to `?v=5`.
+- **Logo**: unchanged by design — the double-pennon mark is national
+  symbolism (Nepal crimson + Nepal blue), not the product palette.
 
-NeutralVariant (c8):
+## 13. Open items
 
-`0 #000000, 5 #0E1118, 10 #191B23, 15 #23262D, 20 #2E3038, 25 #393B43, 30 #44464F, 35 #50525A, 40 #5C5E67, 50 #757780, 60 #8F9099, 70 #A9ABB4, 80 #C5C6D0, 90 #E1E2EC, 95 #EFF0FA, 98 #FAF8FF, 99 #FEFBFF, 100 #FFFFFF`
-
-Error (fixed):
-
-`0 #000000, 5 #2D0001, 10 #410002, 15 #540003, 20 #690005, 25 #7E0007, 30 #93000A, 35 #A80710, 40 #BA1A1A, 50 #DE3730, 60 #FF5449, 70 #FF897D, 80 #FFB4AB, 90 #FFDAD6, 95 #FFEDEA, 98 #FFF8F7, 99 #FFFBFF, 100 #FFFFFF`
-
-## 4. Premium dual-seed mapping (this brand)
-
-Flutter default `secondary` (`#575E71`) is too grey for a green brand.
-Premium keeps primary/neutral/tertiary from `#002C6D` and swaps in the
-green raw palette for secondary roles:
-
-| Role | Light | Dark | Note |
-|---|---|---|---|
-| primary | `#475D92` (p40) | `#B0C6FF` (p80) | trust |
-| onPrimary | `#FFFFFF` | `#152E60` (p20) | |
-| primaryContainer | `#D9E2FF` (p90) | `#2E4578` (p30) | |
-| onPrimaryContainer | `#2E4578` (p30) | `#D9E2FF` (p90) | |
-| secondary | `#006E27` (g40) | `#5EE072` (g80) | growth — brand override |
-| onSecondary | `#FFFFFF` | `#003910` (g20) | |
-| secondaryContainer | `#7CFD8C` (g90) | `#00531B` (g30) | |
-| onSecondaryContainer | `#002107` (g10) | `#EBFFE6` (g98) | darker text for neon container |
-| tertiary | `#725572` (t40) | `#E0BBDE` (t80) | muted plum balances blue+green |
-| onTertiary | `#FFFFFF` | `#412742` (t20) | |
-| tertiaryContainer | `#FDD7FA` (t90) | `#593D5A` (t30) | |
-| error | `#BA1A1A` | `#FFB4AB` | fixed |
-| surface | `#FAF8FF` (n98) | `#121318` (n6) | |
-| surfaceDim | `#DAD9E0` | `#121318` | |
-| surfaceBright | `#FAF8FF` | `#38393F` | |
-| lowest/low/container/high/highest (light) | `#FFFFFF` / `#F4F3FA` / `#EEEDF4` / `#E8E7EF` / `#E2E2E9` | — | |
-| lowest/low/container/high/highest (dark) | — | `#0C0E13` / `#1A1B20` / `#1E1F25` / `#282A2F` / `#33353A` | |
-| onSurface | `#1A1B20` | `#E2E2E9` | |
-| onSurfaceVariant | `#44464F` | `#C5C6D0` | |
-| outline | `#757780` | `#8F9099` | |
-| outlineVariant | `#C5C6D0` | `#44464F` | |
-| inverseSurface | `#2F3036` | `#E2E2E9` | |
-| onInverseSurface | `#F1F0F7` | `#2F3036` | |
-| inversePrimary | `#B0C6FF` | `#475D92` | |
-| surfaceTint | `#475D92` | `#B0C6FF` | |
-| scrim/shadow | `#000000` | `#000000` | |
-
-Contrast: `primary #475D92` on white ≈ 6.0:1; `secondary #006E27`
-on white ≈ 5.9:1; both AA for body text. Green container `#7CFD8C`
-must use dark text `#002107` (≈12:1), never white.
-
-Usage:
-
-- Navy owns navigation, headers, primary buttons, links, focus rings.
-- Green owns success, verified badges, map markers (rural), progress, secondary CTAs.
-- Never place green text on navy without 15% white overlay — use
-  container + dark text instead.
-- Gradient (hero only): `linear-gradient(135deg, #002C6D, #004616 55%, #15A742)` — 60/30/10 navy/surface/green.
-
-## 5. Flutter usage
-
-See `example/brand_theme.dart`:
-
-```dart
-// 1. Base from navy seed (gives primary/tertiary/neutral/surfaces).
-final base = ColorScheme.fromSeed(
-  seedColor: const Color(0xFF002C6D),
-  brightness: Brightness.light,
-);
-// 2. Override secondary with verified green tones.
-// NOTE: `secondary: Color(0xFF4FD166)` alone is NOT enough — Flutter
-// uses it raw (white text fails). Always copyWith tonal roles:
-final light = base.copyWith(
-  secondary: const Color(0xFF006E27), // g40
-  onSecondary: const Color(0xFFFFFFFF),
-  secondaryContainer: const Color(0xFF7CFD8C), // g90
-  onSecondaryContainer: const Color(0xFF002107), // g10
-);
-```
-
-Without any override you get grey `#575E71`. See `example/brand_theme.dart`
-for the full verified `copyWith` (light + dark + fixed roles).
-
-Web mirror: `docs/brand-tokens.css` exposes the same roles as
-`--md-*` variables; `docs/brand.html` is the visual proof.
-
-## 6. Files
-
-- `doc/brand-system.md` — this spec
-- `docs/brand-tokens.css` — CSS variables (`--brand-*`, `--md-*`)
-- `docs/brand.html` — swatches + components preview
-- `example/brand_theme.dart` — Flutter `ThemeData` + component themes
+- [ ] `brand/tokens.json` + generators + CI drift check
+- [ ] Devanagari webfont for the docs site (Inter has no Devanagari)
+- [ ] Adopt the v3 theme in `packages/nepal_admin_widgets` + golden tests
+- [ ] Dark-mode device test of the full site
+- [ ] Recompute the contrast table after any value change
