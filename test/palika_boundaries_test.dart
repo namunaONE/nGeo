@@ -93,12 +93,10 @@ void main() {
       final box = b.bbox;
       expect(box['minLat']!, greaterThanOrEqualTo(26.0),
           reason: b.localBodyName);
-      expect(box['maxLat']!, lessThanOrEqualTo(31.0),
-          reason: b.localBodyName);
+      expect(box['maxLat']!, lessThanOrEqualTo(31.0), reason: b.localBodyName);
       expect(box['minLng']!, greaterThanOrEqualTo(80.0),
           reason: b.localBodyName);
-      expect(box['maxLng']!, lessThanOrEqualTo(89.0),
-          reason: b.localBodyName);
+      expect(box['maxLng']!, lessThanOrEqualTo(89.0), reason: b.localBodyName);
     }
   });
 
