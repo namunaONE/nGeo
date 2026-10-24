@@ -29,8 +29,39 @@ jobs:
           sdk: stable
       - name: Install dependencies
         run: dart pub get
+      # The gate stays binary, but a bare "no" is useless for fixing it:
+      # which file, which construct? On failure this re-runs the formatter
+      # per file and attaches the exact dart-format diff to the run as
+      # check annotations, so the offending lines are visible from the
+      # Checks tab without needing log access.
       - name: Verify formatting (generated file excluded)
-        run: dart format --output=none --set-exit-if-changed $(git ls-files '*.dart' | grep -v 'lib/src/nepal_data.dart')
+        run: |
+          files=$(git ls-files '*.dart' | grep -v 'lib/src/nepal_data.dart')
+          if dart format --output=none --set-exit-if-changed $files; then
+            exit 0
+          fi
+          reported=0
+          for f in $files; do
+            if dart format --output=none --set-exit-if-changed "$f" >/dev/null 2>&1; then
+              continue
+            fi
+            echo "not dart-format clean: $f"
+            if [ "$reported" -lt 8 ]; then
+              reported=$((reported + 1))
+              # Format a copy in-place (inside the repo, so the package's
+              # language version applies), then diff against the original.
+              tmp=".fmt-check-tmp.dart"
+              cp "$f" "$tmp"
+              dart format "$tmp" >/dev/null 2>&1
+              msg="$(diff -u "$f" "$tmp" | head -c 500 || true)"
+              rm -f "$tmp"
+              msg="${msg//%/%25}"
+              msg="${msg//$'\r'/%0D}"
+              msg="${msg//$'\n'/%0A}"
+              echo "::error file=$f,title=Needs dart format::$msg"
+            fi
+          done
+          exit 1
       - name: Regenerate dataset (validates JSON against official counts)
         run: dart run tool/generate.dart
       - name: Verify no codegen drift

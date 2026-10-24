@@ -296,8 +296,7 @@ void main() {
   for (final entry in featureList) {
     final feature = entry as Map<String, dynamic>;
     features.add(BoundaryFeature(
-      (feature['properties'] as Map<String, dynamic>?) ??
-          <String, dynamic>{},
+      (feature['properties'] as Map<String, dynamic>?) ?? <String, dynamic>{},
       feature['geometry'] as Map<String, dynamic>?,
     ));
   }
@@ -305,8 +304,7 @@ void main() {
   // 1) name join within the district (first feature wins, claim once)
   final byKey = <String, BoundaryFeature>{};
   for (final feature of features) {
-    final featureDistrictId =
-        feature.properties['districtId'] as String? ?? '';
+    final featureDistrictId = feature.properties['districtId'] as String? ?? '';
     final featureName = feature.properties['nameEn'] as String? ?? '';
     final key = '$featureDistrictId|${normPalikaName(featureName)}';
     byKey.putIfAbsent(key, () => feature);
