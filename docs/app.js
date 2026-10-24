@@ -429,11 +429,16 @@ const MAP_TILES = {
   maxZoom: 19,
   attribution: '© <a href="https://www.openstreetmap.org/copyright" target="_blank" rel="noopener">OpenStreetMap</a> contributors',
 };
+// Flag-coded type palette (national symbolism, matches the map legend):
+//   metropolitan     — Nepal-flag crimson #DC143C (deep tone)
+//   subMetropolitan  — same crimson lightened 35% toward white
+//   municipality     — green (deep tone)
+//   ruralMunicipality — same green lightened 35% toward white
 const TYPE_COLORS = {
-  metropolitan: '#dc2626',
-  subMetropolitan: '#ea580c',
-  municipality: '#2563eb',
-  ruralMunicipality: '#16a34a',
+  metropolitan: '#DC143C',
+  subMetropolitan: '#E86680',
+  municipality: '#16A34A',
+  ruralMunicipality: '#68C389',
 };
 let _map = null;
 let _cluster = null;
@@ -569,10 +574,10 @@ var MAP_METRICS = {
   type: {
     label: 'Local level type',
     entries: [
-      { label: 'Metro', color: '#dc2626' },
-      { label: 'Sub-metro', color: '#ea580c' },
-      { label: 'Municipality', color: '#2563eb' },
-      { label: 'Rural', color: '#16a34a' },
+      { label: 'Metro', color: '#DC143C' },
+      { label: 'Sub-metro', color: '#E86680' },
+      { label: 'Municipality', color: '#16A34A' },
+      { label: 'Rural', color: '#68C389' },
     ],
   },
   cbs: {
@@ -590,7 +595,7 @@ var DOTS_LEGEND_HTML =
   '<span class="legend-chip"><i class="dot dot-mun"></i>Municipality</span>' +
   '<span class="legend-chip"><i class="dot dot-rural"></i>Rural</span>' +
   '<span class="legend-chip"><i class="dot dot-unverified"></i>Unverified</span>';
-var _mapMetric = 'wards';
+var _mapMetric = 'type';
 var _boundaries = null;        // parsed FeatureCollection (753 palikas)
 var _boundariesReady = null;   // in-flight load promise
 var _boundaryByKey = null;     // districtId|normName -> feature

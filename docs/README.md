@@ -75,9 +75,12 @@ Dark mode: `html.dark` class (JS toggle + `localStorage`), with
 
 Explorer map is a "figure shown on the map" selector (Leaflet 1.9.4,
 lazy-loaded CDN, only on `explorer.html`): all 753 palika boundaries are
-shaded as a choropleth by the selected metric — wards per local level (v3
-blue ramp), local level type, or CBS code confidence — with the classic
-centroid dot map available as a legacy view:
+shaded as a choropleth by the selected metric — local level type (default:
+Nepal-flag crimson `#DC143C` for metropolitan, the same crimson lightened
+35% for sub-metropolitan, green `#16A34A` for municipality and the same
+green lightened 35% for rural municipality), wards per local level (v3
+blue ramp), or CBS code confidence — with the classic centroid dot map
+available as a legacy view:
 
 - Choropleth (default): 753 palika polygons from nepali-geo-pro-max (MIT,
   pinned commit), vendored same-origin (`palika-boundaries.geojson`) with
@@ -88,7 +91,8 @@ centroid dot map available as a legacy view:
   gate (`tool/check_boundary_join.dart`). Filters dim non-matching
   palikas (fill 0.08) instead of hiding them, so the national figure
   keeps its context.
-- Classic dots: canvas circleMarkers colored by type (badge tokens), hollow
+- Classic dots: canvas circleMarkers colored by the flag-coded type palette
+  (same colors as the type choropleth), hollow
   when CBS-unverified; clusters via `chunkedLoading` +
   `removeOutsideVisibleBounds`. The selector falls back to dots
   automatically if boundaries cannot load.
@@ -127,3 +131,4 @@ not defined` outage, where a module-scope caller used an
 initExplorer-scoped helper. Runs in CI before Pages deploy.
 
 Maintained by **namunaONE** under **HyaMuji** and **Taire Bhai**.
+

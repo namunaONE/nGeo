@@ -497,10 +497,10 @@ html.dark .toast, html[data-theme="dark"] .toast { background: var(--slate-100);
 .map-legend { display: flex; gap: var(--space-2); flex-wrap: wrap; }
 .legend-chip { display: inline-flex; align-items: center; gap: 6px; font-size: var(--text-xs); font-weight: var(--weight-medium); color: var(--color-text-secondary); background: var(--color-bg-secondary); border: 1px solid var(--color-border); border-radius: var(--radius-full); padding: 3px 10px; }
 .dot { width: 10px; height: 10px; border-radius: 50%; display: inline-block; border: 2px solid transparent; }
-.dot-metro { background: #dc2626; }
-.dot-sub { background: #ea580c; }
-.dot-mun { background: #2563eb; }
-.dot-rural { background: #16a34a; }
+.dot-metro { background: #dc143c; }
+.dot-sub { background: #e86680; }
+.dot-mun { background: #16a34a; }
+.dot-rural { background: #68c389; }
 .dot-unverified { background: transparent; border-color: var(--color-text-muted); }
 .map { height: clamp(300px, 52vh, 460px); border-radius: var(--radius-md); border: 1px solid var(--color-border); background: var(--color-bg-secondary); z-index: 0; }
 .map:focus-visible { box-shadow: var(--focus-ring); }
@@ -581,3 +581,4 @@ html.dark .leaflet-popup-content code, html[data-theme="dark"] .leaflet-popup-co
 
 /* ---- v2.0 Flagship: brighter gradient ink for stats in dark mode ---- */
 html.dark .stat-value, html[data-theme="dark"] .stat-value { background: linear-gradient(120deg, #93c5fd, #f87171); }
+
