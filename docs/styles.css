@@ -526,3 +526,18 @@ html.dark .leaflet-popup-content code, html[data-theme="dark"] .leaflet-popup-co
   body { background: #fff; color: #000; }
   .card, .feature-card, .source-card { box-shadow: none; break-inside: avoid; }
 }
+
+/* ---- Figure on the map: metric selector, choropleth legend, palika tips ---- */
+.map-figure { display: inline-flex; align-items: center; gap: var(--space-2); font-size: var(--text-xs); font-weight: var(--weight-semibold); color: var(--color-text-secondary); }
+.map-figure select {
+  border: 1px solid var(--color-border); border-radius: var(--radius-md);
+  padding: 6px 10px; font-size: var(--text-xs); font-family: var(--font-sans);
+  background: var(--color-bg); color: var(--color-text); cursor: pointer;
+  transition: all var(--transition);
+}
+.map-figure select:focus { outline: none; border-color: var(--color-border-focus); box-shadow: var(--focus-ring); }
+.legend-title { font-size: var(--text-xs); font-weight: var(--weight-semibold); text-transform: uppercase; letter-spacing: var(--tracking-wide); color: var(--color-text-muted); align-self: center; }
+.legend-swatch { width: 12px; height: 12px; border-radius: 3px; display: inline-block; border: 1px solid var(--color-border-strong); flex: none; }
+.leaflet-tooltip.palika-tip { font-size: var(--text-xs); padding: 4px 8px; border-radius: var(--radius-sm); box-shadow: var(--shadow-md); }
+.leaflet-tooltip.palika-tip .popup-ne { margin-left: 6px; }
+@media print { .map-figure { display: none; } }

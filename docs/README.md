@@ -4,7 +4,7 @@ Static documentation site deployed via GitHub Pages from `docs/`.
 
 - **Live:** https://namunaONE.github.io/Nepal-Local-Government-Data/
 - **Pages:** `index.html` (landing), `api.html` (reference),
-  `explorer.html` (interactive table + centroid map over `data.json`),
+  `explorer.html` (interactive table + figure-selector boundary map over `data.json`),
   `brand.html` (Design System v3 showcase over `brand-tokens.css`)
 - **Assets:** `logo.svg` (icon), `logo-full.svg` (icon + wordmark),
   `favicon.svg`, `styles.css`, `app.js`, `data.json`
@@ -73,17 +73,29 @@ Dark mode: `html.dark` class (JS toggle + `localStorage`), with
 
 ## Map
 
-Explorer embeds a Leaflet 1.9.4 + markercluster 1.5.3 dot map (lazy-loaded,
-CDN, only on `explorer.html`):
+Explorer map is a "figure shown on the map" selector (Leaflet 1.9.4,
+lazy-loaded CDN, only on `explorer.html`): all 753 palika boundaries are
+shaded as a choropleth by the selected metric — wards per local level (v3
+blue ramp), local level type, or CBS code confidence — with the classic
+centroid dot map available as a legacy view:
 
+- Choropleth (default): 753 palika polygons from nepali-geo-pro-max (MIT,
+  pinned commit, lazy-fetched at runtime; jsDelivr with a
+  raw.githubusercontent fallback). Joined to `data.json` by normalized
+  English name + districtId, with a centroid-in-own-polygon fallback —
+  746/753 matched; the 7 coordinate-free rows stay table-only. Filters
+  dim non-matching palikas (fill 0.08) instead of hiding them, so the
+  national figure keeps its context.
+- Classic dots: canvas circleMarkers colored by type (badge tokens), hollow
+  when CBS-unverified; clusters via `chunkedLoading` +
+  `removeOutsideVisibleBounds`. The selector falls back to dots
+  automatically if boundaries cannot load.
 - Tiles: OSM Standard keyless, maxZoom 19, `© OpenStreetMap contributors`
   on-map + footer. Dark mode reuses the same tiles with a CSS filter
   (no second tile set, no API key).
-- Markers: canvas circleMarkers colored by type (badge tokens), hollow
-  when CBS-unverified; clusters via `chunkedLoading` +
-  `removeOutsideVisibleBounds`.
-- Sync: filters/search rebuild markers (all filtered, not just the page);
-  table-row click/Enter flies to the marker; `?cbs=31304` deep-links.
+- Sync: filters/search restyle the choropleth or rebuild dots (all
+  filtered, not just the page); table-row click/Enter flies to the palika;
+  `?cbs=31304` deep-links.
 - Tile factory is a single `MAP_TILES` constant + `createTileLayer()` in
   `app.js`, so the tile source is defined in exactly one place.
 
