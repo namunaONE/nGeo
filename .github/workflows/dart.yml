@@ -43,6 +43,8 @@ jobs:
         run: dart run tool/generate_bindings.dart
       - name: Verify no bindings drift
         run: git diff --exit-code -- bindings/
+      - name: Boundary join coverage gate
+        run: dart run tool/check_boundary_join.dart
       - name: Analyze
         run: dart analyze --fatal-infos
       - name: Run tests

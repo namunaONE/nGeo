@@ -75,6 +75,7 @@ final sources = <String, SourceConfig>{
       'src_data_provinces.ts',
       'src_data_districts.ts',
       'src_data_local-units.ts',
+      'src_geo_local-units.geo.ts',
       'src_data_legacy-districts.ts',
       'src_data_zones.ts',
       'src_data_regions.ts',
@@ -82,6 +83,14 @@ final sources = <String, SourceConfig>{
       'src_data_postal-codes-2025.ts',
       'LICENSE',
     ],
+    // The manifest flattens upstream's nested paths with underscores
+    // (src/data/districts.ts -> src_data_districts.ts), so rebuild the
+    // real path before fetching - without this every URL 404s.
+    customUrlBuilder: (file) {
+      final path = file.split('/').last.replaceAll('_', '/');
+      return 'https://raw.githubusercontent.com/l3lackcurtains/'
+          'nepali-geo-pro-max/main/$path';
+    },
   ),
   'open-admin-data': SourceConfig(
     name: 'open-admin-data',

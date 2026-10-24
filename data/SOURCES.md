@@ -348,6 +348,40 @@ Human decision: Janakpurdham 25 (sub-metro official; geo-pro-max stale 24).
 > rather than publishing one number that silently disagrees with the other.
 > Only Lumbini reconciles exactly (109 units, 983 wards).
 
+## Palika boundary geometry (explorer choropleth)
+
+Website-only artifact — **not shipped in the Dart package**, per the
+"Boundaries — removed (v2.7.2)" rule above: package boundaries still
+require an official CBS/MoFAGA file or a second independent geometry
+source. This file only draws the explorer choropleth.
+
+- Raw pin: `nepali-geo-pro-max/src_geo_local-units.geo.ts` (gitignored
+  `data/_raw/`; SHA-256 + size in `data/PROVENANCE.sha256`; tree
+  `117fd0f3d2dabae3bd86bfe9e4c57098ffe56669`).
+- Lineage: nepali-geo-pro-max (MIT) derived it from
+  `younginnovations/nepal-locallevel-map` (MIT, file
+  `out/municipalities.high.geojson`); Visvalingam-Whyatt simplification at
+  tolerance 0.0001, coordinates rounded to 4 decimals, 22 parks/reserves
+  removed, the split Bansagadhi feature merged. 753 features carrying
+  `districtId`, `provinceId`, `nameEn`, `nameNe`, `type`.
+- Derived committed artifact: `docs/palika-boundaries.geojson`, generated
+  by `tool/generate_palika_boundaries.dart` — never hand-edited. A
+  `metadata` block inside the file records the source pin verbatim.
+- Runtime load order (explorer): same-origin `palika-boundaries.geojson`
+  first, pinned CDN copies (jsDelivr, raw.githubusercontent) as fallbacks.
+- Join gate: `tool/check_boundary_join.dart` runs in CI and pins the
+  explorer join coverage — 746/753 (normalized name + districtId, then a
+  centroid-in-own-polygon fallback) with exactly 7 known misses, all
+  upstream spelling variants that are also coordinate-free: Baitedhar
+  (Dolakha), Baraha (Sunsari), Barhagaun Muktichhetra (Mustang), Bogatan
+  (Doti), Mugu Karmarong (Mugu), Naraphu (Manang), Neshang (Manang). A
+  new miss — or a fixed miss that leaves this list stale — fails the
+  build.
+- "Mappable", defined once to stop the 718-vs-726 confusion: in the
+  package it means CBS code **and** coordinates (718 of 753); in
+  `docs/data.json` it is rows with coordinates (726 of 753 — 8 of the 9
+  uncoded rows still carry open-admin-data coordinates).
+
 ## Website basemap (not shipped in the package)
 
 The GitHub Pages explorer renders centroid dots over

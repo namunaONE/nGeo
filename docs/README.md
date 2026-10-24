@@ -80,12 +80,14 @@ blue ramp), local level type, or CBS code confidence — with the classic
 centroid dot map available as a legacy view:
 
 - Choropleth (default): 753 palika polygons from nepali-geo-pro-max (MIT,
-  pinned commit, lazy-fetched at runtime; jsDelivr with a
-  raw.githubusercontent fallback). Joined to `data.json` by normalized
-  English name + districtId, with a centroid-in-own-polygon fallback —
-  746/753 matched; the 7 coordinate-free rows stay table-only. Filters
-  dim non-matching palikas (fill 0.08) instead of hiding them, so the
-  national figure keeps its context.
+  pinned commit), vendored same-origin (`palika-boundaries.geojson`) with
+  pinned CDN fallbacks (jsDelivr → raw.githubusercontent). Joined to
+  `data.json` by normalized English name + districtId, with a
+  centroid-in-own-polygon fallback — 746/753 matched; the 7 known
+  spelling-variant rows stay table-only, and the join is pinned by a CI
+  gate (`tool/check_boundary_join.dart`). Filters dim non-matching
+  palikas (fill 0.08) instead of hiding them, so the national figure
+  keeps its context.
 - Classic dots: canvas circleMarkers colored by type (badge tokens), hollow
   when CBS-unverified; clusters via `chunkedLoading` +
   `removeOutsideVisibleBounds`. The selector falls back to dots
