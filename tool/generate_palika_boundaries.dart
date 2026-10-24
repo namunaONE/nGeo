@@ -60,7 +60,7 @@ void main(List<String> args) {
   var uniqueVerts = 0;
   var ringCount = 0;
   var roundTripOk = 0;
-  for (final raw in (geo['features'] as List).cast<Map<String, dynamic>>()) {
+  for (final raw in _maps(geo['features'])) {
     final props = raw['properties'] as Map<String, dynamic>;
     final geom = raw['geometry'] as Map<String, dynamic>;
     final rawPolys = geom['type'] == 'Polygon'
@@ -99,10 +99,9 @@ void main(List<String> args) {
 
   // ── 2. Roster rows in canonical order ──
   final rows = <_Row>[];
-  for (final p in (roster['provinces'] as List).cast<Map<String, dynamic>>()) {
-    for (final d in (p['districts'] as List).cast<Map<String, dynamic>>()) {
-      for (final lb
-          in (d['localBodies'] as List).cast<Map<String, dynamic>>()) {
+  for (final p in _maps(roster['provinces'])) {
+    for (final d in _maps(p['districts'])) {
+      for (final lb in _maps(d['localBodies'])) {
         rows.add(_Row(
           district: d['name'] as String,
           name: lb['name'] as String,
@@ -187,11 +186,11 @@ void main(List<String> args) {
     }
   }
 
-  final unmatched = features.where((f) => f.matchedRow == null).toList()
-    ..sort(
-      (a, b) => ('${a.districtId}|${a.nameEn}')
-          .compareTo('${b.districtId}|${b.nameEn}'),
-    );
+  final unmatched = features.where((f) => f.matchedRow == null).toList();
+  unmatched.sort(
+    (a, b) => ('${a.districtId}|${a.nameEn}')
+        .compareTo('${b.districtId}|${b.nameEn}'),
+  );
   final matched = features.length - unmatched.length;
   if (matched + unmatched.length != 753) {
     stderr.writeln('Expected 753 features, got ${features.length}.');
@@ -474,6 +473,11 @@ bool _inRing(double lng, double lat, List<List<double>> ring) {
 }
 
 // ── Misc ───────────────────────────────────────────────────────────────
+
+/// Casts a JSON list to a list of string-keyed maps (the shape every
+/// array in the source files uses).
+List<Map<String, dynamic>> _maps(dynamic v) =>
+    (v as List).cast<Map<String, dynamic>>();
 
 String _norm(String s) =>
     s.toLowerCase().replaceAll(RegExp('[^a-z0-9\\u0900-\\u097F]'), '');

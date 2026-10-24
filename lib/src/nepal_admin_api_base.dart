@@ -1017,8 +1017,9 @@ class NepalAdminApi {
   static PalikaBoundary? getLocalBodyBoundary(
     String districtName,
     String localBodyName,
-  ) =>
-      PalikaBoundaries.byName(districtName, localBodyName);
+  ) {
+    return PalikaBoundaries.byName(districtName, localBodyName);
+  }
 
   /// Boundaries for every roster palika the geometry source covers
   /// (746 of 753), in roster order.
@@ -1035,10 +1036,13 @@ class NepalAdminApi {
   ///
   /// With [includeUnmatched] the unjoined features are appended with
   /// their source `districtId` and `nameEn`, so no geometry is dropped.
-  static Map<String, Object?> boundariesGeoJson({bool includeUnmatched = false}) =>
-      PalikaBoundaries.toGeoJsonFeatureCollection(
-        includeUnmatched: includeUnmatched,
-      );
+  static Map<String, Object?> boundariesGeoJson({
+    bool includeUnmatched = false,
+  }) {
+    return PalikaBoundaries.toGeoJsonFeatureCollection(
+      includeUnmatched: includeUnmatched,
+    );
+  }
 }
 
 /// Boundary access directly on a [LocalBody].

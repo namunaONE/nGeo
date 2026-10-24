@@ -26,7 +26,8 @@ Pure Dart package. Zero runtime dependencies. Data ships in the box.
 | **Bindings for 5 ecosystems** | Dart · TypeScript/JavaScript · Python · CSV · GeoJSON — all generated from one dataset, drift-checked in CI |
 | **Bilingual** | Devanagari names for all 7 provinces, 77 districts and **731/753 palikas** - never transliterated, never guessed |
 | **Bilingual search** | `search('भरतपुर')` and `search('Bharatpur')` return the same palika; fragments match too |
-| **Complete hierarchy** | Province → District → Local Body (palika) |
+| **Complete hierarchy** | 
+Province → District → Local Body (palika) |
 | **Official codes** | 744/753 palikas with CBS 5-digit codes (PDDPP), all 77 districts (3-digit), all 7 provinces (NP-P1…NP-P7) |
 | **Honest confidence tiers** | Every code labelled `verified` (548) / `singleSource` (196) / `unverified` (9) — you choose how much to trust it |
 | **Ward counts** | 745/753 palikas with verified ward counts; declared vs substantiated totals reported side by side; 8 documented roster-defect gaps |
@@ -39,7 +40,7 @@ Pure Dart package. Zero runtime dependencies. Data ships in the box.
 | **Computed stats** | National & provincial totals (not hardcoded), with declared-vs-verified ward reconciliation |
 | **JSON serialization** | `toJson()` / `fromJson()` + `==` / `hashCode` on all models |
 | **Zero dependencies** | Pure Dart, works offline on every platform |
-| **Verified** | `dart analyze --fatal-infos` clean, 145 tests, 141 binding checks, hand-written line coverage 100% with an enforced floor |
+| **Verified** | `dart analyze --fatal-infos` clean, 148 tests, 141 binding checks, hand-written line coverage 100% with an enforced floor |
 
 ---
 
@@ -65,7 +66,8 @@ import 'package:nepal_admin_api/nepal_admin_api.dart';
 
 void main() {
   // ──────────────────────────────────────────────
-  // Provinces (with CBS/ISO codes in v2.0.0+)
+  // Provinces (with CB
+S/ISO codes in v2.0.0+)
   // ──────────────────────────────────────────────
   final provinces = NepalAdminApi.getAllProvinces();
   print('Provinces: ${provinces.length}'); // 7
@@ -113,6 +115,7 @@ void main() {
   final stats = NepalAdminApi.getNationalStats();
   print('''
 Provinces: ${stats.provinces}           // 7
+
 Districts: ${stats.districts}           // 77
 Metropolitan: ${stats.metro}            // 6
 Sub-Metro: ${stats.subMetro}            // 11
@@ -161,6 +164,7 @@ Everything below is **generated** from `data/nepal_local_levels.json` by
 CI, and byte-stable across regenerations. Same numbers, same honesty
 guarantees, in whichever shape you already use.
 
+
 | Target | Install | Shape |
 |---|---|---|
 | **Dart / Flutter** | `nepal_admin_api` (pub.dev) | typed classes, zero deps |
@@ -206,7 +210,8 @@ print(bharatpur.nameNe);        // भरतपुर
 print(bharatpur.nameNeOrName);  // भरतपुर   (never null)
 print(bharatpur.displayBoth);   // Bharatpur · भरतपुर
 
-// Search works in both directions, including fragments.
+// Search works in both directions, including f
+ragments.
 NepalAdminApi.search('भरतपुर').localBodies;   // same as search('Bharatpur')
 NepalAdminApi.search('भारत').localBodies;      // fragment match
 NepalAdminApi.search('चितवन').districts;       // Chitwan
@@ -258,7 +263,8 @@ print(bharatpur.hasContact); // true
 
 ## 🔍 Code confidence, explained
 
-A missing code and a doubtful code are different problems, so the package
+A missing code and a
+ doubtful code are different problems, so the package
 distinguishes them instead of collapsing both to `null`:
 
 | Tier | Count | Meaning | Use it for |
@@ -294,7 +300,8 @@ known gaps, which `Province.unreconciledWards` reports per province.
 | `getAllDistricts()` | `List<District>` | All 77 districts |
 | `getDistrictsByProvince(id)` | `List<District>` | Districts in a province (id or ISO) |
 | `getDistrictByName(name)` | `District?` | Case-insensitive lookup |
-| `getDistrictByCbs(code)` | `District?` | By CBS code (`306` = Kathmandu) |
+| `getDistrictBy
+Cbs(code)` | `District?` | By CBS code (`306` = Kathmandu) |
 | `getAllLocalBodies()` | `List<LocalBody>` | All 753 palikas |
 | `getLocalBodiesByDistrict(name)` | `List<LocalBody>` | Palikas in a district |
 | `getLocalBodiesByProvince(id)` | `List<LocalBody>` | Palikas in a province (id or ISO) |
@@ -316,7 +323,8 @@ known gaps, which `Province.unreconciledWards` reports per province.
 
 **Models**: `Province`, `District`, `LocalBody`, `LocalBodyType`, `CbsCodeConfidence`, `ProvinceStats`, `NationalStats`, `SearchResult`, `PalikaBoundary`
 
-**Helpers**: bilingual (`nameNe`, `nameNeOrName`, `displayBoth` on all three models), `LocalBody.fullPath` (`'Bharatpur, Chitwan, Bagmati'`), `isUrban` / `isRural`, `hasCoordinates`, `hasCbsCode`, `cbsCodeString` (zero-padded, for string joins), `LocalBodyListX` (`sortedByName`, `sortedByFullPath`, `whereUrban`, `whereRural`, `whereVerified`, `whereMapped`, `whereCoded`, `whereDoublyAttested`, `whereSingleSource`, `whereUncoded`, `whereCodeAndCoordinateMapped`, `whereWardsVerified`, `ofType`, `totalWards`, `byCbsCode`), ward reconciliation (`District.wards` / `verifiedWardCoverage` / `wardsFullyVerified`, `Province.declaredWards` / `verifiedWards` / `unreconciledWards` / `wardsReconcile`)
+**Helpers**: bilingual (`nameNe`, `nameNeOrName`, `displayBoth` on all three models), `LocalBody.fullPath` (`'Bharatpur, Chitwan, Bagmati'`), `isUrban` / `isRural`, `hasCoordinates`, `hasCbsCode`, `cbsCodeString` (
+zero-padded, for string joins), `LocalBodyListX` (`sortedByName`, `sortedByFullPath`, `whereUrban`, `whereRural`, `whereVerified`, `whereMapped`, `whereCoded`, `whereDoublyAttested`, `whereSingleSource`, `whereUncoded`, `whereCodeAndCoordinateMapped`, `whereWardsVerified`, `ofType`, `totalWards`, `byCbsCode`), ward reconciliation (`District.wards` / `verifiedWardCoverage` / `wardsFullyVerified`, `Province.declaredWards` / `verifiedWards` / `unreconciledWards` / `wardsReconcile`)
 
 👉 [Full API Documentation](https://namunaONE.github.io/Nepal-Local-Government-Data/api.html)
 
@@ -371,7 +379,8 @@ Step 2: CBS code verification via the CBS harvest + Postal-2025 (tool/merge/veri
 Step 3: Adjudication — 72 conflicts, 72 resolved (tool/merge/adjudicate.dart)
        │ 49 mofaga-exact, 15 mofaga-slug, 8 human
        ▼
-Step 4: Schema v2 with CBS codes embedded (tool/merge/apply_cbs_codes.dart)
+Step 4: Schema v2 with CBS codes embedded (tool/merge/ap
+ply_cbs_codes.dart)
        │
        ▼
 Step 5: Confidence tiers — single-source codes recovered from the CBS roster,
@@ -423,7 +432,8 @@ dart pub get
 dart format --set-exit-if-changed .
 dart analyze --fatal-infos
 dart test
-dart run tool/generate.dart
+dart run tool/generate.
+dart
 node docs/smoke.cjs
 
 # Regenerate EVERYTHING from the source of truth (recommended)
@@ -475,7 +485,8 @@ them drift apart.
 
 Machine-readable docs live alongside the site (llms.txt convention):
 
-- [`llms.txt`](https://namunaONE.github.io/Nepal-Local-Government-Data/llms.txt) — curated index: install, API, data, links
+- [`llms.txt`](https://
+namunaONE.github.io/Nepal-Local-Government-Data/llms.txt) — curated index: install, API, data, links
 - [`llms-full.txt`](https://namunaONE.github.io/Nepal-Local-Government-Data/llms-full.txt) — complete documentation in one file; paste this URL into any LLM for full context
 
 Guidelines for AI-generated answers using this package: always query codes/counts/coordinates from the API (never invent CBS codes, ward counts, or lat/lng); disambiguate duplicate palika names with `districtName`/`provinceName` or `fullPath`; respect `*Verified` flags and `null` gaps.

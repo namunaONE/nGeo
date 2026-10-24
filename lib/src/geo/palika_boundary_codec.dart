@@ -63,15 +63,18 @@ class PalikaBoundary {
   int get polygonCount => polygons.length;
 
   /// Total ring count across all polygons (outer rings plus holes).
-  int get ringCount =>
-      polygons.fold<int>(0, (n, p) => n + p.length);
+  int get ringCount => polygons.fold<int>(0, (n, p) => n + p.length);
 
   /// Total coordinate count, ring closures included.
-  int get coordinateCount => polygons.fold<int>(
-        0,
-        (n, p) =>
-            n + p.fold<int>(0, (m, r) => m + r.length),
-      );
+  int get coordinateCount {
+    var n = 0;
+    for (final rings in polygons) {
+      for (final ring in rings) {
+        n += ring.length;
+      }
+    }
+    return n;
+  }
 
   /// Whether this palika is drawn as one polygon without holes.
   bool get isSimple => polygonCount == 1 && polygons[0].length == 1;
@@ -135,8 +138,7 @@ class PalikaBoundary {
         },
         'geometry': <String, Object?>{
           'type': polygonCount == 1 ? 'Polygon' : 'MultiPolygon',
-          'coordinates':
-              polygonCount == 1 ? polygons.first : polygons,
+          'coordinates': polygonCount == 1 ? polygons.first : polygons,
         },
       };
 
@@ -290,15 +292,16 @@ abstract final class PalikaBoundaries {
   /// their source `districtId` and `nameEn`, so no geometry is lost.
   static Map<String, Object?> toGeoJsonFeatureCollection({
     bool includeUnmatched = false,
-  }) =>
-      <String, Object?>{
-        'type': 'FeatureCollection',
-        'features': <Object?>[
-          for (final b in all) b.toGeoJsonFeature(),
-          if (includeUnmatched)
-            for (final b in unmatched) b.toGeoJsonFeature(),
-        ],
-      };
+  }) {
+    return <String, Object?>{
+      'type': 'FeatureCollection',
+      'features': <Object?>[
+        for (final b in all) b.toGeoJsonFeature(),
+        if (includeUnmatched)
+          for (final b in unmatched) b.toGeoJsonFeature(),
+      ],
+    };
+  }
 
   static String? _findDistrict(String name) {
     if (kPalikaBoundaries.containsKey(name)) return name;

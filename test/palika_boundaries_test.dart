@@ -68,12 +68,11 @@ void main() {
   });
 
   test('Bharatpur: decode, centroid containment, GeoJSON', () {
-    final boundary =
-        NepalAdminApi.getLocalBodyBoundary('Chitwan', 'Bharatpur');
-    expect(boundary, isNotNull);
+    final b = NepalAdminApi.getLocalBodyBoundary('Chitwan', 'Bharatpur');
+    expect(b, isNotNull);
     final lb = NepalAdminApi.getLocalBodyByCbs(31304);
-    expect(boundary!.containsPoint(lb!.lat!, lb.lng!), isTrue);
-    final feature = boundary.toGeoJsonFeature();
+    expect(b!.containsPoint(lb!.lat!, lb.lng!), isTrue);
+    final feature = b.toGeoJsonFeature();
     expect(feature['type'], 'Feature');
     final geometry = feature['geometry'] as Map<String, Object?>;
     expect(geometry['type'], anyOf('Polygon', 'MultiPolygon'));
@@ -193,5 +192,52 @@ void main() {
       (NepalAdminApi.boundariesGeoJson()['features'] as List).length,
       kPalikaBoundaryMatchedCount,
     );
+  });
+
+  test('polygon, ring and vertex accounting respects holes', () {
+    final simple = NepalAdminApi.getLocalBodyBoundary('Chitwan', 'Bharatpur');
+    expect(simple, isNotNull);
+    expect(simple!.isSimple, isTrue);
+    expect(simple.polygonCount, 1);
+    expect(simple.ringCount, 1);
+    expect(simple.containsPoint(0, 0), isFalse);
+
+    final holed =
+        NepalAdminApi.getLocalBodyBoundary('Rupandehi', 'Lumbini Sanskritik');
+    expect(holed, isNotNull);
+    expect(holed!.isSimple, isFalse);
+    expect(holed.ringCount, 2);
+    // The roster centroid is inside the shell and outside the hole.
+    expect(holed.containsPoint(27.469, 83.247), isTrue);
+    // A point inside the hole is inside no palika of this boundary.
+    expect(holed.containsPoint(27.4813, 83.2761), isFalse);
+  });
+
+  test('decode rejects malformed boundary strings', () {
+    const bad = <String>[
+      '*', // not in the VLQ alphabet
+      'g', // continuation bit set, then end of string
+      'ggggggggggg', // 11 groups: past the 50-bit limit
+      'AA', // zero polygons, one trailing character
+      'BBA', // one polygon, one ring, zero vertices
+    ];
+    for (final s in bad) {
+      expect(
+        () => PalikaBoundary.decode(encoded: s),
+        throwsFormatException,
+      );
+    }
+  });
+
+  test('roster palikas without geometry expose it honestly', () {
+    expect(NepalAdminApi.getLocalBodyBoundary('Manang', 'Naraphu'), isNull);
+    final missing = NepalAdminApi
+        .getAllLocalBodies()
+        .where((b) => !b.hasBoundary)
+        .toList();
+    expect(missing.length, 7);
+    for (final b in missing) {
+      expect(b.boundary, isNull, reason: '${b.name} should not decode');
+    }
   });
 }
