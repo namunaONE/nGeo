@@ -4,6 +4,32 @@ All notable changes to this package are documented in this file.
 The format follows [Keep a Changelog](https://keepachangelog.com/) and the
 package adheres to [Semantic Versioning](https://semver.org/).
 
+## Unreleased
+
+The size release for the Dart package. `lib/src/nepal_data.dart` is
+regenerated as a compact pipe-separated roster (format version 1, decoded
+by the new `lib/src/roster_codec.dart`) instead of half a megabyte of
+constructor literals — 522 KB down to 88 KB of source — while the decoded
+objects stay identical field for field.
+
+### Changed
+- **`lib/src/nepal_data.dart`** — now carries `kRosterProvinces`,
+  `kRosterDistricts`, `kRosterLocalBodies` and `kRosterGeoSources` rows.
+  `NepalData.provinces` decodes them through `RosterCodec` on first access;
+  ordering, values and derivations are identical to the old literal, which
+  the parity suite pins (753 rows, record for record, in dataset order).
+- **`tool/generate.dart`** — emits the compact roster. The validation pass
+  is unchanged; the writer additionally refuses a dataset whose declared
+  `cbsCodeConfidence` disagrees with the code-and-flag derivation the
+  decoder performs.
+
+### Added
+- **`lib/src/roster_codec.dart`** — the roster reader. Rows are consumed
+  structurally (each province names its district count, each district its
+  palika count) and every row must be consumed exactly, so a truncated or
+  hand-edited file fails at import rather than decoding half a dataset.
+  Covered by the existing suite; the four unreachable guards carry
+  `// coverage:ignore-line`.
 ## 2.8.0 — 2026-10-24
 
 The boundaries release. Palika polygons ship again — this time as pure-Dart

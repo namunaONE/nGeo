@@ -4,7 +4,7 @@
 // measurement that cannot fail is not a gate.
 //
 // Design note, because the obvious implementation is misleading: `lib/` is
-// dominated by lib/src/nepal_data.dart, a 1,396-line generated map literal
+// dominated by lib/src/nepal_data.dart, a generated data file
 // that reports 100% the moment it is imported. Averaging it in produces a
 // flattering ~98% that would hide any real regression in the hand-written
 // API surface. So generated files are excluded and the floor is applied to
