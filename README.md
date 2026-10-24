@@ -32,13 +32,14 @@ Pure Dart package. Zero runtime dependencies. Data ships in the box.
 | **Ward counts** | 745/753 palikas with verified ward counts; declared vs substantiated totals reported side by side; 8 documented roster-defect gaps |
 | **Administrative attributes** | District HQ, area and website (77/77); province capital, area and website (7/7); palika website/email/phone and postal codes |
 | **Map coordinates** | 726/753 palikas with approximate centroids (`lat`/`lng` + `geoSource`); `hasCoordinates`, `whereMapped` |
+| **Boundary polygons** | All 753 palika boundaries as pure-Dart data (~87 KB, zero assets/downloads); 746/753 joined to the roster, 7 published separately; lossless ~11 m quantisation |
 | **Type-safe models** | `Province`, `District`, `LocalBody`, `LocalBodyType`, `CbsCodeConfidence` enums |
 | **Hierarchical queries** | Navigate province → district → local body with typed accessors |
 | **Typed search** | Disambiguates duplicate names by district/province context, by `fullPath`, or by district-scoped lookup |
 | **Computed stats** | National & provincial totals (not hardcoded), with declared-vs-verified ward reconciliation |
 | **JSON serialization** | `toJson()` / `fromJson()` + `==` / `hashCode` on all models |
 | **Zero dependencies** | Pure Dart, works offline on every platform |
-| **Verified** | `dart analyze --fatal-infos` clean, 136 tests, 141 binding checks, hand-written line coverage 100% with an enforced floor |
+| **Verified** | `dart analyze --fatal-infos` clean, 145 tests, 141 binding checks, hand-written line coverage 100% with an enforced floor |
 
 ---
 
@@ -46,7 +47,7 @@ Pure Dart package. Zero runtime dependencies. Data ships in the box.
 
 ```yaml
 dependencies:
-  nepal_admin_api: ^2.7.3
+  nepal_admin_api: ^2.8.0
 ```
 
 ```bash
@@ -308,8 +309,12 @@ known gaps, which `Province.unreconciledWards` reports per province.
 | `getUncodedLocalBodies()` | `List<LocalBody>` | No defensible code (9) |
 | `search(query)` | `SearchResult` | Typed search (names, ISO, full paths) |
 | `getNationalStats()` | `NationalStats` | Computed national totals |
+| `getLocalBodyBoundary(district, name)` | `PalikaBoundary?` | Boundary polygon (746/753 covered) |
+| `getAllLocalBodyBoundaries()` | `List<PalikaBoundary>` | All matched boundaries, roster order |
+| `getUnmatchedLocalBodyBoundaries()` | `List<PalikaBoundary>` | The 7 unjoined source features |
+| `boundariesGeoJson()` | `Map<String, Object?>` | Everything as one RFC 7946 FeatureCollection |
 
-**Models**: `Province`, `District`, `LocalBody`, `LocalBodyType`, `CbsCodeConfidence`, `ProvinceStats`, `NationalStats`, `SearchResult`
+**Models**: `Province`, `District`, `LocalBody`, `LocalBodyType`, `CbsCodeConfidence`, `ProvinceStats`, `NationalStats`, `SearchResult`, `PalikaBoundary`
 
 **Helpers**: bilingual (`nameNe`, `nameNeOrName`, `displayBoth` on all three models), `LocalBody.fullPath` (`'Bharatpur, Chitwan, Bagmati'`), `isUrban` / `isRural`, `hasCoordinates`, `hasCbsCode`, `cbsCodeString` (zero-padded, for string joins), `LocalBodyListX` (`sortedByName`, `sortedByFullPath`, `whereUrban`, `whereRural`, `whereVerified`, `whereMapped`, `whereCoded`, `whereDoublyAttested`, `whereSingleSource`, `whereUncoded`, `whereCodeAndCoordinateMapped`, `whereWardsVerified`, `ofType`, `totalWards`, `byCbsCode`), ward reconciliation (`District.wards` / `verifiedWardCoverage` / `wardsFullyVerified`, `Province.declaredWards` / `verifiedWards` / `unreconciledWards` / `wardsReconcile`)
 

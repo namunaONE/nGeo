@@ -4,6 +4,55 @@ All notable changes to this package are documented in this file.
 The format follows [Keep a Changelog](https://keepachangelog.com/) and the
 package adheres to [Semantic Versioning](https://semver.org/).
 
+## 2.8.0 — 2026-10-24
+
+The boundaries release. Palika polygons ship again — this time as pure-Dart
+data inside the package: 86.7 KB for all 753 palikas, no assets, no
+downloads, no runtime dependencies.
+
+### Added
+- **`lib/src/geo/palika_boundaries.dart`** — every palika boundary as a
+  generated Dart literal (86.7 KB, under the 100 KB budget pinned in tests).
+  Coordinates are quantised to 1e-4 degrees (~11 m) and stored as
+  zigzag-VLQ deltas in format version 1. The round trip against
+  `docs/palika-boundaries.geojson` is bit-exact — nothing is simplified.
+  Douglas-Peucker was measured first and saves under 3% on this source
+  (it is already simplified), so the lossless encoding was kept instead;
+  a TopoJSON-style shared-arc rewrite would have saved only ~9%.
+- **`lib/src/geo/palika_boundary_codec.dart`** — the decoder:
+  `PalikaBoundary` (polygons, bbox, `containsPoint`, `toGeoJsonFeature`)
+  and `PalikaBoundaries` lookups, decoding lazily on demand.
+- `NepalAdminApi.getLocalBodyBoundary(district, name)` — one palika's
+  boundary (746/753 covered, case-insensitive lookup).
+- `NepalAdminApi.getAllLocalBodyBoundaries()`,
+  `getUnmatchedLocalBodyBoundaries()` and `boundariesGeoJson()` — the
+  roster-order list, the unjoined remainder, and one RFC 7946
+  FeatureCollection.
+- `LocalBody.boundary` / `LocalBody.hasBoundary` via `LocalBodyBoundaryX`.
+- **`tool/generate_palika_boundaries.dart`** — regenerates the data file
+  from `docs/palika-boundaries.geojson` + `data/nepal_local_levels.json`;
+  `--check` is the drift gate. The join is self-verifying: district
+  identity is derived by point-in-polygon majority vote across the 726
+  geocoded roster centroids (77/77 districts, no conflicting majorities),
+  names then join within district (592 pairs), and point-in-polygon fixes
+  spelling variants for the rest (154 pairs). The 7 features that survive
+  all three are published under `districtId|nameEn` rather than guessed:
+  Baiteshwor (Dolakha), Barah (Sunsari), Bogtan (Doti), Narphu and
+  Neshyang (Manang), Mugu Karmarong (Mugu), Barhagaun Muktikhsetra
+  (Mustang).
+- `test/palika_boundaries_test.dart` — structural counts, the 100 KB size
+  gate, metro coverage, Nepal bbox sanity, and a full lossless comparison
+  against the source GeoJSON (CI only; `docs/` is pubignored).
+
+### Notes
+- The geometry is single-source (MIT: `younginnovations/
+  nepal-locallevel-map` via `l3lackcurtains/nepali-geo-pro-max @ 117fd0f`)
+  and labelled as such. 2.7.2 removed a different boundary layer because
+  it violated RFC 7946 on 4,477 of 4,478 rings and could not be verified;
+  this one is reproducible from the pinned upstream commit, its rings are
+  closed, its join to the roster is measured and reported, and the size
+  cost is honest: ~87 KB of Dart for all 753 palikas.
+
 ## 2.7.3 — 2026-10-15
 
 Docs only, no API or data changes. Released because the live pub.dev page was

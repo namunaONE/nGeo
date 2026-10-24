@@ -2,6 +2,7 @@
 //
 // Core models and the query API for Nepal's administrative divisions.
 
+import 'geo/palika_boundary_codec.dart';
 import 'nepal_data.dart';
 
 /// The type of a local body (palika) of Nepal.
@@ -1000,6 +1001,55 @@ class NepalAdminApi {
       localBodies: localBodies,
     );
   }
+
+  // ────────────────────────────────────────────────────────────────
+  // Palika boundaries (2.8.0)
+  //
+  // All 753 palika boundary polygons ship as compact pure-Dart data
+  // (~87 KB, format version 1) and decode lazily on demand.
+  // ────────────────────────────────────────────────────────────────
+
+  /// Boundary polygon for one local body, decoded on demand.
+  ///
+  /// Returns null when the geometry source does not cover the palika
+  /// (7 of 753) or the district/name pair is unknown. Names use the
+  /// roster spelling; the lookup is case-insensitive.
+  static PalikaBoundary? getLocalBodyBoundary(
+    String districtName,
+    String localBodyName,
+  ) =>
+      PalikaBoundaries.byName(districtName, localBodyName);
+
+  /// Boundaries for every roster palika the geometry source covers
+  /// (746 of 753), in roster order.
+  static List<PalikaBoundary> getAllLocalBodyBoundaries() =>
+      PalikaBoundaries.all;
+
+  /// The geometry features that failed both the name join and the
+  /// point-in-polygon join — published under their source names rather
+  /// than guessed.
+  static List<PalikaBoundary> getUnmatchedLocalBodyBoundaries() =>
+      PalikaBoundaries.unmatched;
+
+  /// Every boundary as one GeoJSON FeatureCollection (RFC 7946, WGS84).
+  ///
+  /// With [includeUnmatched] the unjoined features are appended with
+  /// their source `districtId` and `nameEn`, so no geometry is dropped.
+  static Map<String, Object?> boundariesGeoJson({bool includeUnmatched = false}) =>
+      PalikaBoundaries.toGeoJsonFeatureCollection(
+        includeUnmatched: includeUnmatched,
+      );
+}
+
+/// Boundary access directly on a [LocalBody].
+extension LocalBodyBoundaryX on LocalBody {
+  /// This palika's boundary polygon, or null when the geometry source
+  /// does not cover it (7 of 753). The polygon is decoded on access.
+  PalikaBoundary? get boundary =>
+      NepalAdminApi.getLocalBodyBoundary(districtName, name);
+
+  /// Whether the geometry source covers this palika. Never decodes.
+  bool get hasBoundary => PalikaBoundaries.hasBoundary(districtName, name);
 }
 
 /// Fluent helpers for working with palika lists.
@@ -1101,3 +1151,4 @@ extension LocalBodyListX on List<LocalBody> {
           if (b.cbsCode != null) b.cbsCode!: b,
       };
 }
+
