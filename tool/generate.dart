@@ -203,173 +203,243 @@ void _validate(List<Map<String, dynamic>> provinces, Map<String, int> totals) {
 }
 
 String _generate(List<Map<String, dynamic>> provinces) {
+  final geoSources = <String>[];
+  final provRows = <String>[];
+  final distRows = <String>[];
+  final bodyRows = <String>[];
+
+  for (final province in provinces) {
+    final provinceDistricts =
+        (province['districts'] as List).cast<Map<String, dynamic>>();
+    final pNameNe = province['nameNe'] as String?;
+    final row = _join([
+      _s(province['id'], 'province id'),
+      _s(province['name'], 'province name'),
+      _s(pNameNe, 'province nameNe'),
+      _flag(pNameNe != null && province['nameNeVerified'] == true),
+      _s(province['capital'], 'province capital'),
+      _dbl(province['areaSqKm']),
+      _s(province['website'], 'province website'),
+      _int(province['cbsCode'], 'province cbsCode'),
+      _s(province['isoCode'], 'province isoCode'),
+      _int(province['wards'], 'province wards'),
+      '${provinceDistricts.length}',
+    ]);
+    provRows.add(row);
+
+    for (final district in provinceDistricts) {
+      final units =
+          (district['localBodies'] as List).cast<Map<String, dynamic>>();
+      final dNameNe = district['nameNe'] as String?;
+      final dRow = _join([
+        _s(district['name'], 'district name'),
+        _s(dNameNe, 'district nameNe'),
+        _flag(dNameNe != null && district['nameNeVerified'] == true),
+        _int(district['cbsCode'], 'district cbsCode'),
+        _s(district['headquarter'], 'district headquarter'),
+        _dbl(district['areaSqKm']),
+        _s(district['website'], 'district website'),
+        '${units.length}',
+      ]);
+      distRows.add(dRow);
+
+      for (final unit in units) {
+        _checkConfidence(unit, '${district['name']}/${unit['name']}');
+        final zips = unit['zipCodes'] as List?;
+        var zipsCsv = '';
+        if (zips != null && zips.isNotEmpty) {
+          zipsCsv = zips.map((z) => _s(z, 'local body zipCode')).join(',');
+        }
+        final bRow = _join([
+          _s(unit['name'], 'local body name'),
+          _s(unit['nameNe'], 'local body nameNe'),
+          _flag(unit['nameNe'] != null && unit['nameNeVerified'] == true),
+          _typeChar(unit['type'] as String, unit['name'] as String),
+          _int(unit['cbsCode'], 'local body cbsCode'),
+          _flag(unit['cbsCode'] != null && unit['cbsCodeVerified'] == true),
+          _dbl(unit['lat']),
+          _dbl(unit['lng']),
+          _geoIdx(unit, geoSources),
+          _int(unit['wards'], 'local body wards'),
+          _flag(unit['wards'] != null && unit['wardsVerified'] == true),
+          _s(unit['website'], 'local body website'),
+          _s(unit['email'], 'local body email'),
+          _s(unit['phone'], 'local body phone'),
+          zipsCsv,
+        ]);
+        bodyRows.add(bRow);
+      }
+    }
+  }
+
   final b = StringBuffer();
   b.writeln('// GENERATED CODE — DO NOT MODIFY BY HAND.');
   b.writeln('//');
   b.writeln('// Source of truth: $jsonPath');
   b.writeln('// Regenerate with: dart run tool/generate.dart');
   b.writeln('//');
-  b.writeln(
-      '// Official federal structure: 7 provinces, 77 districts, 753 local');
-  b.writeln(
-      '// bodies (6 metropolitan, 11 sub-metropolitan, 276 municipalities,');
-  b.writeln(
-      '// 460 rural municipalities), 6,743 wards. Data as of October 2026.');
-  b.writeln(
-      '// Schema v2: includes CBS codes (province: NP-P1..NP-P7, district: 3-digit, localBody: 5-digit PDDPP).');
+  b.writeln('// Official federal structure: 7 provinces, 77 districts,');
+  b.writeln('// 753 local bodies (6 metropolitan, 11 sub-metropolitan,');
+  b.writeln('// 276 municipalities, 460 rural municipalities), 6,743');
+  b.writeln('// wards. Data as of October 2026.');
+  b.writeln('//');
+  b.writeln('// Compact roster, format version 1 (decoded by');
+  b.writeln('// roster_codec.dart): the dataset ships as pipe-separated rows');
+  b.writeln('// — one per province, district and local body —');
+  b.writeln('// instead of constructor literals, so the generated file');
+  b.writeln('// stays small while decoding to the same objects.');
   b.writeln();
   b.writeln("import 'nepal_admin_api_base.dart';");
+  b.writeln("import 'roster_codec.dart';");
+  b.writeln();
+  b.writeln('/// Version of the compact roster format carried by this file.');
+  b.writeln("const String kRosterFormatVersion = '1';");
+  b.writeln();
+  b.writeln('/// Coordinate provenance labels, referenced from');
+  b.writeln('/// local-body rows by index, in first-appearance order.');
+  b.writeln('const List<String> kRosterGeoSources = [');
+  for (final source in geoSources) {
+    b.writeln("  '$source',");
+  }
+  b.writeln('];');
+  b.writeln();
+  b.writeln('/// Province rows, one per province, in dataset order:');
+  b.writeln('/// id|name|nameNe|nameNeVerified|capital|areaSqKm|website|');
+  b.writeln('/// cbsCode|isoCode|declaredWards|districtCount');
+  b.writeln('const List<String> kRosterProvinces = [');
+  for (final provRow in provRows) {
+    b.writeln("  '$provRow',");
+  }
+  b.writeln('];');
+  b.writeln();
+  b.writeln('/// District rows, one per district, in dataset order:');
+  b.writeln('/// name|nameNe|nameNeVerified|cbsCode|headquarter|areaSqKm|');
+  b.writeln('/// website|unitCount');
+  b.writeln('const List<String> kRosterDistricts = [');
+  for (final distRow in distRows) {
+    b.writeln("  '$distRow',");
+  }
+  b.writeln('];');
+  b.writeln();
+  b.writeln('/// Local-body rows, one per palika, in dataset order:');
+  b.writeln('/// name|nameNe|nameNeVerified|type|cbsCode|cbsVerified|');
+  b.writeln('/// lat|lng|geoSourceIndex|wards|wardsVerified|website|email|');
+  b.writeln('/// phone|zipCodes');
+  b.writeln('const List<String> kRosterLocalBodies = [');
+  for (final bodyRow in bodyRows) {
+    b.writeln("  '$bodyRow',");
+  }
+  b.writeln('];');
   b.writeln();
   b.writeln("/// The package's embedded dataset. Do not construct by hand —");
   b.writeln('/// use [NepalAdminApi] to query it.');
   b.writeln('class NepalData {');
-  b.writeln('  static final List<Province> provinces = [');
-
-  for (final province in provinces) {
-    final provinceDistricts =
-        (province['districts'] as List).cast<Map<String, dynamic>>();
-    var total = 0;
-    final byType = <String, int>{};
-    for (final district in provinceDistricts) {
-      final units =
-          (district['localBodies'] as List).cast<Map<String, dynamic>>();
-      total += units.length;
-      for (final unit in units) {
-        final type = unit['type'] as String;
-        byType[type] = (byType[type] ?? 0) + 1;
-      }
-    }
-
-    b.writeln('    Province(');
-    b.writeln("      id: '${province['id']}',");
-    b.writeln("      name: '${province['name']}',");
-    if (province['nameNe'] != null) {
-      b.writeln("      nameNe: '${province['nameNe']}',");
-      if (province['nameNeVerified'] == true) {
-        b.writeln('      nameNeVerified: true,');
-      }
-    }
-    if (province['capital'] != null) {
-      b.writeln("      capital: '${province['capital']}',");
-    }
-    if (province['areaSqKm'] != null) {
-      b.writeln('      areaSqKm: ${province['areaSqKm']},');
-    }
-    if (province['website'] != null) {
-      b.writeln("      website: '${province['website']}',");
-    }
-    b.writeln("      cbsCode: ${province['cbsCode']},");
-    b.writeln("      isoCode: '${province['isoCode']}',");
-    b.writeln('      stats: const ProvinceStats(');
-    b.writeln('        districts: ${provinceDistricts.length},');
-    b.writeln('        metro: ${byType['metropolitan'] ?? 0},');
-    b.writeln('        subMetro: ${byType['subMetropolitan'] ?? 0},');
-    b.writeln('        mun: ${byType['municipality'] ?? 0},');
-    b.writeln('        ruralMun: ${byType['ruralMunicipality'] ?? 0},');
-    b.writeln('        total: $total,');
-    b.writeln("        wards: ${province['wards']},");
-    b.writeln('      ),');
-    b.writeln('      districts: [');
-
-    for (final district in provinceDistricts) {
-      b.writeln('        District(');
-      b.writeln("          name: '${district['name']}',");
-      if (district['nameNe'] != null) {
-        b.writeln("          nameNe: '${district['nameNe']}',");
-        if (district['nameNeVerified'] == true) {
-          b.writeln('          nameNeVerified: true,');
-        }
-      }
-      final dCbs = district['cbsCode'];
-      if (dCbs != null) {
-        b.writeln('          cbsCode: $dCbs,');
-      }
-      if (district['headquarter'] != null) {
-        b.writeln("          headquarter: '${district['headquarter']}',");
-      }
-      if (district['areaSqKm'] != null) {
-        b.writeln('          areaSqKm: ${district['areaSqKm']},');
-      }
-      if (district['website'] != null) {
-        b.writeln("          website: '${district['website']}',");
-      }
-      b.writeln('          units: [');
-      for (final unit
-          in (district['localBodies'] as List).cast<Map<String, dynamic>>()) {
-        final lbCbs = unit['cbsCode'];
-        final lbVerified = unit['cbsCodeVerified'] == true;
-        final lbConfidence =
-            unit['cbsCodeConfidence'] as String? ?? 'unverified';
-        final lat = unit['lat'];
-        final lng = unit['lng'];
-        final geoSource = unit['geoSource'];
-        final extra = StringBuffer();
-        final nameNe = unit['nameNe'] as String?;
-        if (nameNe != null) {
-          // Devanagari names come from the dataset and contain no quotes or
-          // backslashes, but a single quote is cheap to rule out explicitly:
-          // a name containing one would otherwise produce broken Dart.
-          if (nameNe.contains("'") ||
-              nameNe.contains(r'\') ||
-              nameNe.contains(r'$')) {
-            stderr.writeln('ERROR: unsafe characters in nameNe for '
-                '${unit['name']} (${district['name']}): $nameNe');
-            exit(1);
-          }
-          extra.write(", nameNe: '$nameNe'");
-          if (unit['nameNeVerified'] == true) {
-            extra.write(', nameNeVerified: true');
-          }
-        }
-        if (lbCbs != null) {
-          extra.write(', cbsCode: $lbCbs, cbsCodeVerified: $lbVerified');
-          extra.write(
-            ', cbsCodeConfidence: '
-            'CbsCodeConfidence.$lbConfidence',
-          );
-        }
-        if (lat != null && lng != null) {
-          extra.write(', lat: $lat, lng: $lng');
-          if (geoSource != null) {
-            extra.write(", geoSource: '$geoSource'");
-          }
-        }
-        final wards = unit['wards'];
-        if (wards != null) {
-          extra.write(', wards: $wards');
-          if (unit['wardsVerified'] == true) {
-            extra.write(', wardsVerified: true');
-          }
-        }
-        if (unit['website'] != null) {
-          extra.write(", website: '${unit['website']}'");
-        }
-        if (unit['email'] != null) {
-          extra.write(", email: '${unit['email']}'");
-        }
-        if (unit['phone'] != null) {
-          extra.write(", phone: '${unit['phone']}'");
-        }
-        final zips = unit['zipCodes'];
-        if (zips is List && zips.isNotEmpty) {
-          extra.write(', zipCodes: [');
-          extra.write(
-            zips.map((z) => "'${'$z'.replaceAll("'", r"\'")}'").join(', '),
-          );
-          extra.write(']');
-        }
-        b.writeln(
-            "            LocalBody(name: '${unit['name']}', type: LocalBodyType.${unit['type']}, districtName: '${district['name']}', provinceName: '${province['name']}'$extra),");
-      }
-      b.writeln('          ],');
-      b.writeln('        ),');
-    }
-
-    b.writeln('      ],');
-    b.writeln('    ),');
-  }
-
-  b.writeln('  ];');
-  b.write('}');
+  b.writeln('  static final List<Province> provinces = RosterCodec.decode(');
+  b.writeln('    formatVersion: kRosterFormatVersion,');
+  b.writeln('    geoSources: kRosterGeoSources,');
+  b.writeln('    provinces: kRosterProvinces,');
+  b.writeln('    districts: kRosterDistricts,');
+  b.writeln('    localBodies: kRosterLocalBodies,');
+  b.writeln('  );');
+  b.writeln('}');
   return b.toString();
+}
+
+/// Joins the fields of one roster row.
+String _join(List<String> fields) => fields.join('|');
+
+/// A string field: null becomes the empty field, and anything the row
+/// format cannot carry is refused rather than silently corrupted.
+String _s(Object? value, String where) {
+  final s = value == null ? '' : '$value';
+  _safe(s, where);
+  return s;
+}
+
+/// Refuses the characters a pipe-separated, single-quoted row cannot
+/// carry. The dataset is clean today; this keeps a future merge from
+/// quietly corrupting the roster.
+void _safe(String s, String where) {
+  for (final bad in const ['|', "'", r'\', r'$', '\n', '\r']) {
+    if (s.contains(bad)) {
+      stderr.writeln('ERROR: $where contains $bad: $s');
+      exit(1);
+    }
+  }
+}
+
+/// A boolean field: true is written as '1', everything else as empty.
+String _flag(bool value) => value ? '1' : '';
+
+/// An integer field: null becomes the empty field.
+String _int(Object? n, String where) {
+  if (n == null) return '';
+  if (n is! int) {
+    stderr.writeln('ERROR: $where is not an integer: $n');
+    exit(1);
+  }
+  return '$n';
+}
+
+/// A real-valued field: null becomes the empty field. Integral values
+/// keep their '.0' so the shortest representation round-trips.
+String _dbl(Object? n) {
+  if (n == null) return '';
+  final d = (n as num).toDouble();
+  final i = d.toInt();
+  return i == d ? '$i.0' : '$d';
+}
+
+/// The one-letter type code of a local-body row.
+String _typeChar(String type, String where) {
+  const codes = <String, String>{
+    'metropolitan': 'M',
+    'subMetropolitan': 'S',
+    'municipality': 'm',
+    'ruralMunicipality': 'r',
+  };
+  final code = codes[type];
+  if (code == null) {
+    stderr.writeln('ERROR: unknown local-body type "$type" for $where.');
+    exit(1);
+  }
+  return code;
+}
+
+/// The geo-source field: the index of the label in [geoSources] (added on
+/// first appearance), or empty when the row carries no coordinates.
+String _geoIdx(Map<String, dynamic> unit, List<String> geoSources) {
+  if (unit['lat'] == null || unit['lng'] == null) return '';
+  final raw = unit['geoSource'];
+  if (raw == null) return '';
+  final source = _s(raw, 'local body geoSource');
+  var idx = geoSources.indexOf(source);
+  if (idx < 0) {
+    idx = geoSources.length;
+    geoSources.add(source);
+  }
+  return '$idx';
+}
+
+/// The roster derives the tier away: no code means no tier, a
+/// doubly-attested code is verified, any other code is single-source.
+/// Refuses a dataset whose declared tier disagrees with that rule —
+/// decoding it would tell a different story than the source JSON.
+void _checkConfidence(Map<String, dynamic> unit, String where) {
+  final cbs = unit['cbsCode'];
+  final verified = unit['cbsCodeVerified'] == true;
+  final declared = unit['cbsCodeConfidence'] as String? ?? 'unverified';
+  String derived;
+  if (cbs == null) {
+    derived = 'unverified';
+  } else if (verified) {
+    derived = 'verified';
+  } else {
+    derived = 'singleSource';
+  }
+  if (declared != derived) {
+    stderr.writeln('ERROR: $where declares cbsCodeConfidence '
+        '$declared but its code and flag derive $derived.');
+    exit(1);
+  }
 }

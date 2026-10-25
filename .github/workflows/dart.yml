@@ -82,6 +82,10 @@ jobs:
         run: dart run tool/generate_bindings.dart
       - name: Verify no bindings drift
         run: git diff --exit-code -- bindings/
+      - name: Regenerate palika boundaries (vendored GeoJSON)
+        run: dart run tool/generate_palika_boundaries.dart
+      - name: Verify no palika boundary drift
+        run: git diff --exit-code -- lib/src/geo/palika_boundaries.dart
       - name: Boundary join coverage gate
         run: dart run tool/check_boundary_join.dart
       - name: Analyze

@@ -122,10 +122,10 @@ const Map<String, String> districtIdByName = <String, String>{
 
 final RegExp _dashRe = RegExp('[\u2013\u2014]');
 final RegExp _nonNameRe = RegExp('[^a-z0-9\u0900-\u097F]+');
-final RegExp _typeSuffixRe = RegExp(
-    ' (rural municipality|municipality|sub metropolis|'
-    'sub metropolitan city|metropolitan city|metropolis|gaunpalika|'
-    'nagarpalika|upamahanagarpalika|mahanagarpalika)\$');
+final RegExp _typeSuffixRe =
+    RegExp(' (rural municipality|municipality|sub metropolis|'
+        'sub metropolitan city|metropolitan city|metropolis|gaunpalika|'
+        'nagarpalika|upamahanagarpalika|mahanagarpalika)\$');
 final RegExp _spaceRe = RegExp(' ');
 
 /// Exact port of app.js normPalikaName — the join key depends on it.
@@ -303,14 +303,14 @@ void main() {
 
   // 1) name join within the district (first feature wins, claim once)
   final byKey = <String, BoundaryFeature>{};
-  for (final feature of features) {
+  for (final feature in features) {
     final featureDistrictId = feature.properties['districtId'] as String? ?? '';
     final featureName = feature.properties['nameEn'] as String? ?? '';
     final key = '$featureDistrictId|${normPalikaName(featureName)}';
     byKey.putIfAbsent(key, () => feature);
   }
   var nameJoins = 0;
-  for (final row of rows) {
+  for (final row in rows) {
     final key = '${row.districtId}|${normPalikaName(row.name)}';
     final feature = byKey[key];
     if (feature != null && !feature.claimed) {
@@ -322,14 +322,12 @@ void main() {
 
   // 2) centroid-in-own-polygon fallback, same district first, claim once
   var pipJoins = 0;
-  for (final row of rows) {
+  for (final row in rows) {
     if (row.matched != null || row.lat == null || row.lng == null) {
       continue;
     }
     var hit = _pipScan(features, row.lng!, row.lat!, row.districtId);
-    if (hit == null) {
-      hit = _pipScan(features, row.lng!, row.lat!, null);
-    }
+    hit ??= _pipScan(features, row.lng!, row.lat!, null);
     if (hit != null) {
       row.matched = hit;
       hit.claimed = true;
@@ -340,14 +338,14 @@ void main() {
   var joinedCount = 0;
   var unclaimedCount = 0;
   final misses = <String>[];
-  for (final row of rows) {
+  for (final row in rows) {
     if (row.matched == null) {
       misses.add(row.label);
     } else {
       joinedCount++;
     }
   }
-  for (final feature of features) {
+  for (final feature in features) {
     if (!feature.claimed) {
       unclaimedCount++;
     }

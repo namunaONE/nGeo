@@ -37,9 +37,9 @@ const _alphabet =
 
 void main(List<String> args) {
   final check = args.contains('--check');
-  final geoPath = 'docs/palika-boundaries.geojson';
-  final rosterPath = 'data/nepal_local_levels.json';
-  final outPath = 'lib/src/geo/palika_boundaries.dart';
+  const geoPath = 'docs/palika-boundaries.geojson';
+  const rosterPath = 'data/nepal_local_levels.json';
+  const outPath = 'lib/src/geo/palika_boundaries.dart';
 
   final geoFile = File(geoPath);
   final rosterFile = File(rosterPath);
@@ -52,8 +52,8 @@ void main(List<String> args) {
 
   final geo = jsonDecode(geoFile.readAsStringSync()) as Map<String, dynamic>;
   final meta = geo['metadata'] as Map<String, dynamic>;
-  final roster = jsonDecode(rosterFile.readAsStringSync())
-      as Map<String, dynamic>;
+  final roster =
+      jsonDecode(rosterFile.readAsStringSync()) as Map<String, dynamic>;
 
   // ── 1. Encode every feature, verifying the round trip as we go ──
   final features = <_Feature>[];
@@ -250,7 +250,6 @@ void main(List<String> args) {
       '(roster');
   w("/// spelling), e.g. `kPalikaBoundaries['Chitwan']?['Bharatpur']`.");
   w('const Map<String, Map<String, String>> kPalikaBoundaries = {');
-  var emitted = 0;
   final seen = <String>{};
   var i = 0;
   while (i < rows.length) {
@@ -262,7 +261,6 @@ void main(List<String> args) {
       if (f != null && !seen.contains(key)) {
         seen.add(key);
         entries.add(entryLine(4, "'${_esc(rows[i].name)}'", "'${f.enc}',"));
-        emitted++;
       }
       i++;
     }
@@ -284,7 +282,8 @@ void main(List<String> args) {
   } else {
     w('const Map<String, String> kUnmatchedPalikaBoundaries = {');
     for (final f in unmatched) {
-      w(entryLine(2, "'${_esc(f.districtId)}|${_esc(f.nameEn)}'", "'${f.enc}',"));
+      w(entryLine(
+          2, "'${_esc(f.districtId)}|${_esc(f.nameEn)}'", "'${f.enc}',"));
     }
     w('};');
   }
