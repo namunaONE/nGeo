@@ -240,12 +240,6 @@ jobs:
   # exactly the rot this repo exists to avoid.
   flutter-widgets:
     runs-on: ubuntu-latest
-    permissions:
-      contents: read
-      # TEMP (to be reverted before merge): lets this job post analyze/test
-      # output as a PR comment — the only failure surface readable without
-      # log access.
-      pull-requests: write
     defaults:
       run:
         working-directory: packages/nepal_admin_widgets
@@ -257,55 +251,12 @@ jobs:
           channel: stable
       - name: Resolve dependencies
         run: flutter pub get
-      # TEMP (to be reverted): `flutter analyze` findings are not visible
-      # without log access, so post the output as a PR comment on failure.
       - name: Analyze library, example and tests
-        run: |
-          set +e
-          flutter analyze --fatal-infos 2>&1 | tee /tmp/widgets-analyze.txt
-          code="${PIPESTATUS[0]}"
-          set -e
-          if [ "$code" -ne 0 ]; then
-            {
-              echo "### flutter analyze output (exit $code)"
-              echo '```'
-              cat /tmp/widgets-analyze.txt
-              echo '```'
-            } > /tmp/widgets-analyze-comment.md
-            if [ -n "$PR_NUMBER" ]; then
-              gh pr comment "$PR_NUMBER" --repo "$GITHUB_REPOSITORY" \
-                --body-file /tmp/widgets-analyze-comment.md || true
-            fi
-          fi
-          exit "$code"
-        env:
-          GH_TOKEN: ${{ github.token }}
-          PR_NUMBER: ${{ github.event.pull_request.number }}
+        run: flutter analyze --fatal-infos
       - name: Verify formatting
         run: dart format --output=none --set-exit-if-changed lib test example
-      # TEMP (to be reverted): same for widget tests.
       - name: Run widget tests
-        run: |
-          set +e
-          flutter test 2>&1 | tee /tmp/widgets-test.txt
-          code="${PIPESTATUS[0]}"
-          set -e
-          if [ "$code" -ne 0 ]; then
-            {
-              echo "### flutter test output (exit $code)"
-              echo '```'
-              tail -c 30000 /tmp/widgets-test.txt
-              echo '```'
-            } > /tmp/widgets-test-comment.md
-            if [ -n "$PR_NUMBER" ]; then
-              gh pr comment "$PR_NUMBER" --repo "$GITHUB_REPOSITORY" \
-                --body-file /tmp/widgets-test-comment.md || true
-            fi
-          fi
-          exit "$code"
-        env:
-          GH_TOKEN: ${{ github.token }}
-          PR_NUMBER: ${{ github.event.pull_request.number }}
+        run: flutter test
 
   # Scheduled integrity watch.
   #
@@ -366,6 +317,10 @@ jobs:
             const body = 'The scheduled provenance check failed: at least one '
               + 'vendored input in `data/_raw/` no longer matches its SHA-256 '
               + 'pin in `data/PROVENANCE.sha256`, or is missing.\n\n'
+              + 'An upstream source has changed. Do NOT re-run the merge to '
+              + 'paper over it — follow the guidance in `data/SOURCES.md` '
+              + '(re-fetch, re-review, re-pin, then re-merge).\n\n'
+              + 'See the failing run logs for the specific file.';
             await github.rest.issues.create({
               owner: context.repo.owner,
               repo: context.repo.repo,
