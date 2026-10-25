@@ -3,10 +3,20 @@ name: Daily gap watch (09:00 NPT)
 # 09:00 Asia/Kathmandu (UTC+5:45) is 03:15 UTC. GitHub schedules cron in UTC
 # and may delay runs a few minutes; the report header always records the
 # actual UTC time it ran.
+#
+# push (main, tooling paths only) lets the watch self-test the moment its own
+# code, or a freshly re-pinned provenance file, changes — no manual
+# workflow_dispatch needed to validate an edit end-to-end.
 on:
   schedule:
     - cron: '15 3 * * *'
   workflow_dispatch:
+  push:
+    branches: [main]
+    paths:
+      - '.github/workflows/daily-watch.yml'
+      - 'tool/daily_watch/**'
+      - 'data/PROVENANCE.sha256'
 
 permissions:
   contents: read
