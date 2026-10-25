@@ -4,7 +4,7 @@ Offline administrative divisions of Nepal for Python — **7 provinces,
 77 districts, 753 local bodies, 6,743 wards**, with official CBS codes,
 Devanagari names, coordinates and ward counts.
 
-Data as of **2026-10-13**. Generated from
+Data as of **2026-10-25**. Generated from
 [`data/nepal_local_levels.json`](https://github.com/namunaONE/Nepal-Local-Government-Data)
 by `tool/generate_bindings.dart` — do not edit by hand.
 
