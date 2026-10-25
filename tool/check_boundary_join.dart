@@ -122,10 +122,10 @@ const Map<String, String> districtIdByName = <String, String>{
 
 final RegExp _dashRe = RegExp('[\u2013\u2014]');
 final RegExp _nonNameRe = RegExp('[^a-z0-9\u0900-\u097F]+');
-final RegExp _typeSuffixRe = RegExp(
-    ' (rural municipality|municipality|sub metropolis|'
-    'sub metropolitan city|metropolitan city|metropolis|gaunpalika|'
-    'nagarpalika|upamahanagarpalika|mahanagarpalika)\$');
+final RegExp _typeSuffixRe =
+    RegExp(' (rural municipality|municipality|sub metropolis|'
+        'sub metropolitan city|metropolitan city|metropolis|gaunpalika|'
+        'nagarpalika|upamahanagarpalika|mahanagarpalika)\$');
 final RegExp _spaceRe = RegExp(' ');
 
 /// Exact port of app.js normPalikaName — the join key depends on it.
@@ -304,8 +304,7 @@ void main() {
   // 1) name join within the district (first feature wins, claim once)
   final byKey = <String, BoundaryFeature>{};
   for (final feature in features) {
-    final featureDistrictId =
-        feature.properties['districtId'] as String? ?? '';
+    final featureDistrictId = feature.properties['districtId'] as String? ?? '';
     final featureName = feature.properties['nameEn'] as String? ?? '';
     final key = '$featureDistrictId|${normPalikaName(featureName)}';
     byKey.putIfAbsent(key, () => feature);
