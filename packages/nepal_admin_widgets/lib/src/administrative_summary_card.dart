@@ -56,7 +56,8 @@ class AdministrativeSummaryCard extends StatelessWidget {
           padding: const EdgeInsets.all(16),
           child: Row(
             children: [
-              Icon(Icons.location_city_outlined, color: scheme.onSurfaceVariant),
+              Icon(Icons.location_city_outlined,
+                  color: scheme.onSurfaceVariant),
               const SizedBox(width: 12),
               Expanded(
                 child: Text(

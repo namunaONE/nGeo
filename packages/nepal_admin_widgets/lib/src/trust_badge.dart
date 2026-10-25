@@ -42,8 +42,7 @@ class TrustBadge extends StatelessWidget {
   final bool compact;
 
   /// The short label for a tier.
-  static String labelFor(CbsCodeConfidence confidence) =>
-      switch (confidence) {
+  static String labelFor(CbsCodeConfidence confidence) => switch (confidence) {
         CbsCodeConfidence.verified => 'Doubly attested',
         CbsCodeConfidence.singleSource => 'Single source',
         CbsCodeConfidence.unverified => 'Not coded',

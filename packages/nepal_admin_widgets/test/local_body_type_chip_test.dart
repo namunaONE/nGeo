@@ -23,8 +23,7 @@ void main() {
     }
   });
 
-  test('accents are theme-derived and pairwise distinct across the real '
-      'types', () {
+  test('accents are pairwise distinct across the real types', () {
     final scheme = ColorScheme.fromSeed(seedColor: const Color(0xFF3B82F6));
     final accents = <Color>{
       for (final type in LocalBodyType.values)

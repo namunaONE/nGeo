@@ -22,8 +22,9 @@ runnable gallery.
   dropdowns, bilingual search and a live summary card in one card, with a
   clear-selection action that reports an empty selection.
 - Component gallery in `example/` — every widget runnable in light and dark
-  over the real dataset, with live national statistics. The example now
-  ships its own `pubspec.yaml`, so `flutter run` works out of the box.
+  over the real dataset, with live national statistics. `example/` stays
+  deliberately pubspec-less (repo convention); the `flutter-widgets` CI
+  job compile-checks it on every push.
 - Component test suite — chips, badges, cards and the picker card tested
   against the real dataset: one real palika per CBS tier, every type, the
   empty states, and the clear action.

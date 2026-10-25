@@ -14,8 +14,7 @@ LocalBody get _metro =>
 
 void main() {
   testWidgets('empty state says what to do', (tester) async {
-    await tester
-        .pumpWidget(_wrap(const AdministrativeSummaryCard(body: null)));
+    await tester.pumpWidget(_wrap(const AdministrativeSummaryCard(body: null)));
     expect(find.text('Pick a province, then a district, then a local body.'),
         findsOneWidget);
   });
@@ -27,8 +26,7 @@ void main() {
     expect(find.text(body.type.fullName), findsOneWidget);
     expect(find.text('${body.districtName} · ${body.provinceName}'),
         findsOneWidget);
-    expect(
-        find.text(TrustBadge.labelFor(body.cbsCodeConfidence)),
+    expect(find.text(TrustBadge.labelFor(body.cbsCodeConfidence)),
         findsOneWidget);
   });
 

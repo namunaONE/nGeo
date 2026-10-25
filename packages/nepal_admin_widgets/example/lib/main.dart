@@ -1,9 +1,14 @@
 // Component gallery for nepal_admin_widgets: every widget the package
 // ships, runnable, in light and dark.
 //
-//   cd packages/nepal_admin_widgets/example
-//   flutter pub get
-//   flutter run
+// example/ is deliberately NOT a package (repo convention, same rule as
+// the root example/ - see the flutter-widgets CI job): it ships no
+// pubspec.yaml, so it never disturbs dependency resolution. The gallery
+// is still compile-checked on every push, because `flutter analyze` in
+// this package covers lib, test AND example. To run it interactively,
+// drop this file into any Flutter app that depends on nepal_admin_widgets
+// - or into a scratch package with a path dependency on this one - and
+// `flutter run`.
 //
 // Everything renders offline from the verified dataset compiled into the
 // package — no network, no asset loading, no location permissions.
@@ -163,8 +168,7 @@ class _DetailRow extends StatelessWidget {
         children: [
           SizedBox(
             width: 110,
-            child:
-                Text(label, style: Theme.of(context).textTheme.labelLarge),
+            child: Text(label, style: Theme.of(context).textTheme.labelLarge),
           ),
           Expanded(child: Text(value)),
         ],

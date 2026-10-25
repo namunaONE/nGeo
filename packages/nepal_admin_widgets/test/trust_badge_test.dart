@@ -35,8 +35,7 @@ void main() {
         reason: 'dataset must carry doubly-attested codes');
     expect(singleSource, isNotEmpty,
         reason: 'dataset must carry single-source codes');
-    expect(uncoded, isNotEmpty,
-        reason: 'dataset must carry uncoded palikas');
+    expect(uncoded, isNotEmpty, reason: 'dataset must carry uncoded palikas');
 
     final samples = <CbsCodeConfidence, LocalBody>{
       CbsCodeConfidence.verified: verified.first,
@@ -56,12 +55,10 @@ void main() {
     await tester.pumpWidget(_wrap(TrustBadge.forLocalBody(body: body)));
     expect(find.text('Doubly attested'), findsOneWidget);
 
-    await tester.pumpWidget(
-      _wrap(const TrustBadge.confidence(
-        confidence: CbsCodeConfidence.verified,
-        compact: true,
-      )),
-    );
+    await tester.pumpWidget(_wrap(const TrustBadge.confidence(
+      confidence: CbsCodeConfidence.verified,
+      compact: true,
+    )));
     expect(find.byIcon(Icons.verified), findsOneWidget);
     expect(find.text('Doubly attested'), findsNothing);
   });

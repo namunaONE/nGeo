@@ -117,15 +117,17 @@ with brand blue `#3B82F6` for the intended harmony.
 
 ## Gallery — every widget, runnable
 
-```
-cd packages/nepal_admin_widgets/example
-flutter pub get
-flutter run
-```
+`example/lib/main.dart` is a light/dark gallery over the real dataset: the
+picker, every palika type, every CBS confidence tier, the summary cards and
+their empty states, and live national statistics.
 
-A light/dark gallery over the real dataset: the picker, every palika type,
-every CBS confidence tier, the summary cards and their empty states, and
-live national statistics.
+Following this repo's convention (see the `flutter-example` CI job),
+`example/` is deliberately not a package — it ships no `pubspec.yaml`, so it
+never disturbs dependency resolution. The gallery is still compile-checked
+on every push: the `flutter-widgets` CI job analyzes `lib`, `test` and
+`example` together. To run it interactively, drop `example/lib/main.dart`
+into any Flutter app that depends on `nepal_admin_widgets` — or into a
+scratch package with a path dependency on this one — and `flutter run`.
 
 ## Verification
 
@@ -149,9 +151,10 @@ analysis.
 
 ## Status
 
-`publish_to: none` — this is a monorepo package that depends on the local
-`nepal_admin_api` checkout via a path dependency. Change that to a version
-constraint before publishing.
+The package depends on the hosted [`nepal_admin_api`][api] (`^2.7.2`) and
+carries no `publish_to: none` marker — it can be published to pub.dev
+as-is. Note that CI's `publish-dry-run` job covers the root `nepal_admin_api`
+package only, so publish this package manually when you cut a release.
 
 ## License
 
