@@ -1,6 +1,6 @@
 # nepal_admin_widgets
 
-Flutter dropdowns for Nepal's administrative divisions — **7 provinces,
+Flutter widgets for Nepal's administrative divisions — **7 provinces,
 77 districts, 753 local bodies** — bilingual (English + Devanagari), entirely
 offline, and backed by the verified [`nepal_admin_api`][api] dataset.
 
@@ -12,14 +12,36 @@ compiled into the app.
 ```yaml
 dependencies:
   nepal_admin_api: ^2.7.0
-  nepal_admin_widgets: ^0.1.0
+  nepal_admin_widgets: ^0.2.0
 ```
 
-## Use
+## The widget set
+
+| Widget | What it does |
+|---|---|
+| `AdministrativePickerCard` | The drop-in composition: cascading dropdowns + bilingual search + a live summary card, with a clear-selection action. |
+| `AdministrativeDropdown` | Three dependent Province → District → Palika dropdowns, each disabled until its parent is chosen. |
+| `LocalBodySearchField` | Debounced bilingual search scoped to the cascade, every result labelled with its district. |
+| `AdministrativeSummaryCard` | One palika at a glance: bilingual name, type chip, trust badge, CBS code, wards and the district → province breadcrumb — with an honest empty state. |
+| `LocalBodyTypeChip` | The palika type as a colour-coded chip (full name or 'RM'-style abbreviation), accents derived from ColorScheme roles. |
+| `TrustBadge` | The evidence tier behind a CBS code — doubly attested / single source / not coded — per Design System v3 trust rules. |
+| `AdministrativeCascade` | The widget-free `ChangeNotifier` behind all of it: state transitions and label rules, unit-testable. |
+
+### The fastest start
 
 ```dart
 import 'package:nepal_admin_widgets/nepal_admin_widgets.dart';
 
+AdministrativePickerCard(
+  onChanged: (selection) {
+    if (selection.isComplete) save(selection.localBody!);
+  },
+);
+```
+
+Or wire the parts yourself:
+
+```dart
 final cascade = AdministrativeCascade();
 
 AdministrativeDropdown(
@@ -30,13 +52,8 @@ AdministrativeDropdown(
 );
 ```
 
-Or let the widget own its cascade:
-
-```dart
-AdministrativeDropdown()  // created internally
-```
-
-Read it back from a descendant with `AdministrativeDropdown.cascadeOf(context)`.
+Read the cascade back from a descendant with
+`AdministrativeDropdown.cascadeOf(context)`.
 
 ## The cascade
 
@@ -83,29 +100,52 @@ AdministrativeCascade.formatLocalBodyDisambiguated(body);       // "…, Kathman
 never ends in a dangling separator — 22 of the 753 palikas have no attested
 Devanagari name. `formatLocalBodyDisambiguated` is unique across all 753.
 
+## Theming
+
+Every visual component derives its colours from
+`Theme.of(context).colorScheme` roles — metropolitan chips take the primary
+role, municipalities the secondary, sub-metropolitan the tertiary, rural a
+neutral — so they theme correctly in light and dark with zero configuration
+and stay in harmony with whatever seed colour the host app uses.
+
+`TrustBadge` implements Design System v3's trust rules
+([`doc/brand-system.md`](../../doc/brand-system.md)): a verification claim must
+never look stronger than the evidence behind it, and "verified" renders as
+scoped information in the action colour — never success green. A palika
+without a code renders as a documented fact, not an error. Seed the host app
+with brand blue `#3B82F6` for the intended harmony.
+
+## Gallery — every widget, runnable
+
+```
+cd packages/nepal_admin_widgets/example
+flutter pub get
+flutter run
+```
+
+A light/dark gallery over the real dataset: the picker, every palika type,
+every CBS confidence tier, the summary cards and their empty states, and
+live national statistics.
+
 ## Verification
 
 ```
 flutter analyze     # clean
-flutter test        # 58 tests
+flutter test
 ```
 
-The suite runs against the real dataset, not fixtures. It asserts that the
-cascade cannot produce a body outside its roster, that clearing a selection
-never leaves a stale child, that every label style is non-empty for all 753
-records, that the disambiguated label is unique for all 753, and that no search
-result contradicts the chosen district.
+The suite runs against the real dataset, not fixtures. The core suite asserts
+that the cascade cannot produce a body outside its roster, that clearing a
+selection never leaves a stale child, that every label style is non-empty for
+all 753 records, that the disambiguated label is unique for all 753, and that
+no search result contradicts the chosen district. The 0.2.0 component suite
+pins the display widgets the same way: one real palika per CBS tier, every
+type chip, the empty states, and the clear action reporting an empty
+selection.
 
 CI runs `flutter analyze --fatal-infos` and `flutter test` on every push in the
 `flutter-widgets` job; the widget code is not covered by the Dart package's own
 analysis.
-
-## Example
-
-```
-cd packages/nepal_admin_widgets/example
-flutter run
-```
 
 ## Status
 
