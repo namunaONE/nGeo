@@ -33,6 +33,28 @@ List<List<List<List<double>>>> _asPolys(dynamic coordinates, String type) {
   ];
 }
 
+/// Whether two normalized polygon sets are equal vertex-for-vertex, with
+/// coordinates compared at the codec's 1e-9 round-trip tolerance.
+bool _polysEqual(
+  List<List<List<List<double>>>> a,
+  List<List<List<List<double>>>> b,
+) {
+  if (a.length != b.length) return false;
+  for (var p = 0; p < a.length; p++) {
+    if (a[p].length != b[p].length) return false;
+    for (var g = 0; g < a[p].length; g++) {
+      if (a[p][g].length != b[p][g].length) return false;
+      for (var v = 0; v < a[p][g].length; v++) {
+        if ((a[p][g][v][0] - b[p][g][v][0]).abs() > 1e-9 ||
+            (a[p][g][v][1] - b[p][g][v][1]).abs() > 1e-9) {
+          return false;
+        }
+      }
+    }
+  }
+  return true;
+}
+
 void main() {
   test('boundary constants are self-consistent', () {
     expect(kPalikaBoundaryFormatVersion, '1');
@@ -122,9 +144,15 @@ void main() {
     }
     final gj = jsonDecode(f.readAsStringSync()) as Map<String, dynamic>;
 
-    // Signature: ring count + total coordinate count + first vertex. Two
-    // source features sharing all three is not plausible on this dataset.
-    final bySignature = <String, List<List<List<List<double>>>>>{};
+    // A summary signature (ring count, vertex count, first vertex) is not
+    // a unique key on this dataset: three pairs of palikas split from the
+    // same former VDC (Chaubise/Sangurigadhi, Jantedhunga/Khotehang and
+    // Molung/Sunkoshi) share all three values, so a signature-keyed map
+    // paired them with each other's geometry. The same coarse key is kept
+    // as a bucket, but the match itself is exact (1e-9 per vertex) and
+    // consumes the source feature, so each decoded boundary maps to its
+    // own geometry.
+    final byBucket = <String, List<List<List<List<double>>>>>{};
     for (final raw in (gj['features'] as List).cast<Map<String, dynamic>>()) {
       final geom = raw['geometry'] as Map<String, dynamic>;
       final polys = _asPolys(geom['coordinates'], geom['type'] as String);
@@ -137,7 +165,8 @@ void main() {
         }
       }
       final first = polys.first.first.first;
-      bySignature['$rings:$coords:${first[0]}:${first[1]}'] = polys;
+      final key = '$rings:$coords:${first[0]}:${first[1]}';
+      byBucket.putIfAbsent(key, () => []).add(polys);
     }
 
     var checked = 0;
@@ -154,29 +183,22 @@ void main() {
         }
       }
       final first = b.polygons.first.first.first;
-      final source = bySignature['$rings:$coords:${first[0]}:${first[1]}'];
+      final key = '$rings:$coords:${first[0]}:${first[1]}';
+      final bucket = byBucket[key];
       expect(
-        source,
+        bucket,
         isNotNull,
         reason: 'no source feature matches ${b.localBodyName}',
       );
-      final src = source!;
-      expect(src.length, b.polygons.length,
-          reason: 'polygon count drift in ${b.localBodyName}');
-      for (var p = 0; p < src.length; p++) {
-        expect(src[p].length, b.polygons[p].length,
-            reason: 'ring count drift in ${b.localBodyName}');
-        for (var g = 0; g < src[p].length; g++) {
-          final a = src[p][g];
-          final d = b.polygons[p][g];
-          expect(a.length, d.length,
-              reason: 'ring length drift in ${b.localBodyName}');
-          for (var v = 0; v < a.length; v++) {
-            expect((a[v][0] - d[v][0]).abs(), lessThan(1e-9));
-            expect((a[v][1] - d[v][1]).abs(), lessThan(1e-9));
-          }
-        }
-      }
+      final candidates = bucket!;
+      final i = candidates.indexWhere((s) => _polysEqual(s, b.polygons));
+      expect(
+        i,
+        greaterThanOrEqualTo(0),
+        reason: 'decoded geometry of ${b.localBodyName} matches no source '
+            'feature',
+      );
+      candidates.removeAt(i);
       checked++;
     }
     expect(checked, 753);

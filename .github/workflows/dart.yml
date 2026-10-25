@@ -11,11 +11,9 @@ on:
     - cron: '17 4 * * 1'
 
 permissions:
-  contents: write # TEMPORARY: regen step commits
+  contents: read
   pages: write
   id-token: write
-  pull-requests: write # TEMPORARY: debug comment step
-  actions: read # TEMPORARY: debug step fetches own job log
 
 concurrency:
   group: "pages"
@@ -84,38 +82,18 @@ jobs:
         run: dart run tool/generate_bindings.dart
       - name: Verify no bindings drift
         run: git diff --exit-code -- bindings/
+      - name: Regenerate palika boundaries (vendored GeoJSON)
+        run: dart run tool/generate_palika_boundaries.dart
+      - name: Verify no palika boundary drift
+        run: git diff --exit-code -- lib/src/geo/palika_boundaries.dart
       - name: Boundary join coverage gate
         run: dart run tool/check_boundary_join.dart
-      - name: Regenerate palika boundaries from vendored GeoJSON (TEMPORARY)
-        run: dart run tool/generate_palika_boundaries.dart
-      - name: Commit regenerated boundaries when drifted (TEMPORARY)
-        run: |
-          git config user.name "github-actions[bot]"
-          git config user.email "41898282+github-actions[bot]@users.noreply.github.com"
-          git add lib/src/geo/palika_boundaries.dart
-          if git diff --cached --quiet; then
-            echo "palika_boundaries.dart already in sync"
-          else
-            git commit -m "chore(boundaries): regenerate from vendored GeoJSON (lossless-decode drift fix)"
-            git push origin HEAD:refs/heads/feat/compact-roster
-          fi
-
       - name: Analyze
-        run: |
-          dart analyze --fatal-infos --format=machine > /tmp/analyze.txt || true
-          {
-            echo '## dart analyze diagnostics'
-            echo '```'
-            cat /tmp/analyze.txt
-            echo '```'
-          } >> "$GITHUB_STEP_SUMMARY"
-          if [ -s /tmp/analyze.txt ]; then
-            exit 1
-          fi
+        run: dart analyze --fatal-infos
       - name: Run tests
-        run: dart test 2>&1 | tee /tmp/test.log
+        run: dart test
       - name: Coverage report
-        run: dart test --coverage=coverage 2>&1 | tee /tmp/coverage.log && dart pub global activate coverage && dart pub global run coverage:format_coverage --lcov --in=coverage --out=coverage/lcov.info --report-on=lib --check-ignore
+        run: dart test --coverage=coverage && dart pub global activate coverage && dart pub global run coverage:format_coverage --lcov --in=coverage --out=coverage/lcov.info --report-on=lib --check-ignore
       # The step above has always produced a report that nothing acted on.
       # `lib/` is dominated by lib/src/nepal_data.dart — a 1,396-line generated
       # literal that reports 100% on import — so averaging it in would show a
@@ -125,43 +103,11 @@ jobs:
       # and the single unexecutable line (an uninstantiable private constructor)
       # counts as a miss.
       - name: Enforce the coverage floor
-        run: dart run tool/check_coverage.dart 2>&1 | tee /tmp/coverage_floor.log
+        run: dart run tool/check_coverage.dart
       - name: Explorer smoke test (no browser, no npm deps)
-        run: node docs/smoke.cjs 2>&1 | tee /tmp/smoke.log
+        run: node docs/smoke.cjs
       - name: Bindings smoke test (executes the JS, parses CSV + GeoJSON)
-        run: node bindings/verify_bindings.cjs 2>&1 | tee /tmp/bindings_smoke.log
-      - name: Post debug diagnostics as PR comment (TEMPORARY DEBUG)
-        if: failure()
-        uses: actions/github-script@v7
-        with:
-          script: |
-            let body = "Temporary debug diagnostics:\n\n";
-            const fs = require("fs");
-            const files = [
-              ["/tmp/analyze.txt", "dart analyze machine output"],
-              ["/tmp/test.log", "dart test output (last 8000)"],
-              ["/tmp/coverage.log", "coverage step output (last 8000)"],
-              ["/tmp/coverage_floor.log", "coverage floor output (last 8000)"],
-              ["/tmp/smoke.log", "explorer smoke output (last 8000)"],
-              ["/tmp/bindings_smoke.log", "bindings smoke output (last 8000)"],
-            ];
-            for (const f of files) {
-              try {
-                const t = fs.readFileSync(f[0], "utf8");
-                if (t.trim()) {
-                  body += f[1] + ":\n```\n" + t.slice(-8000) + "\n```\n";
-                }
-              } catch (e) {}
-            }
-            if (body.trim() === "Temporary debug diagnostics:") {
-              body += "job failed but no captured output available\n";
-            }
-            await github.rest.issues.createComment({
-              owner: context.repo.owner,
-              repo: context.repo.repo,
-              issue_number: context.issue.number,
-              body: body,
-            });
+        run: node bindings/verify_bindings.cjs
 
   # The Python binding cannot be exercised locally (the release machine has no
   # interpreter), so this is where it is first actually run. It imports the
