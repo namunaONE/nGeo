@@ -42,7 +42,8 @@ void main(List<String> args) {
   final outPath = 'lib/src/geo/palika_boundaries.dart';
 
   final geoFile = File(geoPath);
-  final rosterFile = File(rosterPath);
+  final rosterFile = File(rosterPat
+h);
   if (!geoFile.existsSync() || !rosterFile.existsSync()) {
     stderr.writeln(
       'Missing input: $geoPath and $rosterPath must both be present.',
@@ -101,7 +102,8 @@ void main(List<String> args) {
   final rows = <_Row>[];
   for (final p in _maps(roster['provinces'])) {
     for (final d in _maps(p['districts'])) {
-      for (final lb in _maps(d['localBodies'])) {
+      for (final lb in _maps(d[
+'localBodies'])) {
         rows.add(_Row(
           district: d['name'] as String,
           name: lb['name'] as String,
@@ -170,7 +172,8 @@ void main(List<String> args) {
     }
   }
 
-  // ── 6. Stage 2: point-in-polygon fallback for the remainder ──
+  // ── 6. Stage 2: point-in-polygon fallback fo
+r the remainder ──
   var pipJoins = 0;
   for (final f in features) {
     if (f.matchedRow != null) continue;
@@ -230,7 +233,8 @@ void main(List<String> args) {
   w('// degrees (~11 m) and stored as zigzag VLQ deltas: the round trip is');
   w('// bit-exact, nothing is simplified or dropped.');
   w('//');
-  w('// Regenerate with: dart run tool/generate_palika_boundaries.dart');
+  w('// Regenerate wit
+h: dart run tool/generate_palika_boundaries.dart');
   w('');
   w('/// Version of the palika boundary string format used in this file.');
   w("const String kPalikaBoundaryFormatVersion = '1';");
@@ -283,9 +287,10 @@ void main(List<String> args) {
     w('const Map<String, String> kUnmatchedPalikaBoundaries = {};');
   } else {
     w('const Map<String, String> kUnmatchedPalikaBoundaries = {');
+
     for (final f in unmatched) {
       w(entryLine(
-        2, "'${_esc(f.districtId)}|${_esc(f.nameEn)}'", "'${f.enc}',"));
+          2, "'${_esc(f.districtId)}|${_esc(f.nameEn)}'", "'${f.enc}',"));
     }
     w('};');
   }
@@ -352,7 +357,8 @@ String _encode(List<List<List<List<double>>>> polys) {
         } else {
           put(zz(qLat));
           put(zz(qLng));
-          anchored = true;
+          a
+nchored = true;
         }
         curLat = qLat;
         curLng = qLng;
@@ -425,7 +431,8 @@ List<List<List<List<double>>>> _decode(String s) {
       ring.add([ring.first[0], ring.first[1]]);
       rings.add(ring);
     }
-    polys.add(rings);
+    polys.add(ring
+s);
   }
   return polys;
 }
@@ -498,7 +505,8 @@ String _esc(String s) => s.replaceAll('\\', '\\\\').replaceAll("'", "\\'");
 class _Feature {
   final String districtId;
   final String nameEn;
-  final String enc;
+  final Strin
+g enc;
   final List<List<List<List<double>>>> polys;
   late final List<double> bbox;
   int? matchedRow;
