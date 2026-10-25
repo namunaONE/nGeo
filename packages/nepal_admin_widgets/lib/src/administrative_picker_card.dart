@@ -1,5 +1,4 @@
 import 'package:flutter/material.dart';
-import 'package:nepal_admin_api/nepal_admin_api.dart';
 import 'package:nepal_admin_widgets/nepal_admin_widgets.dart';
 
 /// The drop-in composition: cascading dropdowns, bilingual search and a live
