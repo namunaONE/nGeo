@@ -11,7 +11,7 @@ on:
     - cron: '17 4 * * 1'
 
 permissions:
-  contents: read
+  contents: write # TEMPORARY: regen step commits
   pages: write
   id-token: write
   pull-requests: write # TEMPORARY: debug comment step
@@ -86,6 +86,20 @@ jobs:
         run: git diff --exit-code -- bindings/
       - name: Boundary join coverage gate
         run: dart run tool/check_boundary_join.dart
+      - name: Regenerate palika boundaries from vendored GeoJSON (TEMPORARY)
+        run: dart run tool/generate_palika_boundaries.dart
+      - name: Commit regenerated boundaries when drifted (TEMPORARY)
+        run: |
+          git config user.name "github-actions[bot]"
+          git config user.email "41898282+github-actions[bot]@users.noreply.github.com"
+          git add lib/src/geo/palika_boundaries.dart
+          if git diff --cached --quiet; then
+            echo "palika_boundaries.dart already in sync"
+          else
+            git commit -m "chore(boundaries): regenerate from vendored GeoJSON (lossless-decode drift fix)"
+            git push origin HEAD:refs/heads/feat/compact-roster
+          fi
+
       - name: Analyze
         run: |
           dart analyze --fatal-infos --format=machine > /tmp/analyze.txt || true
@@ -101,7 +115,7 @@ jobs:
       - name: Run tests
         run: dart test 2>&1 | tee /tmp/test.log
       - name: Coverage report
-        run: dart test --coverage=coverage && dart pub global activate coverage && dart pub global run coverage:format_coverage --lcov --in=coverage --out=coverage/lcov.info --report-on=lib --check-ignore
+        run: dart test --coverage=coverage 2>&1 | tee /tmp/coverage.log && dart pub global activate coverage && dart pub global run coverage:format_coverage --lcov --in=coverage --out=coverage/lcov.info --report-on=lib --check-ignore
       # The step above has always produced a report that nothing acted on.
       # `lib/` is dominated by lib/src/nepal_data.dart — a 1,396-line generated
       # literal that reports 100% on import — so averaging it in would show a
@@ -111,47 +125,36 @@ jobs:
       # and the single unexecutable line (an uninstantiable private constructor)
       # counts as a miss.
       - name: Enforce the coverage floor
-        run: dart run tool/check_coverage.dart
+        run: dart run tool/check_coverage.dart 2>&1 | tee /tmp/coverage_floor.log
       - name: Explorer smoke test (no browser, no npm deps)
-        run: node docs/smoke.cjs
+        run: node docs/smoke.cjs 2>&1 | tee /tmp/smoke.log
       - name: Bindings smoke test (executes the JS, parses CSV + GeoJSON)
-        run: node bindings/verify_bindings.cjs
+        run: node bindings/verify_bindings.cjs 2>&1 | tee /tmp/bindings_smoke.log
       - name: Post debug diagnostics as PR comment (TEMPORARY DEBUG)
         if: failure()
         uses: actions/github-script@v7
         with:
           script: |
             let body = "Temporary debug diagnostics:\n\n";
-            try {
-              const fs = require("fs");
-              const analyze = fs.readFileSync("/tmp/analyze.txt", "utf8");
-              if (analyze.trim()) {
-                body += "dart analyze machine output:\n```\n" + analyze + "\n```\n";
-              }
-            } catch (e) {}
-            try {
-              const fs = require("fs");
-              const testLog = fs.readFileSync("/tmp/test.log", "utf8");
-              body += "dart test output (last 8000 chars):\n```\n" + testLog.slice(-8000) + "\n```\n";
-            } catch (e) {}
-            try {
-              const jobs = await github.rest.actions.listJobsForWorkflowRun({
-                owner: context.repo.owner,
-                repo: context.repo.repo,
-                run_id: context.runId,
-              });
-              const job = jobs.data.jobs.find((j) => j.name === "test");
-              if (job) {
-                const log = await github.rest.actions.downloadJobLogsForWorkflowRun({
-                  owner: context.repo.owner,
-                  repo: context.repo.repo,
-                  job_id: job.id,
-                });
-                const text = typeof log.data === "string" ? log.data : JSON.stringify(log.data);
-                body += "test job log (last 12000 chars):\n```\n" + text.slice(-12000) + "\n```\n";
-              }
-            } catch (e) {
-              body += "could not fetch test job log: " + String(e) + "\n";
+            const fs = require("fs");
+            const files = [
+              ["/tmp/analyze.txt", "dart analyze machine output"],
+              ["/tmp/test.log", "dart test output (last 8000)"],
+              ["/tmp/coverage.log", "coverage step output (last 8000)"],
+              ["/tmp/coverage_floor.log", "coverage floor output (last 8000)"],
+              ["/tmp/smoke.log", "explorer smoke output (last 8000)"],
+              ["/tmp/bindings_smoke.log", "bindings smoke output (last 8000)"],
+            ];
+            for (const f of files) {
+              try {
+                const t = fs.readFileSync(f[0], "utf8");
+                if (t.trim()) {
+                  body += f[1] + ":\n```\n" + t.slice(-8000) + "\n```\n";
+                }
+              } catch (e) {}
+            }
+            if (body.trim() === "Temporary debug diagnostics:") {
+              body += "job failed but no captured output available\n";
             }
             await github.rest.issues.createComment({
               owner: context.repo.owner,
