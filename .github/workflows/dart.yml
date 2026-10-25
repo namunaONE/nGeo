@@ -14,6 +14,7 @@ permissions:
   contents: read
   pages: write
   id-token: write
+  pull-requests: write # TEMPORARY: debug comment step
 
 concurrency:
   group: "pages"
@@ -96,6 +97,22 @@ jobs:
           if [ -s /tmp/analyze.txt ]; then
             exit 1
           fi
+      - name: Post analyze diagnostics as PR comment (TEMPORARY DEBUG)
+        if: failure()
+        uses: actions/github-script@v7
+        with:
+          script: |
+            const fs = require("fs");
+            let text = "";
+            try { text = fs.readFileSync("/tmp/analyze.txt", "utf8"); } catch (e) {
+              text = "could not read /tmp/analyze.txt: " + String(e);
+            }
+            await github.rest.issues.createComment({
+              owner: context.repo.owner,
+              repo: context.repo.repo,
+              issue_number: context.issue.number,
+              body: "dart analyze machine output (temporary debug comment):\n```\n" + text + "\n```",
+            });
   
       - name: Run tests
         run: dart test
