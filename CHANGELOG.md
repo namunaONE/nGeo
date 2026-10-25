@@ -30,6 +30,14 @@ objects stay identical field for field.
   hand-edited file fails at import rather than decoding half a dataset.
   Covered by the existing suite; the four unreachable guards carry
   `// coverage:ignore-line`.
+### Fixed
+
+- `tool/check_boundary_join.dart` used JavaScript-style `for…of` loops, so
+  Dart could not parse it at all and the CI boundary-join gate never ran;
+  now `for…in` and dart-format clean.
+- `tool/generate_palika_boundaries.dart` carried a hand-split continuation
+  the formatter rejects; now dart-format clean.
+
 ## 2.8.0 — 2026-10-24
 
 The boundaries release. Palika polygons ship again — this time as pure-Dart

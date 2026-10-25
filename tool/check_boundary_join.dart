@@ -303,14 +303,15 @@ void main() {
 
   // 1) name join within the district (first feature wins, claim once)
   final byKey = <String, BoundaryFeature>{};
-  for (final feature of features) {
-    final featureDistrictId = feature.properties['districtId'] as String? ?? '';
+  for (final feature in features) {
+    final featureDistrictId =
+        feature.properties['districtId'] as String? ?? '';
     final featureName = feature.properties['nameEn'] as String? ?? '';
     final key = '$featureDistrictId|${normPalikaName(featureName)}';
     byKey.putIfAbsent(key, () => feature);
   }
   var nameJoins = 0;
-  for (final row of rows) {
+  for (final row in rows) {
     final key = '${row.districtId}|${normPalikaName(row.name)}';
     final feature = byKey[key];
     if (feature != null && !feature.claimed) {
@@ -322,7 +323,7 @@ void main() {
 
   // 2) centroid-in-own-polygon fallback, same district first, claim once
   var pipJoins = 0;
-  for (final row of rows) {
+  for (final row in rows) {
     if (row.matched != null || row.lat == null || row.lng == null) {
       continue;
     }
@@ -340,14 +341,14 @@ void main() {
   var joinedCount = 0;
   var unclaimedCount = 0;
   final misses = <String>[];
-  for (final row of rows) {
+  for (final row in rows) {
     if (row.matched == null) {
       misses.add(row.label);
     } else {
       joinedCount++;
     }
   }
-  for (final feature of features) {
+  for (final feature in features) {
     if (!feature.claimed) {
       unclaimedCount++;
     }

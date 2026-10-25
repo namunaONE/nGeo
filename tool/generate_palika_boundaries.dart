@@ -52,8 +52,8 @@ void main(List<String> args) {
 
   final geo = jsonDecode(geoFile.readAsStringSync()) as Map<String, dynamic>;
   final meta = geo['metadata'] as Map<String, dynamic>;
-  final roster = jsonDecode(rosterFile.readAsStringSync())
-      as Map<String, dynamic>;
+  final roster =
+      jsonDecode(rosterFile.readAsStringSync()) as Map<String, dynamic>;
 
   // ── 1. Encode every feature, verifying the round trip as we go ──
   final features = <_Feature>[];
