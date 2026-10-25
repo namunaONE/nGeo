@@ -327,9 +327,7 @@ void main() {
       continue;
     }
     var hit = _pipScan(features, row.lng!, row.lat!, row.districtId);
-    if (hit == null) {
-      hit = _pipScan(features, row.lng!, row.lat!, null);
-    }
+    hit ??= _pipScan(features, row.lng!, row.lat!, null);
     if (hit != null) {
       row.matched = hit;
       hit.claimed = true;

@@ -37,9 +37,9 @@ const _alphabet =
 
 void main(List<String> args) {
   final check = args.contains('--check');
-  final geoPath = 'docs/palika-boundaries.geojson';
-  final rosterPath = 'data/nepal_local_levels.json';
-  final outPath = 'lib/src/geo/palika_boundaries.dart';
+  const geoPath = 'docs/palika-boundaries.geojson';
+  const rosterPath = 'data/nepal_local_levels.json';
+  const outPath = 'lib/src/geo/palika_boundaries.dart';
 
   final geoFile = File(geoPath);
   final rosterFile = File(rosterPath);
