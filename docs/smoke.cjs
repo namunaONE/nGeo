@@ -139,6 +139,14 @@ vm.createContext(sandbox);
   assert.ok(
     tableBody.innerHTML.includes('type-rural'),
     'rural chips use the type-rural class');
+  assert.ok(
+    Array.isArray(sandbox.MAP_OVERLAYS),
+    'MAP_OVERLAYS overlay registry exists');
+  assert.ok(
+    typeof sandbox.loadOverlay === 'function' &&
+      typeof sandbox.setOverlayVisible === 'function' &&
+      typeof sandbox.updateOverlayToggles === 'function',
+    'overlay loader and toggle API present');
   const rows = (tableBody.innerHTML.match(/<tr/g) || []).length;
   console.log(`SMOKE OK: ${data.length} records, ${rows} rows rendered, no errors`);
 })().catch((err) => {
