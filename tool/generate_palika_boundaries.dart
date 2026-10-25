@@ -284,7 +284,8 @@ void main(List<String> args) {
   } else {
     w('const Map<String, String> kUnmatchedPalikaBoundaries = {');
     for (final f in unmatched) {
-      w(entryLine(2, "'${_esc(f.districtId)}|${_esc(f.nameEn)}'", "'${f.enc}',"));
+      w(entryLine(
+        2, "'${_esc(f.districtId)}|${_esc(f.nameEn)}'", "'${f.enc}',"));
     }
     w('};');
   }
