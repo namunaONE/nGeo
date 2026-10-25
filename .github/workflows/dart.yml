@@ -55,7 +55,8 @@ jobs:
               # A file dart format cannot parse makes it exit 65. Under the
               # step shell default `bash -e`, that unguarded call aborted this
               # loop right here and filed a bare, file-less "exit code 65" -
-              # the exact silence this annotation loop exists to prevent.
+              # the exact silence this annotation loop exists to prevent
+.
               # Capture the formatter complaint and report it like a diff.
               if fmt_out="$(dart format "$tmp" 2>&1)"; then
                 msg="$(diff -u "$f" "$tmp" | head -c 500 || true)"
@@ -95,7 +96,8 @@ jobs:
       - name: Coverage report
         run: dart test --coverage=coverage && dart pub global activate coverage && dart pub global run coverage:format_coverage --lcov --in=coverage --out=coverage/lcov.info --report-on=lib --check-ignore
       # The step above has always produced a report that nothing acted on.
-      # `lib/` is dominated by lib/src/nepal_data.dart — a 1,396-line generated
+      # `lib/` is dominated by lib/src/nepal
+_data.dart — a 1,396-line generated
       # literal that reports 100% on import — so averaging it in would show a
       # flattering ~98% and hide any regression in the hand-written API. This
       # applies the floor to hand-written lines only. `--check-ignore` matters:
@@ -132,13 +134,13 @@ jobs:
           python -c "import nepal_admin as n; print('imported', n.__version__)"
       - name: Run the module entry point
         working-directory: bindings/python
-        run: |
-          python -m nepal_admin | head -5
+        run: python -m nepal_admin | head -5
       - name: Exercise the full API and assert the numbers
         working-directory: bindings/python
         run: |
           python - <<'PY'
-          import nepal_admin as n
+          import nepal_adm
+in as n
 
           s = n.get_national_stats()
           assert (s["provinces"], s["districts"], s["total"]) == (7, 77, 753), s
@@ -177,13 +179,14 @@ jobs:
           # Duplicate-name disambiguation and the null-on-ambiguity rule.
           assert len(n.get_local_bodies_by_name("Sunkoshi", "Okhaldhunga")) == 1
           assert n.get_local_body_by_full_path("Bharatpur, Chitwan, Bagmati")
+
           assert n.get_local_body_by_full_path("Sunkoshi") is None
 
           # Ward reconciliation.
           assert n.get_province_stats("lumbini")["wards_reconcile"] is True
           assert n.get_province_stats("gandaki")["unreconciled_wards"] == 14
 
-          print('PYTHON BINDINGS OK')
+          print("PYTHON BINDINGS OK")
           PY
 
   # example/brand_theme.dart imports package:flutter/material.dart, so plain
@@ -222,7 +225,8 @@ jobs:
             flutter:
               sdk: flutter
             nepal_admin_api:
-              path: $GITHUB_WORKSPACE
+              pat
+h: $GITHUB_WORKSPACE
           dev_dependencies:
             flutter_lints: ^6.0.0
           flutter:
@@ -260,8 +264,8 @@ jobs:
 
   # Scheduled integrity watch.
   #
-  # Two checks, because they answer different questions and only one
-  # of them can actually run here:
+  # Two checks, because they answer different questions and only one of them
+  # can actually run here:
   #
   #   1. The pinning CONTRACT: is data/PROVENANCE.sha256 well-formed, are its
   #      paths safe and unique, and is every vendored source documented in
@@ -272,8 +276,9 @@ jobs:
   #      of CC-BY snapshots) and therefore absent from every CI checkout.
   #
   # The previous version ran check 2 unconditionally and filed
-  #      "[provenance] vendored source drift detected" on failure — i.e. it blamed
-  # upstream for the condition "we chose not to commit the snapshots", on every
+  # "[provenance] vendored source drift detected" on failure — i.e. it blamed
+  # upstream for the c
+ondition "we chose not to commit the snapshots", on every
   # scheduled run, forever. It never fired only because the job had never
   # actually executed. The two conditions are now distinct, and the tool's
   # exit code says which one happened:
@@ -318,7 +323,8 @@ jobs:
               + 'vendored input in `data/_raw/` no longer matches its SHA-256 '
               + 'pin in `data/PROVENANCE.sha256`, or is missing.\n\n'
               + 'An upstream source has changed. Do NOT re-run the merge to '
-              + 'paper over it — follow the guidance in `data/SOURCES.md` '
+              + 'paper over 
+it — follow the guidance in `data/SOURCES.md` '
               + '(re-fetch, re-review, re-pin, then re-merge).\n\n'
               + 'See the failing run logs for the specific file.';
             await github.rest.issues.create({
