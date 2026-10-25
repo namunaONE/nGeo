@@ -50,8 +50,7 @@ const Map<String, String> districtIdByName = <String, String>{
   'Bajura': 'P7.D04',
   'Banke': 'P5.D02',
   'Bara': 'P2.D01',
- 
- 'Bhaktapur': 'P3.D01',
+  'Bhaktapur': 'P3.D01',
   'Bhojpur': 'P1.D01',
   'Chitwan': 'P3.D02',
   'Dadeldhura': 'P7.D05',
@@ -129,8 +128,7 @@ final RegExp _typeSuffixRe = RegExp(
     'nagarpalika|upamahanagarpalika|mahanagarpalika)\$');
 final RegExp _spaceRe = RegExp(' ');
 
-/// Exact port of app.j
-s normPalikaName — the join key depends on it.
+/// Exact port of app.js normPalikaName — the join key depends on it.
 String normPalikaName(String input) {
   var s = input.toLowerCase();
   s = s.replaceAll(_dashRe, '-');
@@ -202,8 +200,7 @@ bool pointInGeometry(double x, double y, Map<String, dynamic>? geom) {
         }
       }
       if (!inHole) {
-        return 
-true;
+        return true;
       }
     }
   }
@@ -274,8 +271,7 @@ void main() {
       final districtName = district['name'] as String;
       final districtId = districtIdByName[districtName] ?? '';
       final bodies = district['localBodies'] as List<dynamic>;
-      for (final body in
- bodies) {
+      for (final body in bodies) {
         final localBody = body as Map<String, dynamic>;
         rows.add(PalikaRow(
           localBody['name'] as String,
@@ -336,8 +332,7 @@ void main() {
       hit = _pipScan(features, row.lng!, row.lat!, null);
     }
     if (hit != null) {
-      row.matc
-hed = hit;
+      row.matched = hit;
       hit.claimed = true;
       pipJoins++;
     }
