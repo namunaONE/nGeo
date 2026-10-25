@@ -147,6 +147,29 @@ vm.createContext(sandbox);
       typeof sandbox.setOverlayVisible === 'function' &&
       typeof sandbox.updateOverlayToggles === 'function',
     'overlay loader and toggle API present');
+  assert.ok(
+    sandbox.MAP_OVERLAYS.some((o) => o.id === 'protected-areas'),
+    'protected-areas overlay registered');
+  const pa = JSON.parse(fs.readFileSync(path.join(ROOT, 'protected-areas.geojson'), 'utf8'));
+  assert.ok(
+    Array.isArray(pa.features) && pa.features.length === 20,
+    'protected-areas ships 20 core units, got: ' + (pa.features && pa.features.length));
+  const expectedPaIds = [
+    'chitwan-np', 'bardiya-np', 'banke-np', 'khaptad-np', 'langtang-np',
+    'rara-np', 'sagarmatha-np', 'shey-phoksundo-np', 'shivapuri-nagarjun-np',
+    'makalu-barun-np', 'parsa-np', 'shuklaphanta-np', 'annapurna-ca',
+    'kanchenjunga-ca', 'manaslu-ca', 'gaurishankar-ca', 'api-nampa-ca',
+    'krishnasar-ca', 'koshi-tappu-wr', 'dhorpatan-hr',
+  ];
+  const paIds = new Set(pa.features.map((f) => f.properties && f.properties.id));
+  for (const id of expectedPaIds) {
+    assert.ok(paIds.has(id), 'protected-areas completeness: missing ' + id);
+  }
+  for (const f of pa.features) {
+    assert.ok(
+      f.geometry && Array.isArray(f.geometry.coordinates) && f.geometry.coordinates.length,
+      'protected-area feature has geometry: ' + (f.properties && f.properties.id));
+  }
   const rows = (tableBody.innerHTML.match(/<tr/g) || []).length;
   console.log(`SMOKE OK: ${data.length} records, ${rows} rows rendered, no errors`);
 })().catch((err) => {

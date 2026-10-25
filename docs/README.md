@@ -105,8 +105,18 @@ available as a legacy view:
 - Tile factory is a single `MAP_TILES` constant + `createTileLayer()` in
   `app.js`, so the tile source is defined in exactly one place.
 
-- **Overlays:** context layers (protected areas, national outline,
-  highways — upcoming) render in a dedicated Leaflet pane (z-index 450)
+- **Protected areas (K2):** the 20 core units on the official DNPWC
+  roster — 12 national parks, 6 conservation areas, Koshi Tappu Wildlife
+  Reserve and Dhorpatan Hunting Reserve — vendored same-origin
+  (`protected-areas.geojson`) as an optional green overlay, toggled in
+  the map legend bar. Off by default, green fill-only (v3 accent) so
+  context never competes with the choropleth. Geometry: WDPA
+  (UNEP-WCMC & IUCN) via the WWF Nepal Biodiversity Areas dataset,
+  server-side simplified (~150 m); completeness pinned by a smoke gate
+  (20 units, expected IDs, geometry present). Buffer zones, Ramsar
+  sites and post-roster proposals (Bara, Phulchoki) stay out of scope.
+- **Overlays:** context layers (national outline, highways — upcoming)
+  render in a dedicated Leaflet pane (z-index 450)
   above the figure and persist across metric switches. Each overlay is a
   `MAP_OVERLAYS` entry in `app.js` — a new layer is a data PR, not a
   code PR: vendor the GeoJSON beside `palika-boundaries.geojson`, add

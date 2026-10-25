@@ -609,7 +609,43 @@ var _boundaryLayer = null;     // L.geoJSON layer
 var _boundaryDataAdded = false;
 var _activeRows = new Set();
 
-var MAP_OVERLAYS = [];
+var MAP_OVERLAYS = [
+  // K2 — protected areas. The 20 core units on the official DNPWC roster
+  // (12 national parks, 6 conservation areas, Koshi Tappu Wildlife
+  // Reserve, Dhorpatan Hunting Reserve). Geometry: WDPA (UNEP-WCMC &
+  // IUCN) via the WWF Nepal Biodiversity Areas dataset, server-side
+  // simplified (~150 m tolerance) and vendored same-origin. Buffer
+  // zones, Ramsar sites and post-roster proposals (Bara, Phulchoki)
+  // are intentionally out of scope for this phase. Off by default:
+  // context on top of the figure, never a competitor to it.
+  {
+    id: 'protected-areas',
+    label: 'Protected areas (20)',
+    urls: ['protected-areas.geojson?v=1'],
+    enabledByDefault: false,
+    style: { color: '#4FD166', weight: 1.2, opacity: 0.9, fillColor: '#4FD166', fillOpacity: 0.12 },
+    tooltip: (feature) => {
+      const p = feature.properties || {};
+      let html = '<strong>' + escapeHtmlAttr(p.name || 'Protected area') + '</strong>';
+      if (p.desig || p.areaKm2) {
+        html += '<br><span style="font-size:11px;color:#64748b">' + escapeHtmlAttr(p.desig || '');
+        if (p.areaKm2) html += ' · ' + escapeHtmlAttr(String(p.areaKm2)) + ' km²';
+        html += '</span>';
+      }
+      return html;
+    },
+    popup: (feature) => {
+      const p = feature.properties || {};
+      let html = '<strong>' + escapeHtmlAttr(p.name || 'Protected area') + '</strong>';
+      html += '<br>' + escapeHtmlAttr(p.desig || '');
+      if (p.est) html += ' · est. ' + escapeHtmlAttr(String(p.est));
+      if (p.areaKm2) html += '<br>' + escapeHtmlAttr(String(p.areaKm2)) + ' km²';
+      if (p.iucn && p.iucn !== 'Not Reported') html += ' · IUCN ' + escapeHtmlAttr(p.iucn);
+      html += '<br><span style="color:#64748b;font-size:12px">Boundary: WDPA (UNEP-WCMC &amp; IUCN) via WWF</span>';
+      return html;
+    },
+  },
+];
 var _overlayLayers = {};  // id -> { def, layer, loaded, visible, ready }
 var _overlaysInited = false;
 
