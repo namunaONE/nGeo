@@ -132,7 +132,8 @@ jobs:
           python -c "import nepal_admin as n; print('imported', n.__version__)"
       - name: Run the module entry point
         working-directory: bindings/python
-        run: python -m nepal_admin | head -5
+        run: |
+          python -m nepal_admin | head -5
       - name: Exercise the full API and assert the numbers
         working-directory: bindings/python
         run: |
@@ -182,7 +183,7 @@ jobs:
           assert n.get_province_stats("lumbini")["wards_reconcile"] is True
           assert n.get_province_stats("gandaki")["unreconciled_wards"] == 14
 
-          print("PYTHON BINDINGS OK")
+          print('PYTHON BINDINGS OK')
           PY
 
   # example/brand_theme.dart imports package:flutter/material.dart, so plain
@@ -259,8 +260,8 @@ jobs:
 
   # Scheduled integrity watch.
   #
-  # Two checks, because they answer different questions and only one of them
-  # can actually run here:
+  # Two checks, because they answer different questions and only one
+  # of them can actually run here:
   #
   #   1. The pinning CONTRACT: is data/PROVENANCE.sha256 well-formed, are its
   #      paths safe and unique, and is every vendored source documented in
@@ -271,7 +272,7 @@ jobs:
   #      of CC-BY snapshots) and therefore absent from every CI checkout.
   #
   # The previous version ran check 2 unconditionally and filed
-  # "[provenance] vendored source drift detected" on failure — i.e. it blamed
+  #      "[provenance] vendored source drift detected" on failure — i.e. it blamed
   # upstream for the condition "we chose not to commit the snapshots", on every
   # scheduled run, forever. It never fired only because the job had never
   # actually executed. The two conditions are now distinct, and the tool's
