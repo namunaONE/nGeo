@@ -85,7 +85,18 @@ jobs:
       - name: Boundary join coverage gate
         run: dart run tool/check_boundary_join.dart
       - name: Analyze
-        run: dart analyze --fatal-infos
+        run: |
+          dart analyze --fatal-infos --format=machine > /tmp/analyze.txt || true
+          {
+            echo '## dart analyze diagnostics'
+            echo '```'
+            cat /tmp/analyze.txt
+            echo '```'
+          } >> "$GITHUB_STEP_SUMMARY"
+          if [ -s /tmp/analyze.txt ]; then
+            exit 1
+          fi
+  
       - name: Run tests
         run: dart test
       - name: Coverage report
