@@ -26,7 +26,7 @@ List<List<List<List<double>>>> _asPolys(dynamic coordinates, String type) {
             for (final v in ring as List)
               [
                 ((v as List)[0] as num).toDouble(),
-                ((v as List)[1] as num).toDouble(),
+                (v[1] as num).toDouble(),
               ],
           ],
       ],
@@ -137,7 +137,7 @@ void main() {
         }
       }
       final first = polys.first.first.first;
-      bySignature('$rings:$coords:${first[0]}:${first[1]}') = polys;
+      bySignature['$rings:$coords:${first[0]}:${first[1]}'] = polys;
     }
 
     var checked = 0;
@@ -154,7 +154,7 @@ void main() {
         }
       }
       final first = b.polygons.first.first.first;
-      final source = bySignature('$rings:$coords:${first[0]}:${first[1]}');
+      final source = bySignature['$rings:$coords:${first[0]}:${first[1]}'];
       expect(
         source,
         isNotNull,

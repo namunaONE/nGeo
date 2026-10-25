@@ -250,7 +250,6 @@ void main(List<String> args) {
       '(roster');
   w("/// spelling), e.g. `kPalikaBoundaries['Chitwan']?['Bharatpur']`.");
   w('const Map<String, Map<String, String>> kPalikaBoundaries = {');
-  var emitted = 0;
   final seen = <String>{};
   var i = 0;
   while (i < rows.length) {
@@ -262,7 +261,6 @@ void main(List<String> args) {
       if (f != null && !seen.contains(key)) {
         seen.add(key);
         entries.add(entryLine(4, "'${_esc(rows[i].name)}'", "'${f.enc}',"));
-        emitted++;
       }
       i++;
     }
