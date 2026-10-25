@@ -1,7 +1,7 @@
 // Tests for the v2.4.0 additions: CBS code confidence tiers, ward-total
 // reconciliation, model round-trips and the duplicate-name lookups.
 //
-// The headline change is that a code is no longer all-or-nothing. 744 of 753
+// The headline change is that a code is no longer all-or-nothing. 752 of 753
 // palikas now carry a CBS code of some confidence (up from 547), and the two
 // ward totals are reported side by side instead of one silently shadowing
 // the other.
@@ -30,22 +30,22 @@ void main() {
       }
     });
 
-    test('tier counts are 548 verified / 196 single-source / 9 unverified', () {
+    test('tier counts are 548 verified / 204 single-source / 1 unverified', () {
       final byTier = <CbsCodeConfidence, int>{};
       for (final b in bodies) {
         byTier[b.cbsCodeConfidence] = (byTier[b.cbsCodeConfidence] ?? 0) + 1;
       }
       expect(byTier[CbsCodeConfidence.verified], 548);
-      expect(byTier[CbsCodeConfidence.singleSource], 196);
-      expect(byTier[CbsCodeConfidence.unverified], 9);
+      expect(byTier[CbsCodeConfidence.singleSource], 204);
+      expect(byTier[CbsCodeConfidence.unverified], 1);
       expect(byTier.values.reduce((a, b) => a + b), 753);
     });
 
-    test('code coverage is 744/753, up from 547 before the tiers existed', () {
-      expect(NepalAdminApi.getLocalBodiesWithCode().length, 744);
-      expect(bodies.whereCoded.length, 744);
-      expect(NepalAdminApi.getUncodedLocalBodies().length, 9);
-      expect(bodies.whereUncoded.length, 9);
+    test('code coverage is 752/753, up from 547 before the tiers existed', () {
+      expect(NepalAdminApi.getLocalBodiesWithCode().length, 752);
+      expect(bodies.whereCoded.length, 752);
+      expect(NepalAdminApi.getUncodedLocalBodies().length, 1);
+      expect(bodies.whereUncoded.length, 1);
       expect(
         bodies.whereDoublyAttested.length +
             bodies.whereSingleSource.length +
@@ -64,23 +64,15 @@ void main() {
 
     test('codes are unique nationwide, so a code-keyed join is lossless', () {
       final map = bodies.byCbsCode;
-      expect(map.length, 744, reason: 'no code may map to two palikas');
+      expect(map.length, 752, reason: 'no code may map to two palikas');
       for (final entry in map.entries) {
         expect(entry.value.cbsCode, entry.key);
       }
     });
 
-    test('the 9 uncoded palikas are documented ambiguities, not omissions', () {
+    test('the 1 uncoded palika is a documented ambiguity, not an omission', () {
       const expected = {
-        'Bajura|Jagannath',
-        'Bajura|Khaptad Chhededaha',
         'Jajarkot|Bheri',
-        'Jajarkot|Nalagad',
-        'Rolpa|Gangadev',
-        'Rolpa|Paribartan',
-        'Rolpa|Sunil Smriti',
-        'Solukhumbu|Mapya Dudhkoshi',
-        'Solukhumbu|Thulung Dudhkoshi',
       };
       final actual = {
         for (final b in NepalAdminApi.getUncodedLocalBodies())
@@ -113,7 +105,7 @@ void main() {
   });
 
   group('CBS code lookups', () {
-    test('getLocalBodyByCbs resolves any tier (744 reachable)', () {
+    test('getLocalBodyByCbs resolves any tier (752 reachable)', () {
       final byCode = bodies.byCbsCode;
       for (final entry in byCode.entries) {
         expect(

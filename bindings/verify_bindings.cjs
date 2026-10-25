@@ -111,19 +111,19 @@ if (nad) {
   const doubled = nad.getVerifiedLocalBodies().length;
   const single = nad.getSingleSourceLocalBodies().length;
   const uncoded = nad.getUncodedLocalBodies().length;
-  check(coded === 744, `744 palikas carry a code (got ${coded})`);
+  check(coded === 752, `752 palikas carry a code (got ${coded})`);
   check(doubled === 548, `548 doubly-attested (got ${doubled})`);
-  check(single === 196, `196 single-source (got ${single})`);
-  check(uncoded === 9, `9 uncoded (got ${uncoded})`);
+  check(single === 204, `204 single-source (got ${single})`);
+  check(uncoded === 1, `1 uncoded (got ${uncoded})`);
   check(doubled + single + uncoded === 753,
     'tiers partition all 753 without loss or overlap');
   // Mappable means BOTH a code and a coordinate. That is a smaller set than
-  // either one alone: 726 have coordinates, 744 have codes, and the
-  // intersection is 718.
+  // either one alone: 726 have coordinates, 752 have codes, and the
+  // intersection is 726.
   const mappedOnly = nad.getAllLocalBodies().filter((b) => b.lat != null && b.lng != null).length;
   const mappable = nad.getMappableLocalBodies().length;
   check(mappedOnly === 726, `726 mapped (got ${mappedOnly})`);
-  check(mappable === 718, `718 mapped AND coded (got ${mappable})`);
+  check(mappable === 726, `726 mapped AND coded (got ${mappable})`);
   check(mappable <= Math.min(coded, mappedOnly),
     'the mapped+coded set cannot exceed either parent set');
 
@@ -203,7 +203,7 @@ if (nad) {
 
   // --- the code-keyed join is lossless ---
   const byCode = new Map(nad.getLocalBodiesWithCode().map((b) => [b.cbsCode, b]));
-  check(byCode.size === 744, `the code-keyed join is lossless (${byCode.size})`);
+  check(byCode.size === 752, `the code-keyed join is lossless (${byCode.size})`);
 
   // --- honesty guarantees survive the port ---
   check(nad.getUncodedLocalBodies().every((b) => b.cbsCode == null),
@@ -211,8 +211,8 @@ if (nad) {
   check(nad.getUncodedLocalBodies().every((b) => b.cbsCodeConfidence === 'unverified'),
     'uncoded palikas are labelled unverified');
   const noNameNe = nad.localBodies.filter((b) => b.nameNe == null);
-  check(noNameNe.length === 22,
-    `22 palikas have no Devanagari name (got ${noNameNe.length})`);
+  check(noNameNe.length === 20,
+    `20 palikas have no Devanagari name (got ${noNameNe.length})`);
   check(noNameNe.every((b) => b.nameNeVerified === false),
     'a palika without a Devanagari name is not marked verified');
 
@@ -331,7 +331,7 @@ for (const [file, expectedRows, expectedCols] of [
   check(uniq.size === pairs.length,
     'CSV rows are unique by district+name+code (a stray comma would break this)');
   const withCode = rows.slice(1).filter((r) => r[iCode] !== '').length;
-  check(withCode === 744, `CSV carries 744 codes (got ${withCode})`);
+  check(withCode === 752, `CSV carries 752 codes (got ${withCode})`);
 }
 
 // ---------------------------------------------------------------------------

@@ -201,9 +201,9 @@ void main() {
       // something that no longer resolves.
       expect(NepalAdminApi.getLocalBodyByCbs(31304)!.name, 'Bharatpur');
       expect(NepalAdminApi.getLocalBodyByCbsVerified(40504), isNull);
-      expect(NepalAdminApi.getLocalBodiesWithCode().length, 744);
-      expect(NepalAdminApi.getSingleSourceLocalBodies().length, 196);
-      expect(NepalAdminApi.getUncodedLocalBodies().length, 9);
+      expect(NepalAdminApi.getLocalBodiesWithCode().length, 752);
+      expect(NepalAdminApi.getSingleSourceLocalBodies().length, 204);
+      expect(NepalAdminApi.getUncodedLocalBodies().length, 1);
       expect(
           NepalAdminApi.getLocalBodiesByName('Sunkoshi', 'Okhaldhunga').length,
           1);

@@ -414,9 +414,11 @@ source. This file only draws the explorer choropleth.
   new miss — or a fixed miss that leaves this list stale — fails the
   build.
 - "Mappable", defined once to stop the 718-vs-726 confusion: in the
-  package it means CBS code **and** coordinates (718 of 753); in
-  `docs/data.json` it is rows with coordinates (726 of 753 — 8 of the 9
-  uncoded rows still carry open-admin-data coordinates).
+  package it means CBS code **and** coordinates (726 of 753); in
+  `docs/data.json` it is rows with coordinates (726 of 753). The postal-list
+  adjudication coded the 8 previously uncoded rows that carried
+  open-admin-data coordinates, so the two definitions now agree; only
+  Bheri (Jajarkot) is both uncoded and unmapped.
 
 ## Website basemap (not shipped in the package)
 
