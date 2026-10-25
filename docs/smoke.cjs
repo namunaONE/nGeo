@@ -170,6 +170,35 @@ vm.createContext(sandbox);
       f.geometry && Array.isArray(f.geometry.coordinates) && f.geometry.coordinates.length,
       'protected-area feature has geometry: ' + (f.properties && f.properties.id));
   }
+  assert.ok(
+    sandbox.MAP_OVERLAYS.some((o) => o.id === 'national-outline'),
+    'national-outline overlay registered');
+  const outline = JSON.parse(fs.readFileSync(path.join(ROOT, 'national-outline.geojson'), 'utf8'));
+  const outlineFeature = outline.features && outline.features[0];
+  assert.ok(outlineFeature, 'national outline ships a feature');
+  const outlineRing = outlineFeature.geometry &&
+    outlineFeature.geometry.coordinates && outlineFeature.geometry.coordinates[0];
+  assert.ok(
+    Array.isArray(outlineRing) && outlineRing.length > 1000,
+    'outline ring is high-resolution, got: ' + (outlineRing && outlineRing.length));
+  function pointInRing(pt, r) {
+    let inside = false;
+    const x = pt[0], y = pt[1];
+    for (let i = 0, j = r.length - 1; i < r.length; j = i++) {
+      const xi = r[i][0], yi = r[i][1], xj = r[j][0], yj = r[j][1];
+      if (((yi > y) !== (yj > y)) && (x < (xj - xi) * (y - yi) / (yj - yi) + xi)) inside = !inside;
+    }
+    return inside;
+  }
+  assert.ok(
+    pointInRing([81.023, 30.222], outlineRing),
+    'outline includes Lipulekh Pass (post-May-2020 map)');
+  assert.ok(
+    pointInRing([80.95, 30.20], outlineRing),
+    'outline includes Kalapani');
+  assert.ok(
+    pointInRing([85.3240, 27.7172], outlineRing),
+    'outline includes Kathmandu');
   const rows = (tableBody.innerHTML.match(/<tr/g) || []).length;
   console.log(`SMOKE OK: ${data.length} records, ${rows} rows rendered, no errors`);
 })().catch((err) => {

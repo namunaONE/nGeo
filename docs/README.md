@@ -105,6 +105,17 @@ available as a legacy view:
 - Tile factory is a single `MAP_TILES` constant + `createTileLayer()` in
   `app.js`, so the tile source is defined in exactly one place.
 
+- **National outline (K1):** Nepal's official चुच्चे (chuche) map as
+  published May 2020 — includes Kalapani, Lipulekh and Limpiyadhura
+  (Darchula, Sudurpashchim). Rendered as a blue outline-only overlay,
+  off by default. Geometry shipped unchanged from
+  Acesmndr/nepal-geojson (MIT) — the same source family as the palika
+  boundary layer. A smoke gate pins the map: ring resolution > 1,000
+  points and point-in-polygon asserts for Lipulekh Pass, Kalapani and
+  Kathmandu, so a pre-2020 outline cannot pass CI. Documented gap: no
+  local-level units exist inside the Kalapani–Lipulekh–Limpiyadhura
+  pocket, so the outline intentionally extends beyond the palika
+  layer in the northwest.
 - **Protected areas (K2):** the 20 core units on the official DNPWC
   roster — 12 national parks, 6 conservation areas, Koshi Tappu Wildlife
   Reserve and Dhorpatan Hunting Reserve — vendored same-origin
@@ -115,7 +126,7 @@ available as a legacy view:
   server-side simplified (~150 m); completeness pinned by a smoke gate
   (20 units, expected IDs, geometry present). Buffer zones, Ramsar
   sites and post-roster proposals (Bara, Phulchoki) stay out of scope.
-- **Overlays:** context layers (national outline, highways — upcoming)
+- **Overlays:** context layers (highways — upcoming)
   render in a dedicated Leaflet pane (z-index 450)
   above the figure and persist across metric switches. Each overlay is a
   `MAP_OVERLAYS` entry in `app.js` — a new layer is a data PR, not a

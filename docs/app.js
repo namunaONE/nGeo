@@ -618,6 +618,27 @@ var MAP_OVERLAYS = [
   // zones, Ramsar sites and post-roster proposals (Bara, Phulchoki)
   // are intentionally out of scope for this phase. Off by default:
   // context on top of the figure, never a competitor to it.
+  // K1 — national outline. Nepal's official चुच्चे (chuche) map as
+  // published May 2020: includes Kalapani, Lipulekh and Limpiyadhura
+  // (Darchula, Sudurpashchim). Geometry shipped unchanged from
+  // Acesmndr/nepal-geojson (MIT) — same source family as the palika
+  // boundary layer. Off by default, outline-only (no fill) so it
+  // frames the figure instead of competing with it. Note: no
+  // local-level units exist inside the Kalapani–Lipulekh–Limpiyadhura
+  // pocket yet, so the outline intentionally extends beyond the
+  // palika layer in the northwest.
+  {
+    id: 'national-outline',
+    label: 'National outline (चुच्चे)',
+    urls: ['national-outline.geojson?v=1'],
+    enabledByDefault: false,
+    style: { color: '#1D4ED8', weight: 1.5, opacity: 0.9, fill: false },
+    tooltip: () => 'Nepal — official चुच्चे (chuche) map',
+    popup: () =>
+      '<strong>Nepal — official चुच्चे map (May 2020)</strong>' +
+      '<br>Includes Kalapani · Lipulekh · Limpiyadhura (Darchula)' +
+      '<br><span style="color:#64748b;font-size:12px">Geometry: Acesmndr/nepal-geojson (MIT) — shipped unchanged</span>',
+  },
   {
     id: 'protected-areas',
     label: 'Protected areas (20)',
