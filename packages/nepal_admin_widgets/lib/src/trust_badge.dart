@@ -21,7 +21,11 @@ import 'package:nepal_admin_api/nepal_admin_api.dart';
 /// ```
 class TrustBadge extends StatelessWidget {
   /// Renders the tier of [body]'s CBS code.
-  const TrustBadge.forLocalBody({
+  ///
+  /// Deliberately not const: [confidence] is derived from [body], and a
+  /// const constructor cannot read a field off a parameter in its
+  /// initializer list. Use [TrustBadge.confidence] for a const badge.
+  TrustBadge.forLocalBody({
     super.key,
     required LocalBody body,
     this.compact = false,
