@@ -152,7 +152,7 @@ void main() {
     // as a bucket, but the match itself is exact (1e-9 per vertex) and
     // consumes the source feature, so each decoded boundary maps to its
     // own geometry.
-    final byBucket = <String, List<List<List<List<double>>>>>{};
+    final byBucket = <String, List<List<List<List<List<double>>>>>>{};
     for (final raw in (gj['features'] as List).cast<Map<String, dynamic>>()) {
       final geom = raw['geometry'] as Map<String, dynamic>;
       final polys = _asPolys(geom['coordinates'], geom['type'] as String);
