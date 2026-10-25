@@ -30,6 +30,36 @@ objects stay identical field for field.
   hand-edited file fails at import rather than decoding half a dataset.
   Covered by the existing suite; the four unreachable guards carry
   `// coverage:ignore-line`.
+
+### Data (2026-10-25 — Nepal Post code adjudication)
+- **8 of the 9 uncoded palikas now carry a CBS code**, attested by the Nepal
+  Post local-level code list (`data/SOURCES.md` §7; adjudication record in
+  `doc/REVIEW-codes.md` §7): Mapya Dudhkoshi 10304, Thulung Dudhkoshi 10305,
+  Paribartan 50203, Gangadev 50204, Sunil Smriti 50209, Nalagad 60707,
+  Jagannath 70105, Khaptad Chhededaha 70107 — all `singleSource`
+  (`cbsCodeVerified` stays false: the doubly-attested rule needs CBS +
+  postal-2025, not the postal directory). Tier counts become
+  548 verified / 204 singleSource / 1 unverified; 752 of 753 coded.
+- **Rolpa correction recorded:** the free-code inference had
+  Gangadev = 50203 / Paribartan = 50204; the postal directory attests the
+  reverse (Paribartan = 50203, Gangadev = 50204). The attestation wins.
+- **Bheri (Jajarkot) stays uncoded** — 60706 is implied by the district
+  sequence but not directly attested; it stays null rather than guessed.
+- **Two Devanagari names applied** (single-source, `nameNeVerified: false`):
+  Bhokraha (Sunsari) भोक्राहा, Yangwarak (Taplejung) याङवरक.
+  `nameNe` null count 22 → 20.
+- **Rename flags documented, not applied** (`doc/REVIEW-codes.md` §7.4):
+  Jagannath (Bajura) → possibly "Pandav Gufa"; Sunkoshi (Udayapur) →
+  Limchungbung; Dalome (Mustang) → Lo-Ghekar Damodarkunda; Neshang (Manang) →
+  Nesyang; Barhagaun Muktichhetra (Mustang) → Varagung; Netrawati (Dhading) →
+  Netrawati Dabjong; Sunil Smriti's full name may be "Sahid Sunil Smriti".
+  All need Gazette confirmation before any roster change.
+- `meta.dataAsOf` 2026-10-13 → 2026-10-25.
+- **Derived artifacts must be regenerated** with `dart run tool/pipeline.dart`
+  (`lib/src/nepal_data.dart`, `docs/data.json`, `bindings/`,
+  `data/_stage/code_tiers.json`), and the suites that pin 22-null-`nameNe`,
+  9-unverified, 196-singleSource and 744-coded updated in the same commit.
+
 ### Fixed
 
 - `tool/check_boundary_join.dart` used JavaScript-style `for…of` loops, so
