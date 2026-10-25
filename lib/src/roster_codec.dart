@@ -146,8 +146,7 @@ class RosterCodec {
   static bool _flag(String field) => field == '1';
 
   /// Parses an integer field; an empty field decodes to null.
-  static int? _intOpt(String field) =>
-      field.isEmpty ? null : int.parse(field);
+  static int? _intOpt(String field) => field.isEmpty ? null : int.parse(field);
 
   /// Parses a real-valued field; an empty field decodes to null.
   static double? _doubleOpt(String field) =>

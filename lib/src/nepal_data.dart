@@ -3,14 +3,16 @@
 // Source of truth: data/nepal_local_levels.json
 // Regenerate with: dart run tool/generate.dart
 //
-// Official federal structure: 7 provinces, 77 districts, 753 local
-// bodies (6 metropolitan, 11 sub-metropolitan, 276 municipalities,
-// 460 rural municipalities), 6,743 wards. Data as of October 2026.
+// Official federal structure: 7 provinces, 77 districts,
+// 753 local bodies (6 metropolitan, 11 sub-metropolitan,
+// 276 municipalities, 460 rural municipalities), 6,743
+// wards. Data as of October 2026.
 //
-// Compact roster, format version 1 (decoded by roster_codec.dart):
-// the dataset ships as pipe-separated rows — one per province,
-// district and local body — instead of constructor literals, so the
-// generated file stays small while decoding to the same objects.
+// Compact roster, format version 1 (decoded by
+// roster_codec.dart): the dataset ships as pipe-separated rows
+// — one per province, district and local body —
+// instead of constructor literals, so the generated file
+// stays small while decoding to the same objects.
 
 import 'nepal_admin_api_base.dart';
 import 'roster_codec.dart';
@@ -18,15 +20,15 @@ import 'roster_codec.dart';
 /// Version of the compact roster format carried by this file.
 const String kRosterFormatVersion = '1';
 
-/// Coordinate provenance labels, referenced from local-body rows
-/// by index, in first-appearance order.
+/// Coordinate provenance labels, referenced from
+/// local-body rows by index, in first-appearance order.
 const List<String> kRosterGeoSources = [
   'open-admin-data',
 ];
 
 /// Province rows, one per province, in dataset order:
-/// id|name|nameNe|nameNeVerified|capital|areaSqKm|website|cbsCode|
-/// isoCode|declaredWards|districtCount
+/// id|name|nameNe|nameNeVerified|capital|areaSqKm|website|
+/// cbsCode|isoCode|declaredWards|districtCount
 const List<String> kRosterProvinces = [
   'koshi|Koshi|कोशी प्रदेश|1|Biratnagar|25906.0|https://koshi.gov.np/|1|NP-P1|1157|14',
   'madhesh|Madhesh|मधेश प्रदेश|1|Janakpur|9661.0|https://madhesh.gov.np/|2|NP-P2|1271|8',
@@ -38,8 +40,8 @@ const List<String> kRosterProvinces = [
 ];
 
 /// District rows, one per district, in dataset order:
-/// name|nameNe|nameNeVerified|cbsCode|headquarter|areaSqKm|website|
-/// unitCount
+/// name|nameNe|nameNeVerified|cbsCode|headquarter|areaSqKm|
+/// website|unitCount
 const List<String> kRosterDistricts = [
   'Bhojpur|भोजपुर|1|106|Bhojpur|1507.0|https://www.ddcbhojpur.gov.np|9',
   'Dhankuta|धनकुटा|1|107|Dhankuta|892.0|https://www.ddcdhankuta.gov.np|7',
@@ -121,8 +123,9 @@ const List<String> kRosterDistricts = [
 ];
 
 /// Local-body rows, one per palika, in dataset order:
-/// name|nameNe|nameNeVerified|type|cbsCode|cbsVerified|lat|lng|
-/// geoSourceIndex|wards|wardsVerified|website|email|phone|zipCodes
+/// name|nameNe|nameNeVerified|type|cbsCode|cbsVerified|
+/// lat|lng|geoSourceIndex|wards|wardsVerified|website|email|
+/// phone|zipCodes
 const List<String> kRosterLocalBodies = [
   'Bhojpur|भोजपुर|1|m|10604|1|27.188|87.05|0|12|1|http://bhojpurmun.gov.np|info@bhojpurmun.gov.np|029-420102|57000',
   'Shadananda|षडानन्द|1|m|10601||27.337|87.103|0|14|1|http://shadanandamun.gov.np|shadanandanagarpalika@gmail.com|029-421125|57000',

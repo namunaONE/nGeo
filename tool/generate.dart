@@ -278,14 +278,16 @@ String _generate(List<Map<String, dynamic>> provinces) {
   b.writeln('// Source of truth: $jsonPath');
   b.writeln('// Regenerate with: dart run tool/generate.dart');
   b.writeln('//');
-  b.writeln('// Official federal structure: 7 provinces, 77 districts, 753 local');
-  b.writeln('// bodies (6 metropolitan, 11 sub-metropolitan, 276 municipalities,');
-  b.writeln('// 460 rural municipalities), 6,743 wards. Data as of October 2026.');
+  b.writeln('// Official federal structure: 7 provinces, 77 districts,');
+  b.writeln('// 753 local bodies (6 metropolitan, 11 sub-metropolitan,');
+  b.writeln('// 276 municipalities, 460 rural municipalities), 6,743');
+  b.writeln('// wards. Data as of October 2026.');
   b.writeln('//');
-  b.writeln('// Compact roster, format version 1 (decoded by roster_codec.dart):');
-  b.writeln('// the dataset ships as pipe-separated rows — one per province,');
-  b.writeln('// district and local body — instead of constructor literals, so the');
-  b.writeln('// generated file stays small while decoding to the same objects.');
+  b.writeln('// Compact roster, format version 1 (decoded by');
+  b.writeln('// roster_codec.dart): the dataset ships as pipe-separated rows');
+  b.writeln('// — one per province, district and local body —');
+  b.writeln('// instead of constructor literals, so the generated file');
+  b.writeln('// stays small while decoding to the same objects.');
   b.writeln();
   b.writeln("import 'nepal_admin_api_base.dart';");
   b.writeln("import 'roster_codec.dart';");
@@ -293,8 +295,8 @@ String _generate(List<Map<String, dynamic>> provinces) {
   b.writeln('/// Version of the compact roster format carried by this file.');
   b.writeln("const String kRosterFormatVersion = '1';");
   b.writeln();
-  b.writeln('/// Coordinate provenance labels, referenced from local-body rows');
-  b.writeln('/// by index, in first-appearance order.');
+  b.writeln('/// Coordinate provenance labels, referenced from');
+  b.writeln('/// local-body rows by index, in first-appearance order.');
   b.writeln('const List<String> kRosterGeoSources = [');
   for (final source in geoSources) {
     b.writeln("  '$source',");
@@ -302,8 +304,8 @@ String _generate(List<Map<String, dynamic>> provinces) {
   b.writeln('];');
   b.writeln();
   b.writeln('/// Province rows, one per province, in dataset order:');
-  b.writeln('/// id|name|nameNe|nameNeVerified|capital|areaSqKm|website|cbsCode|');
-  b.writeln('/// isoCode|declaredWards|districtCount');
+  b.writeln('/// id|name|nameNe|nameNeVerified|capital|areaSqKm|website|');
+  b.writeln('/// cbsCode|isoCode|declaredWards|districtCount');
   b.writeln('const List<String> kRosterProvinces = [');
   for (final provRow in provRows) {
     b.writeln("  '$provRow',");
@@ -311,8 +313,8 @@ String _generate(List<Map<String, dynamic>> provinces) {
   b.writeln('];');
   b.writeln();
   b.writeln('/// District rows, one per district, in dataset order:');
-  b.writeln('/// name|nameNe|nameNeVerified|cbsCode|headquarter|areaSqKm|website|');
-  b.writeln('/// unitCount');
+  b.writeln('/// name|nameNe|nameNeVerified|cbsCode|headquarter|areaSqKm|');
+  b.writeln('/// website|unitCount');
   b.writeln('const List<String> kRosterDistricts = [');
   for (final distRow in distRows) {
     b.writeln("  '$distRow',");
@@ -320,8 +322,9 @@ String _generate(List<Map<String, dynamic>> provinces) {
   b.writeln('];');
   b.writeln();
   b.writeln('/// Local-body rows, one per palika, in dataset order:');
-  b.writeln('/// name|nameNe|nameNeVerified|type|cbsCode|cbsVerified|lat|lng|');
-  b.writeln('/// geoSourceIndex|wards|wardsVerified|website|email|phone|zipCodes');
+  b.writeln('/// name|nameNe|nameNeVerified|type|cbsCode|cbsVerified|');
+  b.writeln('/// lat|lng|geoSourceIndex|wards|wardsVerified|website|email|');
+  b.writeln('/// phone|zipCodes');
   b.writeln('const List<String> kRosterLocalBodies = [');
   for (final bodyRow in bodyRows) {
     b.writeln("  '$bodyRow',");
