@@ -63,8 +63,7 @@ class TrustBadge extends StatelessWidget {
       };
 
   /// The icon for a tier.
-  static IconData iconFor(CbsCodeConfidence confidence) =>
-      switch (confidence) {
+  static IconData iconFor(CbsCodeConfidence confidence) => switch (confidence) {
         CbsCodeConfidence.verified => Icons.verified,
         CbsCodeConfidence.singleSource => Icons.fact_check,
         CbsCodeConfidence.unverified => Icons.help_outline,

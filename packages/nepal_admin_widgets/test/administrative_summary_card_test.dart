@@ -26,8 +26,8 @@ void main() {
     expect(find.text(body.type.fullName), findsOneWidget);
     expect(find.text('${body.districtName} · ${body.provinceName}'),
         findsOneWidget);
-    expect(find.text(TrustBadge.labelFor(body.cbsCodeConfidence)),
-        findsOneWidget);
+    expect(
+        find.text(TrustBadge.labelFor(body.cbsCodeConfidence)), findsOneWidget);
   });
 
   testWidgets('an uncoded palika never shows a code', (tester) async {

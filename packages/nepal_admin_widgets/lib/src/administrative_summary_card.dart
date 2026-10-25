@@ -135,9 +135,7 @@ class AdministrativeSummaryCard extends StatelessWidget {
                     size: 16, color: scheme.onSurfaceVariant),
                 const SizedBox(width: 6),
                 Text(
-                  b.wards != null
-                      ? '${b.wards} wards'
-                      : 'wards not recorded',
+                  b.wards != null ? '${b.wards} wards' : 'wards not recorded',
                   style: theme.textTheme.bodySmall,
                 ),
               ],
