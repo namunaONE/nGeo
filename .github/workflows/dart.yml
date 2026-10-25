@@ -240,6 +240,12 @@ jobs:
   # exactly the rot this repo exists to avoid.
   flutter-widgets:
     runs-on: ubuntu-latest
+    permissions:
+      contents: read
+      # TEMP (to be reverted before merge): lets this job post analyze/test
+      # output as a PR comment — the only failure surface readable without
+      # log access.
+      pull-requests: write
     defaults:
       run:
         working-directory: packages/nepal_admin_widgets
@@ -252,20 +258,29 @@ jobs:
       - name: Resolve dependencies
         run: flutter pub get
       # TEMP (to be reverted): `flutter analyze` findings are not visible
-      # without log access, so dump the output to the job summary.
+      # without log access, so post the output as a PR comment on failure.
       - name: Analyze library, example and tests
         run: |
           set +e
           flutter analyze --fatal-infos 2>&1 | tee /tmp/widgets-analyze.txt
           code="${PIPESTATUS[0]}"
           set -e
-          {
-            echo "### flutter analyze output (exit $code)"
-            echo '```'
-            cat /tmp/widgets-analyze.txt
-            echo '```'
-          } >> "$GITHUB_STEP_SUMMARY"
+          if [ "$code" -ne 0 ]; then
+            {
+              echo "### flutter analyze output (exit $code)"
+              echo '```'
+              cat /tmp/widgets-analyze.txt
+              echo '```'
+            } > /tmp/widgets-analyze-comment.md
+            if [ -n "$PR_NUMBER" ]; then
+              gh pr comment "$PR_NUMBER" --repo "$GITHUB_REPOSITORY" \
+                --body-file /tmp/widgets-analyze-comment.md || true
+            fi
+          fi
           exit "$code"
+        env:
+          GH_TOKEN: ${{ github.token }}
+          PR_NUMBER: ${{ github.event.pull_request.number }}
       - name: Verify formatting
         run: dart format --output=none --set-exit-if-changed lib test example
       # TEMP (to be reverted): same for widget tests.
@@ -281,9 +296,16 @@ jobs:
               echo '```'
               tail -c 30000 /tmp/widgets-test.txt
               echo '```'
-            } >> "$GITHUB_STEP_SUMMARY"
+            } > /tmp/widgets-test-comment.md
+            if [ -n "$PR_NUMBER" ]; then
+              gh pr comment "$PR_NUMBER" --repo "$GITHUB_REPOSITORY" \
+                --body-file /tmp/widgets-test-comment.md || true
+            fi
           fi
           exit "$code"
+        env:
+          GH_TOKEN: ${{ github.token }}
+          PR_NUMBER: ${{ github.event.pull_request.number }}
 
   # Scheduled integrity watch.
   #
@@ -300,10 +322,10 @@ jobs:
   #
   # The previous version ran check 2 unconditionally and filed
   #      "[provenance] vendored source drift detected" on failure — i.e. it blamed
-  #      upstream for the condition "we chose not to commit the snapshots", on every
-  #      scheduled run, forever. It never fired only because the job had never
-  #      actually executed. The two conditions are now distinct, and the tool's
-  #      exit code says which one happened:
+  # upstream for the condition "we chose not to commit the snapshots", on every
+  # scheduled run, forever. It never fired only because the job had never
+  # actually executed. The two conditions are now distinct, and the tool's
+  # exit code says which one happened:
   #   0 verified   1 drift/invalid   2 sources absent (expected here)
   provenance-watch:
     if: github.event_name == 'schedule'
