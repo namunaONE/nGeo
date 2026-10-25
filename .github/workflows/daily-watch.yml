@@ -1,0 +1,86 @@
+name: Daily gap watch (09:00 NPT)
+
+# 09:00 Asia/Kathmandu (UTC+5:45) is 03:15 UTC. GitHub schedules cron in UTC
+# and may delay runs a few minutes; the report header always records the
+# actual UTC time it ran.
+on:
+  schedule:
+    - cron: '15 3 * * *'
+  workflow_dispatch:
+
+permissions:
+  contents: read
+  issues: write
+
+concurrency:
+  group: daily-watch
+  cancel-in-progress: false
+
+jobs:
+  watch:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-node@v4
+        with:
+          node-version: '20'
+
+      # Exit 1 only for outcomes that need a human decision before the next
+      # merge run (pinned-source drift, or a CBS roster change that makes a
+      # refused pairing resolvable). Everything else is a report, not a
+      # failure — the exact discipline data/SOURCES.md §provenance-watch
+      # learned the hard way.
+      - name: Run the daily source watch
+        id: watch
+        continue-on-error: true
+        run: node tool/daily_watch/watch.cjs
+
+      - name: Upload the daily report
+        uses: actions/upload-artifact@v4
+        if: always()
+        with:
+          name: daily-report
+          path: watch/
+          if-no-files-found: warn
+
+      - name: File an issue when the watch found actionable drift
+        if: steps.watch.outcome == 'failure'
+        uses: actions/github-script@v7
+        with:
+          script: |
+            const fs = require('fs');
+            let body = '';
+            try {
+              body = fs.readFileSync('watch/daily-report.md', 'utf8');
+            } catch (e) {
+              body = 'The daily watch exited non-zero but the report file could not be read: ' + e.message;
+            }
+            if (body.length > 20000) {
+              body = body.slice(0, 20000) + '\n\n…(truncated — see the run artifact for the full report)';
+            }
+            const marker = '[daily-watch] source drift / gap change detected';
+            const runUrl = context.serverUrl + '/' + context.repo.owner + '/' + context.repo.repo
+              + '/actions/runs/' + context.runId;
+            const footer = '\n\nRun: ' + runUrl + '\n\n'
+              + 'Remedy, matched to the failure: re-fetch, re-review, re-pin, then re-merge '
+              + '(see data/SOURCES.md and tool/daily_watch/README.md). '
+              + 'If the reported change is a genuine improvement (e.g. a previously uncoded '
+              + 'palika became resolvable), resolve it in the merge pipeline — never hand-edit '
+              + 'lib/src/nepal_data.dart.';
+            const open = await github.paginate(github.rest.issues.listForRepo, {
+              owner: context.repo.owner, repo: context.repo.repo,
+              state: 'open', per_page: 100,
+            });
+            const existing = open.find(i => i.title === marker);
+            if (existing) {
+              await github.rest.issues.createComment({
+                owner: context.repo.owner, repo: context.repo.repo,
+                issue_number: existing.number,
+                body: body + footer,
+              });
+            } else {
+              await github.rest.issues.create({
+                owner: context.repo.owner, repo: context.repo.repo,
+                title: marker, body: body + footer, labels: ['data'],
+              });
+            }

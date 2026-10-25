@@ -1,0 +1,7 @@
+{
+  "comment": "Expected values for external cross-check sources, recorded 2026-10-25. These are informational baselines, not gates: the watch reports a difference but does not fail on it. Update a value only after adjudicating the change in a merge review. osm values are null until the first successful run records them.",
+  "cbs": { "localBodiesRows": 753 },
+  "geoBoundaries": { "adm3UnitCount": 774, "yearRepresented": "2019" },
+  "localBoundaries": { "features": 777, "localLevels": 755 },
+  "osm": { "adminLevel7": null, "adminLevel9": null }
+}
