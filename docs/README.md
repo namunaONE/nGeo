@@ -105,6 +105,16 @@ available as a legacy view:
 - Tile factory is a single `MAP_TILES` constant + `createTileLayer()` in
   `app.js`, so the tile source is defined in exactly one place.
 
+- **Overlays:** context layers (protected areas, national outline,
+  highways — upcoming) render in a dedicated Leaflet pane (z-index 450)
+  above the figure and persist across metric switches. Each overlay is a
+  `MAP_OVERLAYS` entry in `app.js` — a new layer is a data PR, not a
+  code PR: vendor the GeoJSON beside `palika-boundaries.geojson`, add
+  the registry entry (label, URL fallback chain, style, tooltip), and
+  the loader, toggles (`#map-overlays`) and graceful "(unavailable)"
+  degradation come for free. Overlays are context, not data — their
+  styling must never compete with the choropleth figure.
+
 ## Regenerating explorer data
 
 ```bash

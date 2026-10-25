@@ -491,6 +491,11 @@ function ensureMap() {
     _map.on('focus', () => _map.scrollWheelZoom.enable());
     _map.on('blur', () => _map.scrollWheelZoom.disable());
     createTileLayer().addTo(_map);
+    // Overlay pane (z-index 450) sits above the default overlay pane
+    // (400) so context layers always draw above the choropleth/dots,
+    // whatever order layers are added or re-added in.
+    const overlayPane = _map.createPane('map-overlays');
+    overlayPane.style.zIndex = '450';
     _cluster = window.L.markerClusterGroup({
       chunkedLoading: true,
       removeOutsideVisibleBounds: true,
@@ -498,6 +503,7 @@ function ensureMap() {
       maxClusterRadius: 48,
     });
     _map.addLayer(_cluster);
+    initMapOverlays();
     if (status) status.textContent = '';
     // Deep link: explorer.html?cbs=31304
     const cbs = new URLSearchParams(window.location.search).get('cbs');
@@ -602,6 +608,23 @@ var _boundaryByKey = null;     // districtId|normName -> feature
 var _boundaryLayer = null;     // L.geoJSON layer
 var _boundaryDataAdded = false;
 var _activeRows = new Set();
+
+var MAP_OVERLAYS = [];
+var _overlayLayers = {};  // id -> { def, layer, loaded, visible, ready }
+var _overlaysInited = false;
+
+// ---- Map overlays: context layers above the figure ----
+// Overlays (protected areas, the national outline, highways, ...) are
+// context, not data: they render in a dedicated pane above the
+// choropleth/dots, persist across metric switches, and toggle
+// independently. Data PRs append entries to MAP_OVERLAYS and vendor the
+// GeoJSON beside palika-boundaries.geojson. Entry shape:
+//   { id, label, urls: [same-origin first, then fallbacks],
+//     enabledByDefault: bool, style: object | fn(feature) -> path options,
+//     tooltip: fn(feature) -> html (pre-escaped), popup: fn(feature) -> html }
+// The loader below uses the same fallback-chain pattern as
+// PALIKA_BOUNDARIES_URLS; an unfetchable overlay never breaks the map —
+// it degrades to a disabled "(unavailable)" toggle.
 
 function setMapMetric(metric) {
   if (metric !== 'dots' && !MAP_METRICS[metric]) return;
@@ -819,6 +842,103 @@ function wireBoundaryFeature(feature, layer) {
     const p = feature.properties || {};
     layer.bindPopup('<strong>' + escapeHtmlAttr(p.nameEn || 'Palika') + '</strong>' +
       '<br><span style="color:#64748b;font-size:12px">Boundary not matched to a table row</span>');
+  }
+}
+
+function initMapOverlays() {
+  if (_overlaysInited) return;
+  _overlaysInited = true;
+  for (const def of MAP_OVERLAYS) loadOverlay(def);
+  updateOverlayToggles();
+}
+
+function loadOverlay(def) {
+  const state = _overlayLayers[def.id];
+  if (state) return state.ready;
+  const s = { def: def, layer: null, loaded: false, visible: !!def.enabledByDefault, ready: null };
+  _overlayLayers[def.id] = s;
+  s.ready = (async () => {
+    let lastErr = null;
+    for (const url of def.urls) {
+      try {
+        const res = await fetch(url);
+        if (!res.ok) throw new Error('HTTP ' + res.status + ' loading overlay ' + def.id);
+        const fc = JSON.parse(await res.text());
+        if (!fc || !Array.isArray(fc.features) || !fc.features.length) {
+          throw new Error('overlay ' + def.id + ' parsed to 0 features');
+        }
+        s.layer = window.L.geoJSON(fc, {
+          pane: 'map-overlays',
+          style: def.style || {},
+          onEachFeature: (feature, layer) => {
+            const tip = def.tooltip && def.tooltip(feature);
+            if (tip) {
+              layer.bindTooltip(tip, { className: 'palika-tip', sticky: true, direction: 'top' });
+            }
+            const pop = def.popup && def.popup(feature);
+            if (pop) layer.bindPopup(pop);
+          },
+        });
+        s.loaded = true;
+        if (s.visible && _map && !_map.hasLayer(s.layer)) _map.addLayer(s.layer);
+        updateOverlayToggles();
+        return s;
+      } catch (err) {
+        lastErr = err;
+      }
+    }
+    delete _overlayLayers[def.id];
+    console.error('Overlay unavailable:', def.id, lastErr);
+    updateOverlayToggles();
+    return null;
+  })();
+  return s.ready;
+}
+
+function setOverlayVisible(id, visible) {
+  const s = _overlayLayers[id];
+  if (!s || !s.loaded || !s.layer) return;
+  s.visible = visible;
+  if (!_map) return;
+  if (visible && !_map.hasLayer(s.layer)) _map.addLayer(s.layer);
+  if (!visible && _map.hasLayer(s.layer)) _map.removeLayer(s.layer);
+}
+
+function overlayToggleLabel(def) {
+  const s = _overlayLayers[def.id];
+  if (!s) return def.label + ' (unavailable)';
+  if (!s.loaded) return def.label + ' (loading\u2026)';
+  return def.label;
+}
+
+function updateOverlayToggles() {
+  const el = document.getElementById('map-overlays');
+  if (!el) return;
+  el.innerHTML = '';
+  if (!MAP_OVERLAYS.length) { el.hidden = true; return; }
+  el.hidden = false;
+  const title = document.createElement('span');
+  title.className = 'legend-title';
+  title.textContent = 'Overlays';
+  el.appendChild(title);
+  for (const def of MAP_OVERLAYS) {
+    const s = _overlayLayers[def.id];
+    const label = document.createElement('label');
+    label.className = 'overlay-toggle' + (s ? (s.loaded ? '' : ' overlay-loading') : ' overlay-unavailable');
+    const box = document.createElement('input');
+    box.type = 'checkbox';
+    box.id = 'overlay-' + def.id;
+    if (s && s.loaded) {
+      box.checked = s.visible;
+      box.addEventListener('change', () => setOverlayVisible(def.id, box.checked));
+    } else {
+      box.disabled = true;
+    }
+    const text = document.createElement('span');
+    text.textContent = overlayToggleLabel(def);
+    label.appendChild(box);
+    label.appendChild(text);
+    el.appendChild(label);
   }
 }
 
