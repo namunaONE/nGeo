@@ -462,3 +462,23 @@ Get-ChildItem -Recurse -File data\_raw | ForEach-Object {
 
 A mismatch means the upstream source has changed and the merge must be
 re-reviewed — **not** silently re-accepted.
+
+---
+
+## Province boundaries (high-res) - added 2026-10-26
+
+- Source: National Geoportal (Survey Department of Nepal) - high-resolution
+  provincial boundary shapefile (province0.shp).
+- Retrieved: 2026-10-26 (user-provided download).
+- CRS: WGS 84 (EPSG:4326) - no reprojection required.
+- Content: 7 provincial polygons, 15,146 vertices (after Douglas-Peucker
+  simplification, eps=0.0005 deg, ~55 m), one part each, no holes.
+- Names: English only (Name_E). Devanagari names come from the CBS roster.
+- Dropped fields: Name/NM (legacy font), Cases_Deng (health overlay).
+- License: Government of Nepal (National Geoportal / Survey Department).
+  Redistribution terms to be confirmed before bundling in a published
+  package; currently treated as a high-res cross-check/upgrade source.
+- Generated artifact: lib/src/geo/province_boundaries.dart (51 KB).
+- Regenerate: dart run tool/generate_province_boundaries.dart
+  (input: docs/province-boundaries.geojson).
+- Conversion tool: tool/convert_province_shp.js.

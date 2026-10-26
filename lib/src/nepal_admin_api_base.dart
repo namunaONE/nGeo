@@ -3,6 +3,7 @@
 // Core models and the query API for Nepal's administrative divisions.
 
 import 'geo/palika_boundary_codec.dart';
+import 'geo/province_boundary_codec.dart';
 import 'nepal_data.dart';
 
 /// The type of a local body (palika) of Nepal.
@@ -1042,6 +1043,49 @@ class NepalAdminApi {
     return PalikaBoundaries.toGeoJsonFeatureCollection(
       includeUnmatched: includeUnmatched,
     );
+  }
+
+  // --- Province boundaries (high-res, National Geoportal) ---
+
+  /// Boundary polygon for one province, decoded on demand.
+  ///
+  /// Returns null when the geometry table does not cover the province.
+  /// Look up by ISO code (e.g. 'NP-P1') or by 1-based province code.
+  static ProvinceBoundary? getProvinceBoundary(String provinceIdOrIso) {
+    if (provinceIdOrIso.toUpperCase().startsWith('NP-P')) {
+      return ProvinceBoundaries.byIso(provinceIdOrIso.toUpperCase());
+    }
+    final code = int.tryParse(provinceIdOrIso);
+    if (code != null && code >= 1 && code <= 7) {
+      return ProvinceBoundaries.byCode(code);
+    }
+    // Try by name via the roster.
+    final p = getProvinceById(provinceIdOrIso);
+    if (p != null) return ProvinceBoundaries.byCode(p.cbsCode);
+    return null;
+  }
+
+  /// Boundaries for all 7 provinces, decoded, in province-code order.
+  static List<ProvinceBoundary> getAllProvinceBoundaries() =>
+      ProvinceBoundaries.all;
+
+  /// Whether the geometry table covers this province (ISO or code).
+  static bool hasProvinceBoundary(String provinceIdOrIso) {
+    if (provinceIdOrIso.toUpperCase().startsWith('NP-P')) {
+      return ProvinceBoundaries.hasBoundary(provinceIdOrIso.toUpperCase());
+    }
+    final code = int.tryParse(provinceIdOrIso);
+    if (code != null && code >= 1 && code <= 7) {
+      return ProvinceBoundaries.hasBoundary('NP-P$code');
+    }
+    final p = getProvinceById(provinceIdOrIso);
+    if (p != null) return ProvinceBoundaries.hasBoundary('NP-P${p.cbsCode}');
+    return false;
+  }
+
+  /// Every province boundary as one GeoJSON FeatureCollection (RFC 7946, WGS84).
+  static Map<String, Object?> provinceBoundariesGeoJson() {
+    return ProvinceBoundaries.toGeoJsonFeatureCollection();
   }
 }
 
