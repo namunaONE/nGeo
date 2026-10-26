@@ -89,7 +89,7 @@ void main() {
 - `getProvinceById(id)` → by slug or ISO, case-insensitive, null when unknown
 - `getProvinceByIso('NP-P3')`, `getProvinceByCbs(3)`
 - `getAllDistricts()` → 77; `getDistrictsByProvince(idOrIso)`; `getDistrictByName('Chitwan')` (case-insensitive); `getDistrictByCbs(306)`
-- `getAllLocalBodies()` → 753; `getLocalBodiesByDistrict(name)`; `getLocalBodiesByProvince(idOrIso)`; `getLocalBodiesByType(type)`; `getLocalBodyByCbs(31304)` (null when unverified/absent); `getVerifiedLocalBodies()` (547 CBS-verified)
+- `getAllLocalBodies()` → 753; `getLocalBodiesByDistrict(name)`; `getLocalBodiesByProvince(idOrIso)`; `getLocalBodiesByType(type)`; `getLocalBodyByCbs(31304)` (null when unverified/absent); `getVerifiedLocalBodies()` (548 CBS-verified)
 - `search(query)` → case-insensitive across names, ISO codes, full paths, type names; empty query → empty result
 - `getNationalStats()` → computed live, never hardcoded
 
@@ -106,7 +106,7 @@ void main() {
 ## Data verification (why AI can trust these numbers)
 
 - 5+ independent sources merged (abinrimal, sagautam5, CBS/NSO CSVs, Postal Codes 2025, nepali-geo-pro-max, open-admin-data, MoFAGA directory).
-- **CBS codes:** 744/753 palikas carry a 5-digit PDDPP code. 548 are doubly-attested (`verified`: CBS CSV + Postal-2025 agree), 196 rest on the CBS roster alone (`singleSource`), 9 are null. Never guessed.
+- **CBS codes:** 752/753 palikas carry a 5-digit PDDPP code. 548 are doubly-attested (`verified`: CBS CSV + Postal-2025 agree), 204 rest on a single roster (`singleSource`), 1 is null. Never guessed.
 - **Ward counts:** 745/753 doubly-attested (two 753-row snapshots + province-sum reconciliation; Lumbini 109/109=983 fully reconciled); 1 human decision (Janakpurdham 25); 8 null pending roster adjudication.
 - **Coordinates:** 726/753 approximate centroids from vendored open-admin-data extract; 27 null, never fabricated.
 - **Devanagari spellings:** 72 conflicts adjudicated (49 MoFAGA-exact, 15 slug-identified, 8 human) — see `data/_stage/adjudications.json`.
@@ -115,7 +115,7 @@ void main() {
 ## Known gaps (do not fill by guessing)
 
 - 8 palikas lack ward counts (MoFAGA-backed roster defects): Manang Naraphu/Neshang, Salyan Dhorchaur, Bajhang Kanda, Udayapur Sunkoshi, Saptari Belhi Chapena, Nuwakot Meghang, Rasuwa Aamachhodingmo.
-- 206 palikas lack verified CBS codes; 27 lack coordinates. All surface as `null` with `*Verified == false`.
+- 205 palikas lack verified CBS codes; 27 lack coordinates. All surface as `null` with `*Verified == false`.
 - Administrative boundaries may change by government decision; dataset is versioned per release (see Changelog).
 
 ## Website

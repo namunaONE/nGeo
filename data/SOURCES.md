@@ -23,6 +23,7 @@ re-fetchable from the URLs below. Integrity is verified against
 | 3 | `l3lackcurtains/nepali-geo-pro-max` | `main` | MIT | No | 2026-10-11 |
 | 4 | `open-admin-data/nepal-administrative-divisions` | `main` | **CC-BY-4.0** | **Yes** | 2026-10-11 |
 | 5 | opendatanepal `geographical-codes-for-states-districts-and-local-bodies` (CBS harvest) | CKAN resource IDs, see §6 | **CC-BY** (`license_id: cc-by`, re-verified at fetch) | **Yes — via NOTICE** | 2026-10-11 |
+| 7 | Nepal Post local-level code list (giwmscdnone.gov.np portal PDFs) | n/a — referenced, not vendored | Government of Nepal publication (no stated licence) | No | 2026-10-25 |
 
 ## File-level pins and blob SHAs
 
@@ -172,7 +173,35 @@ English spellings are UPPERCASE variants (`CHITAWAN`, `DHANUSA`,
 **Used for:** `nsoCode` (verified), `nsoCodeVerified`, district-code
 resolution, 4th Devanagari vote (palika level, where aligned).
 
-## Code confidence tiers (`resolve_code_tiers.dart`, v2.4.0)
+### 7. Nepal Post local-level code list — referenced, not vendored (2026-10-25)
+
+Two PDFs published on Nepal Post's GIS portal and read via search-index
+extracts on 2026-10-25 (not machine-parsed into `data/_raw/`; every extract
+used is quoted in `doc/REVIEW-codes.md` §7):
+
+- Local-level code list — English + Devanagari name + `PDDPP` per local unit:
+  `https://giwmscdnone.gov.np/media/pdf_upload/locallevelcode_tjstksd.pdf`
+- Federal-structure post office list — office, province, local-level code,
+  office postal code:
+  `https://giwmscdnone.gov.np/media/pdf_upload/पोष्टल कोड_5aoxvqu.pdf`
+  (mirror: `https://giwmscdnone.gov.np/media/pages/files/postl code english (1)_ihneau2.pdf`)
+
+**Provides:** direct 5-digit PDDPP attestation for 8 of the 9 `unverified`
+palikas — Mapya Dudhkoshi 10304, Thulung Dudhkoshi 10305 (Solukhumbu);
+Paribartan 50203, Gangadev 50204, Sunil Smriti 50209 (Rolpa); Nalagad 60707
+(Jajarkot); Jagannath 70105, Khaptad Chhededaha 70107 (Bajura). Its 7-digit
+office postal codes (`PDDPP` + post-office ward, e.g. `7010503` for
+Jagannath) are a *different system* from `zipCodes` and are **not** merged.
+Its Devanagari column is a candidate second vote for the `nameNe` backlog —
+never auto-applied.
+**Limits:** a Government of Nepal publication with no stated licence — treated
+as a factual reference, not vendored data. Bheri (Jajarkot) is **not** directly
+attested in the extracts; its inferred 60706 stays refused.
+**Correction recorded:** the Rolpa free-code inference had Gangadev = 50203 /
+Paribartan = 50204; the directory attests the reverse. The attestation wins —
+the inference was never merged.
+
+## Code confidence tiers (`resolve_code_tiers.dart`, v2.4.0; postal-list addendum 2026-10-25)
 
 `verify_codes.dart` is deliberately strict: a code is `verified` only when
 postal-2025 and the CBS harvest independently name the same code for the same
@@ -185,8 +214,8 @@ silently dropping over a quarter of Nepal's local bodies.
 **published with an honest label rather than discarded**:
 
 - `verified` (548) — unchanged: doubly-attested.
-- `singleSource` (196) — one attestation from the authoritative CBS roster.
-  Accepted only when **all** of these hold:
+- `singleSource` (196 → **204** since 2026-10-25) — one attestation from the
+  authoritative CBS roster, accepted only when **all** of these hold:
   1. the row is in the same district (PDD prefix match),
   2. its palika type agrees after canonicalising the harvest's own dialect
      (`Metropolitian`, `Municipaity`, `Gaun Palika`, `Gaunpaika` — see
@@ -196,9 +225,16 @@ silently dropping over a quarter of Nepal's local bodies.
      the pairing is forced by elimination — exactly one of our palikas and
      exactly one free CBS row of that type remain in a district whose roster
      matches the CBS roster type-for-type.
-- `unverified` (9) — no defensible code; `cbsCode` stays null. These are
-  genuine ambiguities (several unclaimed same-type rows in one district, where
-  any assignment would be a permutation guess), not omissions.
+
+  Since 2026-10-25 the tier also holds codes **directly attested by the Nepal
+  Post local-level code list** (§7): 8 palikas whose CBS-roster pairing was a
+  refused permutation guess, but whose PDDPP code a government directory
+  names explicitly. `cbsCodeVerified` stays `false` for them — the
+  doubly-attested rule needs CBS + postal-2025, not the postal directory.
+- `unverified` (9 → **1** since 2026-10-25) — Bheri (Jajarkot) only. The
+  postal-list extracts name every other Jajarkot code (60701–60707 minus the
+  district's coded rows), so 60706 is a strong inference but **not a direct
+  attestation**; it stays null rather than guessed.
 
 Two invariants are machine-enforced, so a wrong code cannot ship:
 
@@ -378,9 +414,11 @@ source. This file only draws the explorer choropleth.
   new miss — or a fixed miss that leaves this list stale — fails the
   build.
 - "Mappable", defined once to stop the 718-vs-726 confusion: in the
-  package it means CBS code **and** coordinates (718 of 753); in
-  `docs/data.json` it is rows with coordinates (726 of 753 — 8 of the 9
-  uncoded rows still carry open-admin-data coordinates).
+  package it means CBS code **and** coordinates (726 of 753); in
+  `docs/data.json` it is rows with coordinates (726 of 753). The postal-list
+  adjudication coded the 8 previously uncoded rows that carried
+  open-admin-data coordinates, so the two definitions now agree; only
+  Bheri (Jajarkot) is both uncoded and unmapped.
 
 ## Website basemap (not shipped in the package)
 

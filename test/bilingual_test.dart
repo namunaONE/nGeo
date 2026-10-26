@@ -30,10 +30,10 @@ void main() {
       }
     });
 
-    test('731 of 753 palikas carry a Devanagari name', () {
+    test('733 of 753 palikas carry a Devanagari name', () {
       final named = bodies.where((b) => isDevanagari(b.nameNe)).length;
-      expect(named, 731);
-      expect(bodies.where((b) => b.nameNe == null).length, 22);
+      expect(named, 733);
+      expect(bodies.where((b) => b.nameNe == null).length, 20);
     });
 
     test('every non-null nameNe actually contains Devanagari', () {
@@ -107,8 +107,6 @@ void main() {
     test('palikas with no attested Devanagari name stay null', () {
       const expected = {
         'Sunsari|Baraha',
-        'Sunsari|Bhokraha',
-        'Taplejung|Yangwarak',
         'Udayapur|Sunkoshi',
         'Saptari|Belhi Chapena',
         'Dhading|Netrawati',

@@ -148,11 +148,11 @@ jobs:
           assert s["ward_gaps"] == 8, s
           assert s["unreconciled_wards"] == 46, s
 
-          assert len(n.get_local_bodies_with_code()) == 744
+          assert len(n.get_local_bodies_with_code()) == 752
           assert len(n.get_verified_local_bodies()) == 548
-          assert len(n.get_single_source_local_bodies()) == 196
-          assert len(n.get_uncoded_local_bodies()) == 9
-          assert len(n.get_mappable_local_bodies()) == 718
+          assert len(n.get_single_source_local_bodies()) == 204
+          assert len(n.get_uncoded_local_bodies()) == 1
+          assert len(n.get_mappable_local_bodies()) == 726
 
           b = n.get_local_body_by_cbs(31304)
           assert b["name"] == "Bharatpur" and b["district"] == "Chitwan", b

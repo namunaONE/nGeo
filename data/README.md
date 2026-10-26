@@ -11,8 +11,9 @@ from it.
   460 rural municipalities) · 6,743 wards
 - **Codes (Schema v2 + tiers):** provinces `cbsCode` 1–7 + `isoCode` NP-P1…NP-P7,
   districts `cbsCode` 3-digit, palikas `cbsCode` 5-digit PDDPP +
-  `cbsCodeConfidence` (`verified` 548 / `singleSource` 196 / `unverified` 9 —
-  744 of 753 palikas carry a code)
+  `cbsCodeConfidence` (`verified` 548 / `singleSource` 204 / `unverified` 1 —
+  752 of 753 palikas carry a code; the 8 resolved on 2026-10-25 are attested
+  by the Nepal Post local-level code list, see `data/SOURCES.md` §7)
 - **Basis:** the federal structure established by the Local Level
   Restructuring Commission (2017) under the Constitution of Nepal (2015),
   cross-checked against Ministry of Federal Affairs and General
@@ -36,7 +37,7 @@ from it.
 | `cbsCode` | int? | 5-digit PDDPP: P=province, DD=district, PP=palika; null when unverified |
 | `cbsCodeVerified` | bool | true only when doubly-attested (CBS + Postal-2025) |
 | `cbsCodeConfidence` | enum | `verified` \| `singleSource` \| `unverified` — see below |
-| `nameNe` | string? | Devanagari name; null for 22/753 (never transliterated) |
+| `nameNe` | string? | Devanagari name; null for 20/753 (never transliterated) |
 | `nameNeVerified` | bool | true only when both bilingual sources agree on the spelling |
 | `lat` / `lng` | double? | approximate WGS84 centroid; null for 27/753 (never fabricated) |
 | `geoSource` | string? | e.g. `open-admin-data`, `osm-nominatim` |
@@ -56,7 +57,7 @@ with such a guess often enough to matter.
 |---|---|---|
 | Province | 7/7 | 6/7 |
 | District | 77/77 | 77/77 |
-| Local body | 731/753 | 450/731 |
+| Local body | 733/753 | 450/733 |
 
 `nameNeVerified == false` does **not** mean the name is doubtful. It means the
 two rosters spell the same name differently in orthography — 262 pairs differ
@@ -88,8 +89,8 @@ codes. `cbsCodeConfidence` records the difference:
 | Tier | Count | Rule |
 |---|---|---|
 | `verified` | 548 | postal-2025 **and** the CBS harvest name the same code for the same entity |
-| `singleSource` | 196 | Exactly one same-district, same-type row of the CBS roster within normalized-name Levenshtein distance 2, **or** a pairing forced by elimination inside a district whose roster matches the CBS roster type-for-type |
-| `unverified` | 9 | No defensible code. Left `null` — a genuine ambiguity, not an omission |
+| `singleSource` | 204 | Exactly one same-district, same-type row of the CBS roster within normalized-name Levenshtein distance 2, **or** a pairing forced by elimination inside a district whose roster matches the CBS roster type-for-type, **or** (since 2026-10-25) a code directly attested by the Nepal Post local-level code list (`data/SOURCES.md` §7) |
+| `unverified` | 1 | Bheri (Jajarkot) — its inferred 60706 is not directly attested, so it stays `null` rather than guessed |
 
 `cbsCodeVerified` remains exactly the doubly-attested case, so any code
 written against v2.x keeps behaving identically.

@@ -97,10 +97,10 @@ Solu Dudhkunda,सोलुदुधाकुण्ड,false,municipality,Solukh
 Khumbu Pasanglhamu,खुम्बुपसङ्लाहमु,false,ruralMunicipality,Solukhumbu,सोलुखुम्बु,Koshi,NP-P1,10301,verified,27.843,86.718,open-admin-data,5,true,,,,
 Likhu Pike,लिखुपिके,true,ruralMunicipality,Solukhumbu,सोलुखुम्बु,Koshi,NP-P1,10308,verified,27.551,86.434,open-admin-data,5,true,http://likhupikemun.gov.np,info@likhupikemun.gov.np,9852882600,56000
 Mahakulung,महाकुलुङ,false,ruralMunicipality,Solukhumbu,सोलुखुम्बु,Koshi,NP-P1,10302,verified,27.654,86.899,open-admin-data,5,true,,,,
-Mapya Dudhkoshi,माप्या दुधकोशी,false,ruralMunicipality,Solukhumbu,सोलुखुम्बु,Koshi,NP-P1,,unverified,27.537,86.693,open-admin-data,7,true,,,,
+Mapya Dudhkoshi,माप्या दुधकोशी,false,ruralMunicipality,Solukhumbu,सोलुखुम्बु,Koshi,NP-P1,10304,singleSource,27.537,86.693,open-admin-data,7,true,,,,
 Necha Salyan,नेचासल्यान,true,ruralMunicipality,Solukhumbu,सोलुखुम्बु,Koshi,NP-P1,10306,verified,27.373,86.605,open-admin-data,5,true,http://nechasalyanmun.gov.np,nechasalyan345@gmail.com,038-412277,56000
 Sotang,सोटाङ,false,ruralMunicipality,Solukhumbu,सोलुखुम्बु,Koshi,NP-P1,10303,verified,27.517,86.775,open-admin-data,5,true,,,,
-Thulung Dudhkoshi,थुलुङ दुधकोशी,true,ruralMunicipality,Solukhumbu,सोलुखुम्बु,Koshi,NP-P1,,unverified,27.428,86.714,open-admin-data,9,true,http://thulungdudhkoshimun.gov.np,info@thulungdudhkoshimun.gov.np,९८५२८६६१२३,56000
+Thulung Dudhkoshi,थुलुङ दुधकोशी,true,ruralMunicipality,Solukhumbu,सोलुखुम्बु,Koshi,NP-P1,10305,singleSource,27.428,86.714,open-admin-data,9,true,http://thulungdudhkoshimun.gov.np,info@thulungdudhkoshimun.gov.np,९८५२८६६१२३,56000
 Dharan,धरान,true,subMetropolitan,Sunsari,सुनसरी,Koshi,NP-P1,11301,verified,26.795,87.277,open-admin-data,20,true,,,,56700
 Itahari,इटहरी,true,subMetropolitan,Sunsari,सुनसरी,Koshi,NP-P1,11306,verified,26.674,87.258,open-admin-data,20,true,,,,56700
 Baraha,,false,municipality,Sunsari,सुनसरी,Koshi,NP-P1,11302,singleSource,,,,11,true,,,,
@@ -108,7 +108,7 @@ Duhabi,दुहबी,false,municipality,Sunsari,सुनसरी,Koshi,NP-P1
 Inaruwa,इनरुवा,false,municipality,Sunsari,सुनसरी,Koshi,NP-P1,11309,verified,26.6,87.168,open-admin-data,10,true,http://inaruwamun.gov.np,info@inaruwamun.gov.np,025-565077,
 Ramdhuni,रामधुनी,true,municipality,Sunsari,सुनसरी,Koshi,NP-P1,11305,verified,26.693,87.172,open-admin-data,9,true,http://ramdhunimun.gov.np,ramdhunibhasi@gmail.com,025-562566,56700
 Barju,बर्जु,true,ruralMunicipality,Sunsari,सुनसरी,Koshi,NP-P1,11312,verified,26.461,87.209,open-admin-data,6,true,http://barjumun.gov.np,info@barjumun.gov.np,9852070720,56700
-Bhokraha,,false,ruralMunicipality,Sunsari,सुनसरी,Koshi,NP-P1,11304,singleSource,,,,8,true,,,,
+Bhokraha,भोक्राहा,false,ruralMunicipality,Sunsari,सुनसरी,Koshi,NP-P1,11304,singleSource,,,,8,true,,,,
 Dewangunj,देवानगन्ज,true,ruralMunicipality,Sunsari,सुनसरी,Koshi,NP-P1,11311,verified,26.461,87.151,open-admin-data,7,true,,,,56700
 Gadhi,गढी,true,ruralMunicipality,Sunsari,सुनसरी,Koshi,NP-P1,11308,verified,26.565,87.181,open-admin-data,6,true,http://gadhimun.gov.np,ito.gadhiruralmuncipality@gmail.com,0,56700
 Harinagara,हरिनगर,true,ruralMunicipality,Sunsari,सुनसरी,Koshi,NP-P1,11310,singleSource,26.493,87.106,open-admin-data,7,true,http://harinagaramun.gov.np,harinagargapa@gmail.com,9852038096,56700
@@ -121,7 +121,7 @@ Mikwakhola,मिक्वाखोला,true,ruralMunicipality,Taplejung,त�
 Phaktanglung,फाक्ताङलुङ,false,ruralMunicipality,Taplejung,ताप्लेजुङ,Koshi,NP-P1,10101,singleSource,27.679,87.913,open-admin-data,7,true,,,,
 Sidingba,सिडिङबा,false,ruralMunicipality,Taplejung,ताप्लेजुङ,Koshi,NP-P1,10109,singleSource,27.361,87.94,open-admin-data,7,true,,,,
 Sirijangha,सिरिजाङ्घा,false,ruralMunicipality,Taplejung,ताप्लेजुङ,Koshi,NP-P1,10108,singleSource,27.497,87.966,open-admin-data,8,true,,,,
-Yangwarak,,false,ruralMunicipality,Taplejung,ताप्लेजुङ,Koshi,NP-P1,10107,singleSource,,,,6,true,,,,
+Yangwarak,याङवरक,false,ruralMunicipality,Taplejung,ताप्लेजुङ,Koshi,NP-P1,10107,singleSource,,,,6,true,,,,
 Laligurans,लालीगुराँस,false,municipality,Terhathum,तेह्रथुम,Koshi,NP-P1,10805,verified,27.13,87.451,open-admin-data,9,true,http://laliguransmun.gov.np,info@laliguransmun.gov.np,026-402119,
 Myanglung,म्याङलुङ,true,municipality,Terhathum,तेह्रथुम,Koshi,NP-P1,10804,verified,27.141,87.516,open-admin-data,10,true,http://myanglungmun.gov.np,info@myanglungmun.gov.np,026-460135,57100
 Aatharai,आठराई,true,ruralMunicipality,Terhathum,तेह्रथुम,Koshi,NP-P1,10801,singleSource,27.208,87.682,open-admin-data,7,true,http://aathraimun.gov.np,aathraigaupalika1@gmail.com,9852684324,57100
@@ -557,13 +557,13 @@ Mandavi,मांडवी,false,ruralMunicipality,Pyuthan,प्युठान
 Naubahini,नौबहिनी,true,ruralMunicipality,Pyuthan,प्युठान,Lumbini,NP-P5,50302,verified,28.255,82.909,open-admin-data,8,true,http://naubahinimun.gov.np,naubahinirm@gmail.com,9857836020,22300
 Sarumarani,सरूमरानी,false,ruralMunicipality,Pyuthan,प्युठान,Lumbini,NP-P5,50309,verified,27.944,82.839,open-admin-data,6,true,,,,
 Rolpa,रोल्पा,true,municipality,Rolpa,रोल्पा,Lumbini,NP-P5,50207,verified,28.329,82.605,open-admin-data,10,true,http://rolpamun.gov.np,rolpanagarpalika@gmail.com,086440071,22100
-Gangadev,गंगादेव,true,ruralMunicipality,Rolpa,रोल्पा,Lumbini,NP-P5,,unverified,28.446,82.42,open-admin-data,7,true,,,,22100
+Gangadev,गंगादेव,true,ruralMunicipality,Rolpa,रोल्पा,Lumbini,NP-P5,50204,singleSource,28.446,82.42,open-admin-data,7,true,,,,22100
 Lungri,लुङ्गरी,false,ruralMunicipality,Rolpa,रोल्पा,Lumbini,NP-P5,50210,verified,28.267,82.809,open-admin-data,7,true,,,,
 Madi,माडी,false,ruralMunicipality,Rolpa,रोल्पा,Lumbini,NP-P5,50205,verified,28.402,82.506,open-admin-data,6,true,,,,
-Paribartan,परिवर्तन,true,ruralMunicipality,Rolpa,रोल्पा,Lumbini,NP-P5,,unverified,28.481,82.548,open-admin-data,6,true,,,,22100
+Paribartan,परिवर्तन,true,ruralMunicipality,Rolpa,रोल्पा,Lumbini,NP-P5,50203,singleSource,28.481,82.548,open-admin-data,6,true,,,,22100
 Runtigadhi,रुन्टीगढी,true,ruralMunicipality,Rolpa,रोल्पा,Lumbini,NP-P5,50208,singleSource,28.177,82.513,open-admin-data,9,true,http://runtigadhimun.gov.np,rrmrolpa@gmail.com,9849628947,22100
 Sunchhahari,सुनछहरी,true,ruralMunicipality,Rolpa,रोल्पा,Lumbini,NP-P5,50201,verified,28.382,82.829,open-admin-data,7,true,,,,22100
-Sunil Smriti,सुनिल स्मृति,true,ruralMunicipality,Rolpa,रोल्पा,Lumbini,NP-P5,,unverified,28.277,82.738,open-admin-data,8,true,http://sunilsmritimun.gov.np,info@sunilsmritimun.gov.np,086-401170,22100
+Sunil Smriti,सुनिल स्मृति,true,ruralMunicipality,Rolpa,रोल्पा,Lumbini,NP-P5,50209,singleSource,28.277,82.738,open-admin-data,8,true,http://sunilsmritimun.gov.np,info@sunilsmritimun.gov.np,086-401170,22100
 Thabang,थवाङ,true,ruralMunicipality,Rolpa,रोल्पा,Lumbini,NP-P5,50202,singleSource,28.46,82.74,open-admin-data,5,true,,,,22100
 Tribeni,त्रिवेणी,true,ruralMunicipality,Rolpa,रोल्पा,Lumbini,NP-P5,50206,singleSource,28.292,82.483,open-admin-data,7,true,,,,10600 22000 22100 22200
 Bhoome,भुमे,false,ruralMunicipality,Rukum East,रुकुम पूर्व,Lumbini,NP-P5,50103,singleSource,28.567,82.683,open-admin-data,9,true,,,,
@@ -613,7 +613,7 @@ Simkot,सिमकोट,true,ruralMunicipality,Humla,हुम्ला,Karnal
 Tanjakot,तान्जाकोट,false,ruralMunicipality,Humla,हुम्ला,Karnali,NP-P6,60307,verified,29.703,81.749,open-admin-data,5,true,,,,
 Bheri,भेरी,false,municipality,Jajarkot,जाजरकोट,Karnali,NP-P6,,unverified,,,,13,true,http://bherimun.gov.np,bherimun@gmail.com,089-430002,
 Chhedagad,छेडागढ,false,municipality,Jajarkot,जाजरकोट,Karnali,NP-P6,60704,verified,28.752,82.017,open-admin-data,13,true,,,,
-Nalagad,नालागड,false,municipality,Jajarkot,जाजरकोट,Karnali,NP-P6,,unverified,28.866,82.391,open-admin-data,13,true,,,,
+Nalagad,नालागड,false,municipality,Jajarkot,जाजरकोट,Karnali,NP-P6,60707,singleSource,28.866,82.391,open-admin-data,13,true,,,,
 Barekot,बारेकोट,true,ruralMunicipality,Jajarkot,जाजरकोट,Karnali,NP-P6,60701,verified,28.986,82.27,open-admin-data,9,true,http://barekotmun.gov.np,barekotrm@gmail.com,9858080810,21500
 Junichande,जुनिचन्दे,false,ruralMunicipality,Jajarkot,जाजरकोट,Karnali,NP-P6,60703,verified,28.902,81.987,open-admin-data,11,true,,,,
 Kuse,कुसे,true,ruralMunicipality,Jajarkot,जाजरकोट,Karnali,NP-P6,60702,verified,28.881,82.148,open-admin-data,9,true,http://kushemun.gov.np,info@kushemun.gov.np,081-695060,21500
@@ -702,8 +702,8 @@ Budhinanda,बुढीनन्द,false,municipality,Bajura,बाजुरा
 Tribeni,त्रिवेणी,true,municipality,Bajura,बाजुरा,Sudurpashchim,NP-P7,70109,singleSource,29.335,81.429,open-admin-data,9,true,,,,10600 22000 22100 22200
 Gaumul,गौमुल,true,ruralMunicipality,Bajura,बाजुरा,Sudurpashchim,NP-P7,70102,verified,29.568,81.482,open-admin-data,6,true,http://gaumulmun.gov.np,ito.gaumulmun@gmail.com,9848492727,10600
 Himali,हिमाली,true,ruralMunicipality,Bajura,बाजुरा,Sudurpashchim,NP-P7,70101,verified,29.712,81.618,open-admin-data,7,true,http://himalimun.gov.np,info@himalimun.gov.np,9858021521,10600
-Jagannath,जगन्नाथ,true,ruralMunicipality,Bajura,बाजुरा,Sudurpashchim,NP-P7,,unverified,29.399,81.645,open-admin-data,6,true,http://jagganathmun.gov.np,info@jagganathmun.gov.np,9749011330,10600
-Khaptad Chhededaha,खप्तड छेडेदह,true,ruralMunicipality,Bajura,बाजुरा,Sudurpashchim,NP-P7,,unverified,29.398,81.281,open-admin-data,7,true,http://chhededahamun.gov.np,icto.chhededaha@gmail.com,096-690801,10500 10600 10700 10800
+Jagannath,जगन्नाथ,true,ruralMunicipality,Bajura,बाजुरा,Sudurpashchim,NP-P7,70105,singleSource,29.399,81.645,open-admin-data,6,true,http://jagganathmun.gov.np,info@jagganathmun.gov.np,9749011330,10600
+Khaptad Chhededaha,खप्तड छेडेदह,true,ruralMunicipality,Bajura,बाजुरा,Sudurpashchim,NP-P7,70107,singleSource,29.398,81.281,open-admin-data,7,true,http://chhededahamun.gov.np,icto.chhededaha@gmail.com,096-690801,10500 10600 10700 10800
 Swami Kartik,,false,ruralMunicipality,Bajura,बाजुरा,Sudurpashchim,NP-P7,70104,singleSource,,,,5,true,,,,
 Amargadhi,अमरगढी,true,municipality,Dadeldhura,डडेलधुरा,Sudurpashchim,NP-P7,70502,verified,29.306,80.608,open-admin-data,11,true,http://amargadhimun.gov.np,info@amargadhimun.gov.np,096-410222,10300
 Parashuram,परशुराम,true,municipality,Dadeldhura,डडेलधुरा,Sudurpashchim,NP-P7,70505,singleSource,29.13,80.34,open-admin-data,12,true,http://parshurammun.gov.np,parshurammun@gmail.com,096-411004,10300
