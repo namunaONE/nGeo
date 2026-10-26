@@ -280,24 +280,30 @@ abstract final class PalikaBoundaries {
   ///
   /// Empty on current data: the 2026-10-26 centroid completion let the
   /// point-in-polygon fallback join the last seven spelling variants, so
-  /// every feature is matched. The loop body stays (the join is
-  /// data-driven, and a future geometry-source update can produce
-  /// unmatched features again), but each line carries an explicit
-  /// coverage marker so the 100% floor keeps measuring reachable code.
+  /// every feature is matched. The entry-parsing logic lives in
+  /// [decodeUnmatchedEntry] and stays test-covered; the loop below is
+  /// dormant until a future geometry-source update produces unmatched
+  /// features again, so its single line carries an explicit coverage
+  /// marker and the 100% floor keeps measuring reachable code.
   static List<PalikaBoundary> get unmatched {
     final out = <PalikaBoundary>[];
     for (final e in kUnmatchedPalikaBoundaries.entries) {
-      final i = e.key.indexOf('|'); // coverage:ignore-line
-      final districtId = e.key.substring(0, i); // coverage:ignore-line
-      final localBodyName = e.key.substring(i + 1); // coverage:ignore-line
-      final boundary = PalikaBoundary.decode( // coverage:ignore-line
-        districtId: districtId, // coverage:ignore-line
-        localBodyName: localBodyName, // coverage:ignore-line
-        encoded: e.value, // coverage:ignore-line
-      ); // coverage:ignore-line
-      out.add(boundary); // coverage:ignore-line
+      out.add(decodeUnmatchedEntry(e.key, e.value)); // coverage:ignore-line
     }
     return out;
+  }
+
+  /// Decodes one unmatched entry keyed `districtId|sourceName`.
+  ///
+  /// Exposed (and tested) independently of [unmatched] so the parsing
+  /// stays covered even while the unmatched map is empty.
+  static PalikaBoundary decodeUnmatchedEntry(String key, String encoded) {
+    final i = key.indexOf('|');
+    return PalikaBoundary.decode(
+      districtId: key.substring(0, i),
+      localBodyName: key.substring(i + 1),
+      encoded: encoded,
+    );
   }
 
   /// Everything as one GeoJSON FeatureCollection (RFC 7946, WGS84).
