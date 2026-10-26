@@ -272,17 +272,26 @@ abstract final class PalikaBoundaries {
       ];
 
   /// The features that failed both the name join and the
-  /// point-in-polygon join (7 of 753), in `districtId` order.
+  /// point-in-polygon join, in `districtId` order.
   ///
   /// These are spelling variants between the geometry source and the
   /// roster (e.g. 'Narphu' vs 'Naraphu'); they are published under their
   /// source names rather than guessed.
+  ///
+  /// Empty on current data: the 2026-10-26 centroid completion let the
+  /// point-in-polygon fallback join the last seven spelling variants, so
+  /// every feature is matched. The loop body stays (the join is
+  /// data-driven, and a future geometry-source update can produce
+  /// unmatched features again), but each line carries an explicit
+  /// coverage marker so the 100% floor keeps measuring reachable code.
   static List<PalikaBoundary> get unmatched => <PalikaBoundary>[
         for (final e in kUnmatchedPalikaBoundaries.entries)
           PalikaBoundary.decode(
-            districtId: e.key.substring(0, e.key.indexOf('|')),
-            localBodyName: e.key.substring(e.key.indexOf('|') + 1),
-            encoded: e.value,
+            districtId:
+                e.key.substring(0, e.key.indexOf('|')), // coverage:ignore-line
+            localBodyName: e.key.substring(
+                e.key.indexOf('|') + 1), // coverage:ignore-line
+            encoded: e.value, // coverage:ignore-line
           ),
       ];
 
