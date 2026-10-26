@@ -6,8 +6,8 @@
       "geometry": {
         "type": "Point",
         "coordinates": [
-          87.315045,
-          27.006773
+          87.30665,
+          27.005482
         ]
       },
       "properties": {
@@ -23,7 +23,7 @@
         "localBodyCount": 137,
         "wards": 1157,
         "centroidMethod": "mean of mapped local-body centroids (approximate)",
-        "derivedFrom": "132 mapped local bodies"
+        "derivedFrom": "137 mapped local bodies"
       }
     },
     {
@@ -31,8 +31,8 @@
       "geometry": {
         "type": "Point",
         "coordinates": [
-          85.709259,
-          26.850274
+          85.71639,
+          26.847831
         ]
       },
       "properties": {
@@ -48,7 +48,7 @@
         "localBodyCount": 136,
         "wards": 1271,
         "centroidMethod": "mean of mapped local-body centroids (approximate)",
-        "derivedFrom": "135 mapped local bodies"
+        "derivedFrom": "136 mapped local bodies"
       }
     },
     {
@@ -56,8 +56,8 @@
       "geometry": {
         "type": "Point",
         "coordinates": [
-          85.438713,
-          27.680122
+          85.443739,
+          27.683008
         ]
       },
       "properties": {
@@ -73,7 +73,7 @@
         "localBodyCount": 119,
         "wards": 1121,
         "centroidMethod": "mean of mapped local-body centroids (approximate)",
-        "derivedFrom": "115 mapped local bodies"
+        "derivedFrom": "119 mapped local bodies"
       }
     },
     {
@@ -81,8 +81,8 @@
       "geometry": {
         "type": "Point",
         "coordinates": [
-          83.98159,
-          28.165628
+          84.000388,
+          28.192106
         ]
       },
       "properties": {
@@ -98,7 +98,7 @@
         "localBodyCount": 85,
         "wards": 759,
         "centroidMethod": "mean of mapped local-body centroids (approximate)",
-        "derivedFrom": "78 mapped local bodies"
+        "derivedFrom": "85 mapped local bodies"
       }
     },
     {
@@ -106,8 +106,8 @@
       "geometry": {
         "type": "Point",
         "coordinates": [
-          82.870056,
-          27.946759
+          82.875073,
+          27.947064
         ]
       },
       "properties": {
@@ -123,7 +123,7 @@
         "localBodyCount": 109,
         "wards": 983,
         "centroidMethod": "mean of mapped local-body centroids (approximate)",
-        "derivedFrom": "108 mapped local bodies"
+        "derivedFrom": "109 mapped local bodies"
       }
     },
     {
@@ -131,8 +131,8 @@
       "geometry": {
         "type": "Point",
         "coordinates": [
-          82.050716,
-          29.004797
+          82.056658,
+          28.997747
         ]
       },
       "properties": {
@@ -148,7 +148,7 @@
         "localBodyCount": 79,
         "wards": 718,
         "centroidMethod": "mean of mapped local-body centroids (approximate)",
-        "derivedFrom": "74 mapped local bodies"
+        "derivedFrom": "79 mapped local bodies"
       }
     },
     {
@@ -156,8 +156,8 @@
       "geometry": {
         "type": "Point",
         "coordinates": [
-          80.879119,
-          29.257214
+          80.88625,
+          29.25958
         ]
       },
       "properties": {
@@ -173,7 +173,7 @@
         "localBodyCount": 88,
         "wards": 734,
         "centroidMethod": "mean of mapped local-body centroids (approximate)",
-        "derivedFrom": "84 mapped local bodies"
+        "derivedFrom": "88 mapped local bodies"
       }
     }
   ]

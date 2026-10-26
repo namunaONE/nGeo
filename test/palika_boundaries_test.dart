@@ -108,6 +108,10 @@ void main() {
       NepalAdminApi.getLocalBodyBoundary('Atlantis', 'Bharatpur'),
       isNull,
     );
+    // The ci-fallback arm of hasBoundary: the exact-key containsKey misses,
+    // so the case-insensitive match must rescue the lookup.
+    expect(PalikaBoundaries.hasBoundary('chitwan', 'BHARATPUR'), isTrue);
+    expect(PalikaBoundaries.hasBoundary('chitwan', 'Nowhere'), isFalse);
   });
 
   test('decoded boundaries sit inside the Nepal bounding box', () {
@@ -249,13 +253,31 @@ void main() {
     }
   });
 
-  test('roster palikas without geometry expose it honestly', () {
-    expect(NepalAdminApi.getLocalBodyBoundary('Manang', 'Naraphu'), isNull);
+  test('every roster palika has boundary geometry since the centroid fix', () {
+    // The 2026-10-26 centroid completion let the point-in-polygon
+    // fallback join the last seven upstream spelling variants, so
+    // Naraphu — the long-standing honest-null example — now decodes.
+    expect(NepalAdminApi.getLocalBodyBoundary('Manang', 'Naraphu'), isNotNull);
     final missing =
         NepalAdminApi.getAllLocalBodies().where((b) => !b.hasBoundary).toList();
-    expect(missing.length, 7);
-    for (final b in missing) {
-      expect(b.boundary, isNull, reason: '${b.name} should not decode');
-    }
+    expect(missing.length, 0);
+  });
+
+  test('unmatched entry decoding stays covered while the map is empty', () {
+    // The join is complete since the 2026-10-26 centroid completion, so
+    // kUnmatchedPalikaBoundaries is empty and getUnmatchedLocalBodyBoundaries
+    // returns nothing. decodeUnmatchedEntry is the entry-parsing logic that
+    // getter would run, exercised directly so it cannot rot.
+    expect(NepalAdminApi.getUnmatchedLocalBodyBoundaries(), isEmpty);
+    final b = PalikaBoundaries.decodeUnmatchedEntry(
+      'P4.D02|Narphu',
+      kPalikaBoundaries['Manang']!['Naraphu']!,
+    );
+    expect(b.isUnmatched, isTrue);
+    expect(b.districtId, 'P4.D02');
+    expect(b.localBodyName, 'Narphu');
+    expect(b.polygonCount, greaterThan(0));
+    expect(b.toGeoJsonFeature()['properties'],
+        containsPair('districtId', 'P4.D02'));
   });
 }

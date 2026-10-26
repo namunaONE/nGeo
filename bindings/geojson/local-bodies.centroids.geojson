@@ -1354,6 +1354,32 @@
       "geometry": {
         "type": "Point",
         "coordinates": [
+          86.789,
+          27.113
+        ]
+      },
+      "properties": {
+        "name": "Diprung",
+        "nameNe": "डिप्रुङ",
+        "nameNeVerified": false,
+        "type": "ruralMunicipality",
+        "district": "Khotang",
+        "districtNe": "खोटाङ",
+        "province": "Koshi",
+        "isoCode": "NP-P1",
+        "cbsCode": 10507,
+        "cbsCodeVerified": false,
+        "cbsCodeConfidence": "singleSource",
+        "geoSource": "palika-boundaries-centroid",
+        "wards": 7,
+        "wardsVerified": true
+      }
+    },
+    {
+      "type": "Feature",
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
           86.922,
           26.97
         ]
@@ -3060,6 +3086,31 @@
       "geometry": {
         "type": "Point",
         "coordinates": [
+          87.132,
+          26.755
+        ]
+      },
+      "properties": {
+        "name": "Baraha",
+        "nameNeVerified": false,
+        "type": "municipality",
+        "district": "Sunsari",
+        "districtNe": "सुनसरी",
+        "province": "Koshi",
+        "isoCode": "NP-P1",
+        "cbsCode": 11302,
+        "cbsCodeVerified": false,
+        "cbsCodeConfidence": "singleSource",
+        "geoSource": "palika-boundaries-centroid",
+        "wards": 11,
+        "wardsVerified": true
+      }
+    },
+    {
+      "type": "Feature",
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
           87.242,
           26.553
         ]
@@ -3172,6 +3223,32 @@
         "zipCodes": [
           "56700"
         ]
+      }
+    },
+    {
+      "type": "Feature",
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          87.101,
+          26.588
+        ]
+      },
+      "properties": {
+        "name": "Bhokraha",
+        "nameNe": "भोक्राहा",
+        "nameNeVerified": false,
+        "type": "ruralMunicipality",
+        "district": "Sunsari",
+        "districtNe": "सुनसरी",
+        "province": "Koshi",
+        "isoCode": "NP-P1",
+        "cbsCode": 11304,
+        "cbsCodeVerified": false,
+        "cbsCodeConfidence": "singleSource",
+        "geoSource": "palika-boundaries-centroid",
+        "wards": 8,
+        "wardsVerified": true
       }
     },
     {
@@ -3530,6 +3607,32 @@
       "geometry": {
         "type": "Point",
         "coordinates": [
+          87.761,
+          27.317
+        ]
+      },
+      "properties": {
+        "name": "Yangwarak",
+        "nameNe": "याङवरक",
+        "nameNeVerified": false,
+        "type": "ruralMunicipality",
+        "district": "Taplejung",
+        "districtNe": "ताप्लेजुङ",
+        "province": "Koshi",
+        "isoCode": "NP-P1",
+        "cbsCode": 10107,
+        "cbsCodeVerified": false,
+        "cbsCodeConfidence": "singleSource",
+        "geoSource": "palika-boundaries-centroid",
+        "wards": 6,
+        "wardsVerified": true
+      }
+    },
+    {
+      "type": "Feature",
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
           87.451,
           27.13
         ]
@@ -3854,6 +3957,31 @@
         "zipCodes": [
           "56300"
         ]
+      }
+    },
+    {
+      "type": "Feature",
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          86.642,
+          27.084
+        ]
+      },
+      "properties": {
+        "name": "Sunkoshi",
+        "nameNeVerified": false,
+        "type": "ruralMunicipality",
+        "district": "Udayapur",
+        "districtNe": "उदयपुर",
+        "province": "Koshi",
+        "isoCode": "NP-P1",
+        "cbsCode": 11405,
+        "cbsCodeVerified": false,
+        "cbsCodeConfidence": "singleSource",
+        "geoSource": "palika-boundaries-centroid",
+        "wards": null,
+        "wardsVerified": false
       }
     },
     {
@@ -6596,6 +6724,31 @@
       "geometry": {
         "type": "Point",
         "coordinates": [
+          86.679,
+          26.518
+        ]
+      },
+      "properties": {
+        "name": "Belhi Chapena",
+        "nameNeVerified": false,
+        "type": "ruralMunicipality",
+        "district": "Saptari",
+        "districtNe": "सप्तरी",
+        "province": "Madhesh",
+        "isoCode": "NP-P2",
+        "cbsCode": 20111,
+        "cbsCodeVerified": false,
+        "cbsCodeConfidence": "singleSource",
+        "geoSource": "palika-boundaries-centroid",
+        "wards": null,
+        "wardsVerified": false
+      }
+    },
+    {
+      "type": "Feature",
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
           86.701,
           26.521
         ]
@@ -8430,6 +8583,31 @@
       "geometry": {
         "type": "Point",
         "coordinates": [
+          84.969,
+          27.992
+        ]
+      },
+      "properties": {
+        "name": "Netrawati",
+        "nameNeVerified": false,
+        "type": "ruralMunicipality",
+        "district": "Dhading",
+        "districtNe": "धादिङ",
+        "province": "Bagmati",
+        "isoCode": "NP-P3",
+        "cbsCode": 30405,
+        "cbsCodeVerified": false,
+        "cbsCodeConfidence": "singleSource",
+        "geoSource": "palika-boundaries-centroid",
+        "wards": 5,
+        "wardsVerified": true
+      }
+    },
+    {
+      "type": "Feature",
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
           85.082,
           28.226
         ]
@@ -8596,6 +8774,31 @@
         "zipCodes": [
           "45500"
         ]
+      }
+    },
+    {
+      "type": "Feature",
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          86.137,
+          27.634
+        ]
+      },
+      "properties": {
+        "name": "Baitedhar",
+        "nameNeVerified": false,
+        "type": "ruralMunicipality",
+        "district": "Dolakha",
+        "districtNe": "दोलखा",
+        "province": "Bagmati",
+        "isoCode": "NP-P3",
+        "cbsCode": 30104,
+        "cbsCodeVerified": false,
+        "cbsCodeConfidence": "singleSource",
+        "geoSource": "palika-boundaries-centroid",
+        "wards": 8,
+        "wardsVerified": true
       }
     },
     {
@@ -10152,6 +10355,31 @@
       "geometry": {
         "type": "Point",
         "coordinates": [
+          85.061,
+          27.992
+        ]
+      },
+      "properties": {
+        "name": "Meghang",
+        "nameNeVerified": false,
+        "type": "ruralMunicipality",
+        "district": "Nuwakot",
+        "districtNe": "नुवाकोट",
+        "province": "Bagmati",
+        "isoCode": "NP-P3",
+        "cbsCode": 30506,
+        "cbsCodeVerified": false,
+        "cbsCodeConfidence": "singleSource",
+        "geoSource": "palika-boundaries-centroid",
+        "wards": null,
+        "wardsVerified": false
+      }
+    },
+    {
+      "type": "Feature",
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
           85.301,
           27.891
         ]
@@ -10441,6 +10669,31 @@
         "cbsCodeConfidence": "verified",
         "geoSource": "open-admin-data",
         "wards": 9,
+        "wardsVerified": true
+      }
+    },
+    {
+      "type": "Feature",
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          86.186,
+          27.446
+        ]
+      },
+      "properties": {
+        "name": "Likhu",
+        "nameNeVerified": false,
+        "type": "ruralMunicipality",
+        "district": "Ramechhap",
+        "districtNe": "रामेछाप",
+        "province": "Bagmati",
+        "isoCode": "NP-P3",
+        "cbsCode": 31003,
+        "cbsCodeVerified": false,
+        "cbsCodeConfidence": "singleSource",
+        "geoSource": "palika-boundaries-centroid",
+        "wards": 7,
         "wardsVerified": true
       }
     },
@@ -11695,6 +11948,31 @@
       "geometry": {
         "type": "Point",
         "coordinates": [
+          84.729,
+          28.016
+        ]
+      },
+      "properties": {
+        "name": "Bhimsen",
+        "nameNeVerified": false,
+        "type": "ruralMunicipality",
+        "district": "Gorkha",
+        "districtNe": "गोरखा",
+        "province": "Gandaki",
+        "isoCode": "NP-P4",
+        "cbsCode": 40106,
+        "cbsCodeVerified": false,
+        "cbsCodeConfidence": "singleSource",
+        "geoSource": "palika-boundaries-centroid",
+        "wards": 8,
+        "wardsVerified": true
+      }
+    },
+    {
+      "type": "Feature",
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
           84.873,
           28.541
         ]
@@ -11825,6 +12103,31 @@
         "cbsCodeVerified": true,
         "cbsCodeConfidence": "verified",
         "geoSource": "open-admin-data",
+        "wards": 8,
+        "wardsVerified": true
+      }
+    },
+    {
+      "type": "Feature",
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          84.743,
+          28.198
+        ]
+      },
+      "properties": {
+        "name": "Sulikot",
+        "nameNeVerified": false,
+        "type": "ruralMunicipality",
+        "district": "Gorkha",
+        "districtNe": "गोरखा",
+        "province": "Gandaki",
+        "isoCode": "NP-P4",
+        "cbsCode": 40103,
+        "cbsCodeVerified": true,
+        "cbsCodeConfidence": "verified",
+        "geoSource": "palika-boundaries-centroid",
         "wards": 8,
         "wardsVerified": true
       }
@@ -12234,6 +12537,31 @@
       "geometry": {
         "type": "Point",
         "coordinates": [
+          84.235,
+          28.78
+        ]
+      },
+      "properties": {
+        "name": "Naraphu",
+        "nameNeVerified": false,
+        "type": "ruralMunicipality",
+        "district": "Manang",
+        "districtNe": "मनाङ",
+        "province": "Gandaki",
+        "isoCode": "NP-P4",
+        "cbsCode": 40201,
+        "cbsCodeVerified": false,
+        "cbsCodeConfidence": "singleSource",
+        "geoSource": "palika-boundaries-centroid",
+        "wards": null,
+        "wardsVerified": false
+      }
+    },
+    {
+      "type": "Feature",
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
           84.395,
           28.608
         ]
@@ -12252,6 +12580,81 @@
         "cbsCodeConfidence": "singleSource",
         "geoSource": "open-admin-data",
         "wards": 9,
+        "wardsVerified": true
+      }
+    },
+    {
+      "type": "Feature",
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          84.005,
+          28.683
+        ]
+      },
+      "properties": {
+        "name": "Neshang",
+        "nameNeVerified": false,
+        "type": "ruralMunicipality",
+        "district": "Manang",
+        "districtNe": "मनाङ",
+        "province": "Gandaki",
+        "isoCode": "NP-P4",
+        "cbsCode": 40202,
+        "cbsCodeVerified": false,
+        "cbsCodeConfidence": "singleSource",
+        "geoSource": "palika-boundaries-centroid",
+        "wards": null,
+        "wardsVerified": false
+      }
+    },
+    {
+      "type": "Feature",
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          83.755,
+          28.886
+        ]
+      },
+      "properties": {
+        "name": "Barhagaun Muktichhetra",
+        "nameNeVerified": false,
+        "type": "ruralMunicipality",
+        "district": "Mustang",
+        "districtNe": "मुस्ताङ",
+        "province": "Gandaki",
+        "isoCode": "NP-P4",
+        "cbsCode": 40303,
+        "cbsCodeVerified": false,
+        "cbsCodeConfidence": "singleSource",
+        "geoSource": "palika-boundaries-centroid",
+        "wards": 5,
+        "wardsVerified": true
+      }
+    },
+    {
+      "type": "Feature",
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          83.937,
+          29.036
+        ]
+      },
+      "properties": {
+        "name": "Dalome",
+        "nameNeVerified": false,
+        "type": "ruralMunicipality",
+        "district": "Mustang",
+        "districtNe": "मुस्ताङ",
+        "province": "Gandaki",
+        "isoCode": "NP-P4",
+        "cbsCode": 40301,
+        "cbsCodeVerified": false,
+        "cbsCodeConfidence": "singleSource",
+        "geoSource": "palika-boundaries-centroid",
+        "wards": 5,
         "wardsVerified": true
       }
     },
@@ -12694,6 +13097,31 @@
         "zipCodes": [
           "33000"
         ]
+      }
+    },
+    {
+      "type": "Feature",
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          84.065,
+          27.811
+        ]
+      },
+      "properties": {
+        "name": "Bungdikali",
+        "nameNeVerified": false,
+        "type": "ruralMunicipality",
+        "district": "Nawalpur",
+        "districtNe": "नवलपरासी पूर्व",
+        "province": "Gandaki",
+        "isoCode": "NP-P4",
+        "cbsCode": 40803,
+        "cbsCodeVerified": false,
+        "cbsCodeConfidence": "singleSource",
+        "geoSource": "palika-boundaries-centroid",
+        "wards": 6,
+        "wardsVerified": true
       }
     },
     {
@@ -14813,6 +15241,32 @@
         "cbsCodeConfidence": "verified",
         "geoSource": "open-admin-data",
         "wards": 8,
+        "wardsVerified": true
+      }
+    },
+    {
+      "type": "Feature",
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          83.417,
+          27.98
+        ]
+      },
+      "properties": {
+        "name": "Ruru",
+        "nameNe": "रुरु",
+        "nameNeVerified": false,
+        "type": "ruralMunicipality",
+        "district": "Gulmi",
+        "districtNe": "गुल्मी",
+        "province": "Lumbini",
+        "isoCode": "NP-P5",
+        "cbsCode": 50412,
+        "cbsCodeVerified": false,
+        "cbsCodeConfidence": "singleSource",
+        "geoSource": "palika-boundaries-centroid",
+        "wards": 6,
         "wardsVerified": true
       }
     },
@@ -17550,6 +18004,35 @@
       "geometry": {
         "type": "Point",
         "coordinates": [
+          82.181,
+          28.703
+        ]
+      },
+      "properties": {
+        "name": "Bheri",
+        "nameNe": "भेरी",
+        "nameNeVerified": false,
+        "type": "municipality",
+        "district": "Jajarkot",
+        "districtNe": "जाजरकोट",
+        "province": "Karnali",
+        "isoCode": "NP-P6",
+        "cbsCode": null,
+        "cbsCodeVerified": false,
+        "cbsCodeConfidence": "unverified",
+        "geoSource": "palika-boundaries-centroid",
+        "wards": 13,
+        "wardsVerified": true,
+        "website": "http://bherimun.gov.np",
+        "email": "bherimun@gmail.com",
+        "phone": "089-430002"
+      }
+    },
+    {
+      "type": "Feature",
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
           82.017,
           28.752
         ]
@@ -18046,6 +18529,31 @@
       "geometry": {
         "type": "Point",
         "coordinates": [
+          81.628,
+          29.071
+        ]
+      },
+      "properties": {
+        "name": "Kalika",
+        "nameNeVerified": false,
+        "type": "ruralMunicipality",
+        "district": "Kalikot",
+        "districtNe": "कालिकोट",
+        "province": "Karnali",
+        "isoCode": "NP-P6",
+        "cbsCode": 60509,
+        "cbsCodeVerified": false,
+        "cbsCodeConfidence": "singleSource",
+        "geoSource": "palika-boundaries-centroid",
+        "wards": 8,
+        "wardsVerified": true
+      }
+    },
+    {
+      "type": "Feature",
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
           81.856,
           29.041
         ]
@@ -18239,6 +18747,32 @@
         "zipCodes": [
           "21100"
         ]
+      }
+    },
+    {
+      "type": "Feature",
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          82.542,
+          29.663
+        ]
+      },
+      "properties": {
+        "name": "Mugu Karmarong",
+        "nameNe": "मुगुम कर्मारोङ",
+        "nameNeVerified": false,
+        "type": "ruralMunicipality",
+        "district": "Mugu",
+        "districtNe": "मुगु",
+        "province": "Karnali",
+        "isoCode": "NP-P6",
+        "cbsCode": 60201,
+        "cbsCodeVerified": false,
+        "cbsCodeConfidence": "singleSource",
+        "geoSource": "palika-boundaries-centroid",
+        "wards": 9,
+        "wardsVerified": true
       }
     },
     {
@@ -18607,6 +19141,31 @@
       "geometry": {
         "type": "Point",
         "coordinates": [
+          82.181,
+          28.461
+        ]
+      },
+      "properties": {
+        "name": "Dhorchaur",
+        "nameNeVerified": false,
+        "type": "ruralMunicipality",
+        "district": "Salyan",
+        "districtNe": "सल्यान",
+        "province": "Karnali",
+        "isoCode": "NP-P6",
+        "cbsCode": 60904,
+        "cbsCodeVerified": false,
+        "cbsCodeConfidence": "singleSource",
+        "geoSource": "palika-boundaries-centroid",
+        "wards": null,
+        "wardsVerified": false
+      }
+    },
+    {
+      "type": "Feature",
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
           81.962,
           28.297
         ]
@@ -18661,6 +19220,31 @@
         "zipCodes": [
           "22200"
         ]
+      }
+    },
+    {
+      "type": "Feature",
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          82.191,
+          28.569
+        ]
+      },
+      "properties": {
+        "name": "Kumakh Malika",
+        "nameNeVerified": false,
+        "type": "ruralMunicipality",
+        "district": "Salyan",
+        "districtNe": "सल्यान",
+        "province": "Karnali",
+        "isoCode": "NP-P6",
+        "cbsCode": 60902,
+        "cbsCodeVerified": false,
+        "cbsCodeConfidence": "singleSource",
+        "geoSource": "palika-boundaries-centroid",
+        "wards": 7,
+        "wardsVerified": true
       }
     },
     {
@@ -19719,6 +20303,31 @@
       "geometry": {
         "type": "Point",
         "coordinates": [
+          81.292,
+          29.863
+        ]
+      },
+      "properties": {
+        "name": "Kanda",
+        "nameNeVerified": false,
+        "type": "ruralMunicipality",
+        "district": "Bajhang",
+        "districtNe": "बझाङ",
+        "province": "Sudurpashchim",
+        "isoCode": "NP-P7",
+        "cbsCode": 70201,
+        "cbsCodeVerified": false,
+        "cbsCodeConfidence": "singleSource",
+        "geoSource": "palika-boundaries-centroid",
+        "wards": null,
+        "wardsVerified": false
+      }
+    },
+    {
+      "type": "Feature",
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
           80.931,
           29.512
         ]
@@ -20116,6 +20725,31 @@
           "10700",
           "10800"
         ]
+      }
+    },
+    {
+      "type": "Feature",
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          81.75,
+          29.419
+        ]
+      },
+      "properties": {
+        "name": "Swami Kartik",
+        "nameNeVerified": false,
+        "type": "ruralMunicipality",
+        "district": "Bajura",
+        "districtNe": "बाजुरा",
+        "province": "Sudurpashchim",
+        "isoCode": "NP-P7",
+        "cbsCode": 70104,
+        "cbsCodeVerified": false,
+        "cbsCodeConfidence": "singleSource",
+        "geoSource": "palika-boundaries-centroid",
+        "wards": 5,
+        "wardsVerified": true
       }
     },
     {
@@ -20717,6 +21351,31 @@
         "zipCodes": [
           "10800"
         ]
+      }
+    },
+    {
+      "type": "Feature",
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          81.01,
+          29.055
+        ]
+      },
+      "properties": {
+        "name": "Bogatan",
+        "nameNeVerified": false,
+        "type": "ruralMunicipality",
+        "district": "Doti",
+        "districtNe": "डोटी",
+        "province": "Sudurpashchim",
+        "isoCode": "NP-P7",
+        "cbsCode": 70607,
+        "cbsCodeVerified": false,
+        "cbsCodeConfidence": "singleSource",
+        "geoSource": "palika-boundaries-centroid",
+        "wards": 7,
+        "wardsVerified": true
       }
     },
     {
@@ -21354,6 +22013,35 @@
         "phone": "099-412046",
         "zipCodes": [
           "10400"
+        ]
+      }
+    },
+    {
+      "type": "Feature",
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          80.092,
+          28.9
+        ]
+      },
+      "properties": {
+        "name": "Mahakali",
+        "nameNe": "महाकाली",
+        "nameNeVerified": false,
+        "type": "municipality",
+        "district": "Kanchanpur",
+        "districtNe": "कञ्चनपुर",
+        "province": "Sudurpashchim",
+        "isoCode": "NP-P7",
+        "cbsCode": 70905,
+        "cbsCodeVerified": false,
+        "cbsCodeConfidence": "singleSource",
+        "geoSource": "palika-boundaries-centroid",
+        "wards": 10,
+        "wardsVerified": true,
+        "zipCodes": [
+          "10100"
         ]
       }
     },

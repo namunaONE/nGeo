@@ -39,8 +39,8 @@ from it.
 | `cbsCodeConfidence` | enum | `verified` \| `singleSource` \| `unverified` — see below |
 | `nameNe` | string? | Devanagari name; null for 20/753 (never transliterated) |
 | `nameNeVerified` | bool | true only when both bilingual sources agree on the spelling |
-| `lat` / `lng` | double? | approximate WGS84 centroid; null for 27/753 (never fabricated) |
-| `geoSource` | string? | e.g. `open-admin-data`, `osm-nominatim` |
+| `lat` / `lng` | double? | approximate WGS84 centroid; all 753 mapped — 726 from open-admin-data, 27 area-weighted centroids of the vendored boundary polygons |
+| `geoSource` | string? | e.g. `open-admin-data`, `osm-nominatim`, `palika-boundaries-centroid` |
 | `wards` | int? | ward count; null for 8/753 pending roster adjudication |
 | `wardsVerified` | bool | true only when doubly-attested (sagautam5 + geo-pro-max, incl. documented aliases) |
 | `website` / `email` / `phone` | string? | official contact block, single-source (MoFAGA); null for 382/753 |

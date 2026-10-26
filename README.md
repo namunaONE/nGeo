@@ -27,12 +27,12 @@ Pure Dart package. Zero runtime dependencies. Data ships in the box.
 | **Bilingual** | Devanagari names for all 7 provinces, 77 districts and **731/753 palikas** - never transliterated, never guessed |
 | **Bilingual search** | `search('भरतपुर')` and `search('Bharatpur')` return the same palika; fragments match too |
 | **Complete hierarchy** | Province → District → Local Body (palika) |
-| **Official codes** | 744/753 palikas with CBS 5-digit codes (PDDPP), all 77 districts (3-digit), all 7 provinces (NP-P1…NP-P7) |
+| **Official codes** | 752/753 palikas with CBS 5-digit codes (PDDPP), all 77 districts (3-digit), all 7 provinces (NP-P1…NP-P7) |
 | **Honest confidence tiers** | Every code labelled `verified` (548) / `singleSource` (196) / `unverified` (9) — you choose how much to trust it |
 | **Ward counts** | 745/753 palikas with verified ward counts; declared vs substantiated totals reported side by side; 8 documented roster-defect gaps |
 | **Administrative attributes** | District HQ, area and website (77/77); province capital, area and website (7/7); palika website/email/phone and postal codes |
-| **Map coordinates** | 726/753 palikas with approximate centroids (`lat`/`lng` + `geoSource`); `hasCoordinates`, `whereMapped` |
-| **Boundary polygons** | All 753 palika boundaries as pure-Dart data (~91 KB, zero assets/downloads); 746/753 joined to the roster, 7 published separately; lossless ~11 m quantisation |
+| **Map coordinates** | All 753 palikas with approximate centroids (`lat`/`lng` + `geoSource`: open-admin-data, plus boundary-polygon centroids for the last 27); `hasCoordinates`, `whereMapped` |
+| **Boundary polygons** | All 753 palika boundaries as pure-Dart data (~91 KB, zero assets/downloads); all 753 joined to the roster; lossless ~11 m quantisation |
 | **Type-safe models** | `Province`, `District`, `LocalBody`, `LocalBodyType`, `CbsCodeConfidence` enums |
 | **Hierarchical queries** | Navigate province → district → local body with typed accessors |
 | **Typed search** | Disambiguates duplicate names by district/province context, by `fullPath`, or by district-scoped lookup |
@@ -309,7 +309,7 @@ known gaps, which `Province.unreconciledWards` reports per province.
 | `getUncodedLocalBodies()` | `List<LocalBody>` | No defensible code (9) |
 | `search(query)` | `SearchResult` | Typed search (names, ISO, full paths) |
 | `getNationalStats()` | `NationalStats` | Computed national totals |
-| `getLocalBodyBoundary(district, name)` | `PalikaBoundary?` | Boundary polygon (746/753 covered) |
+| `getLocalBodyBoundary(district, name)` | `PalikaBoundary?` | Boundary polygon (753/753 covered) |
 | `getAllLocalBodyBoundaries()` | `List<PalikaBoundary>` | All matched boundaries, roster order |
 | `getUnmatchedLocalBodyBoundaries()` | `List<PalikaBoundary>` | The 7 unjoined source features |
 | `boundariesGeoJson()` | `Map<String, Object?>` | Everything as one RFC 7946 FeatureCollection |
@@ -324,7 +324,7 @@ known gaps, which `Province.unreconciledWards` reports per province.
 
 ## 🗺️ Data Explorer
 
-Interactive table with all 753 local bodies — search, filter by province/district/type, view CBS codes and verification status — plus an interactive centroid map (726 mapped, Leaflet + clustered dots, click a row to fly to it, `?cbs=` deep links).
+Interactive table with all 753 local bodies — search, filter by province/district/type, view CBS codes and verification status — plus an interactive centroid map (all 753 mapped, Leaflet + clustered dots, click a row to fly to it, `?cbs=` deep links).
 
 👉 [Open Data Explorer](https://namunaONE.github.io/Nepal-Local-Government-Data/explorer.html)
 
@@ -377,7 +377,7 @@ Step 4: Schema v2 with CBS codes embedded (tool/merge/apply_cbs_codes.dart)
 Step 5: Confidence tiers — single-source codes recovered from the CBS roster,
         with a bijection gate so no two palikas share a code
         (tool/merge/resolve_code_tiers.dart)
-       │ 548 verified + 196 singleSource = 744/753 codes (98.8%)
+       │ 548 verified + 204 singleSource = 752/753 codes (99.9%)
        ▼
 Step 6: Devanagari names at all three levels, corroborated against a second
         bilingual source (tool/merge/attach_bilingual.dart)

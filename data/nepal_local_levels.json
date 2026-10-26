@@ -3,7 +3,7 @@
     "name": "Nepal local government structure",
     "description": "Canonical dataset of Nepal's federal administrative divisions: provinces, districts and local bodies (palikas).",
     "source": "Federal structure established by the Local Level Restructuring Commission (2017) under the Constitution of Nepal (2015); cross-checked against MoFAGA references.",
-    "dataAsOf": "2026-10-25",
+    "dataAsOf": "2026-10-26",
     "totals": {
       "provinces": 7,
       "districts": 77,
@@ -879,6 +879,9 @@
             {
               "name": "Diprung",
               "type": "ruralMunicipality",
+              "lat": 27.113,
+              "lng": 86.789,
+              "geoSource": "palika-boundaries-centroid",
               "wards": 7,
               "wardsVerified": true,
               "cbsCode": 10507,
@@ -1966,6 +1969,9 @@
             {
               "name": "Baraha",
               "type": "municipality",
+              "lat": 26.755,
+              "lng": 87.132,
+              "geoSource": "palika-boundaries-centroid",
               "wards": 11,
               "wardsVerified": true,
               "cbsCode": 11302,
@@ -2048,6 +2054,9 @@
             {
               "name": "Bhokraha",
               "type": "ruralMunicipality",
+              "lat": 26.588,
+              "lng": 87.101,
+              "geoSource": "palika-boundaries-centroid",
               "wards": 8,
               "wardsVerified": true,
               "cbsCode": 11304,
@@ -2277,6 +2286,9 @@
             {
               "name": "Yangwarak",
               "type": "ruralMunicipality",
+              "lat": 27.317,
+              "lng": 87.761,
+              "geoSource": "palika-boundaries-centroid",
               "wards": 6,
               "wardsVerified": true,
               "cbsCode": 10107,
@@ -2509,6 +2521,9 @@
             {
               "name": "Sunkoshi",
               "type": "ruralMunicipality",
+              "lat": 27.084,
+              "lng": 86.642,
+              "geoSource": "palika-boundaries-centroid",
               "cbsCode": 11405,
               "cbsCodeVerified": false,
               "cbsCodeConfidence": "singleSource",
@@ -4205,6 +4220,9 @@
             {
               "name": "Belhi Chapena",
               "type": "ruralMunicipality",
+              "lat": 26.518,
+              "lng": 86.679,
+              "geoSource": "palika-boundaries-centroid",
               "cbsCode": 20111,
               "cbsCodeVerified": false,
               "cbsCodeConfidence": "singleSource",
@@ -5373,6 +5391,9 @@
             {
               "name": "Netrawati",
               "type": "ruralMunicipality",
+              "lat": 27.992,
+              "lng": 84.969,
+              "geoSource": "palika-boundaries-centroid",
               "wards": 5,
               "wardsVerified": true,
               "cbsCode": 30405,
@@ -5496,6 +5517,9 @@
             {
               "name": "Baitedhar",
               "type": "ruralMunicipality",
+              "lat": 27.634,
+              "lng": 86.137,
+              "geoSource": "palika-boundaries-centroid",
               "wards": 8,
               "wardsVerified": true,
               "cbsCode": 30104,
@@ -6487,6 +6511,9 @@
             {
               "name": "Meghang",
               "type": "ruralMunicipality",
+              "lat": 27.992,
+              "lng": 85.061,
+              "geoSource": "palika-boundaries-centroid",
               "cbsCode": 30506,
               "cbsCodeVerified": false,
               "cbsCodeConfidence": "singleSource",
@@ -6684,6 +6711,9 @@
             {
               "name": "Likhu",
               "type": "ruralMunicipality",
+              "lat": 27.446,
+              "lng": 86.186,
+              "geoSource": "palika-boundaries-centroid",
               "wards": 7,
               "wardsVerified": true,
               "cbsCode": 31003,
@@ -7504,6 +7534,9 @@
             {
               "name": "Bhimsen",
               "type": "ruralMunicipality",
+              "lat": 28.016,
+              "lng": 84.729,
+              "geoSource": "palika-boundaries-centroid",
               "wards": 8,
               "wardsVerified": true,
               "cbsCode": 40106,
@@ -7594,6 +7627,9 @@
             {
               "name": "Sulikot",
               "type": "ruralMunicipality",
+              "lat": 28.198,
+              "lng": 84.743,
+              "geoSource": "palika-boundaries-centroid",
               "cbsCode": 40103,
               "cbsCodeVerified": true,
               "wards": 8,
@@ -7870,6 +7906,9 @@
             {
               "name": "Naraphu",
               "type": "ruralMunicipality",
+              "lat": 28.78,
+              "lng": 84.235,
+              "geoSource": "palika-boundaries-centroid",
               "cbsCode": 40201,
               "cbsCodeVerified": false,
               "cbsCodeConfidence": "singleSource",
@@ -7893,6 +7932,9 @@
             {
               "name": "Neshang",
               "type": "ruralMunicipality",
+              "lat": 28.683,
+              "lng": 84.005,
+              "geoSource": "palika-boundaries-centroid",
               "cbsCode": 40202,
               "cbsCodeVerified": false,
               "cbsCodeConfidence": "singleSource",
@@ -7913,6 +7955,9 @@
             {
               "name": "Barhagaun Muktichhetra",
               "type": "ruralMunicipality",
+              "lat": 28.886,
+              "lng": 83.755,
+              "geoSource": "palika-boundaries-centroid",
               "wards": 5,
               "wardsVerified": true,
               "cbsCode": 40303,
@@ -7924,6 +7969,9 @@
             {
               "name": "Dalome",
               "type": "ruralMunicipality",
+              "lat": 29.036,
+              "lng": 83.937,
+              "geoSource": "palika-boundaries-centroid",
               "wards": 5,
               "wardsVerified": true,
               "cbsCode": 40301,
@@ -8218,6 +8266,9 @@
             {
               "name": "Bungdikali",
               "type": "ruralMunicipality",
+              "lat": 27.811,
+              "lng": 84.065,
+              "geoSource": "palika-boundaries-centroid",
               "wards": 6,
               "wardsVerified": true,
               "cbsCode": 40803,
@@ -9599,6 +9650,9 @@
             {
               "name": "Ruru",
               "type": "ruralMunicipality",
+              "lat": 27.98,
+              "lng": 83.417,
+              "geoSource": "palika-boundaries-centroid",
               "wards": 6,
               "wardsVerified": true,
               "cbsCode": 50412,
@@ -11370,6 +11424,9 @@
             {
               "name": "Bheri",
               "type": "municipality",
+              "lat": 28.703,
+              "lng": 82.181,
+              "geoSource": "palika-boundaries-centroid",
               "wards": 13,
               "wardsVerified": true,
               "cbsCode": null,
@@ -11698,6 +11755,9 @@
             {
               "name": "Kalika",
               "type": "ruralMunicipality",
+              "lat": 29.071,
+              "lng": 81.628,
+              "geoSource": "palika-boundaries-centroid",
               "wards": 8,
               "wardsVerified": true,
               "cbsCode": 60509,
@@ -11836,6 +11896,9 @@
             {
               "name": "Mugu Karmarong",
               "type": "ruralMunicipality",
+              "lat": 29.663,
+              "lng": 82.542,
+              "geoSource": "palika-boundaries-centroid",
               "wards": 9,
               "wardsVerified": true,
               "cbsCode": 60201,
@@ -12086,6 +12149,9 @@
             {
               "name": "Dhorchaur",
               "type": "ruralMunicipality",
+              "lat": 28.461,
+              "lng": 82.181,
+              "geoSource": "palika-boundaries-centroid",
               "cbsCode": 60904,
               "cbsCodeVerified": false,
               "cbsCodeConfidence": "singleSource",
@@ -12132,6 +12198,9 @@
             {
               "name": "Kumakh Malika",
               "type": "ruralMunicipality",
+              "lat": 28.569,
+              "lng": 82.191,
+              "geoSource": "palika-boundaries-centroid",
               "wards": 7,
               "wardsVerified": true,
               "cbsCode": 60902,
@@ -12832,6 +12901,9 @@
             {
               "name": "Kanda",
               "type": "ruralMunicipality",
+              "lat": 29.863,
+              "lng": 81.292,
+              "geoSource": "palika-boundaries-centroid",
               "cbsCode": 70201,
               "cbsCodeVerified": false,
               "cbsCodeConfidence": "singleSource",
@@ -13088,6 +13160,9 @@
             {
               "name": "Swami Kartik",
               "type": "ruralMunicipality",
+              "lat": 29.419,
+              "lng": 81.75,
+              "geoSource": "palika-boundaries-centroid",
               "wards": 5,
               "wardsVerified": true,
               "cbsCode": 70104,
@@ -13493,6 +13568,9 @@
             {
               "name": "Bogatan",
               "type": "ruralMunicipality",
+              "lat": 29.055,
+              "lng": 81.01,
+              "geoSource": "palika-boundaries-centroid",
               "wards": 7,
               "wardsVerified": true,
               "cbsCode": 70607,
@@ -13912,6 +13990,9 @@
             {
               "name": "Mahakali",
               "type": "municipality",
+              "lat": 28.9,
+              "lng": 80.092,
+              "geoSource": "palika-boundaries-centroid",
               "wards": 10,
               "wardsVerified": true,
               "cbsCode": 70905,

@@ -152,7 +152,7 @@ jobs:
           assert len(n.get_verified_local_bodies()) == 548
           assert len(n.get_single_source_local_bodies()) == 204
           assert len(n.get_uncoded_local_bodies()) == 1
-          assert len(n.get_mappable_local_bodies()) == 726
+          assert len(n.get_mappable_local_bodies()) == 752
 
           b = n.get_local_body_by_cbs(31304)
           assert b["name"] == "Bharatpur" and b["district"] == "Chitwan", b

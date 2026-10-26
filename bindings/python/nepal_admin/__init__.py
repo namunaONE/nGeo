@@ -1,6 +1,6 @@
 """Offline administrative divisions of Nepal.
 
-Data as of ``2026-10-25``. Generated from
+Data as of ``2026-10-26``. Generated from
 ``data/nepal_local_levels.json`` by ``tool/generate_bindings.dart``; do not
 edit by hand.
 

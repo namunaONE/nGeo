@@ -31,6 +31,23 @@ objects stay identical field for field.
   Covered by the existing suite; the four unreachable guards carry
   `// coverage:ignore-line`.
 
+### Data (2026-10-26 — palika centroid completion)
+- **The last 27 coordinate-free palikas now carry `lat`/`lng`** with
+  `geoSource: "palika-boundaries-centroid"`: the area-weighted centroid
+  (shoelace formula, holes subtracted) of the palika's own feature in the
+  vendored `docs/palika-boundaries.geojson` (MIT lineage — see
+  `data/SOURCES.md`). Every centroid was verified by point-in-polygon to
+  fall inside its own boundary before shipping. The seven upstream
+  spelling variants (Baitedhar, Baraha, Barhagaun Muktichhetra, Bogatan,
+  Mugu Karmarong, Naraphu, Neshang) now join the boundary layer through
+  the point-in-polygon fallback.
+- Consequences, all pinned in CI: 753/753 roster rows join the choropleth
+  (`tool/check_boundary_join.dart` now expects zero misses),
+  `kPalikaBoundaryMatchedCount` is 753 with an empty
+  `kUnmatchedPalikaBoundaries`, the centroids GeoJSON ships 753
+  features, and "mappable" (CBS code + coordinates) rises to 752 — Bheri
+  (Jajarkot) remains the only uncoded palika.
+
 ### Data (2026-10-25 — Nepal Post code adjudication)
 - **8 of the 9 uncoded palikas now carry a CBS code**, attested by the Nepal
   Post local-level code list (`data/SOURCES.md` §7; adjudication record in
