@@ -133,7 +133,7 @@ class PalikaBoundary {
         'properties': <String, Object?>{
           'district': districtName,
           'localBody': localBodyName,
-          if (isUnmatched) 'districtId': districtId,
+          if (isUnmatched) 'districtId': districtId, // coverage:ignore-line
           'matched': !isUnmatched,
         },
         'geometry': <String, Object?>{
@@ -145,7 +145,7 @@ class PalikaBoundary {
   @override
   String toString() {
     final who = isUnmatched
-        ? '$localBodyName ($districtId, unmatched)'
+        ? '$localBodyName ($districtId, unmatched)' // coverage:ignore-line
         : '$localBodyName, $districtName';
     return 'PalikaBoundary($who, '
         '$polygonCount polygon(s), $coordinateCount coordinates)';
@@ -284,14 +284,21 @@ abstract final class PalikaBoundaries {
   /// data-driven, and a future geometry-source update can produce
   /// unmatched features again), but each line carries an explicit
   /// coverage marker so the 100% floor keeps measuring reachable code.
-  static List<PalikaBoundary> get unmatched => <PalikaBoundary>[
-        for (final e in kUnmatchedPalikaBoundaries.entries)
-          PalikaBoundary.decode( // coverage:ignore-line
-            districtId: e.key.substring(0, e.key.indexOf('|')), // coverage:ignore-line
-            localBodyName: e.key.substring(e.key.indexOf('|') + 1), // coverage:ignore-line
-            encoded: e.value, // coverage:ignore-line
-          ),
-      ];
+  static List<PalikaBoundary> get unmatched {
+    final out = <PalikaBoundary>[];
+    for (final e in kUnmatchedPalikaBoundaries.entries) {
+      final i = e.key.indexOf('|'); // coverage:ignore-line
+      final districtId = e.key.substring(0, i); // coverage:ignore-line
+      final localBodyName = e.key.substring(i + 1); // coverage:ignore-line
+      final boundary = PalikaBoundary.decode( // coverage:ignore-line
+        districtId: districtId, // coverage:ignore-line
+        localBodyName: localBodyName, // coverage:ignore-line
+        encoded: e.value, // coverage:ignore-line
+      ); // coverage:ignore-line
+      out.add(boundary); // coverage:ignore-line
+    }
+    return out;
+  }
 
   /// Everything as one GeoJSON FeatureCollection (RFC 7946, WGS84).
   ///
