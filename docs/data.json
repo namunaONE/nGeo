@@ -389,6 +389,9 @@
     "cbsCodeVerified": false,
     "cbsCodeConfidence": "singleSource",
     "isoCode": "NP-P3",
+    "lat": 27.992,
+    "lng": 84.969,
+    "geoSource": "palika-boundaries-centroid",
     "wards": 5,
     "wardsVerified": true
   },
@@ -507,6 +510,9 @@
     "cbsCodeVerified": false,
     "cbsCodeConfidence": "singleSource",
     "isoCode": "NP-P3",
+    "lat": 27.634,
+    "lng": 86.137,
+    "geoSource": "palika-boundaries-centroid",
     "wards": 8,
     "wardsVerified": true
   },
@@ -1680,7 +1686,10 @@
     "cbsCode": 30506,
     "cbsCodeVerified": false,
     "cbsCodeConfidence": "singleSource",
-    "isoCode": "NP-P3"
+    "isoCode": "NP-P3",
+    "lat": 27.992,
+    "lng": 85.061,
+    "geoSource": "palika-boundaries-centroid"
   },
   {
     "name": "Panchakanya",
@@ -1857,6 +1866,9 @@
     "cbsCodeVerified": false,
     "cbsCodeConfidence": "singleSource",
     "isoCode": "NP-P3",
+    "lat": 27.446,
+    "lng": 86.186,
+    "geoSource": "palika-boundaries-centroid",
     "wards": 7,
     "wardsVerified": true
   },
@@ -2761,6 +2773,9 @@
     "cbsCodeVerified": false,
     "cbsCodeConfidence": "singleSource",
     "isoCode": "NP-P4",
+    "lat": 28.016,
+    "lng": 84.729,
+    "geoSource": "palika-boundaries-centroid",
     "wards": 8,
     "wardsVerified": true
   },
@@ -2918,6 +2933,9 @@
     "cbsCodeVerified": true,
     "cbsCodeConfidence": "verified",
     "isoCode": "NP-P4",
+    "lat": 28.198,
+    "lng": 84.743,
+    "geoSource": "palika-boundaries-centroid",
     "wards": 8,
     "wardsVerified": true
   },
@@ -3210,7 +3228,10 @@
     "cbsCode": 40201,
     "cbsCodeVerified": false,
     "cbsCodeConfidence": "singleSource",
-    "isoCode": "NP-P4"
+    "isoCode": "NP-P4",
+    "lat": 28.78,
+    "lng": 84.235,
+    "geoSource": "palika-boundaries-centroid"
   },
   {
     "name": "Nashong",
@@ -3238,7 +3259,10 @@
     "cbsCode": 40202,
     "cbsCodeVerified": false,
     "cbsCodeConfidence": "singleSource",
-    "isoCode": "NP-P4"
+    "isoCode": "NP-P4",
+    "lat": 28.683,
+    "lng": 84.005,
+    "geoSource": "palika-boundaries-centroid"
   },
   {
     "name": "Barhagaun Muktichhetra",
@@ -3250,6 +3274,9 @@
     "cbsCodeVerified": false,
     "cbsCodeConfidence": "singleSource",
     "isoCode": "NP-P4",
+    "lat": 28.886,
+    "lng": 83.755,
+    "geoSource": "palika-boundaries-centroid",
     "wards": 5,
     "wardsVerified": true
   },
@@ -3263,6 +3290,9 @@
     "cbsCodeVerified": false,
     "cbsCodeConfidence": "singleSource",
     "isoCode": "NP-P4",
+    "lat": 29.036,
+    "lng": 83.937,
+    "geoSource": "palika-boundaries-centroid",
     "wards": 5,
     "wardsVerified": true
   },
@@ -3501,6 +3531,9 @@
     "cbsCodeVerified": false,
     "cbsCodeConfidence": "singleSource",
     "isoCode": "NP-P4",
+    "lat": 27.811,
+    "lng": 84.065,
+    "geoSource": "palika-boundaries-centroid",
     "wards": 6,
     "wardsVerified": true
   },
@@ -4768,6 +4801,9 @@
     "cbsCodeVerified": false,
     "cbsCodeConfidence": "unverified",
     "isoCode": "NP-P6",
+    "lat": 28.703,
+    "lng": 82.181,
+    "geoSource": "palika-boundaries-centroid",
     "wards": 13,
     "wardsVerified": true,
     "website": "http://bherimun.gov.np",
@@ -5047,6 +5083,9 @@
     "cbsCodeVerified": false,
     "cbsCodeConfidence": "singleSource",
     "isoCode": "NP-P6",
+    "lat": 29.071,
+    "lng": 81.628,
+    "geoSource": "palika-boundaries-centroid",
     "wards": 8,
     "wardsVerified": true
   },
@@ -5266,6 +5305,9 @@
     "cbsCodeVerified": false,
     "cbsCodeConfidence": "singleSource",
     "isoCode": "NP-P6",
+    "lat": 29.663,
+    "lng": 82.542,
+    "geoSource": "palika-boundaries-centroid",
     "wards": 9,
     "wardsVerified": true
   },
@@ -5515,7 +5557,10 @@
     "cbsCode": 60904,
     "cbsCodeVerified": false,
     "cbsCodeConfidence": "singleSource",
-    "isoCode": "NP-P6"
+    "isoCode": "NP-P6",
+    "lat": 28.461,
+    "lng": 82.181,
+    "geoSource": "palika-boundaries-centroid"
   },
   {
     "name": "Kalimati",
@@ -5572,6 +5617,9 @@
     "cbsCodeVerified": false,
     "cbsCodeConfidence": "singleSource",
     "isoCode": "NP-P6",
+    "lat": 28.569,
+    "lng": 82.191,
+    "geoSource": "palika-boundaries-centroid",
     "wards": 7,
     "wardsVerified": true
   },
@@ -6779,6 +6827,9 @@
     "cbsCodeVerified": false,
     "cbsCodeConfidence": "singleSource",
     "isoCode": "NP-P1",
+    "lat": 27.113,
+    "lng": 86.789,
+    "geoSource": "palika-boundaries-centroid",
     "wards": 7,
     "wardsVerified": true
   },
@@ -7996,6 +8047,9 @@
     "cbsCodeVerified": false,
     "cbsCodeConfidence": "singleSource",
     "isoCode": "NP-P1",
+    "lat": 26.755,
+    "lng": 87.132,
+    "geoSource": "palika-boundaries-centroid",
     "wards": 11,
     "wardsVerified": true
   },
@@ -8034,6 +8088,9 @@
     "cbsCodeVerified": false,
     "cbsCodeConfidence": "singleSource",
     "isoCode": "NP-P1",
+    "lat": 26.588,
+    "lng": 87.101,
+    "geoSource": "palika-boundaries-centroid",
     "wards": 8,
     "wardsVerified": true
   },
@@ -8400,6 +8457,9 @@
     "cbsCodeVerified": false,
     "cbsCodeConfidence": "singleSource",
     "isoCode": "NP-P1",
+    "lat": 27.317,
+    "lng": 87.761,
+    "geoSource": "palika-boundaries-centroid",
     "wards": 6,
     "wardsVerified": true
   },
@@ -8633,7 +8693,10 @@
     "cbsCode": 11405,
     "cbsCodeVerified": false,
     "cbsCodeConfidence": "singleSource",
-    "isoCode": "NP-P1"
+    "isoCode": "NP-P1",
+    "lat": 27.084,
+    "lng": 86.642,
+    "geoSource": "palika-boundaries-centroid"
   },
   {
     "name": "Tapli",
@@ -9621,6 +9684,9 @@
     "cbsCodeVerified": false,
     "cbsCodeConfidence": "singleSource",
     "isoCode": "NP-P5",
+    "lat": 27.98,
+    "lng": 83.417,
+    "geoSource": "palika-boundaries-centroid",
     "wards": 6,
     "wardsVerified": true
   },
@@ -12764,7 +12830,10 @@
     "cbsCode": 20111,
     "cbsCodeVerified": false,
     "cbsCodeConfidence": "singleSource",
-    "isoCode": "NP-P2"
+    "isoCode": "NP-P2",
+    "lat": 26.518,
+    "lng": 86.679,
+    "geoSource": "palika-boundaries-centroid"
   },
   {
     "name": "Bishnupur",
@@ -14422,7 +14491,10 @@
     "cbsCode": 70201,
     "cbsCodeVerified": false,
     "cbsCodeConfidence": "singleSource",
-    "isoCode": "NP-P7"
+    "isoCode": "NP-P7",
+    "lat": 29.863,
+    "lng": 81.292,
+    "geoSource": "palika-boundaries-centroid"
   },
   {
     "name": "Kedarsyun",
@@ -14695,6 +14767,9 @@
     "cbsCodeVerified": false,
     "cbsCodeConfidence": "singleSource",
     "isoCode": "NP-P7",
+    "lat": 29.419,
+    "lng": 81.75,
+    "geoSource": "palika-boundaries-centroid",
     "wards": 5,
     "wardsVerified": true
   },
@@ -15119,6 +15194,9 @@
     "cbsCodeVerified": false,
     "cbsCodeConfidence": "singleSource",
     "isoCode": "NP-P7",
+    "lat": 29.055,
+    "lng": 81.01,
+    "geoSource": "palika-boundaries-centroid",
     "wards": 7,
     "wardsVerified": true
   },
@@ -15688,6 +15766,9 @@
     "cbsCodeVerified": false,
     "cbsCodeConfidence": "singleSource",
     "isoCode": "NP-P7",
+    "lat": 28.9,
+    "lng": 80.092,
+    "geoSource": "palika-boundaries-centroid",
     "wards": 10,
     "wardsVerified": true,
     "zipCodes": [

@@ -23,7 +23,7 @@ const int kPalikaBoundaryVertexCount = 16101;
 
 /// Features joined to canonical roster entries by name or
 /// point-in-polygon. The remainder is in [kUnmatchedPalikaBoundaries].
-const int kPalikaBoundaryMatchedCount = 746;
+const int kPalikaBoundaryMatchedCount = 753;
 
 /// Encoded boundaries, keyed by district name then local-body name (roster
 /// spelling), e.g. `kPalikaBoundaries['Chitwan']?['Bharatpur']`.
@@ -249,6 +249,8 @@ const Map<String, Map<String, String>> kPalikaBoundaries = {
         'BBVy+pQm0p1BsI5blM7DTxO6JpFmGlUiShB6T8MyDvSoT0G6P3IX4LmJiJ7H6OoFsa5M8Q/I2R1UzIlLlKxT8HjNyB',
     'Itahari':
         'BBRy+pQm0p1B7X/LzR/OtQyJ9JI7BtQ0DhNiHwCoBpgB2HLyIsC+M8I+JnFuFiRoI2GmBuPmM8D',
+    'Baraha':
+        'BBYq3sQ8jn1BrLiBjFuHnTzGxDwS3KvIjhBtJrK9LW7VjiBtbpIrOtMvFoE/IzEnQ8eoaoOzI2J7d2YkSpHyNoE0VyI0IikBwTyciFuF8Q',
     'Duhabi':
         'BBPs3nQ8/o1BhMxGrJ0DxKvEhHzLxQhMnLiErKlHsG7D5H1IwBjJ4T2Fga5GkJ+Nub2V',
     'Inaruwa':
@@ -580,6 +582,7 @@ const Map<String, Map<String, String>> kPalikaBoundaries = {
         'BBPm59Qwnw0B9JoPxS2LhJ+VtN5Lpa1H4CjLkMjR8UzWhL5V2IlM0ZvBgUySnE2GkGkR',
     'Jiri':
         'BBdss+Qu330BpObtI0KtLtE0BvGhQrVgB9OrHxI9PxH1G/IhT1FxHzIzKlhB3DxUrLnKiG9LuN/JyLuF4G8KqRwC8Mwa9B8MkS4JkBoNmJoX6LkHI4MsU+EgF8L',
+    'Baitedhar': 'BBLuk8Q+oz0BnUhE3G7KzJ/BtLrPgHpO6N1Qgd+CsI4EkKmWtIgH',
     'Bigu':
         'BBqByjiRwx10B3cjPlG6B5RlkB/XtBjJkGpKpCpd/QpPhU0apTyGlKgGrZ6M5MjGlXoN7KuKqOoY8NwV6a2E+UiTpJqQtD2XhP+G8G+R4CkSxHqE6F/DkQ2F8H4QiI2JmVsQ/BoD8HtWyGzOkN9L2C1GpL9iBkNrLrD5SoE7E0G0EkSpBgO',
     'Gaurishankar':
@@ -836,10 +839,16 @@ const Map<String, Map<String, String>> kPalikaBoundaries = {
   },
   'Manang': {
     'Chame': 'BBMqisRmiuzB+FzHwFrwByIvByEwIkcoRsL6KjMkJnE6YzM4IrEtGtQvE',
+    'Naraphu':
+        'BBwB4u0R2nszBrFqXZkUwEkH/P0U7FsP+FkN9H0HiDoL1GkVzO/EciL9G0K9L/BlFqI7OvFwB9I/VhD7C5NpNjB5DzQ3I5WrR1E/GjXpQpVtV3GjL0CqKhQmR9QyVxDsMpaiU/UoNiBoD1PvF1S6N1ViSNkGqHgMjHqOwPuL4CP2MwI0K+G7CiNiHjEgM+EmHjKuS',
     'Nashong':
         'BBpB88xR8kxzBrLsPnKmTzK/E7L2KnCwL7MnE1P+E9B6G/N+F5YgFxSb3CuHhZgHhRxBlHtLiBjLjH3ZkYrSqGnMrE3L7TvEpJhLzB7OV9c3EhXuJvN+O0M2a8O0M3IoE5YoX3LuV4GqQqVgHkXsR2E4I6W6D0QqNkB8C6NgWiD',
+    'Neshang':
+        'BBoB8wyRkipzB/LkHjGpHhSO5N2VwF2SnD2PnNhBhUgVrMqaxVyDvb2cvnB3XxEvIyF1OoRxQRjgBmPtPkGxSkJ7K1B9OgNjQrChMqDzjBkEpIkXxNmUrZ0GjOkN0O+HgUzCkMkN+QkP6CsGgHmDuQ6PyFiKrCoF+NrKsF3C+R',
   },
   'Mustang': {
+    'Barhagaun Muktichhetra':
+        'BB5Bso3RkmhzBpJuLA2O5D6anIyQyHoMzB2N7R0YtJ4C5HsL7V3DOgS0G6NqD6VxDyQrJyExIoPvLkB3S+P7NibvJ+CzQpUgJzK4C9RsKrFnF9NhKsC5PxFlDtQ5QjKsInU+H5BuL3mByElCFvRwEvbmTzJyN0B6D3P1JpfpOiB9IjHhB/XtPtboE7MtD9S0QnEmRgBnBmKsIgFoNhE0TmSgdwf8RmIjC0KmQ+E4S3C',
     'Dalome':
         'BCkCul7Ru2jzBjWoarLsClMkM3Qma5FkT/S2a9TsI0JqN6wBieK2OjJgOjNwFnFoJrQyI1MsRuMuNrJyajVoC4DqV5JiPrPAxJnFnNuB1L7GjatG9OmBsFpXtRlSkKtS3EhH+DjMhNhH9G8CvIzKrBrS6Nhb4S9PwLjByInPsJxEyDxQpD5VzG5NN/R8V4D6HpLuJ5C8RzY0B1NxHnMoIxQ6D5aA1OyK1LuKwHiLC8IhK6H2IvBkNuJkBuC+R8OtCqFnI4M1DsRdsC+LgX2WD54E6qKAAAG',
     'Gharapjhong':
@@ -1289,6 +1298,8 @@ const Map<String, Map<String, String>> kPalikaBoundaries = {
         'BBnBorjSwkmyBxpBhI5Q+P4H6OvOzE/LoDrBgL5NqT1UzJ5Y9EgB7S5J/ZlNpFBrUkG5LsNhOsF6DuOhJ/GjSoO1KhBjPoLrhB6LtGqFuLkU6B8DiG7OuM6HmUrDiT0QhGwJgEuDniB4gB0HuDqLzJwM2F8Y6HwI3CsI8DwU',
     'Khatyad':
         'BBd8zgS+1hyB9D5F5LuG9IqX3N9SkGxDiBtS1Q7IlBhbR/W2KhLzC5kBobzMsD9PuGmJmb0NuX5F2F9J6J6KpO0O7FuMzPgMqD6P/GoNiEqKhC+WwEwIxGkQhL4K',
+    'Mugu Karmarong':
+        'BB3C0pgSi4nyBqFC6NpTsB/KgMnDwO0E3H5O6Q9P0tB0JwTlDwBuSzG6MuM+TqCgQnI8N7DsTsN4M2IYuTnKqF4I6J3E+OuBtCmK2K4K8GnGgQmD8CoRyOrJoL2QyHxCgRmS4PkU/J4TlOoC/GqL/W8O/FmSvH4BtP7M1CiM8FiXyHmNrKsIZ2IrOgIxMlP/B5LhL3ErHgHyFuQpF2UpT0DxH2VqB2M7J7B3J0HtZBnHhTpGpBtqBwP5BrGpT/OrEe/G/XOzJ7R1F/FiH9XxMhEpP7H9B/QpciInLwQV1BxXxGzQ6FtKF9RqX/HyIkD4N3FnSjbhN3M+ElNkHJuYvPjHnN0IxP',
     'Soru':
         'BBlB45iSoyjyB6KvMtDpL3gBzHtDoiBvJ/DzQiGsDhT5HlU8OtM7DhGjU5ByJrDiL3KyGjQvEvIiC9WhEpKgHnNpD5P0P/L8FtMgSnP/EqnBsKwMoU2LnDqL6G8HwB4Q8OiY6QwL4NsS7BwP5IP7UkV9U+E1H6H',
   },
@@ -1477,6 +1488,8 @@ const Map<String, Map<String, String>> kPalikaBoundaries = {
         'BBX0p8R++sxBlBhTjK7UuXpXxIpUkItFyJwFoKlQhBlKiJkDDgZoKmNxB8KkLsEmLgB9EyMjNiO5JoIjMyRtH9J3F2FciPjHK',
     'Badi Kedar':
         'BBhBu74Ry1rxBjM6EjGsP9M+FwC6MpE2avFgM/L5HhOiFvK5JxXgE7R7GhC9PsElSpHrIiClKkHrIqNS4EzTxZtNmGpO4OEkL7OoD1NkG6B2G3QgY2CpEuW+GWrFiMsNqP8SvC8SqX',
+    'Bogatan':
+        'BBe+m1R4ztxB8R8GyX/DwK6JiOhFgM6HwF/LqE1avC5M+M9FkGrP8InBF2KiI+TrBqPxI2XsJ2KkLwDsFiWvO8GvV8WrK+FtHiFhY+PlZEjMxRhG7MwIpejQnS2B1M',
     'Jorayal':
         'BBewl6RsooxBC8W1IqWxLmS1D6NM8S7QiHf/I7SpX7SwCrNpPsFhM9GVqEtW/X1CX1U8L1lBkTpR7G5L6I3S0I7EwIlRmK9CoIkZgQE6B4OyJcqLoR9CgGiE2Z',
     'K.I. Singh':
@@ -1535,18 +1548,4 @@ const Map<String, Map<String, String>> kPalikaBoundaries = {
 
 /// Boundaries that could not be joined to a canonical roster entry by
 /// name or point-in-polygon. Keyed by `districtId|geojsonName`.
-const Map<String, String> kUnmatchedPalikaBoundaries = {
-  'P1.D11|Barah':
-      'BBYq3sQ8jn1BrLiBjFuHnTzGxDwS3KvIjhBtJrK9LW7VjiBtbpIrOtMvFoE/IzEnQ8eoaoOzI2J7d2YkSpHyNoE0VyI0IikBwTyciFuF8Q',
-  'P3.D04|Baiteshwor': 'BBLuk8Q+oz0BnUhE3G7KzJ/BtLrPgHpO6N1Qgd+CsI4EkKmWtIgH',
-  'P4.D05|Narphu':
-      'BBwB4u0R2nszBrFqXZkUwEkH/P0U7FsP+FkN9H0HiDoL1GkVzO/EciL9G0K9L/BlFqI7OvFwB9I/VhD7C5NpNjB5DzQ3I5WrR1E/GjXpQpVtV3GjL0CqKhQmR9QyVxDsMpaiU/UoNiBoD1PvF1S6N1ViSNkGqHgMjHqOwPuL4CP2MwI0K+G7CiNiHjEgM+EmHjKuS',
-  'P4.D05|Neshyang':
-      'BBoB8wyRkipzB/LkHjGpHhSO5N2VwF2SnD2PnNhBhUgVrMqaxVyDvb2cvnB3XxEvIyF1OoRxQRjgBmPtPkGxSkJ7K1B9OgNjQrChMqDzjBkEpIkXxNmUrZ0GjOkN0O+HgUzCkMkN+QkP6CsGgHmDuQ6PyFiKrCoF+NrKsF3C+R',
-  'P4.D06|Barhagaun Muktikhsetra':
-      'BB5Bso3RkmhzBpJuLA2O5D6anIyQyHoMzB2N7R0YtJ4C5HsL7V3DOgS0G6NqD6VxDyQrJyExIoPvLkB3S+P7NibvJ+CzQpUgJzK4C9RsKrFnF9NhKsC5PxFlDtQ5QjKsInU+H5BuL3mByElCFvRwEvbmTzJyN0B6D3P1JpfpOiB9IjHhB/XtPtboE7MtD9S0QnEmRgBnBmKsIgFoNhE0TmSgdwf8RmIjC0KmQ+E4S3C',
-  'P6.D07|Mugum Karmarong':
-      'BB3C0pgSi4nyBqFC6NpTsB/KgMnDwO0E3H5O6Q9P0tB0JwTlDwBuSzG6MuM+TqCgQnI8N7DsTsN4M2IYuTnKqF4I6J3E+OuBtCmK2K4K8GnGgQmD8CoRyOrJoL2QyHxCgRmS4PkU/J4TlOoC/GqL/W8O/FmSvH4BtP7M1CiM8FiXyHmNrKsIZ2IrOgIxMlP/B5LhL3ErHgHyFuQpF2UpT0DxH2VqB2M7J7B3J0HtZBnHhTpGpBtqBwP5BrGpT/OrEe/G/XOzJ7R1F/FiH9XxMhEpP7H9B/QpciInLwQV1BxXxGzQ6FtKF9RqX/HyIkD4N3FnSjbhN3M+ElNkHJuYvPjHnN0IxP',
-  'P7.D07|Bogtan':
-      'BBe+m1R4ztxB8R8GyX/DwK6JiOhFgM6HwF/LqE1avC5M+M9FkGrP8InBF2KiI+TrBqPxI2XsJ2KkLwDsFiWvO8GvV8WrK+FtHiFhY+PlZEjMxRhG7MwIpejQnS2B1M',
-};
+const Map<String, String> kUnmatchedPalikaBoundaries = {};
