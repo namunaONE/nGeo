@@ -108,6 +108,10 @@ void main() {
       NepalAdminApi.getLocalBodyBoundary('Atlantis', 'Bharatpur'),
       isNull,
     );
+    // The ci-fallback arm of hasBoundary: the exact-key containsKey misses,
+    // so the case-insensitive match must rescue the lookup.
+    expect(PalikaBoundaries.hasBoundary('chitwan', 'BHARATPUR'), isTrue);
+    expect(PalikaBoundaries.hasBoundary('chitwan', 'Nowhere'), isFalse);
   });
 
   test('decoded boundaries sit inside the Nepal bounding box', () {
