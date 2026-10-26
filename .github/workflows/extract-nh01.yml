@@ -1,0 +1,33 @@
+# TEMPORARY extraction workflow for the H1 overlay PR.
+# Runs the one-shot NH01 extractor on a runner (network available,
+# unlike the sandbox that authored the script) and commits the vendored
+# GeoJSON artifact. Delete before merge (same pattern as PR #11).
+name: Extract NH01 highway (temporary)
+
+on:
+  push:
+    branches: [feat(map)/h1-nh01-mahendra-highway]
+
+permissions:
+  contents: write
+
+jobs:
+  extract:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-node@v4
+        with:
+          node-version: 20
+      - run: node tool/extract_nh01.cjs
+      - name: Commit extracted highway artifact
+        run: |
+          git config user.name "github-actions[bot]"
+          git config user.email "41898282+github-actions[bot]@users.noreply.github.com"
+          git add docs/nh01-highway.geojson
+          if git diff --cached --quiet; then
+            echo "nothing to commit"
+            exit 0
+          fi
+          git commit -m "chore: extract NH01 highway artifact from OSM (pin refresh)"
+          git push
