@@ -1,1551 +1,938 @@
 // GENERATED FILE - DO NOT EDIT.
 //
-// Lossless boundary geometry for all 753 local bodies (palikas) of Nepal,
-// encoded as compact strings (format version 1 - see palika_boundary_codec.dart).
+// Lossless boundary geometry for local bodies (palikas) of Nepal,
+// encoded as compact strings (format version 1 - see
+// palika_boundary_codec.dart).
 //
-// Source: docs/palika-boundaries.geojson (l3lackcurtains/nepali-geo-pro-max @
-// 117fd0f, MIT; originally
-// younginnovations/nepal-locallevel-map (MIT), MIT). Coordinates quantised to 1e-4
-// degrees (~11 m) and stored as zigzag VLQ deltas: the round trip is
-// bit-exact, nothing is simplified or dropped.
+// Source: docs/palika-boundaries-highres.geojson (scraped from
+// sthaniya.gov.np via Acesmndr/nepal-geojson, MIT license).
+// Coordinates quantised to 1e-4 degrees (~11 m) and stored as
+// zigzag VLQ deltas: the round trip is bit-exact.
 //
-// Regenerate with: dart run tool/generate_palika_boundaries.dart
+// Regenerate with: dart run tool/generate_palika_boundaries_highres.dart
 
-/// Version of the palika boundary string format used in this file.
 const String kPalikaBoundaryFormatVersion = '1';
 
-/// Number of palika boundary features carried in this file.
 const int kPalikaBoundaryFeatureCount = 753;
 
 /// Total boundary vertices across all features (ring closure vertices
 /// are re-appended on decode and are not stored).
-const int kPalikaBoundaryVertexCount = 16101;
+const int kPalikaBoundaryVertexCount = 17481;
 
-/// Features joined to canonical roster entries by name or
-/// point-in-polygon. The remainder is in [kUnmatchedPalikaBoundaries].
+/// Features joined to canonical roster entries.
 const int kPalikaBoundaryMatchedCount = 753;
 
-/// Encoded boundaries, keyed by district name then local-body name (roster
-/// spelling), e.g. `kPalikaBoundaries['Chitwan']?['Bharatpur']`.
+/// Encoded boundaries, keyed by district name then local-body name
+/// spelling, e.g. `kPalikaBoundaries['Chitwan']?['Bharatpur']`.
 const Map<String, Map<String, String>> kPalikaBoundaries = {
-  'Bhojpur': {
-    'Bhojpur':
-        'BBT6t0Qo9l1BpPtJ7XhF4BzG3UrI3H2HvS1DvSwCgQvPnBzNyZhX4T/L6V/I6QwK0I0LtF+JuL+H/JkQzE0P',
-    'Shadananda':
-        'BBU6t3Q+2l1B/LiC7LsX1O4OpOLhI5FvJgMvUgF7IvCqH7c3H3lB0EzPgKjQoGgB+G/MkP5KgRsMiExF+S8CoT8uB',
-    'Aamchowk':
-        'BBR85vQsrk1BvNwNnT2KrOrD3P0P9MrpBc7K1KvSiNthByMyJuc2E8E7IwQuFmI/NoR6FxC+c1S8V',
-    'Arun': 'BBOgq0Qunn1BrFxBnRiVrQqGvJ8OhVKnOtP5IpS+Y7f4btEyH5S/C5IykB+KkG8Q',
-    'Hatuwagadhi':
-        'BBQqmwQy5m1Bhb0I1K7O3S1J9I1F1FgGlEja4PzPsOsDoT1KwNvNkJqLqHjBmI6LqHwXtJkR',
-    'Pauwa Dunma':
-        'BBOstxQ2un1B5TlVnTC8DzNiNnL+C1P0LjKyTjDwS2D4H1H4UsIoBuPxH6S3buE',
-    'Ramprasad Rai':
-        'BBPsnyQq4j1B3R6QoB0N5diexGtTlI5LpHkBjPzZ2S7VwD7ToW1N8IvSyNgRI2HyNkc',
-    'Salpa Silichho':
-        'BBZ6t3Q+2l1B+BjQnT7uB9S7ChEyF/QrMtGKhEzPkUrYwUlPiJmEiOxMgOzCoHsPiL+FTiJnKgQzDySmHiSjEmL6LmK3CmNwC6JtH+SpNlK',
-    'Tyamke Maiyum':
-        'BBZm40Qilk1BtL9HuF9JzIzL5QvK5VgJna2SjE5QxNjcH1HxN/QoDzImLdiDoIqT0EgH9FuVyKiMb+QhSqKiILuWkS2KmIwMoDkSvQkW',
-  },
-  'Dhankuta': {
-    'Dhankuta': 'BBN0ouQ01q1BjGnS9DzblGxRshBtFoMmGoSiRgGjIsLoTzBiSnH+MjWYnSlF',
-    'Mahalaxmi':
-        'BBP6pxQu8q1B/N/UqJtQoDtf4SrWqJoP8K2C0N1GiFoR/EyMqF8b9E6J5JepTsUjIxH',
-    'Pakhribas':
-        'BBOgoxQ2op1B5egJ9K5R/FkIvY7WQ/M4S7SlDnO8bnM8N4C2UgW+HwR+EG3SsW',
-    'Chaubise':
-        'BBV+5sQ8tr1BgLpIoX5C2E8D2OxEQqQ2KiN1DuJ6KgS3PkUpVxBrQ0FrJ1F2C6NhE0LpN2KqBtNxDre6InCAnMxI9U',
-    'Chhathar Jorpati':
-        'BBSg5uQo5r1B9I7GhB3SrG/J4P9HoSmFkWXoH9M6BpU4R5FiKqCP0JpJuQgOgVzQwFnR2PlWoEzC4E',
-    'Sahidbhumi':
-        'BBPsivQu1o1BzI1ErhBuFN5U6D7HzI5E7C3KoLpb9IlCqSvI+I2F4S2JoP2PmDoO3S8S',
-    'Sangurigadhi':
-        'BBV+5sQ8tr1B3C7RxMrOgFjb6M7QnFra8H5OlJhJ6IrhB6cUnLqb8C4K0I6E5D8HB4Z2G0M+D0biN2e1OyE1E7DnX6C',
-  },
-  'Ilam': {
-    'Deumai':
-        'BBai9rQ2i01B7C7MiFvSzGnKuHzLwN1F6K4GoPuB6NlJ6SsOmM2QyXjGgKrOuTwjBhGiG5VuF9MnFhPiQjE8N3YsH2F3O/D1J/MrFhI4DpMvKvGoG',
-    'Ilam':
-        'BBjB6xwQ2g01BxO+LpC4JrKd7S4MMoLkMIzMwWlJlB/LjMtcOpLoEsE+VtCoH9MqGrH3IgJ1X9F1FhCjYrXvHvFrJ2EnNuRTwGnGqMwKiI3DgNsFgE2J1F4O4YrHkE7NiPhQ+MoF6VtFiGhG',
-    'Mai':
-        'BBao0sQ6t11B7IoPhMjKnW4NpajDnNzExKzO/IzBhIjc4B5KtJ6DkD5Q6N/TiczJwN/H0E3LgToDiEzHmMsX9H2C0GoKhFwSwD+JpFmQwFsJsXwH',
-    'Suryodaya':
-        'BBgBo+rQ6j61B6KzL7B7OhKzJ2E1RqGlB2H7bvC1L2ExKrK8D5RrM3MvRoW3NiMkK0InPoJ6Q/I2XsH4ImPlK8L6R2BkR6PYsRmBsFyMuO2PlK8LzB6KtVrJtS+P/N/FpSkW3T1C',
-    'Chulachuli':
-        'BBZqsqQg0y1BvgBiQvInN7IxBThQyW5lBqF+BiZ5M6GhP8MiKwKvOwKsD+JvIyGtO+M1PdmXvFuSvQoOzHhHpPqDjEiM1PvEnM0KpF4WmJ6J',
-    'Fakfokathum':
-        'BBNg2vQqxy1B/JsOxXkGlM1Q5SrO2HnEpJrXB5P+KkFiLnQ2PiF8e2iBhF0M',
-    'Mai Jogmai':
-        'BBQkwvQqv41BlR/IrFxMrRlB5PX1BjR7L5RlEpZqLnEucNgMkMkRY+G8emJgKgFwKSoR',
-    'Mangsebung':
-        'BBYu1tQ4my1B5NmJnPtB5K3G9O6GnKxPhE0H/SnDzE4LlPoBqB3LlJ5JqF3WoMzK2PwEkEhMqPpD0HiHwQnO2G3LyLwZ8T8HXkOqJsX',
-    'Rong':
-        'BBdo+rQ6j61B3a4HzB/GsJ7L/P3Ga5HpOnIuItN4YtCpL5JmFlGhXjHzDvF4RnMrG9LtIjHX3JwPnLmLsC6K4O6RsMsK7D1EyKwC2L1H8bpGmB1E2RiK0J8B8O',
-    'Sandakpur':
-        'BBT0gwQk331B/EvKlJ/J9G7e9GH0L5VjMHLnL8S3MsKeqC3JyO9L6S2V4IwjBlDwGkC4ZtKiL1GlDnZwN',
-  },
-  'Jhapa': {
-    'Arjundhara':
-        'BBUy3qQiq31BlSxH3NhP3Fgc3OsD7StHlC5P2FpDtBvT5H9OgSWualMyK0OoN0E2TU/E6IjNqFY4JuIkHsG+L',
-    'Bhadrapur':
-        'BBT04mQ8541B5J6D/DzHtMsChgBOvUlJkD7RiOlCvDlQ2RkMHmG6Q9IkNsFyS7DsInGgNuD6D8LgJkE9SiS',
-    'Birtamod':
-        'BBOmwoQqr31BnOepO+JxKcnH/GgF3ZzOhBhE5SsWnD0F1L0cgJyFoIuBwT1FqD',
-    'Damak': 'BBOkspQ+hx1BpLiFvLpE9O9QvOhErNpXoP4JmML8K1HmWgH2SwB4IsOqMyFhZ6M',
-    'Gauradaha':
-        'BBWogmQuxy1BvUwE7JnW2F+BsC9VjG/M0MhH/QtHyF7Rgf9GqMqD8UjGiIsM7GsLgG2PoV4HtG8ItLjFrSyIpG8I7IpEHmU',
-    'Kankai':
-        'BBOwopQ2u11B/L6HrKpEzKoKlWnJsExMjB5UlR8FsEhPgK3BkDlJmhB8J6PgFiIkc',
-    'Mechinagar':
-        'BBY04mQ8541BiQpE+ShSvJtM6P5KmhByG6GuF7DsSgYAIgJ1b0MyT+E0TlEoSkJZ6HgQ4GrJ8LxF+IxgB3DvMpJthBvCzMlNnM/BzXlM',
-    'Shivasatakshi':
-        'BBT+lpQws01B7P9ElhB7JjDmJ9V3BnB7NrHgBjS9L6D3VwOhCyTnPmIgDyYV4L4L8PwDwIoNvK2QjD6QuJ5D',
-    'Barhadashi':
-        'BBVqxnQmz11B5GgMvUYpE1OvNhBgB8H7JyCzFmEhTzE9IxHtHsEH1PgIWoL9KmS6FwFrIwHoDiO3EgQyCiS3JkB6U',
-    'Buddhashanti':
-        'BBSosqQ4941BhWuHxT9E2bzMH/I/XA8DrSxBpIwJP4F/b4NiPsSwLzJsH0DwFiXkHlFmGqL6J3YuC',
-    'Gauriganj':
-        'BBUihmQqsz1B3bhBzKhJoEnLlJzJnbtI2E3KnGzImMhOwFjWiRzL4DwOgRuHzMiHkGgNrC+V1F9B8JoW2TjHuF4H',
-    'Haldibari':
-        'BBSo+mQyy31BrX0HjNrF5Q+IIlG5NvJRpVjI/NmL3HQnKqXiG0FlE8JxCf7HwNiBwGgkB0OiBjD8T',
-    'Jhapa':
-        'BBWsjnQ2301B7QqBhO4EvHnDvFsIlS5F5IM6NrLrGxB7H9QrJ6B3H9HoC5MqGeoHrL0KiJuNlCmUqEoM8KsHfoB8N+LwD',
-    'Kachanakawal':
-        'BBW07kQwu31BTkNhOmCtDyR7InG3T9c3OvBpCtNsGnKoNH8CjQmNvV4HrJkKgEmBhPqL+K7L2DI2PuHrEmEsQlL4HkIgO',
-    'Kamal':
-        'BBWu6oQo1y1B3S1NxYWlI/CxToP9UlCwPvJIlU8IqEqG7IsSxIuLkFuG7InV3H/F1P8GrL0K4MwOiE+O+QwLqEgN7E/TijB',
-  },
-  'Khotang': {
-    'Diktel Rupakot Majhuwagadhi':
-        'BBX6x0Q+wh1BvGvI5RvD1MwC7EtSnLjXzNlQlBzWtI1L8SxLDlPmI3JoPD4PoHiRwfnBuS2NiCsQnUwHqGzHqXjFqWLkXjHiM',
-    'Halesi Tuwachung':
-        'BBdu/zQ4t90B5P/GnPElI4JEmP7SyL1OnD5R7VoHlS8JhIkI5RsElWiH5RlK9ahN1LlHtY6B/JgIJ0JzKG3J6SiNyB6KmMkQ8E6WyU8SNkV4G0SJ2VnHoI',
-    'Aiselukharka':
-        'BBS453Qimg1BjRLrFlHpf/F1C5W1V5Z2XrG1BhJ7NhIlE3PogBrCkPqBsDiSVoa4KkMzC8K+EwJsPgM',
-    'Baraha Pokhari':
-        'BBP0uvQkig1B7XZzF8P0EiIzQ+B9JwPvQqInB3hBzMjSlB5RuHjUwXtHoeN2OwLmEgN',
-    'Diprung': 'BBNmvyQsq/0B/K0Q1CiU+B4StXnHpQpmB9StfrE5YsN9DoPvN4Vyd2OoDuI2L',
-    'Jante Dhunga':
-        'BBR6+vQ+ni1B9GvDlIgOvQtF7E8Itc1ExMxJzGzUwQpI+JvP0Q9BzEhI0F7P8XaoN4kB/BmNwM0F',
-    'Kepilasgadhi':
-        'BBU6x0Q+wh1B2OhMkHhMMjXkFpWsH5T4MkK2C6WqfgGsFmHoRWlD0Q+CwV7PwChOyMhJlEvUmP9S4W1H/LjS1K',
-    'Khotehang':
-        'BBR6+vQ+ni1ByHnOvMzFgClNnN3kB9CpYlE/M9LpO+ezFmJ1MiF0Y+Suf2KoawM4W1OuS7D+N/QoL',
-    'Rawabesi':
-        'BBRmv1Qsr+0BvOoN5DsJ1NhCoBtSzQ1dnI/XoHnI4C5Q4J6D4J0WwQuDkNyKgBmJ8NiI2BiJ1XsG',
-    'Sakela':
-        'BBP8yxQolh1B9CvIwTiF9B3S2ChUyJhQ+O+SoLkX8EuS0aW9QiShMctVxK/G+FpTzE',
-  },
-  'Morang': {
-    'Biratnagar':
-        'BBRo2lQyxp1B9O3G6BxLzK1CxLgIhQmBtIhGhRsGzF7Y2TG0IxOqIqDsX/F8VuIyDiN5GgL4H6E',
-    'Belbari':
-        'BBQmgpQw6s1BprB3LlaqFyE5H3K/IgC3L5JhU+WnIiPjEuRiPoRxGwMiCyNkO4LkOlKgUrOxE',
-    'Letang':
-        'BBZ+0sQo8t1BtJuJpLvD1XqF1a3HrOwUvQ0OzM2BuHrL9DpP/IuEjCzLW9mBoHtOsOyEmK/TkN6HqGjH+SrCgKwEoQxEgDyMpFmNwP4P2H9B',
-    'Pathari Shanishchare': 'BBKmpnQk6u1BnJmE1J/H1DnN2QpamawC8JqH6TnEYgd9OuQ',
-    'Rangeli':
-        'BBSw0mQojs1BhRnBkCgVsK4K5PsPnZ/SrPyMuD4EpWmL4C7Q+FjfyP9GoDlSuFpF0OMoC/GyagBwF+Q',
-    'Ratuwamai':
-        'BBS+2mQ83v1B9SPvaiFrVgOlWwElGvR3HehC5YhFzPqR0L0QjDyLlPwdb+P8IiJpGiTsNoJlEgB4S',
-    'Sundarharaicha':
-        'BBMg5pQmyp1B9H4d2CwRre7BnRyGxOpNxD9M+DzY8DlGiDrKmYvJ0RgP',
-    'Sunwarshi':
-        'BBQo2mQq2u1BrJrFhJqG9P7IvdcxLmPzQkDjK7NyHlTqjBhRtD3EsPxMoZgTyEjF2XsK5J2S',
-    'Urlabari':
-        'BBQs2pQ6/v1BrPXlW/G7K2HlMM5JxJ/YqBoT/Kf3S4jB0HsL9OwN9I+DqPtHsL+M/B8NuN',
-    'Budhiganga':
-        'BBPq1nQgkq1BlDjGhPnC3RhT9e9L6G/KxDhNkK5DyQiMiH0LyKwEsJzD2QuJoBoQpHI',
-    'Dhanapalthan':
-        'BBOy8lQgjr1BrIyJzOLtFqFnDmSpQoEvKxVjCxY7GpMqSpDe/E8QO0H8K8IwC',
-    'Gramthan': 'BBN61nQi6q1BlSkB3ayJ9JpGwFpMzCxEf/O3MJiF/MgB5PmXkH4RiTiPoC',
-    'Jahada':
-        'BBPy/kQ0mq1BnTtBdgFnSoDtM1H/QmBpI5K8O9RmB/N8IoFkO3BuIiGiMnBzC2NgUiR',
-    'Kanepokhari':
-        'BBOk7oQq0t1B5ToEvZvLvasGzOtHoLnKrK3KjC/UoTkByIkJxE6HmapFiUmEuS6I',
-    'Katahari':
-        'BBQkkmQujr1BtG1C/P3N7IvCvEnN/ThR0C1NyP9H0K2C5ByL+O4GlC2M4MKgBgP0CyEvFqM',
-    'Kerabari':
-        'BBZgysQmlt1B/IOvP3PqFlN/CxMnQyE/JvE9SsC9MwGnSpVxNjO8RF1CvR+H3diN0IkNxByT7HmLmK2U0IgEuJyMsO8CsS1H8TyI+UAoM',
-    'Miklajung':
-        'BBTs2pQ6/v1B4G5P7NtNmQpOsOvU2a4H2XpFqLwDuJtJ/C0M+C8U9M2PxGuO9JwIvKrDvKwO7MhKhC+NhRtE',
-  },
-  'Okhaldhunga': {
-    'Siddhicharan':
-        'BBf882Qqm60BpIR9R2J3lB+DvBsOhRkB7EyY5H1D/GrgBgKtGqL6BF5K0MlWjFjMvFjhBwTqLuN7BmC4UwQ8QB1S2H/D0M2K0IeqGvJlDvL2NnKgY6IxFiIpO2B2BqUvI+D',
-    'Champadevi':
-        'BBT422Qgp20BjNqGZmKpQnKvJ4MjU1ON/TkF5GzalL6E7KrKlXsKxPuVuWgG/CoN+RySzHqKsJvC8SqJ8C',
-    'Chishankhu Gadhi':
-        'BBPun0Qkh80B8CneiRjBwBrO4lB9D+R1JqIShO6Q5O0D0B0WhC4fuIgNxbwEtHzL9PmC',
-    'Khiji Demba':
-        'BBVin4Qiy40BhQ9LK9F5M9UzEuFlFvP1KpHhEjQgL+C8IvN8XxXoCpRsI4E2IwR2SyUsMqIwDiOhGuJsBgOnU+QNqJ',
-    'Likhu':
-        'BBP422Qgp20BTtWpJ7CwC7SpKrJxS0HhKrMgQ/QmPAkc0GuNqM6O2FnCqR7XyX7IwN',
-    'Manebhanjyang':
-        'BBSk3zQo060B7S/U7E5WlMjQxB5K5KvL2LnHsJlTsIjG6EoIkLVsLsM8EqMkJ2B2FoiBkFkMzMmWG6K',
-    'Molung':
-        'BBV8j1Q8r40BqO5F4GrK7D/L6J1GiStfiFqQ2KqHmFwP0EtFgRohBtMnD1NoKmDwLpGwJzIdzM1K1HgEC2SvQ7QlC3U',
-    'Sunkoshi':
-        'BBV8j1Q8r40BzC+D5cjO7EpMrLrMjLW1FnN+F7O6QtCwB1PqJjU0amLjF6GOgUkU2OwJ3MqQoK9JwP5J2G8DgM3GsK',
-  },
-  'Panchthar': {
-    'Phidim':
-        'BBV49yQ6tz1BhRgDnE2UlS4N1D4QpO5JtSvZxEvKsC9RsFhDwFxnB+QzHtHxHsGvXmQiGuI1DwK6PtE6EgJiTiBsW+J2K',
-    'Falelung':
-        'BBVwyzQ6/21BvYAvVtD3H7J5PI3B5nB3FrPkNuI2D3QmS3NoE1UsT/CuHsHgIvGsJsF/BsL6G+F9C0NiJsJ/FyPzLsb',
-    'Falgunanda':
-        'BBOktwQg3z1BjNpR9MtYoFpVvQ7TsXxa+D+KgazL4J2N7C+TuHyH9Q0HvFynBrFiD',
-    'Hilihan':
-        'BBU410Qmty1BxOrGrDskBxJmG3K1C1OiE3D1U9J1KhBrW/IhTiEtGsUwF+FsP8LkEkK5KqR9d2F5D2MmK9HoWSiV',
-    'Kummayak':
-        'BBPwkyQ82w1B9JkChTpHrK7I/Z0L9D9K1JsO/GlgB2D1T6MnBsFvtBkNoR8X6Q8I4VyLgN',
-    'Miklajung':
-        'BBYw1vQ83w1B1NmMrO5O1PhFhLoQ9KjFhTlG3MlgBPjhBoO/MiEzL1C5NsJ2FsQzFwVuBZ2GxT0UTiN4LoWoI2SwNJ0DjMkLNsG4Q',
-    'Tumbewa': 'BBN2uvQkwv1BnM0DzDkMvNKnI1S3LnWUhNyTzUyLtYqbocgMjErFwtB5MoB',
-    'Yangbarak':
-        'BBewyzQ6/21BJvY0LrbgGxPhJrJ+CzN5G9FgCrL+K7IsDrkBkMmGyK6mBhE0NoEyUzDmToB6P6L4OkOyKiDiI4PyIkZ4F+L2GwPkTnHyHzItS3avFlVuPpH3I9X/MzWP',
-  },
-  'Sankhuwasabha': {
-    'Chainapur':
-        'BBW000Q87s1BwH7ViLjPtB3a7HtavU3clIzXjSrRgL5GyKnPqYgE+LuJJ8fiSk0BkTqOsCsJsOoWwJwI1U6HvYoVxLkD5K8L',
-    'Dharmadevi':
-        'BBT2x0Q6yp1BhH2F/PyarEwRxIgP/GoZrLvL7BpTlOlJ/KOqTrU6Jd+E5JpF7bgFxMhFnRiGlLiMpFkSsR',
-    'Khandabari':
-        'BBS6+3Qklo1BtWwB/J/M3RgE1RzY7MkHlT7DwMpDwJ/LiI6FqOM2O3O8LrX0TvE0VgRd2XhJwN7DsP',
-    'Madi': 'BBM000Q87s1B3gBzQ9JW4DrYyI/OsEvRgQxaiH1FmM8O8HuauB4ahLkP',
-    'Panchakhapan':
-        'BBRyo3Q67r1BhKxGrOnWrCrJjTpOhSj0BK7fzF9I6K4B8MjHoP+V0OuUgT8PpImKmC2MhGuZuJojB',
-    'Bhotkhola':
-        'BBwB0i8Q2zt1BgN1NmLwD5BzkBhJvT1QrL7J3RBhPuHpPqRtVmQjHoLiMqNdkNvO0QlJchV+W1kBfkhBqMiIkHyQ5EqY7K0I+B4a2JoHgJqhB1KwD3EnRpH8ckPuZ1BqdwO0P7IgPpU+B9FsN0NwNsBkX7PhDhN2HnS/LrF8DrMlOhNjBkB9K7W5ISvR0KnDoDvIpY1J',
-    'Chichila':
-        'BBO0q5Qsgp1B/VGlQrHS9I5HlW8DrP0MppBoLiMwEqPoOgDwHmPeoM/I2CrEgM',
-    'Makalu':
-        'BB8Bss/Qgzm1B9W2kBbiVzQmJjNwOpNenLhMlQkHpRuVtHqPCiP8J4R2QsLiJwT6B0kBlLvDhWyVzV3KxCpJ7TrT/MoDpXtJe3XzFtPZ97B0H7GxEhasE/LgJ1CpIpbkFzPqJlCwLuNsP9RqIdkJ9QmSjPmRpGwQlSwKpEyKrN6Ena0LnKwZyC6O+Q+G9UuPmI4Q7J6PpE4K4IwSsBkFoUxE0O7O+IjH4PpUsG5EwLzMS7MsL4BmJ',
-    'Sabhapokhari':
-        'BBVop5Qits1BtPNrG5GnRsBpZtKG9JtJnjBiGtZlC1MqIlK/S7PxJ9RkP5DgKgNuWvB0FiUmQsHgWF9GuKa+7B0FuP',
-    'Silichong':
-        'BBiB6r5Q8/m1BrOjDvEpPnLhM1HwBmEjXvC5J4ClN5LlKkElLlHhS0DxSoK/PEtI0PwN8UpMuP2O8KDyH1HueuDyQgPod4DyUyLnBoSxKsNvKqEvQmSlRqGlSkPjJ+QpIerP+RvLtNpJmC',
-  },
-  'Solukhumbu': {
-    'Solu Dudhkunda':
-        'BBkBqs7Qwo90BpMjK9ShB7DtFApYrRlBpctN5bsFxDpH2G3b3iBzBlC9MwOzQwI9D1BpUqO1ByFhIidxLsC0J+RqOwB6G4N+I4G9DmM4K+PlLyQiJsGgMuMsHyTuB6F2GgYuH2EiW1d0TFkWvSoJhL8P',
-    'Khumbu Pasanglhamu':
-        'BB/BiwgRw2i1B7FnSyBrVhM1QvqBsJrJhEpH9M1K9BvB9LrRpQ1UrBpiBjJ/LjLwIpR3XrEhE/FwF7OyEuGoG9QsLlFocoGiL7PwSnJGjW2dzTrB7P+JxF+UgC6G1QsayImiBN2LvD6F/OoShH8JG+VsFqTuJA4HsLoKqFjEySoC2DyH/GyRlQ2DpDgRwG+N2IiCyIuRhD4enL4F9G8KjShL3EqQ/LwK2CqJ9EuOgIoQtTsW1FmW5PiFlIkfvSrB3K3I',
-    'Likhu Pike':
-        'BBRyq7Q6p50B9PmLlM3K3G+D3N9IvB5G9RpOrCzJvJoCA7IoU9QrB/NuG1Mka+MyOia6LwKoE6V',
-    'Mahakulung':
-        'BBnBw63Qkog1BqgBvJwC6H6GtKvG/N6Q9GoWqBuG0F6TbqFrK2LkLqiBkJ2UsBsRqQwB+L2K+BqH+MsJiEwqBrJiM2QxBsVoFyR5Q6KtPlI9G+U5O9QvZxClPoSxUxLnd3DxQ/OtetDxH2H7KEtP1O7UqMnFpJ9U3KpI3kB',
-    'Mapya Dudhkoshi':
-        'BBX+j7Q4i/0BtPvDhE/FzT3I9KHzPjP/O3GyKhUnUjVsGzfyLTqcuNsRmBAqY8DuF+SiBqMkKrLmFnG+QxEtGvF8OiEgG4XsE',
-    'Necha Salyan':
-        'BBN633Qgz70BxKqMnHpB1S4PxEmRlP5NiC3fzBzW6OzDiPtSmC+M4iB0B1G4b',
-    'Sotang':
-        'BBUw63Qkog1BXhVkD3QyPzQhH7V6L7BiRmH0PkP+KI0T4IiEgG4PwDpFsK5TctGzFnWpB5Q+GwGgO5GuKvC5H',
-    'Thulung Dudhkoshi':
-        'BBSoz4Qs690B7NuBiH8VxP0QvEyO1O/N0C7K3KjMWnarDhShQ9DwE7N2S3PoHqByKpMuX4B1FucoUkV',
-  },
-  'Sunsari': {
-    'Dharan':
-        'BBVy+pQm0p1BsI5blM7DTxO6JpFmGlUiShB6T8MyDvSoT0G6P3IX4LmJiJ7H6OoFsa5M8Q/I2R1UzIlLlKxT8HjNyB',
-    'Itahari':
-        'BBRy+pQm0p1B7X/LzR/OtQyJ9JI7BtQ0DhNiHwCoBpgB2HLyIsC+M8I+JnFuFiRoI2GmBuPmM8D',
-    'Baraha':
-        'BBYq3sQ8jn1BrLiBjFuHnTzGxDwS3KvIjhBtJrK9LW7VjiBtbpIrOtMvFoE/IzEnQ8eoaoOzI2J7d2YkSpHyNoE0VyI0IikBwTyciFuF8Q',
-    'Duhabi':
-        'BBPs3nQ8/o1BhMxGrJ0DxKvEhHzLxQhMnLiErKlHsG7D5H1IwBjJ4T2Fga5GkJ+Nub2V',
-    'Inaruwa':
-        'BBRmtoQ8nn1BtIFpBoNpHgF3O7S/Mnf9U9HBvMyNpE4HgL6RnC+azM4J4HtNmK3BmWqJkEYmS',
-    'Ramdhuni':
-        'BBQk6pQ+lo1B5IxHtFhR9JoF9M7I9CBXlSpJjE4BlWuNlK0E3G0eqYV8VsK+LgGkGlGmU',
-    'Barju': 'BBO8zlQopn1B1JpBvBkJ6H2IxG4G/sBJvGnP6F7FWxPwY/J+I+CgRpLsOkN9L6K',
-    'Bhokraha': 'BBN83oQmrl1BhbuFpKmH5RoC3H/KpKkDuBpIhMtI9CxI2LtEwaNmaHyO+G',
-    'Dewangunj': 'BBN4zlQ8sm1BrE3D/QqL9I9ClLyH3SiEdxQ2UrhB4EiL6SqB0G3JgK0SsKmG',
-    'Gadhi': 'BBN46nQypo1B1Z5UjJ9N/Z6GjMxM+L5K/JrJoN7Isf6DgNof4O8SqH/ECiT',
-    'Harinagara': 'BBKg+lQunm1BxK/G/JzSzG4J5SpBwDhWytBpH+CyIiMuItJkZ',
-    'Koshi':
-        'BBQyjoQm1k1B7PnChK0ER1U5LtBzW7QzFpPMtSrE9R9Q1BZjQocoSqCgLgT4YsmB8a0EoQ',
-  },
-  'Taplejung': {
-    'Phungling':
-        'BBTgn4Q4+y1BrSpHvM2ClFzJlUO/BzS+IjMrY5QxQnSuQjSrB1HuMrJgO6CkHmWqY4XuB0Q5E0W6FmByGkQ',
-    'Aatharai Tribeni':
-        'BBNyt2Q4rv1B3RyJsB2H7JoNjQsP3O1J5B5R0J9biCljB+DjF+Z6TkG0O6PyE',
-    'Maiwakhola':
-        'BBQiz2Q6hv1B3QvFjGzOnbtX0DpM2K/LyLjDwYnVyV5IqZuKqViCpVyStHrB1E0KhT0TlOwK',
-    'Meringden':
-        'BBX+/6Qkst1B5TpH/Q4M3IuOpE+QtM+EhI0PvQzCnS2Drd8I5KhD4G3URtUmOvKiTzT2EzKuHsBqVxS4TwHoJbgMwHgNnD8TsT',
-    'Mikwakhola':
-        'BBiBsq3Qgzw1B/MhO5G5VogBxIoS1DwQ0CiIzPuM9EqE9Q4ItOgR3MsR+DuGiI2asKyIYqY2JnDwIzKoDRwR8W6IjB+KkR2G5R+W5iBsZzX3C3CsGnRkCnU9UvMpYxVqE1K5I/OjD/SwD1L6K',
-    'Phaktanglung':
-        'BBhC4h9Q4051BlU5ZxGrRzbxHrP/L5C9YlQ3XhD7MrZziBlJ4BlFlMzTtUuChMxEtP3JlGxGjQ5FlB6EzWtBzQ1M7P2L5KgTvDgPkD2K6IyVpEwMqYoU+UoRjC4CrG0X4C6iBrZ6R9W2N4EoSgMuLjHgDia7DmKmTuNM4F2nB6ToNqRJoH+TgEhD8P/L7BnLuHwEuoB1F+P5JwGvEuLqHkK8EuQ9LoX+F2L7R8H+IgT/CkOxM0SpB2K1KwDvKxRzSiPtJhK9RzB7DzM',
-    'Sidingba':
-        'BBVy93Qui41BhQhT9L1GjZ3F3PxIhDhIjOxK5L3OnB5P0DlTnExUyC7Sqc+PkJnD2M8H2K+c8L4HkRsW+GoO3LwZgOiW',
-    'Sirijangha':
-        'BBqBy93Qui41B6BtG/NhW4LvZ9GnOjRrW7L3H1K9c1M7HjJoD/WhPiLnVwHyD4LpS4OwFmUNmF0JwM1CsSqHgGkMtCiM0TuUmFmMmJ3BsZ0iBiD8MmQ4X6C+YsPgM0byHyGsRmU6ZhHgEzPrG7MvPvV5D3M7R9jBnQzMyB5IzKtML7MuO',
-    'Yangwarak':
-        'BBOsp2Qqvy1BrJ7D3LqSvHxDhLoVlKpP9BxQkFnRvB9N+HnW4K3KuRgSsY6Q9IkM',
-  },
-  'Terhathum': {
-    'Laligurans': 'BBNmjxQqot1BBrNoHxPvPlVmLtXiShByG4GyMMmOmJ8BqTlDkQnU+BjOwQ',
-    'Myanglung':
-        'BBPs/yQq0t1BlgBmNlHwK9H4Y1GtNrXtQwQneoT3EkOvQoU9B8FzO2IgKkOd7I8Ob0L',
-    'Aatharai':
-        'BBQm8xQu6v1B6M3EwMzKkRxB2qB9XuM/QvB0hBzJ+b6B6R1F6DpR+djK6K7LjE9FrPrUvFxI9L',
-    'Chhathar':
-        'BBQmjxQqot1BlRye/G1MpK/FpImFrX1Z9J5W8BvPmWoB0C3EmWnEoR1P8MlDlLuXwPmVnHyP',
-    'Menchhyayem': 'BBK490Qqgu1B7U6ItT1D7F5MhOpEyJ9NczL8I7OyS+GmdkX',
-    'Phedap': 'BBN490Qygu1BtMgR1qB+XjRyBvM0K/MyC9LvT+H3YmHvKme9M4LVqMyRuT2D',
-  },
-  'Udayapur': {
-    'Belaka':
-        'BBbq9pQ2vj1BuE3LrMxEuQ9MlCjLkLpP6L2BO4J0S2RiQ7KqPrDrC6GsP6FiN+N5C0H2KwSb8KyPo1BjBwIpQgMzO3C3EnHxchFhkBvTxIzInEzVqHxN',
-    'Chaudandigadhi':
-        'BBdontQqij1BnN5OrP5FsC5GpPsDhQ8KzS1RtGvVvMmB/Q/PWxIrN3OkM1HiBlVgR8FsVhD+C9OgL5HoP8D1G2RkQoMjLgK4VZsNjH8MsWM+fuHmLhEwVsDqG',
-    'Katari':
-        'BBvBwsxQ2o50B9KnMxZkJlFzOhOkElItN9K2F9O2ShSnKxP8NnBhItKGYnTmK5SqBvWrW7K8EpPwDrahCjR1LlPyKlM6LlewQ7MlM4RTmIzKkN2JmCyG4VuU2NyJiTqB6Z+IoHwb+FqJxE8O3J+XgHBhTsGzEoV2M9B0OoWuK5GmU1J+BxCkLzHsCzJ0K/HK',
-    'Triyuga':
-        'BBkBkluQ+y+0BxKlBvXuH1M8kBlH+D3VakL/JjQnM2G1RnP7D/K6H9C+OrViDhR9F3KzZmK3NlDtU1L9MoKxMlJzJwFxJ3FtOgFnOuOlJ+LG2E7M+R+O4IxO8Y0F4KuK2MjBCkLqHkF8TobwKkL2K4rB',
-    'Rautamai':
-        'BBVkluQ+y+0BoDtR1K3rBrKvE9Q7c0LiC+KrH8gBwB+OjFoF9HgOiEiN8NrC4WlLyJsB8MgHE0Q6P5Q0JlJ2M3e6EpLkG',
-    'Sunkoshi':
-        'BBPw0wQyy90BzQ5P/GDrB7MmLxJsC3We3K+ViC4NjLiWjBkGqDpHmMrEmWjI6R9QiT',
-    'Tapli':
-        'BBQqjwQ0w70BjKtKgHpOrGzN2ClPwLvVyZjJyByI6OkKOuIiN2LuI2YjEyEhWkB3NkL9VhC',
-    'Udayapurgadhi':
-        'BBegowQyl50BvLwV1CmPsG0NxIqPzJ1DnF+H9OkF7gBvB9KsHlN5C5IrJBjL1MkB3KtK5dvJ6F/K0OwO8MZhCpUkPlJsJxPsVLoBiIyP7NiSoK+O1S+K1FmIuNiOjE',
-  },
-  'Bara': {
-    'Jitpur Simara':
-        'BBhBms2Qwg9zB5U2EjTV3K5K/LpDtJqE5SwR7SwHtK1B3G2FlbQtL6HzL5TiK1E2MnI3BhKlYtKnFzQoI/FQvO7G/IgL9GqGuJ2Z8J0RxGogByLwSoB8UoGiPxKqL2G0WI4F0S5HqD',
-    'Kalaiya':
-        'BBX44wQux9zB9V/D3FlOrLpL7GsFhKtFR1LhWjGtEzKyM3JmC/LuJsBhD4J4J2JsKnJ8HgCsBrK6KoDsG2TsRuRmV+H4BiK1MoI',
-    'Kolhabi':
-        'BBUo0xQ+lg0BhG1F/OoD3ItBzMtK1GwKHlOrK2KwBlclFrHuUnJwOqH4EhJxDnUsDtHoK0LuL5HwfyB6I8iBsBsT',
-    'Mahagadhimai':
-        'BBOg3uQyg+zB5WxIoExHgQ1DxMtDYzS6G5KoJ2OgExPkOqO8GrFqN4PjGsWlQzD',
-    'Nijagadh':
-        'BBZo0xQ+lg0BunB9VrBrT9I9dyC1MuK2B8SvH6SvRuJpEgMqD4K6KkTW6U1EM+a3R8EjJ2N5PkG/FsLhNgHzKiXB0kB/TyI1O3I/S/CxPvJ',
-    'Pacharauta':
-        'BBO43uQyl+zBxLiK7M9G9I3LzLP/CmJ7X1MjDhQyDjWwMqEqE6QkS2CkJ6QsNnB',
-    'Simroungadh': 'BBImztQgz/zBrLpHvOyHkBhwBqNuCgDlJ0WspB3MG',
-    'Aadarsha Kotwal':
-        'BBOmkvQgu/zB3JiD/VxFlIuJhJ9BuB/M4MFzSxlB0HpD+I4LwKqByJmT0KxJU0T',
-    'Baragadhi':
-        'BBOu3vQk4/zBzH4BlRzSTzT/N+I3D/MwL/JiM4D0OjE4EgGsFyL1OyEkHoCsIuQ',
-    'Bishrampur': 'BBJu3vQs16zB3L3H3L+ChCwStJrByC/U8JpbsG4MoR6R',
-    'Devtal': 'BBJmgvQiu8zBvHwMvXpCrBzTxLJsCtTgIwBwL2PiWkG',
-    'Karaiyamai':
-        'BBQy8vQ42+zBrFxL3E/FzOkEhM3DwEjLuM/DmQ0DwGtWuD6JiLhBuOgIrDuHyDoU3EiJvOpH',
-    'Parawanipur': 'BBHq6wQss7zBjW5G6GlS5L5LwIf2Q+K/DkL',
-    'Pheta': 'BBI+9vQgl7zBjHoK7H/BrKoJ3J1JkFnc4L9C2MyI',
-    'Prasauni': 'BBJq2wQ+k8zB9MjJlKzTpIlQgB5KkTmG5GmSoW8G9H2N',
-    'Subarna': 'BBLkguQm49zB3MhFDxIxNpEwD9dwF9BkR3BsB0T0L6I0H2L/P2D',
-  },
-  'Dhanusha': {
-    'Janakpurdham':
-        'BBRskrQq8t0B/NiG0D4QgF2J/HhBxDkNzTgCxIuH3I1MnM7D2E5KzJvFIjO+Q/TsMgEwR1IyI8B',
-    'Bideha':
-        'BBO2jpQmzx0B9O6C1IlJyIjLiG5a9H3K4B9M6IuPsLgGyH6PmJqBzCqWlH1C3BmN',
-    'Chhireshwornath':
-        'BBOwssQ02v0B/jB5NXxOwGqJ8JNqB/Q+H0CClNuKuKiKwBoLuOTkM2QwEvHiJ',
-    'Dhanushadham':
-        'BBOwosQkwx0BvWnBiJhP9I5K8Q3NiGnR2a8C4NoF8MnD2V8ZzHsKlMjI5jBqInLoQ',
-    'Ganeshman Charnath':
-        'BBaulsQm0y0BqBtQtGtGmIlN2IRoLnQ6jBpImMkI0HrKtGnHqHhIqNuDwVhD7BwuB9Wo3BhTuX/KwSpLyCxG3V1JlC0KjNUlIqR1V/LpMxNZlXoI',
-    'Hansapur': 'BBMkyrQ+0w0B1JRxKyNjP3BtTrJ8FtMiDpdsZvBqJyKrGgFxC8M4U0F',
-    'Kamala': 'BBM+zoQ4oz0B2DtxBiMjEHoL8Q4EhD8K6Q7GkKuD8K8L5IiM9nByQvLlC',
-    'Mithila':
-        'BBd43vQ6lw0BvViDpNtDzJ2F9MnQzUYwHhJ1QvEUjM9KjO6flDkMpJjDzHsS+CDtGueuCyO2JoEhIqEqMgKmHwKvG0JqCwVxXmEgD5HqU1SkEvH+K/P4ElS2N',
-    'Mithila Bihari': 'BBKwhrQ+pw0B7E5FqK/NpJxKrNc4G1QuPwBiCyLygBmNhGoR',
-    'Nagarain': 'BBIq9oQuxu0BhEsNxflJiCngB0LpKoL6P4RW5G4H',
-    'Sabaila':
-        'BBPulsQm0y0BrL0CtWpFK3WtJXjP9JyE1Q+NyCyKxNoOiCqDsT/HiFwWoBlImNuGuG',
-    'Shahidnagar':
-        'BBS0jrQwxy0BxMgF7K7LjKtD5Q8GiD7K7Q3EInLmKsD4BlNmH2CqD/V0JsImIhG+D0IvEiPkP+JuJY',
-    'Aurahi': 'BBHq7pQ62w0BhLrCpGzPiFpaoI6HgNnFhDqd',
-    'Bateshwor': 'BBIo2sQ6zu0BrK5B5JhL0V9F+GxMyXiGgM6MjMqJ',
-    'Dhanauji': 'BBJ8upQyqv0B9EoazMlGnIrOhEnSoIa4DrN+IgD1DqN',
-    'Janak Nandini': 'BBI+zoQ4oz0BlK3S3QvC7DvI8N2BahMoI5T8N0O',
-    'Laxminiya': 'BBK6hsQunu0BNqN9HzCpBgR7JOvGpJ3NjHzD3QkNlGwf+F',
-    'Mukhiyapatti Musaharmiya': 'BBHsnoQirt0BzLqKjF6K/Y9iBiNDgJnDyOyG',
-  },
-  'Mahottari': {
-    'Aurahi': 'BBK6htQ6ts0B5EnFhZxFpJ5UwNgD4JhVoO0MG0NmHK+K8c',
-    'Balawa': 'BBO63rQs0s0BvVrDZuEtVpIpI+G5LtI4C5MiP4E5BpO4EzHyQqD+K4N4U4J0EmL',
-    'Bardibas':
-        'BBiB2ttQ64t0BwE1DrFhMG1InM/CzBrPqTyF7DhK2nBwI+UwL+C1KJhdmF7hB0NuEgZqVmVsG+NEwX2UnFsLzGxF3NkR6LgN3HoOlE/CvVyXzJpCvKwG/JlHpEpMnEiIxO1JtetCEuG/WpD',
-    'Bhangaha':
-        'BBR2ttQ64t0BhPrE9GyM3M8CxYzExB/TjGjM+O8C5B7N4JPlEzK2G/F+YyFKmP2P0IF2IsFiM',
-    'Gaushala':
-        'BBQ0ttQ6ps0BjGjTlHJFzN5H7EsWT2F3Q9I1L2C9IsS2DiOyJukB4IlF8hBKid9C2K9UvL',
-    'Jaleshwor': 'BBNg+oQyus0BzKiExLvMtJ6HpM9BWhIuNhKwIlegPzBtBiQmLpExFyNiJmL',
-    'Loharpatti':
-        'BBPqxrQg9t0BtMBhQpMb5HjStEjN9JwGpPyI+IqI9GuVqIatE8T6EuDmM9O7CkGkM',
-    'Manara Shisawa': 'BBLkkqQgzr0BvM5CP1UhOtJ7fkH0JxKkVtF+e0GqUL6BwhBpQpD',
-    'Matihani': 'BBKogpQk7t0BzNH9HhOpU9TyBrL8PrH4RkN/K2NmJ0M2JqC',
-    'Ram Gopalpur': 'BBM+jsQgjs0BjEkFzXtJvN9SWpOgK4B8M4L1D5VuL4ImUuChG8QvN/C',
-    'Ekadara': 'BBI+2pQuur0BrFmInTxJkDnHnLnC6B9LiRxFiOuJ',
-    'Mahottari': 'BBLi5pQkts0BxE8F9OhDxHrB+G/PhJlL8N6DiP1GkP4E6BqOhP3E',
-    'Pipara': 'BBMozqQ0rt0BrY2HrM/DnO6LmBnL1JpClJzM+H9F6EjNkR4F0K3DrCyK',
-    'Samsi': 'BBJmvsQo/q0BlVrBtL3I2D6V7M3L/J3BF/NoQSoPrI',
-    'Sonama': 'BBKq4sQ8jr0BhV1RxIxKsOtZoNxC4E2H+S8JxC0J+I2L1F4Q',
-  },
-  'Parsa': {
-    'Birgunj':
-        'BBb87zQmu7zBpX3CxT/IzRyG1Z7JpGtJ/GlE1Q9KvIgBsB4JlK3DzTtXAnLuNV6I5YsSe/GyFgFqKqnB4GxIoM+HsIwRwH1EkMsM0I2GnHkQ6Lsc2H',
-    'Bahudarmai': 'BBL2wxQ+o5zBpnB3G/EpKsKrHwMZpBnMwPmB3DiNyNbkEoL1IX',
-    'Parsagadhi':
-        'BBPu8zQim7zBrc1HjQ5L1GoHrMzI2EjMvRvH9HrIoLrM1EvN6RiB0RyHqT6FF+FmZ4S',
-    'Pokhariya': 'BBKorxQk33zBzL2LlN2B7OpE4F7V2Xd3F3KoOtFoKuKxD6M',
-    'Bindabasini': 'BBKsrwQqy4zBvbjF3F3NwGyB0H3QkQ9BrF2LiH2KwPV2B2L',
-    'Chhipaharmai': 'BBHgwwQmn2zBhUmDmMzkB0QmC+Q6RpGgE3M/F',
-    'Dhobini': 'BBHk0xQ012zBlUrDpM3FgD3U4MgGqG/D4VqC',
-    'Jagarnathpur':
-        'BBRi4yQuo3zBtP2E7M5KtBkY3KnB9I5IyJCyD5MnKtK6JpBuM/asOsEkIhHwIwEXqMlPlBhD8Y',
-    'Jirabhawani':
-        'BBN8k0Qg63zBzPhBlUhLvDyF9FjN7LzDiD7YmPmBIvN8XuFzC+NsBuMuRkI',
-    'Kalikamai': 'BBIwpxQm52zBnOuF4F4KnYajIjIwI7X6WiI6H7C',
-    'Pakaha Mainpur': 'BBHsowQqu3zB1J0E7R9F4G7UgKzPoL2ClI8W',
-    'Paterwa Sugauli':
-        'BBPyh0Qu/4zBpMHrNpHpL2BgGxKvMmBtC1M9IzJrQSuBjY8M6KmS3CoGwDmUiL0PiB',
-    'Sakhuwa Prasauni':
-        'BBUu+zQui6zBlZ3SG9FpT5FzRxHlIwBhFhNxNcyEhJhKjJiLrI8UsFyKzC+I0JuC2MwMlB/FyKqL1BsNqHqMI',
-    'Thori':
-        'BBTqm0Qul3zBtRjIrBtM0C9Nq0BhdqSzMwHjkB8GtxBqLiGoI4hB9I2GIiPtOyjClG0I9WlHhJtNxJwHH+K/QnF',
-  },
-  'Rautahat': {
-    'Boudhimai': 'BBKy/sQwqh0B2CpO1M7LwEpNX3PwOxHkHoIlMqN2SmI8EmZ',
-    'Brindaban':
-        'BBV4qxQ4+k0BlK3L/JwBlmBne7F2C1NhLFtKiLvD3FxIc3NlJvB+N5UmLkMgJqOvCqNqCoIoMyRuS/IoQF6CiTgHya',
-    'Chandrapur':
-        'BBe4qxQ4+k0ByJtF/Gxa5ChTnQGtSgJnMxRpCnI6CvMqUgCvBlKsSnBgDxIsM7FkHmHwIzG+J0ImUjB2FnHoG4G4Q2ClMilBL4UvIwDnG6evLgDhEqM2I2RnIkBvO7I',
-    'Dewahi Gonahi':
-        'BBN+quQy3h0BjRe+B9G1NvDlRuH6InN0UzF4BhNoLkEqO5BiFmLjGyK5J4B',
-    'Gadhimai': 'BBM42tQg3j0B/M3JW/O4H3KkOoBFmH4M7GwIiCjBiQoW4RvN8GtZpC',
-    'Garuda':
-        'BBPu9uQkrj0BlJ9DkBhQvIhC3M8GtGrPjJZUnLqLvHudnBoMvCxM8SmJwBb4N/B+H',
-    'Gaur': 'BBH0trQq5h0B9QgL1CpLlJxCoB3OiR1H6MgK',
-    'Gujara':
-        'BBZi7zQ+gi0B3Q1CnG3G1FoHlUkB9JzIvI0GjHlHrM8F/CyIrSoBwBmK5SJrQzQpEtM8RxOwJgB4G9NkSpDkXtO0KyPyPwJgTgDoUmH6FmL',
-    'Ishanath': 'BBLkksQ2qg0BlQmMvMxCvG4LlO6F+DrO9CjOoH9I2NrD6OtJqBwR',
-    'Katahariya':
-        'BBR6ovQwzh0B5N1BhB+F/OAFrI6J3BkGxK7LlPgI1G0M4KsF7ImKauI4JmQrJ1ImOqBmHpRgD',
-    'Madhav Narayan':
-        'BBO86tQo6h0B1JoGToL0B4H3H4KVgPgN4J/OmFnH5JrP9dyKrIiBrWqRzH2NwD',
-    'Maulapur': 'BBLu6uQ6tg0BjT8LnLjEzGjM1SlI4TlR4F8EmItJwMoE5HqP6HwL',
-    'Paroha': 'BBMy/sQwqh0BvD2OjMtCzDxPjKxT2FvMhP/BiD1M2FiEmWclC+S2M8L',
-    'Phatuwa Bijayapur':
-        'BBT0rwQowg0BlQsJtI3JlKZrF8ItJ5PhJuC5HvL6J1PqLjE4WmL2I+JuF4B2GvK0MuK4IuBgPnDiG2FjXuO',
-    'Rajdevi': 'BBM63rQkni0B9KmNtJmF5E0DxIuDbpL3JrEsFtamJyC2CqLyGlGiT/C',
-    'Rajpur': 'BBKqqsQquh0B7KkM5RjBqCpP3QxOoIjHwMyCmQhM9B6IkKyT',
-    'Durga Bhagawati': 'BBIgxsQq7i0B/L+D7BvIxT5HoD1I2cnI+B0N8FG',
-    'Yamunamai': 'BBKw3sQ8ri0BhGH9BzNxPmG7KhBqDrNiH2E+LxMyE8IyOmJ',
-  },
-  'Saptari': {
-    'BodeBarsain':
-        'BBNi+mQky70B5FlJxP8D1G7I1RvJ6LtJuS1HsH+EmG7GyYtBPkNkEubjMhC',
-    'Dakneshwori':
-        'BBQ+jnQ4j90BhWxBexMxJA3WjJzKhL8ExH0Hpc0RsG2G8IwWfpCwP5LwCpBsOkO6BoI2G',
-    'Hanumannagar Kankalini':
-        'BBUoknQ8mh1B7G0MoBgN1NiC8EyT/L5NpC/KncnSjE3IlMwCvO9lB4JnhByLsM5D4P2OuQkGlO+I2KgL3B2TmHkNoW',
-    'Kanchanrup':
-        'BBVo3pQk2g1B7NuEnLkUuGyDxD2V9WzBpW/RlWorBtIpMlE1Q2NhCiBpYqQxCuJ7L9DlEqQ9Q4S5ByH7I8HlBwOsHjM2H',
-    'Khadak':
-        'BBQmqpQsw80B7MFzdpP1S4G3LvDrHpGqDxKgP5GkMiCjEtb8DjKmN2H0VyC+SmU9EyM4FuO',
-    'Rajbiraj':
-        'BBPynnQ8k/0BhP1FlemJ6BkGjPLzChgBkNuEwO9J7I3JJpKibkOsCxI+K8OxEgIsJkF',
-    'Saptakoshi': 'BBN81pQk9i1B7UlVyD1VtGxDoLjUsO/DVyIgRgQwMlByEkIrK+BjLqPmCkL',
-    'Shambhunath':
-        'BBTy1pQ2890Bnb6GnRd5CvP7KOQxIpPmBtIpJgCjOnI1GjO5BqBrOmQqG4LwD2S3G0dqPgVsFnKyM2L+M',
-    'Surunga':
-        'BBR6tpQsn70B9SlUzVxC7L7LiB5PmanHgSsGwX9DqNmQwKjFiR8GpEoKmFmG/IoM9R9O1E8M9LF',
-    'Agnisair Krishna Sabaran':
-        'BBQu3pQw7/0BtP3C7HmBxH8I9WchGpKlYxDZnLwHhGBtOrEpFgiBtE0T0DgVzJhF6GoM8c',
-    'Balan-Bihul': 'BBK8tnQ2m60B3RWlG8GrLzFuC5boLTiLpBiN8KiKZhB6P',
-    'Belhi Chapena':
-        'BBNo3mQ6t90BrNvBnBhJzZ2BrG0L7VhI4MlrBgPwJA2F4WkJyJAdyM4MmD',
-    'Bishnupur': 'BBNutlQ8t+0BqK9LlRzFyD9SiS3HuM0BoBiJsNwBU6UhbjOKqK8I4JvO+J',
-    'Chhinnamasta': 'BBJutlQ8t+0BrZ2F9NxK3B5N+GvPsR3B+L0GhC4LmR0F',
-    'Mahadewa': 'BBGsjnQ61/0BrQyVjU3G8Ehe4UrHuLQ',
-    'Rupani':
-        'BBPowpQqm+0B/U0JzTzD/mB0EyE/HhExLrKrFsIxWuN2KqPlBPyI8KN6CwPmiBtBgJjF',
-    'Tilathi Koiladi':
-        'BBM8+lQ0kg1BjMzIjGmO1OtQ6D3PxLrM8ChL2RlCtDoO2FwPkPM8GhK',
-    'Tirahut': 'BBJoknQ8mh1BoDvEjNnW0H9WyZmEuJoNvP+O+DmEtJ8L',
-  },
-  'Sarlahi': {
-    'Bagmati':
-        'BBPkjyQ4wm0BxVNlHlClc7DpJtN6CpHxNhG4JzQrOpJkIhG6G9OkWgUgKvByU2YuRkP',
-    'Balara':
-        'BBRqnrQ6ik0BrT9WoB5I3LjN4LVcqLyItDiB/J2H0GiJxL8PqHhHgXa2M4IsPpIoGhJ7C4B5O',
-    'Barahathawa':
-        'BBX8gwQ68l0B9WzFlCyJ+FuL1H4E/DrKrRvHrIwDlJ9DyGzHnH1IqE7GzG1H4OzU0DrLyOCsTxJiQoK5G+OjIiGsOqJ3J0QyNiG',
-    'Godaita': 'BBOkrtQuzl0BzetG9DzHvRZZlJjPpGgEnXiIV3B6OiJ8CmJzGgUiJSqJ8XmJ',
-    'Haripur':
-        'BBO8jwQstn0B6B2L9RrEvPoG9PjUsDzP4GgFsGxO0JjF1G3HmCxJ2WsF+SyOjO6G',
-    'Haripurwa': 'BBKutuQqpq0BjiBxMnQtJDzHyLxE+FjJmQKyGuK1HiL0ToK',
-    'Hariwan': 'BBN6jyQ81o0B9FsDpK5H/QxBxKrlBjMpE/HmHyBtb8P/HiRmEmHmCsayDhH65B',
-    'Ishworpur':
-        'BBXutuQqpq0B2BnLzTnK2HhLlI3WkKyDwG5FwPtB9GjLuH1P8XoOmG2cuNyTiLuc6I+P+PgEmbqMwDgR7MxL9NDlVrG/YpVziB5H',
-    'Kabilashi':
-        'BBPq0uQ6mn0BhUjD5L+IhLgCxBrY+MsCgFzJ5FzGkL3JmJ+DsIvDsRwH6CmHrGuO3G/E',
-    'Lalbandi':
-        'BBVkwyQmgs0B/JvRlbpM9P/D5I9PhLtctNxTlG1c7G/GkHhG+RsE5B1LgIlHkMqEyKslBgRyBqK6H8FrDyb0jBwF+Q5H6a',
-    'Malangawa': 'BBJumtQqrn0BnSoBxM/FzBlO9OvOqB3GoM2CsMqL6X4G',
-    'Basbariya': 'BBNiguQi8l0B5HlMjNyDgF1PiGnDrDhQiFhayWsJzDsL3O0U0G2HpE8GoH2I',
-    'Bishnu': 'BBKu2rQs9l0BjKzC5ChLlHlQ6EtKkPqGamJwRaqJ0LlRiP',
-    'Brahmapuri': 'BBLk+tQ++o0B1Rd8B1JxL9ExQ3OpGlOwajHyNqCR0LvHuL2T8T',
-    'Chakraghatta': 'BBIi/tQ0+l0BjL4J6F0G/E0JjO5C/KzNwFjVkXlD',
-    'Chandranagar': 'BBLg7tQgyo0BjPpNwHtLrBnUoOpB+T2CuHkNtH2P+GkLvPuBvG6F',
-    'Dhanakaul': 'BBLkwtQ4jl0B7XlJtFhLHhY7GtJiItS4M6WoH6JkQ5FhFiasDiQ',
-    'Kaudena': 'BBIs4rQkjm0B8epWqHgE9CsX8ImEEoLzTvGrMpL',
-    'Parsa': 'BBGustQg+o0B9FkJjdwG+FjX8L/EkT6C',
-    'Ramnagar': 'BBI6ysQuvk0B/P7G3IrPZ1MiH/WkNqL3BmN8GuJ',
-  },
-  'Siraha': {
-    'Dhangadhimai':
-        'BBVyzsQoq50BzNjMhcnKjDpSza3F9E4J3RpK+G7PgFjaoN1HqagIiIgHpGqGoI0EyN+Q0gBpFwQ9JpBwWlK6S9ByT3JD',
-    'Golbazar':
-        'BBW2nqQkv20B7GzNxH5DoRzPoa4HuCnFoPkHH5MrH7GsI1DqRkX4GyO0QwFzE6OoM+MrG8HzgBqFxN9QnIzEqGpGhI/Gpa/H',
-    'Kalyanpur':
-        'BBRs2rQ4nz0BvSnC1D6FsP4G1HiepImH7QnHH7J3S7MxDoE/C8OlHnHhBrSshBnQ+B/I0VlJqQgF',
-    'Karjanha':
-        'BBP+1sQsw00B5QjD6BnR6G1IrRlF/FrGHrSiUyB+G1GmXnIyNagMqMvJqCjMwO5Lme',
-    'Lahan':
-        'BBVg0oQmu50Bb5RkH7KuLgCrCvPmTzF2QmH+E3J0a4FkDqSicoKyN0LtC4HjPmJiCqU7Ma3V5StL5BvKkFpNlQvX+D',
-    'Mirchaiya':
-        'BBS8/sQwr20BzQvF3GxOpRjX7HmBtM9JgFtH2HherP3G2D5FoQ0BoIgHsRmF5G2I5BoR6QkD0LkPiCkR',
-    'Siraha':
-        'BBQizpQw900BnpBpEtCyGxM7GnC/H3M3IiBlXqN3CyB9MnF1PoTuEoH+J6JgRiS8BiBsS+KoJ',
-    'Sukhipur': 'BBN2nqQkv20BpGkC9H6gB/EqCrM1MpM/DrE9QyKtKzM1FgIpS6NqCeyH4UqH',
-    'Arnama': 'BBKu4pQ++10BrM3EdxH7RvC9JnPvF1H4MN4hB+G+P+JpDuQ',
-    'Aurahi': 'BBJy8oQ4t20BlW1DjJ3H9DnVwBlUwUgIiOsPhIsS0M2F',
-    'Bariyarpatti':
-        'BBN47oQ2j30BhLhFlD6NzM3DdsMtP7KvDqD6HtiB8GkCyB7KkJ4HmW2DlFgF',
-    'Bhagawanpur': 'BBK4snQ+x50BtJhHhLqBxGvGuL/SiD5P0MqEqLqM6FoN/C4M',
-    'Bishnupur': 'BBG2uqQiw00BlEgetXxQ3BzIsKxb4S8M',
-    'Laxmipur Patari': 'BBLm2pQu930B7SyGsCwPnNrBvKrXrKD1C9R0M4DmD5NsXiJsM2M',
-    'Naraha': 'BBIwqqQiu10BmE/d8K6B4V0P8GsJI6MnPjHtCoF',
-    'Nawarajpur': 'BBJq+nQ4l50BlGnSpLpMzMpEyH/V4I1CkPgPCmVgN+E',
-    'Sakhuwa Nankarkatti':
-        'BBMg0oQmu50BrU8HnPJElIuKBwGrJoL5Q/M9E8D3TsKEoKiZhFyI',
-  },
-  'Bhaktapur': {
-    'Bhaktapur': 'BBEuq8Qu5k0B8Fta6DqW0G6H',
-    'Changunarayan': 'BBMsm8Qq4l0BiE7eqQ2DzG5HrB7SsNrEsKmHwHqSzHqWiIkcpWEF7I',
-    'Madhyapur Thimi': 'BBF2h9Q08j0B9O6F3ErHvBhakPiM',
-    'Suryabinayak': 'BBIuq8Qu5k0BhE8elUpRgHnGvKxWyJrP+UlUkDsY',
-  },
-  'Chitwan': {
-    'Bharatpur':
-        'BBsBis/QoqyzB9GXlDkMzL6FrJvFhOwGhT/IvEvQhNrFzjBiItBvGhZkE9M1LoC9J1IxHmG9IC3OnHvJgHzRxK/SmIrQ3BjmB8HnRnL1XmEpIgPkM2GqRkLgRyH6E2OkU2LkcwNyC6GsP1NsSiOmfuX3D4BsKsJiHjD6NmI7CiHxR0H5FyNsB4GwI',
-    'Kalika':
-        'BBX2z9Q051zB3KsLrSvGxD9QnK3G0PzRrCxR3FlFkFnK/HvU1IvEmKnK9F3NqRzFiNsFwEwQ8ImEyEqd0Q+D1CiHwH+PxKuM5LgG',
-    'Khairhani':
-        'BBTy28Q2o0zB7EuDvd3IhT+KlE+KjMgExDjHrC7e3HxBjB1gByF0F6J9E+KsUiGvKiG0JqEtH8T2N4U4EjFoK',
-    'Madi':
-        'BBYoh3Q0izzBrFqCtFlbrN5OuK3djC3UiFrLxBvPmK1dnD5Fob1LmG1ImMtC2K0I6FpFsRHzHiJXmOjIwDDyOha0uBpEiWvLkMc6N',
-    'Rapti':
-        'BBWus6Q4x2zBqI9X9DxckM/DmE9KiT9Kwd4I2GiJzP0RoK4GyD+QyOwCwMyICoSkF0RxQsY7N1C7StPTvWhKvI5VuLlOnD',
-    'Ratnanagar':
-        'BBRgi6Qg1yzBgF1KmPlGgf/EuBwG4QlEwHwPlKoK2IwEuHuT3c9FpLtLpEuHhGzJhGwK9KrU5J+E',
-    'Ichchhakamana':
-        'BBgB2z9Q051zB0EpX6L/FyKtMvH9P2ChHzQ9DxEpdmK6EiOvGsJwF0L5FmDjM+GYxCwNmJ4B2CwV8NoC+DsL0JkIrEuO6C+I1KsF9GuPrQYLxNhI1N9FkRxK3ExB0VhJxC/D8H',
-  },
-  'Dhading': {
-    'Dhunibenshi':
-        'BBN688Qiu+zBybkFuHkI6FzGmGiuB8D4e7JsM5I/BFtSjO9S5ZxLxGxQuCpR',
-    'Nilkhantha':
-        'BBT23iR0q6zB5QgK1KyS8EgOnI8ZnkB/Q/QC1KgK0DvPiDrmB5DjH8NrQ3DnJiLsE+I3P6V4DgW/GyJ1NiJgE',
-    'Benighat Rorang':
-        'BBe2n/Qg93zBsCsQtB8PxJ+B1YvIjBiGta2PqB6GrOkT3QtM8G7I8HvWjNvSgN1I0KuGyQrYjFzR5D3WwKlOqN8GgE7HiJyCyBzVyK4E+FjRiI2NMyN5HwOjJodqOuU',
-    'Gajuri':
-        'BBR2k9Qm+7zBvOvXsDtSiEtMwOxUpB5Gua1PkBhG4SoDsLqNzE0JgFgOvHgWyLoS3KxB9JtJlN+I',
-    'Galchhi':
-        'BBVm5/Q4o8zB9FmFpOjBkC4V/GN3I+ZhFuFhIrJwK1S1MrUpE/H7XrFjHzFsiB/YmN9I+JuJ4KyBb3O2RhO6F+HhDsmB',
-    'Ganga Jamuna':
-        'BBU8klRqq8zB7RXlL9OrYjLpInToJrNIzJwJ7EyI6EkF1fjCnOofwMsC0P5MsO4B+O2O6HS4R2RAoEkItV+W',
-    'Jwalamukhi': 'BBM6uiR8w4zBjJgS/VgH5V3DvJpdxNnWiFlHmNrD+CxHwWzC8U4I0Lkc',
-    'Khaniyabas':
-        'BBNm/kRm0+zBnTzHhG1gB3S7MvG1QyC1e0YgLmL+O2ScgOiTnG8IoDuKnPiW',
-    'Netrawati': 'BBN+tjRq+7zB5R0I9C0Q1OT5P9NsG5T7E/N2KxS4R5GIsUkHjPsFgCgK+Z',
-    'Rubi Valley':
-        'BBdm/kRm0+zBoCpNoPhWnDtKiEnQzM5LkHf0ZjcyMmH4OhHgUuS6E4F2FqQgT+GuGpD6O4IwMkVOmR/JgUasM3OiKjR+ClPsMlXrH1J8JzWvGrDrMpOrM7N/C',
-    'Siddhalek':
-        'BBP85gRkm5zB9I4PhLrE4DoJ/F6J/gBwbnFlLwH/V/E/N+EraoFjJrCrQ2SnJ8MqCkJ4S',
-    'Thakre': 'BBOoy+Qwh+zBxCgJ7P6QtHjIxbjF8IlKOrP3L5U4EtHqFlUofgFqEgI2MsUvK2S',
-    'Tripurasundari':
-        'BBQymjR026zB3I+I7G5EsBxhCrKzIiB7NnHzNkTmN+C6M8TjB6RkHqEuQjF2fxI5EvJ8EH0J',
-  },
-  'Dolakha': {
-    'Bhimeshwor':
-        'BBPm59Qwnw0B9JoPxS2LhJ+VtN5Lpa1H4CjLkMjR8UzWhL5V2IlM0ZvBgUySnE2GkGkR',
-    'Jiri':
-        'BBdss+Qu330BpObtI0KtLtE0BvGhQrVgB9OrHxI9PxH1G/IhT1FxHzIzKlhB3DxUrLnKiG9LuN/JyLuF4G8KqRwC8Mwa9B8MkS4JkBoNmJoX6LkHI4MsU+EgF8L',
-    'Baitedhar': 'BBLuk8Q+oz0BnUhE3G7KzJ/BtLrPgHpO6N1Qgd+CsI4EkKmWtIgH',
-    'Bigu':
-        'BBqByjiRwx10B3cjPlG6B5RlkB/XtBjJkGpKpCpd/QpPhU0apTyGlKgGrZ6M5MjGlXoN7KuKqOoY8NwV6a2E+UiTpJqQtD2XhP+G8G+R4CkSxHqE6F/DkQ2F8H4QiI2JmVsQ/BoD8HtWyGzOkN9L2C1GpL9iBkNrLrD5SoE7E0G0EkSpBgO',
-    'Gaurishankar':
-        'BBtBss+Qu330B+B3V/E7LrU9EH3M5LjHlJnXjBnNjS3J+B7M9J9Y6LtauL1L2F4LuJ0E2TiSyHkMqdgRqKqCkJjGgYuB6RmkBmG5B0c+O/H+L4KqKlR8HG8UxTuSR6TmPkRiHlC+JyTLmLvKkF5FgP1LwDliBOhf/JTjRyB/O2K3KiElM7L9S7QyB',
-    'Kalinchowk':
-        'BBO429Qq9y0BrV3O3NlWiJ9VyS1L8JlP4K4D+J9I0I4DmO1DkGmX5M6M/FsZxGmK',
-    'Melung':
-        'BBO6k7Qknx0BxboE9JvCzbyHpB5b0Cne4K/HwNgIyJnM+KkTvEqUoQwDgF9HmFqU',
-    'Shailung':
-        'BBPmq7Qolx0B1HjY/E+HnQvDwEpU9KjTsU9RgKnX0E/SsPmQwQ4E2D0S5I2GiL6V7U0W',
-    'Tamakoshi': 'BBM896Qy0y0BtNgKhG+LhTnVlWvGrL3QyT1RgWtD+JwCoenEjMmT/GqO',
-  },
-  'Kathmandu': {
-    'Kathmandu': 'BBMw29Qwsj0BpJ1DvSyDlOrL+Pnc9IzE6D9KwUuB+LmCXuV6I4OvRE',
-    'Budhanilkantha': 'BBH2m/Qg2j0BlsBvDlMrVwRDsE1HoJ+FkX2C',
-    'Chandragiri': 'BBHs78Qyyh0BlQvPxMvBuFjS6QvU6ZyL3L0jB',
-    'Dakshinkali': 'BBK+97Qy1h0BrGoG9WL1QxPuEnPkatE8D/H+OwH5BkNqGiH',
-    'Gokarneshwar': 'BBMgy+Q2rl0BxGhZhNjFrI3P5HC9GpRoPAgEgGmsBwDtBkQqEoYxMkL',
-    'Kageshwari Manohara': 'BBLwv+Qoml0B9M0CjDhM9P7MnTnaQhLyKC8GkT6HBsI4PiNkF',
-    'Kirtipur': 'BBHm68Qo2h0B1G8JnLvBjKtJ2HpJlHpKwVsH',
-    'Nagarjun': 'BBJu59Qwgi0B1B1HncnIuHtGiJnY6KrDgG+KGuSgIgC',
-    'Shankharapur': 'BBMsw9Q0wk0BiPmMkDiM+MzCgH6VuDsWpRkU3FfB/PrQxLhIjc0HpW',
-    'Tarakeshwar': 'BBI649Q6mi0BmM9YgK3LqE8J2TwUqB6RlQtEhMvD',
-    'Tokha': 'BBIyk/Q+9i0BjX1CvM3B9JnLsIjD2MXiMwDmQuE',
-  },
-  'Kavrepalanchok': {
-    'Banepa': 'BBMo58Qsln0BpI3NvFuLzG1J/KqD3MxLrKvb4IhEsG3MqTqT6WkJxFmV',
-    'Dhulikhel':
-        'BBQ8h7Q8no0BpP7apNvK6OkEgJhK4IuD+GlPiN8LgLpD0G2JuJuDpOkGhG+JjM9B3HyFuBkT',
-    'Mandan Deupur':
-        'BBRgq8Qy2p0B5CnI8M3OtKlCoLvRuO3U/JzR9ChPoF5KuQ9B4W8LpG2TwCmVzJ8FtJqTmByG7M8P',
-    'Namobuddha':
-        'BBPy36Qm4p0BtFjD9VkR/O9F0O3ZjE/ExKqHItcf5OuPzNqFxPuR0MqP8a/LiOuO2N',
-    'Panauti':
-        'BBW6x7Q6kl0BrG4M3IiE4MmXpJkJJiK3ItD/IiK9SnG9B6E3J3QgYlRxQvQ7DlYyIjUsJzPiGiJqSW5F4LyIgJyIvJyK+U',
-    'Panchkhal':
-        'BBR0p8Qs9o0BvJyUvUoLlT6QpC/SmOrXtO1NgMhOmMuFtBjT4HxFkM+BiG9JoQxK0MkQvEkMhUwW',
-    'Bethanchowk':
-        'BBQm/5Qmln0BvIuOpIhG7JnLrOxHJzWmGtM9PxMvKzXkBpQqOkSocuE+NoF2B4TyQwQ/XmR',
-    'Bhumlu':
-        'BBQgq8Qy2p0BpH8HqPgS1FmVcobrI6FtMtEjF3Q7POjG7V5LzMmanSwUnLwJxUuKmC7M4O',
-    'Chauri Deurali':
-        'BBR2j5Q03r0B2KjC8RpL7C7D+K/TkJ7C6L0MkG8V8PNoJ+VlK+LiEgJpMoL/UrRzH1O3MqD/RhG',
-    'Khanikhola':
-        'BBQk24Q46m0B1KyFOwMjU/Frb/QpK1KoEzVhDnF0OrMuE9JO3O8IpGuNmBgPilB+PyMlGuM',
-    'Mahabharat':
-        'BBW2p3Qskq0B7NxJxNhD1LiFG9OnHjS4K7J3DxHrD7nB6KlQFhSwIVF0LqK2KsbgRkUgGhO+NyJwMZ4MlBoGrB8Z1OuD',
-    'Roshi':
-        'BBXmt5Qogq0B5MyGlSoYpRqR/Y9HyItc3CzH0L5M2OtDsB7ZmBnGa3MxJvMsOtOX/L2N/EoVoSsI8HtNsOiEyIHucyKpHkEgF',
-    'Temal':
-        'BBPux6Quvq0BjJ8C9KgU8C8DvtB2XnLhDzC0H1HvLqD/LoXld0I9K0NzGmOgG+VjRqGoI',
-  },
-  'Lalitpur': {
-    'Lalitpur': 'BBL6u8Q67i0B5LvF7MiLlIhNiDxN/K3JyRlB8FpG6KkJqHpD8MuJ',
-    'Godawari':
-        'BBSwm7Qmnk0BlDzGpSVzLjW8CpP5DrO5IsEM7QnFtPmLgE8HnS6WyZgL2GuHoOyBqH4CuN/G8CDoM',
-    'Mahalaxmi': 'BBKwm7Qmnk0B4J9SEnMqNjHqFxKoJJe0Q9UmUlSwaxI/I',
-    'Bagmati':
-        'BBYg85Qwli0B5L6FvHrGtJuC4DuS/ML9D0azMzF5K8DtEuNlMlImKhMyInYlB5IqKnOKvP+OjNoMKoFzI4OyKsFhMiPkM7HoSlL/D',
-    'Konjyosom':
-        'BBP+q6Q62j0BtFyHxOQnC9QvF5JlZ1KgNM3DtSuJtCwHsG6L5FL+K6IrE6DsO7CqP',
-    'Mahankal':
-        'BBRuq3Qw4j0B4LoHuEtN6K7D0M0FVpWoGpCyX2IwF6JoC+Q0KyHhE0PnQ2DnctEpOjShT2BtF6F',
-  },
-  'Makwanpur': {
-    'Hetauda':
-        'BBfyv5Qg87zBlDmFzVErB4QlMmK7a2RsD2GvK6RLiVZ0I0B8Nxc4HlBtaxRpE7F7TsI5G4R7EgD9S/H1gB6HpD3FxNsD5SqPbwZ8GkSvRoGlZkTsFxEkLoLsE7C2L6OiP',
-    'Thaha':
-        'BBVur8Qolg0BlN5J1QpGmD5SxM5IhPrC6BnW0I3I0N9kB4J2FiGhQsKtM2TxLuK6OrG0Y3EuH4L6UNsP9UmVtCqR0GuQ',
-    'Bagmati':
-        'BBiBwuzQ46j0BsO+CwF9HgNa2KnmB2H9QwXhH+R1C4BqSoJsM2IF+W6LzByLvM4SrB2btE+JvL8JvL3EtG3M/GJ1JxRrXoM9I6ZhMgG3SH8BqIlSsB8CnJjJhE/HqF7FvLiEpMwL/CoG5e',
-    'Bakaiya':
-        'BBjBwo4Qwoh0BxGsejMiZ9W5L1IGnJrM3BpS9R2CvXiH1H+Q1KomB/MZvF+HlP3DmB9TgN7gB/CjdoL5FCzkB0KhXiN/GgGrL+OtFsJ0D7B2IyRqEtBwRuIkW+QiFqStJPjKoK7D0EuKgRyCzH6X',
-    'Bhimphedi':
-        'BBfk16Qk3+zB7FW9MigBzCudpKwM3OxKnF0InMJzM+IsDjP4K1iB+LwCqI9TH3UnJ1KxKuB+E5UrV5J6CrMmMlKsB3Q0VDmDlF+SwE1BwK+H4LwSvKuN0IxBmPxHiUzI4I',
-    'Indrasarowar':
-        'BBQ465Q41g0B+EN0Ctd+MhgB6HhBqO0IsL+ClD6S2QqGmN6JpKwR3OxG7DgIjauER4KnSzJ',
-    'Kailash':
-        'BBXi78Q6w7zB1TyLrKuMhGiQpN5CrO5JvSwK9H3L2BvK9SvE6ItZkGrErBlMgK/R0OjHgO8I+CjH6UlC8J+KsI/H8R2PhGmJrDuS',
-    'Makawanpurgadhi':
-        'BBXwz4Qyhg0B/QxCzEtKnK8DQkKpSuJ9QhFzD3MsalIzB7NazIMhVwK5RrD1GyWnOwB+IsV6J9E6UyKtBoJ2KI4UpI+T9LvC',
-    'Manahari':
-        'BBcqh5Q6k6zBjTrFnGmZjSwRvZ7GhPauBnN8Txd2B9QoI3EyCpVuN3L6P2OyaiHkL9KwIHQtPkF9S6LrNQxLsKkL4Q4CnDwPtSwepLhD7M4OjLkS1GuD',
-    'Raksirang':
-        'BBa4t8Qs75zBrIgI7J9K5UmC9CkH/N7IzOkH/JgSsBmMxK8Q5OhP8C1LnLrEkLhhB2GtDkLjS8M3OqLiDuSveoDvPoT9KiKwIUwW8SuP3J+EkNwS',
-  },
-  'Nuwakot': {
-    'Belkotgadhi':
-        'BBS8vgRmkg0BzP1D9VqB3GvLjTvBvGrJtDxW6Q5Y4I9ZgHOjC3ViUoE+H6H4D6SX6QnBmUsFoOgO4I',
-    'Bidur':
-        'BBX2wiR21/zBzD4EfyZ/NhEpExLhI1BPjKzNlIhG4EtHtN/N3IrFnOoBlUB3P6V+T6LayK5VqIuH0PWpI0T8D6L4InG2G4c',
-    'Dupcheshwor':
-        'BBRoniR+xl0Brd4D/WnIG3UjEhJ8I5a+M/L6MoG8K7DqTM6FqEjEwhBwKoJwL3BZgL/H+EtGnI',
-    'Kakani': 'BBO28/Qmzh0BlRiHGjH5QExHnHvHnpB0E9NkTwB4GwL+VpBqPyDhDsVzI0QxL8B',
-    'Kispang':
-        'BBP2wiR21/zBqC9LxEpVwI9B2LhNwB5UmLLyWkHiGmVkJgFvEqINqVnchXzFyExGud',
-    'Likhu': 'BBM2xhR2ig0BxQwSkCmUpOpBtLuPlRxLyL7B0IzQ+BlTwJ7X0LgC0NmI',
-    'Meghang':
-        'BBU8lkRs39zBxWjHlLMvB6U1LiN1GnGhJyHvHrMqIzTzPVpItHjD3gB8LkE2EhFgN+M2OU+CzQwP1EwH4c4S8M',
-    'Panchakanya': 'BBK+qhRmoj0BtVmH8CzVtTb4BlcoOzUqOqByFgNlC4NuEiJ',
-    'Shivapuri':
-        'BBUw1gRsvj0BqCuF7I6akEiJfiRzHmBtM1LrQ/CmBvcuHpDjHvIqG/RpJ5C1CpZiCxLmRhH6MqErF0Ra4PuTc',
-    'Suryagadhi': 'BBLqnhR6uh0BlGzZyQvSiI2BqEyLgOiE5F2doLwI6CkMnXzBoB5Z',
-    'Tadi': 'BBMi3iR6tj0BzazCvRWE1etEhJWpVgX9DnB6ZoX0BL0JmPuM0EsP',
-    'Tarakeshwar': 'BBKiwhR2r9zBxK6V5LZ/UtR3DrW1N9KsL9E+E7KgRBsY8M',
-  },
-  'Ramechhap': {
-    'Manthali':
-        'BBb8z4Qs8x0BjU5E/LvK3NwTsCsQzIuK7c5HxI/L4G9JpCnN4S3N1GtKjQnJvKhLgO/PlBrI2JJmOsJgE+T0RrQiM/O0JyG5BoM2R9BqV8P/C4KEgf',
-    'Ramechhap':
-        'BBXu62Qoi00BhiBxEnFiH9TsHtVtWYpI/B5VjG/CgT3YzCnMwOlL7BpM6QhUwK+KkQoJ2GuK3S4NqCoN3G+JyIgM4jBqE7GiUuF4K',
-    'Doramba':
-        'BBR6k5Q0lw0B9OzEkDtM2LrTvB5e2NvE6C3P9EjSoVlGuLxN0FgOgVsR7EqZ/JoXnV4S1IuL7U5H',
-    'Gokulganga':
-        'BBgBmq9Q4830B/IjK7OYhFvO5I/DzS6DzHnInE9PvLrDjJ5OzHzSnGzEhD5YtO5OrMehcjNrFtFqCnQyQxVkK4KmWwGkRgUqNwL4DyU0KmhByH0IiT2F2GgJ+PyHsHyIf+OiQsV',
-    'Khandadevi':
-        'BBV814Qghw0BvXhF6BnMzJxGhMgPzRsQhB9MnQlS2L/B6KrLrF5HuPpNqH5coNte6K5MuD4IvKwfoTuTgQ2IgBge1LsT',
-    'Likhu':
-        'BBRun4Qq600BpW1J1VvO4JtLtF3K0I/arCrQ4NvTgMwK8TwEsD+HxQyVpCoQ8X0PoR2CjGiLnQsM',
-    'Sunapati':
-        'BBOmj5Qsiu0BvP7HnTtTwKvf6H1F+QtKgLsNgSiG4MpDpDmJ5SwLxIH+EkS5C4P',
-    'Umakunda':
-        'BBtBun4Qq600BuP3GoQrMyHlM2RoPiD6YoG0E0H0SkJ6OwLsDoE+P0HoI0S5D6IgEiFwO8OXoG2ImO8FuIzKoR0BoH2F8QxB8L+ShEmM1K4KxBgPmDqW1E+M9U/B9JyFpDlG/XtH5F1GxTtBtMrHrG/LxQhJkCnOnE5V5LvKxOha/arN/CrKrMpI1SxU',
-  },
-  'Rasuwa': {
-    'Aamachhodingmo':
-        'BBX8voRyvh0B3SiRjfoJhHuWzJtF7MtQ1FwFriBxnBxCpL2LlNmR+EoS3KhDjJ0Z6D2J7JmXsHmPrMkR9C4OhKzEgO2J0N7NuXxOqI',
-    'Gosaikunda':
-        'BB4B4zjRi8j0B6L/GyI5Q0BrSrK1ZtBlU4TvQ2G8UsiBynB2FvF8MuQ0JuFiHtWkfnJ4N9P8EsLmKqdzJqFjGoS8S6VsL8BmG0a7BqejP6iBZqTngB4JuLyRsR+OuIrEiUgIfqMiWvBwCqRhIgI/LxB5V0J1RvC1fuJxbugBzNzNS9R9H3WjH/mBnN3L2B3J8PpJ7C/KoJtSPtNpG7DpD1OrIjIxUVD3IjKjT/R1V',
-    'Kalika': 'BBN+9jRgkh0BnVxOrMmF5I1HewLrJNyBnd+OzC6LqP6HpP+OiJwI3BiLiO',
-    'Naukunda':
-        'BBQ4zjRi8j0BtQlZ1LtNjGnbnLvI6E1TsJOdvL6I2HsMlF2UoNgF8K/C0KsK2ZzBsSxI6Q',
-    'Uttargaya':
-        'BBV61kRi9g0BvLnVlMT9OhJ5HqP5LpP9O0C+DhLkXuEyGtd0FxEociXOpVwEpI+JmCqG4O8NgDqOsMuDmYnS4KlR9E',
-  },
-  'Sindhuli': {
-    'Dudhouli':
-        'BBiBivxQw110B1F+PCiT9X/G7O4JpJyEvb9F9InHpB5ZxJhT3I/CzH5LoHtBgLvSiTtX+Wn3BQtbsHFoF+NwVvT6D4IwJXiC2SnIS3EwKA4TzHqFzKwZ4GiTwSxG0JgRwQ+HCkPhFmR',
-    'Kamalamai':
-        'BBtB611Q26t0BnJkTM0W7FuB5TpM1GyUnIiEhK1FsCgO7JqZ9L4S1IhKkCzHzHhRhT5OpW+TlHlMxE8RvN2E/SqTnL7PhB9Y6D/MmS1NgQ3EwH9K2SjEyPxiB5L/M4NjR0GyFoFrLxE9GiFtN6UgHgDzEuTtDsN8H0FtGyW6IzBuLvNyH2B4V6LwI+OhI',
-    'Ghyanglekha':
-        'BBV8j3Quor0B3VomBxE+NtLgYpIiGiB7T9OiI5LvI1B3VwNxH0BtLpH/D6Izb6IxW9CzSwKtEkHuM2LhFyNiD8NyJ4C0H',
-    'Golanjor':
-        'BBY0o0Qgnz0B1OgPzHtM/SxRoKvOxIhN4D/PmEvP6JjJ8JpZrC/NiK2FoIhE2GxU6TqMuHvK6IgH8GwR5emkB8BqMvOmL0CoM/S4YkGgD',
-    'Hariharpurgaghi':
-        'BBfki2Qs7n0B9PvB7ViGpHzE1WkDGsYpPvH1NoLrLxFzRsCzD1JiH55BlF5E6DnUiKsEuNzMkJiE7CoJmSrB7BpI4SIiM/F+I5ZsXnM2JyRgHK8RoZ9HmOzIsImEmG5KmQ',
-    'Marin':
-        'BBbi+1Q2yp0BjNkC+C0S5IyW5I0bnP5EzFuGrN7HtTuD/C0E5U/GoIlP6H5avF9Q5ajiB0RrCsLyF2NnLqPwHFrY2WjDqH0E8VhGsPe2EiX3K8JoHkS',
-    'Phikkal':
-        'BBVivxQw110B+HpEwFldyFiC+PzOQrPmNwEiGpJmU4C2O/O8BsGjL8XsKmXjOgfvB2P5QuC/F8V/JkDnWtK+BzOnV1M',
-    'Sunkoshi':
-        'BBPg91Qwrv0BvOjQ9BxNgdlxByE9N4VnmBgZ+HKyK2HwLlImFnNuepH6ctPqNsF6H5KsL',
-    'Tinpatan':
-        'BBdszzQkzz0BzNEhGqJlNvEPsP9P0O5I/K3NjCzJ/QvSyG3GhT0KvZ0HpFA3T4EvKoIRhC1SvJYmHnNyE7RmHmMqW9TiT6O0HiRwFoQ3EqXyIiNnKwOgTyR',
-  },
-  'Sindhupalchok': {
-    'Bahrabise':
-        'BBZwx/Q23v0BvM2KjQ0DqFvchHhLoBvYtCjT/IrIbjPkJf0IvKmQ5FicuLwBhIsKciIvIuNoFrDsNtP8E/M2V/LLzKoS9Jb0C2Q8FsD',
-    'Chautara Sangachowkgadhi':
-        'BBQgw/Qsmr0B3T7ExQ8B3K2HtSMtb9d7EYvL5PmhBhWsa6Ekc1B0I3D+KgGiQdiHiIlOkN',
-    'Melamchi':
-        'BBVg9/Q26o0BhR5evK6I5EpY1IX9U0SI9esJoHqRjU5I7kB8LhEkJtK8XGuM2L6M8DzV2E+ImbOkOyQ6U1P+K1K6O',
-    'Balephi': 'BBOsn/Q4rs0BxNiEzIwKjJgB9EkEG7ShFnQrI/P6V9IyQ7B6Y+FyCkJ/SHrDqT',
-    'Bhotekoshi':
-        'BBawx/Q23v0B9B1f7FrDzC1Q+Jc0KnSgMMgN1VuP7E8E1MsP0W8LPmdqMqI9C0I0KkLyCxCuI3PiNrO8XpI2C1MxL9PlHnTmiBvH4mBvI7KnY7N',
-    'Helambu':
-        'BBey7gR0xn0BxQ5UNjO9IlbkX5EkRgHkf5CqO0CyXmGqQzL4MrV+HGkKkTE4IyUWsIkIqD2OlK+S3PmF9JlDrQ6EvMqBjL3FnLiG1OvBzE4G5RwGyBiP7KNpThR',
-    'Indrawoti':
-        'BBQilgR80p0BhHhIhQe9K/FzI4Djc2Bra5EiI3QuJpT+GnC0XtW2IY6EqYwK5I0K+P2Hwb',
-    'Jugal':
-        'BBrBu9jRs4t0BjLxCzIzKpI+CldpM7LQhIhQnWvMhIwIrKbvBiIhctL3IrGsDpTgTIzHlK8GrkBmMjM2NwG2SkB6L6MgVoDqF5D6L8HyX7DiOlMmYzG+K2IoHtJ2Y5KyDuT+H4WR+R4NwN8DsKlLoIJ2LzK4BlPmN9LtBlJwR/MkDtIjE',
-    'Lisankhu Pakhar':
-        'BBO6j9Qouu0BxW4BxDjNvQ3ErOrQyLrRhE/I2MvQmO/B+IqDuJgVkTgC8ImLrV8Q',
-    'Panchpokhari Thangpal':
-        'BBmBi+lRsvp0B1Y6KnHuJ9K1IlY0GhOmMxX8D5L7HpF6D/UnD5L5M1SjBpNjWtGxLmEpP2K5O2P9K+JqBqTiR8KOxBhP6RvG0E3G2OwBoLhGkL4FwMpBsQ5E+JmD4PlFmK9SqG8DQuNnJuS8CgL7PqJ1B4JoN4L',
-    'Sunkoshi': 'BBLkj+Qg/s0BjKgFpG5IjT/BtJ/U9IpDbnb4GjYub+d4P8QiFoQ',
-    'Tripurasundari':
-        'BBO80+Qgmw0BhHzD9J+I1K/DyDtOjGjRoE1GhX5SsC/W+cnY6O6TuCkTnBwYiHiL',
-  },
-  'Baglung': {
-    'Baglung':
-        'BBSivmR23hzBqLzOgLxJlInIxEtcgK7C+DiJsQ5ImCzGkH+PiGjDgHvM2S2GmCkKrM4Y7X6EvR2jBpK2E',
-    'Dhorpatan':
-        'BBdi/rRmi4yB5buF1OlDjQuDNoUqLqFjD2MpHyCxFgbkDwInM6MvIxP7KtkBsD7KrKlFtE/NwQpNqGtVsHuDoLjIqPxZka5XuDrIyRjHmHqMpHuVUuN8IyH9ByX',
-    'Galkot':
-        'BBdg3nRio+yB5WyRxE8JhSjBkCxXnD5P+EzEhC5V9ItN4RtN9BpUsF9NjD3MoJsC0DwWoHmG8K1C6SpNP5KuQnFkL6OwOyFpOqQ5ImBrVwTuC8L1J2JyF4MlNkK',
-    'Jaimini':
-        'BBRivmR23hzBtNzFtPGzJ3FtHvP/StK+IlQoTpEqF1MkRBmL3P2OsGgIgQ/J8CyEucmIoI/KyJ',
-    'Badigad':
-        'BBZqvpRmp7yB/N1EjL5OtQoFQ6K5SqN7K2CnHlGzDvWtM7K0Q5N6EnLye7e9HvKgIxHjM3MuD9ZwHmBuT6jBhGkHqKqTsKmFrD8K8KukBwIyP',
-    'Bareng':
-        'BBPwrmRsi/yB3K+OjRCpF2MrFtO6FvQ5HtKuK3GuBtMxE9Vua7U0G8JiC6V9E0EoD6P',
-    'Kathekhola':
-        'BBPw5oRwx/yBlMM/GwMhGkDjH9PlC0GrQ6I9LhZyFpOyWtRiQhCuQsK+JlCyF+L5FmS',
-    'Nisikhola':
-        'BBagnsR8rzyBnGsO+DqW/G2LvDuQvMiBtDsIja6XpPyZnLkIrHtDpGuVvQqNGtMvRriBiT/RuJzEsJ7jB2QhPQ5PgP5CmL/IcvMqThB6LzRuOlE',
-    'Tamankhola':
-        'BBU2hqRox6yBpC/JwFxWqHxCkD1MpLpFOnUkQtD2OmD4a/F4EkGiPCkByQoK6ThL6V9BwMrVoQnKjRpQ0O1O1I',
-    'Tarakhola':
-        'BBSkkpRsx+yB7MbtQrK5P+BxCxMmNjKxF3M2J1JtC7LsVvT8VjLkI9PwNmYPyNzJmJsB0UnKoInHsL',
-  },
-  'Gorkha': {
-    'Gorkha':
-        'BBU+3iRmg2zB6CvH/KlPxTiBuDnWsC1P9I9R7XvLqH3DlD7LmP5biNwQ1BoYsGoKkQiGkcuY6I4b1EsHrB8X3KxC',
-    'Palungtar':
-        'BBRkzkRyzyzB7E2GrDyV7P4DvPwOjVnNjQhGrGnK2BnYnL/PgIveqP9C6QgX8dgGuCwJgK4DkL9F',
-    'Aarughat':
-        'BBW6xmR2z7zBjcpLlK8BR3R1O5H3B9O6MrOrCzP9qBlQvCtGSrlByEjE4XiH2J2PgbNuE+NwDoZvDgSsJgIF0PwP4TmCkJ',
-    'Ajirkot':
-        'BBU28pRo92zB3JkDvc7DnR7F7GiH1PqCn0B7VpazV6GnNoQ5EkIxS0I0CmTwRyQtE2V0L8LlDkSsF2SiJ0L6PlE+I',
-    'Bhimsen':
-        'BBR08jR0j3zBxEkERslB1Z+B9C5MpTvNlElOpMnEkVlO8BxK8JrJySwF4KyCsB7XkLXe4OjMihB',
-    'Chumanubri':
-        'BBmCy5rRmj+zB0DvEkEhfUlb9WiC9M5C5GgJtV5WnM1lB/KpEkNpO6FhSmE1YPteiG/HrJzFtExX8NvUiGAoUpSwQrKoEzT6P9JmGvLuO2DiZ/G4CtHySc6Y/EgO9F+B5G2P9E8MoEoCvL8L1K0KgF0IoO/DsGoGiUzKmJakiB3NoPrTgL/H+WrVrG7JgT9G0iBnY2vBqHwH8D+Z4D6VhJoC4IoYyHlBoTuOsUwagIyE5G0NsJ8VhaiavC0T7I+FnNtF/E3J3RmLvW5DTjM3V7FlH9GqBlN',
-    'Dharche':
-        'BBpBy5rRmj+zBxIoJhXsB7FoF9PvCvPhINlRvMjV5O3ItGqD/S9G1FpQ5E3F/TtSjPsGyGhMlCjJvP3TGzPrJ/HwD/RhF/UqM5KgR1BuFlHobxBsiBpOonBRrCsMQuelE2Y5FiSjNqOgLqEoM2lBuV6W6G/I+M6C+WhCTmbjEif',
-    'Gandaki':
-        'BBOwuhR692zBvW0C9CyHlNsD5S0NlM2D4B5KpOtUkJndwL7O2ML+GtP2TsGkPoS',
-    'Shahid Lakhan':
-        'BBV+3iRmg2zB7JsJ7ByKvXiOvJpU5D3TjPnS3NrI+BpMsEtOzJjI9DrLwH9IkU9BoPmK+KkC+I+RrC2PtDoWyThBgLmP',
-    'Siranchowk':
-        'BBOiglRw01zBjlB5LtItbtGrI8C7IiMtI8P3DsDxV8E1G6HqT+O4IsVogBjIySnQ6E',
-    'Sulikot':
-        'BBVw9lR8n4zBtE9N/aO1J1P5dnLkMhhB7FrUwnBmMiW+To0B8V2PpC8GhHoR8Fwc8D4JjDmBwJxhB6BriBqOnbyBtFmH/Q2B',
-  },
-  'Kaski': {
-    'Pokhara':
-        'BBlB6opR2/ozB/QgIxMySrQE5WjH+D8d3H6G9HqVvOkB7IlQpQlFhK8KvF5NvUvW0DrMmOtX8OlGoI7N3ChMsDpTmPhEqQtUL5VoLrLlBjNyLvLgX4XamOpG2NwZqCxD2O+F4KzB6G+HyO4KoEF6N8H2K',
-    'Annapurna':
-        'BBmB2zuR0vnzB1XoE5PxTlU/HzQ5L/MnQnGgL9T5NzShHjfVlE7HhQhBzLuV2C4K7UWqG1NZlO5CvWoI3VwG0FmF/HmK+HyLtRyN9M6Q3EgOhLjDykBuF7HsLjJ8K4CqPqL0KqKuY+V6IuNwT3MoQsB4OyoBjEqI',
-    'Machhapuchchhre':
-        'BBjBystRqpqzBlJtFhIuFptB9W/DqEpZgClKyErPnUlMnKiGnH7H1KG5N3KnE9HxO0B5G9F3KyD1OpH3N0LtViQiBmE8HkfW0SiH+T6NoG/KgNoQ0Q6LmUgI6PyTqXlDgD2M/MkQ2B+OjJ8KjGyS',
-    'Madi':
-        'BBhB00mRgtszBHje8L9W4H5G9D7d6WkHsQDyMxSgR/HqOqJsPoUmKxEqZ/BgEpEqtB+WiItFyJ4FG6fnRyQvD6NzKsCvFswB3FiHlMjHxHjNhKT3DhI3T9L/PqDlOnI5chLlQkPvhBL',
-    'Rupa':
-        'BBQ00mRgtszBxH4PpFrD3TwJtFnG9S2GrE9KwBrhB0FxIArPmI6EiK7KqQmF8ImQgI5BiE6S',
-  },
-  'Lamjung': {
-    'Bensi Shahar':
-        'BBb4roR+kxzBrIarWrSpC3J9MsJiBuS2LrE5FuKnUkHpL1EsCpJnMpPiMpC4DtO/E3FqIrX5CxIuN/DzFxTmI1E+MyQoH0S2IzI4MuYjIwDsL2L6FmR',
-    'Madhya Nepal':
-        'BBRy7mR0iuzBvOUvB4WzHkC/MpHjC2K1QjD5Wt3BohBpIuFoG4TvJqFsD6JvRiJgPrFkMmC0OsGkF',
-    'Rainas': 'BBMsnlRqtzzBtMtGhIjSgBzVjL+F/J3DmWtPuMpQ+QwGiDqgB8IgPG6O',
-    'Sundarbazar':
-        'BBT6imR+pxzB1fhHgKxXL7W7E1X+M4CkC1KgNqH0HjCwB3WqGiE0FyTtNgE6CyIpIsXgF4F3DuOhMqCoMqP',
-    'Dordi':
-        'BBlBwmpRiw1zBcpP1KtNhYjSvPtHvHjKjUtClIgE7B9W8GzGsCxU7PHtRsMrG/aiCnJyN0C6PiJoUjH6FtK1LsEhBtS+MrJqC4JsWsSsIZiLoMqQqdByOwR2NyGsM+fuJ0N6UuF0IvQsKnUqS3PyLzL5P',
-    'Dudhapokhari':
-        'BBXwmpRiw1zBpZhI7LmD1VzLxQuElTvR5HvB7N/U5K1OiXjHF5OjGtL2QjN8PIrCyU7G0G8B+WmI/DkUuCwHkKwPuHiYkS2KuN',
-    'Kwhola Sothar':
-        'BBYg6nR89uzBnK+HnHzS9MxQyHvIrGjFlCzOsDrQ4W8DqN/BmQjP6ciLmOoIgQpD8U0OnQ6G7VyO3boK7EkFtJvQ1H4EUmX4DuK/ItH',
-    'Marshyangdi':
-        'BBoB4zrRiz0zBhHqCzN5U9ftJxGrMvR1NCxOpQpdhLnMwC9O5FlRrL1LkIvD9LnJ6CjSwS4H3DtKTlX2H3EuJwQ8EjF4bnK8VxOsQ5GyMgG0K4OhH6N4EiXW+c0B8OqJiL8TwEsE4LpGoMjYsSkH4ZhBkLmHuLxDsJ5P+J',
-  },
-  'Manang': {
-    'Chame': 'BBMqisRmiuzB+FzHwFrwByIvByEwIkcoRsL6KjMkJnE6YzM4IrEtGtQvE',
-    'Naraphu':
-        'BBwB4u0R2nszBrFqXZkUwEkH/P0U7FsP+FkN9H0HiDoL1GkVzO/EciL9G0K9L/BlFqI7OvFwB9I/VhD7C5NpNjB5DzQ3I5WrR1E/GjXpQpVtV3GjL0CqKhQmR9QyVxDsMpaiU/UoNiBoD1PvF1S6N1ViSNkGqHgMjHqOwPuL4CP2MwI0K+G7CiNiHjEgM+EmHjKuS',
-    'Nashong':
-        'BBpB88xR8kxzBrLsPnKmTzK/E7L2KnCwL7MnE1P+E9B6G/N+F5YgFxSb3CuHhZgHhRxBlHtLiBjLjH3ZkYrSqGnMrE3L7TvEpJhLzB7OV9c3EhXuJvN+O0M2a8O0M3IoE5YoX3LuV4GqQqVgHkXsR2E4I6W6D0QqNkB8C6NgWiD',
-    'Neshang':
-        'BBoB8wyRkipzB/LkHjGpHhSO5N2VwF2SnD2PnNhBhUgVrMqaxVyDvb2cvnB3XxEvIyF1OoRxQRjgBmPtPkGxSkJ7K1B9OgNjQrChMqDzjBkEpIkXxNmUrZ0GjOkN0O+HgUzCkMkN+QkP6CsGgHmDuQ6PyFiKrCoF+NrKsF3C+R',
-  },
-  'Mustang': {
-    'Barhagaun Muktichhetra':
-        'BB5Bso3RkmhzBpJuLA2O5D6anIyQyHoMzB2N7R0YtJ4C5HsL7V3DOgS0G6NqD6VxDyQrJyExIoPvLkB3S+P7NibvJ+CzQpUgJzK4C9RsKrFnF9NhKsC5PxFlDtQ5QjKsInU+H5BuL3mByElCFvRwEvbmTzJyN0B6D3P1JpfpOiB9IjHhB/XtPtboE7MtD9S0QnEmRgBnBmKsIgFoNhE0TmSgdwf8RmIjC0KmQ+E4S3C',
-    'Dalome':
-        'BCkCul7Ru2jzBjWoarLsClMkM3Qma5FkT/S2a9TsI0JqN6wBieK2OjJgOjNwFnFoJrQyI1MsRuMuNrJyajVoC4DqV5JiPrPAxJnFnNuB1L7GjatG9OmBsFpXtRlSkKtS3EhH+DjMhNhH9G8CvIzKrBrS6Nhb4S9PwLjByInPsJxEyDxQpD5VzG5NN/R8V4D6HpLuJ5C8RzY0B1NxHnMoIxQ6D5aA1OyK1LuKwHiLC8IhK6H2IvBkNuJkBuC+R8OtCqFnI4M1DsRdsC+LgX2WD54E6qKAAAG',
-    'Gharapjhong':
-        'BBgByxxR2vmzB5RzQ0CjM9H/TjNzOnE1NqCpOtHlFsD3M/FxFpD5TsM5N6DhP6J+QkNwNoDjO6TnL8R9OoEhVoHiCIqX+IkHqOhB2Jqf5D4PxNzBlT0JvEwbGwRxEmCtL4mB9H6B',
-    'Lomanthang':
-        'BBrBw/3RqoszBsJxatMtN2MrRsQxIoFnJkNvFkJ/NJ1O5wBhezJpN+TrIgT1a6FjT4QlamMjMsLrCkWnaK+UiH4MkL9E8R6LvC2WiHsEoKuetFqb4IoKlKuV9IjHlHwRuH0Q5JqR8F6JjNyWxP9F3HoSe0XV2OlO/BtMtWnoB6HnDmP9MW',
-    'Thasang':
-        'BBe+jwRkvjzBrO3D9J/O5PtMpXzIjG1F6D/MwKthBuCrM4gB5FmGxKoU1JkOgGgWuNqPlD8Krc+E0FnE8MuPubtGrBnEiV7R+O5ToLnDkOjNvN5J9Q5DiPrM6NqD6TgGyF',
-  },
-  'Myagdi': {
-    'Beni':
-        'BBPimqRingzBnVVjPqRjLqD0LpY1IlRuHhF+DpYmTrFmH2LmKmBkDlJqG4RgGrDkFsP',
-    'Annapurna':
-        'BBlB0wqRu1gzBqLqFoOX8J+KqDjNsf5OweoK8OzJyIyJvKuhB5DgNkG2FqX0I6PuM+JgPwHrBqOqKpCqOoE2NzGkOlUsZlX+L1O9mBnQrBvT4M5ItNtY9VzKpKpPpL7K3CrLkJtF8HwCjsBtQ1FzN1JuKzSmJzE',
-    'Dhawalagiri':
-        'BByBqqwR4s/yBwF1WrHxGlV3HjWpOjbrCjMlNpO+QlSkInGmMoB8N7NlExEnIwJ5V9IpG/C3QgGpFqB5Q5XyFkWhd8KxNlKtHgDxMsL/F+BvMiL5VlDjE4PlJsMuGsBtLgUjc8TsDqSmUNqI6NyPuBrR2SmJqSmB6GkMhN4dkKgiBvCmTiSyQvB2NoHmbuL0UzFmd3GwMpPmD/VtN',
-    'Malika':
-        'BBWw+rRu09yBxVqFtDlKvR/B6E/M9E7H9XnF4HlNQxNxK3S4InQmPjC2O2IqQzOoKkRiHtCkKmM7KyNjWid6XxFpB6Q/FqF',
-    'Mangala':
-        'BBS84qR6g/yB/FsDpG3RjDmJlKlBlH1L5SuF2EvcoHrLoKnIQzQ+XoF+E8H5EgNwRgC0EwRpG4CnBoP',
-    'Raghuganga':
-        'BBgBqqwR4s/yBnU2JlGyK3gB6FtGwG3K7C1I6IvenKrf6OpDkN7J9K5UXpPlS+X7WjFrP2J3NoBnP+NzO4MX+IqGvJ6VyEoI8NmEnB7NoGlMmSjIqO9QkMmNkbsCkWqOmV4HsHyG',
-  },
-  'Nawalpur': {
-    'Devchuli': 'BBMoq+QqxtzB5KmGpcpJjX+HtEhiBnEhK4IvO6UzD6MtHgUiG8JkPkFqY',
-    'Gaidakot':
-        'BBR08+QqvuzB3G8ItX+HyDqVsN2EK+OlK2P3cuI7F1BhOlf2NrSxPnf9GxYkX9HqcqJ4KlGqQ8M',
-    'Kawasoti':
-        'BBW6h8QgrszB/QlO/GjY1O5J9GwCpOrJoFtQ0J8BsS9K+KuDpCuImO4CoCmI+OckHqBtBqNyP6C+N9D2JiUpOpD5MuH5U0D',
-    'Madhya Bindu':
-        'BBZqx9Q2knzBlHkN0C8MzJkLvD6Q7SsGhSmU1I1BCuK9KtDrS+KzJ7BsBhKxPlY8MjNrElRzD9cgPhHmGqEoNtD2NsC0MjF0FkF0ShPqQ4E',
-    'Binayi Tribeni':
-        'CBeuy9Q8/mzBzb1MzSiPzFjFzMkF1NrCnNuDlGpEpJ4GtJhFtB7N1HpIwT5T1ErIsUB6CjSoK/K8JkJ+ZmEqGl2B7GpS8MsFyWxNrFmdkHwNqCmW3IkVXmQgQTA+XBI1zE6I7KsJlO0C0GuL5I0C7KrbuQtHgQxF',
-    'Bulingtar':
-        'BBU08+QqvuzBjCjRnQ7MuGrTjFpY7JjPmM5WiPxDsJhI6I6F6QOpEuKwB4Q0CqLDwSzGyByCuNpE8OR+Y/KqI',
-    'Bungdikali':
-        'BBRmggR+6qzB7Z7GrJiIhPyDqBhMvGjLoD5P8G1O9IjLmEhM+JuBuSmPkO3C4JkFzE4P6MoP9C0O',
-    'Hupsekot':
-        'BBb8t+Q2/qzB7MqXxN1PjBzH9N+DxP5CuBpNjHpB9ObnClIlO3CoC7S2I2BiSlU8SrGwD5Q0JjLzC7MmHjN6K+MuCyZwP0HlEiM+IkL7G2OnD6PwGkL',
-  },
-  'Parbat': {
-    'Kushma':
-        'BBS8qnRg2kzB9KuBjItShK3M2DvWsJhc0R3BwR1jBiG2M4KyW3JsJ0B4J1G8P9O7GsGyIrDuKnNRO0Z',
-    'Phalebas':
-        'BBQ+ymR27jzBnMiGpPhEmB9RlMnOyBxcrT5ES3SiH1JsG6M0J4FuPFyWgNmBgT9H2P1DwW',
-    'Bihadi': 'BBL47kR6ohzBzQvEjI+JpTlDvHxE5FnI+OhS+F1LgO8F8ImMiUkN',
-    'Jaljala': 'BBKy1pRq+hzBnnB4CpKjUClP0dhGkPpRoVW0KuOzGmVlJ0E',
-    'Mahashila': 'BBLsslRw9izBpG1BzJ+OpO3TzDlWpJmHvEpNkKxU2TqBC2UsT6E',
-    'Modi':
-        'BBX8qnRg2kzB1DpKNzZoNSsDtKrGxI+O8G2G7PlD1GwLvO2gBduUkLuQ2FsB2G3O+L5Q4ExN+MxLuRlK9HlFgIvGzFnI4V/FgO',
-    'Paiyu':
-        'BBPujjRsjhzBgNaX8GgToF/FsKwEqNqJlH0DmWoDsHvNiClKjN3P5DxGzSiE/K5H3G',
-  },
-  'Syangja': {
-    'Bhirkot':
-        'BBPkqkRk1kzBpO2JhJoFlE6dpL9QxGhZerO6IhLyFtSvCpNgR9JsJ2L+KtCD6M1N4L',
-    'Chapakot':
-        'BBYqpiRo9lzBnH4JzIrB9EkQ1PmB2HiGlBoZ/M4FzN/M/GtJmL5U/B7ShJtK0F7P1C5H8SpU8EtMqK+H6GsQpEmPvB2FoSvCI0I4MmF',
-    'Galyang':
-        'BBb2kjR8hizBnKe+D2I7MnChTgR2E4MgCmBlD2KlF6VvKCpG9LvLCAvO0JhL1B1WqGpDzP9M7B1MyJrB8J3JoH8BsPtH+M9OkGgMoJgB9DiO6H4G',
-    'Putalibazar':
-        'BBW6mkRounzBmE1MvJlfBlLtRxC4CxQiJnFuXlN0IkJwNuEjDqHsDuU6IjLvB4dM2X6EiDrDqT4CiMnI8N3IuBrW5crDqG',
-    'Walling':
-        'BBa4njR86lzB1TmBhJyEiEjN3MlFHzInSwCwB1FqElPrDxKwKBmF5VmD1K/BlB1E3MiT/Q8MoC9D1IoKdoF0N4RiFlSkKwCqNxFuS5IiLdsO',
-    'Aandhikhola':
-        'BBRq/mRwhlzBhXtE2C+IpSuUlGzK5IkLrDtUwEzJpH7ZsKpG8BxJ+I0BnB+IqPiEoMhGuEqP+OoO',
-    'Arjunchaupari':
-        'BBO04lR40jzB9IzB7ByJrKqGqH8Z7OjCzIjJjJwDjJxe2N3L4FpHgIoH0J9OwS+P',
-    'Biruwa':
-        'BBT6mkRounzBhJmEpX1L5DmHnSjE9F1J9CrMrGqQpcjN2PlB+EjQ0IsBiDrJ+OxB4bSoI/HsJyCCmLwJmf',
-    'Harinas':
-        'BBTi9gRu7nzBoOlFmBnZ0UiHsGpQ+CsM+F2JoSkE6DlHqX2LnKmN8F0R9GQnKoW3DxQxJ3PrNMvNzI/X+G',
-    'Kaligandaki':
-        'BBP6uiR4wgzBxHoO9VuG/E1LkEzPxBxWnC/IoI5ElJpUqHzOfzM4N6NiRsOpLqXgIiR',
-    'Phedikhola': 'BBM46lRkknzBtJkBL1XmDlR6WrW1C9IsQoBsJ6HvBwInLsLM6VpQuU',
-  },
-  'Tanahun': {
-    'Bhanu':
-        'BBTygiR+7wzBsLxHqL1nBwM1H+OwTgDvN8GF2D7P4RtByK4QsMjB6DqLM8WhQge7N0NpPwHxDzG7d/FjLtS',
-    'Bhimad':
-        'BBSigjR8pqzBhQ9C3Jsb4GwL1FkJhP/VuDnL/P3SmMrE7PrH4FvgBzOvS8ImCgY9GwN0IsNLyJ4P0FwhB',
-    'Byas':
-        'BBiBoolR+ovzB1LqBxK3Q3RuB1D8P7GG/CwN9OvT7OoPjLoFsBtJ3H7F7HoK1LKjOtFvKgD1H/FsGvNyRpIkC/JgNpNuOkC+CvGzKhI+BpKsSqFkQvS0JmB+M9YmgByKGkTrL4DsHsX8U0lB',
-    'Shuklagandaki':
-        'BBa23kR2tszBlVlHzFhI6G1MnQlGgCvLrN7E4BxH3J3JgK9QpE/LwJlOmD/M+GP7FzRuIjM8KnF+DoSsDpGoW6d/F4DlOuXzDsMwUwW1CsYzFyI',
-    'Aanbu Khaireni':
-        'BBV2r/QmwxzBsGgIuCpTkJ+DyMrZ+SmQ1DiIuL+IsDvP8MqJ4DgL5J+M5HiLzBiT3G8FjU+BvH+I7NnC1CvVlJ3ByE7gB',
-    'Bandipur':
-        'BBXygiR+7wzBvIqW5PjRrDwPtL9I2DhI9SlQxMsZ3DzMwFtO8K/KV9N+FvI2HgGwK/CkOuF2LJ8HnK4H8FrBuJwOSpGyF/F4U',
-    'Devghat':
-        'BBZwvgRqsvzB9FwIW+N7KgL7KkXtCqTpLhWxNrBzH6FhHyRlI8CkD5NrJhH3BrKmL/CmK1PJ9OrN1ExDpVuX9HsEzIuR8CoKzH+Q6JoKyQ',
-    'Ghiring':
-        'BBUs6hRulrzB3M9CnOwD1S7CU6J1KB8HhoB5MnPoE3C/C1RkDtOsGnCoD1eoK9EuLgcsM8N3FwgB8PsHlMsEgQ4S',
-    'Myagde':
-        'BBOu9jR4gszBhS2bzJlBjQwSrSpFqD7pBuK3Q3GvL4Jrb6RsEoG8PsN8E/BwLoQmG',
-    'Rishing':
-        'BBYkxgRmlvzBnKxQ1PnHClcqE7OxCtN0GxBEvSzCpLChWuFuN2KCT5J2S8CoOvD4M+C+MwR3E0HnFm0B0KiI9CwGtOjC/MqNjCgK',
+  'Achham': {
+    'Bannigadhi Jayagadh': 'BBKwx6Ri00xB/OwP3MHB99BlEtEiI9G6dlB8CoKjGHlDuK',
+    'Chaurpati': 'BBZ+q8R83wxB7N1JnNgCxJ6Y7LjCFoV7PjJ1EuDaiNhR6ExN7HiDxDnHrQnR9UnHtUsWnZ4etMmB1J0FhC+BwXwO2boJ8D+G1K2IuB4X+M',
+    'Dhakari': 'BBRwp3R09yxB1Ym2BzLZhWxTlR1EtNxSqH7L1FpK6Fle6gBxyBuG0BpCsIsKwPyJkE8KtDasd6JuL',
+    'Kamal Bazar': 'BBQk64R8m1xB1TsCtQ8MoD2HzQ7BtLoQrKjH0JvZ/K3ciYlxBqKPsK2d8ayBrF8ToH6I3E4E',
+    'Mangalsen': 'BBU415Ry90xBpgBxH0DzZ7axBrK1dpKQlDrZ5JtLZrdmaxO+JwEyC9LwK7BwFgUwYolBhD0D0I4D6EuOjEoNyEwF',
+    'Mellekh': 'BBOi77R+j2xBhZ3PtS/lBoF/Mble+MrF6FgKsMjXmXwU4EuUmJ6IzZmcK0HqL4J',
+    'Panchdebal Binayak': 'BBSm92Rms2xBuLnQ0Q8BnD1HqWlQmS0BQ0XgLmD4C6GhI4IkS0QqCgPnNsHUgQ9J0G1G+SlW5iB7HpZ',
+    'Ramaroshan': 'BBSk55Ryx3xBpC/OjSzQiI3I3C5G/KlDD7W1IvKkMpG4e0MuQhQwQkgBiZ4PyF+R7SsgBtLgDtH7HvQhD',
+    'Sanphebagar': 'BBd0p8RyozxBtWhY7N2XtExKzGuF3DlL9ckChI+G4DpO5FhNgXhCZhN2EtD8PkJMvV2LsC0FrVmRtFsOoKnGsS2OsB4BqM2IrL6JmBjEubmH7CsDoHnOwUxGtD',
+    'Turmakhand': 'BBe6y2Ril2xB1H3DrL6JtHpBjG2F2BuG/LcpH4N9S0MvF+Nz5B+d9KsOrPf1DtkBqHuJgMnMiOuEuLnPqM5EsH/Q8ZUwMhfrNjZzB3QyK/G8LvZqQ2FiWyTmSwDiFiV',
   },
   'Arghakhanchi': {
-    'Bhumikasthan':
-        'BBYovjRuw2yBpErChRxI1CwMrHN1G2OjM+NlI7DtMsH/B7U/ExFwF3PjF9P+JzLuVuByNxL8Lrb0FiMqK+B0SzH8W6RrJkB7IyL5JsgB',
-    'Sandhikharka':
-        'BBZyujRyv4yBtRf9NoQhBqHpTsFsC/dxQvF3C8KvN0FnE3PsIrDrIrI8M/QsD2FuMrHmI8DkM9N2G1OsHO2CvMiRyI4E6IP2T1G+KwK+O',
-    'Shitaganga':
-        'BBxBsrhRyr1yBzJgMkF+PvF4PqEsSjI8OtFwEsIsIrIsDAuJtNmI1DwKvIgBhL5IhM4IkHiIzM+Q7IvCrDoIhV3HkHjMpF3ZwEpb+EjayIjE1P/QXvIuKzDkPxOkMrC7OjOwB3W/GnTsFrRxBvaoD1sBkR5Y4IuGoDiN0TkP4TsMvC2OgFqN7E8F+H8KnG6M6QgRpD2b8D8K',
-    'Chhatradev':
-        'BBS28hR+56yBjFvX7FpOmDrH+MxGqMBiBpH+NnQuRgBwF4JiN+F0R5JrYkdzPgCtXuN6BqFpN6KG8M',
-    'Malarani':
-        'BBV2wkR6y4yBxPuMhN9FvF3JuEjLvK9O2G9KQ1ToIlL6JrgB8IxLiYmErIgQgHoNrDuLjJ8EqCoP7KmCsE0OrIbpG0T',
-    'Panini':
-        'BBW66hRwr5yBjJ0I8FqO+G8V7QlFqBqQ1KvGzNmHpHuNvf9akDvYtEnQjHhIiM3IiL6IwIf2DvK2MnHgFsFwNzF4C7KyQwF',
+    'Bhumikasthan': 'BBdovjRuw2yBF5JhHiIjOlJ9B2L1KyBvBmKnGgBvIoQzH/D7FyF8E6D9KrBhI9awF3PpFzP2HvCkC5JuV+BqN1K+Jvd+HkNsI4BiRhJ0a4TlKiBe2HhJ2D5JsgB',
+    'Chhatradev': 'BBO28hR+56yBnIrOWjf+YlGoQzYoQ+B6M0PsW5LrXmfvmBoOoBwGrN+KE6MhIgB',
+    'Malarani': 'BBY2wkR6y4yBxVoMxMvPuEjLvK9O6MtWhGzO2I3E6JrgB2IhDPvIiKjBgE0FmLGnJ+QmB8JsGqChBqM1L8CsCgQ7KmCyEuOvJA9F0P',
+    'Panini': 'BBY66hRwr5yBjJ0IwFmG3CoRiK8MtQhGMuRjL1GpVuUrJjIHxKjF+F3O1MuC/ZxLpYkDlG+IxCuR6I6FvL2MnHgFsF0N3F0C3KqUyF',
+    'Sandhikharka': 'BBbyujRyv4yBpQ9BlQ0YnToF0F7e5TzEzC4KzN4FnE3PsIrDzIpMkNhNiLqHqEI7E5DqFtFmI8DwInQoGfwBlK2KxB+B1LkOmJiHhIoGuY5MuWwK+O',
+    'Shitaganga': 'BB1BsrhRyr1yBjC6J1HwCqF0PvF4PqEsSjI8O1FS0IqMrIsDH8JlN4H5FwLtR5I9IyCjDmG2G+L3JkMpLxB5EqIzTxHwH9M3F/YqJ3kBvErD2EvNyIjEpHlCjJrXshB3W0GoCrRvO2BrW/GnT6FrTGj+BwHpDlHlE8RrY2HyE4NogBiFzJ0B0K8GnC0Q6L5CiPoF+LnF+FkIqLnG+M6QgRvDucmE6J',
   },
-  'Banke': {
-    'Nepalgunj':
-        'BBWonlRu37xB9J1LpRSrQvE1G0G1LlFxI+DzG/IgPnGsF9HlRjNmO9YmMjB4G+F2K9CpEmRoQ4IwH+B4JiFzEiJ+JkFiEkN',
-    'Kohalpur':
-        'BBWmooRkn+xB5PzUxU7GxGxPnThQ9ZtIxI/MkIvIrCtKkK3GjBnLqJS9D1KydsHgF/B+BwTsQ2XoYqGmYkPxNggBjMqDqF8H',
-    'Baijanath':
-        'BBXghpRst8xBnY/OnYpGrQ1X9BvT/EgClbxHzC1SsJwHgL/FuC/I3TthB0N1GyOiN+C+N0UuRoE0NkN4WoHrE6I+H/DuF8VmJyH6P',
-    'Duduwa':
-        'BBXgpiRm38xB7I6HvI5Eid1kBwDpiB+EtKqRoNrF+H/OoG0GgJyI9D2LmF2GzGsQwEqRR2NmSxUoL3TjI5HqM7SYxHjKnJ8C+CiP',
-    'Janaki':
-        'BBP8tlRol7xBnMtJ0EhJ3JhFvH9BnQ3IqElR1K+C5ShF+RxegM0UkMtI8B2MwTwMsMsmB',
-    'Khajura':
-        'BBQ29lRkn6xB8BiL7NxE1GjXvTvM7B1MjMuI/LzUyJvU6K4LyDvI0gBjHkcs0BtCgJ/KgGrJvH',
-    'Narainapur':
-        'BBRgshRk6gyB3d5W7JS1BrZmLlM6RhcKnK0X5dwI6EiEtIiIsIjC8VsQkP9J2SEwN1SsTtJygB',
-    'Rapti Sonari':
-        'BBrBmooRkn+xBpCoJpOmNlG1C6C+NrKmY5KkDrPkdpN0P1T4MtTS1Rg3B3QqiBQyGtOqN7RjFna8DNnLkGxZvHpGE9iBxRCmE99B+EjGuJxgB2SrTDvN+J1SrQjPkC7V8N/I9ChPoJ7CyHkK8SX6HpM4TkIyUnLiF0F+ZuIoTiQyGyPyU8G',
-  },
-  'Bardiya': {
-    'Bansgadhi':
-        'CBMgvpRgn7xBoJoNhBmKqMgByClL8NQhM+WzE8VrQ1JnThEyB1J4LpRBZlnC10FmJ0HsPyB0PsVwUmLzGwb1F2K8DoNtHiExD4QoK6O1FsV9IzHlHiElIpPvJzHQnNzRnRwMnM/KpRpClM0DnN2HxBlHnOjFpR',
-    'Barbardiya':
-        'BBXwkpRuz3xBhCxFvUlLzPrVrPxBlJzHsHxE8D7V4UzGiC9XuHrT0GkH8ZkGmQzH6M2J2S4Q0F+X1IhD9R2JnJsWrPmKkEoMpDmK',
-    'Gulariya':
-        'BBT6unRqwzxB6SkM2N1FzBmOtJwPgC2LzViJjDiL3IxB5D2O3XKuBlWrLoBlKzDrBhXgFhE2M1OGwK4RN',
-    'Madhuwan':
-        'BBRkgqRu8zxBrQsHvTnDlK/ItQ8E5SjM6hB5dqWkBuW9OgE3F8NgIiW9CHkN+I4IvH4IpTtB7GyT',
-    'Rajapur': 'BBNu9qR6iyxBlOkE3PlNkN5mC2O9M2S2Q0L+CyDuMgS0R6DgO7X6M7K7I9T+I',
-    'Thakurbaba':
-        'BBSyirR080xBxN3R9OhE9FrKmM1H8GxTqTuBwH3I/HpO6Y8RxJ6B4KwD8O+P6OkKwEoT3XnC1IzClU8H',
-    'Badhaiyatal':
-        'BBX2nkRm+3xB+H5QqWiDiO7UiMhC+I7WsZhCqC3M4IyBJmKpO0JkFqRmHoO1HyBzDoNqCmMgLqRjQmLlJrUxV/ClIpPrYiDnMoN',
-    'Geruwa':
-        'BBPmvuRq9yxBhWP/K1IhXhF7NlK7FiF5W1LlH0GnMhEiDnNgU1IoMmJsZ3NqNyEiW+W',
-  },
-  'Dang': {
-    'Ghorahi':
-        'BBkBq2kRmntyBrQ7PpGrfnM8OhCodnPgK5FiC7O5IpMuJ3T5Q/BzQpOiG0I7NuFjbpK7KiLlS6HriB0StqB4RiOkE7JyLkJsDpNwSgCiKyRoDyQmYzCmHsFe0QkRoFzIyajGiHqLiLtFwIhF+OmB6NrLsD',
-    'Tulsipur':
-        'BBiBq8lRo/pyBjRnFdzQlHrFlY0CnDxQhKxRvS/BrDqNxLjJjE8J3RhOkDvO4QvXhBhHwL1boLmHsE5HiGiLgN5T0XyemJyBDzcyD6HqUmLqZ2G0X9CyGyT7CmQ9MoHIsPhVuSJ8PpLuB',
-    'Lamahi':
-        'BBkBykjR45lyBvL2biBiH3QwX7EqU7Q0kB5HsiBhLmSqK8KtFkbzI8NqOhGkEwEhG6mB1etC7VpJNlVuDjO1D9NmGvRvElNiPlKwErSsDjPDxLiJdbxQgGlawNtRsF5SiGxFnI7GyN/IgU7X8LlE0UqE',
-    'Babai':
-        'BBRo5nRq8kyBrKLhN/J/cvB5KuHnFtR/RvTxW1LgPhpBuTR6L7Ggf0JoZmSvCsK2NgU7EsU3IyG',
-    'Bangalachuli':
-        'BBb46gR+1wyB8G/EwHloBxDtCiDjwB+EzVwTmQqMtJ8O6I6FhCoP/JiCndoM7OqGsfyQiPP0HhLwK/OkmBrCyU9KnNlKNpOsb9J2DsBkK5ImChMhJrB+H',
-    'Dangisharan':
-        'BBS4qlRk3lyBlFuNwC+LlJxBzXxe/M6ThGhLrE6HnLlH0MlVyHhN+UpuBmHR4R6QtHkOwCmXqLDgSwL',
-    'Gadhawa':
-        'BBdk0/QqptyBnI0FpBocoF0gBhC4YtRiaqGkExR8FFzNxB9f9J1EtBnRjNqG7LTlDrwBjQl2B+CtPrI7fkZ4CqCyJqNjBqIgJ6FhF2MyDsMpFkTdiF4KlGwR2D+N',
-    'Rajpur':
-        'BBmB61/Q++qyBhgB2I1MxD5FiFpI/IpNkBpCxJjZ3CiBtKgPrd+YzV4SvnBuX/f0G7N8N3NuO5hB/E1CsE3QwS9TwR3MqRrCD+iBwHqGjGyZOoLsOK/T8XxNgJoI8GhGyFrF6SvNuR/FmacyQhJeEyLrDkPvEsS',
-    'Rapti':
-        'BBR46gR+1wyBlPqWzDnLvO1HnDhN3ItGsC/ZnFzgBqBncoIzFkDyJuTqF2b4B2C+LvDugByDuCvHmoB',
-    'Shantinagar':
-        'BBR2wnRwqmyBxXiDpZ1GhV3PoU/M/RvLpLEvClXyI3NgN0MoFuR6KtHgdwBiNgKsKMrF4RkEwL',
-  },
-  'Gulmi': {
-    'Musikot':
-        'BBasimRoz8yBtE3MyBxRvD4H7aiE/EtQ+K9DJpTrH9HsHtP8DwDqQtH0MkBiblPG5Q8J8E6MzBa1QmJ+FzMwSlQoL5EoLzQ6NqGoVrF+N+BqU',
-    'Resunga':
-        'BBSuklRmv7yBnWnMwC5JxOrG7K0E/BjH7YrFhJ7IuXtN0P/BgP/RoRa3CmSyKC7GsJoIiLtEiJsH+H',
-    'Chandrakot':
-        'BBVgklRk3+yBzTiK9C9LqIlLnHlK0J3VrHlRjLqD9L5I0C7K8JzM+SzGuMyNuWlGwD3HxByR4GmQta8UyE+VtBuM9GzC',
-    'Chhatrakot':
-        'BBS25jRuz8yBrIiR1ItEhDvTvKI5OwFjRoGyGrNnFvQrORxD5L2GldwY8TsP2ByJqKrBgIqRlDyJwJ',
-    'Dhurkot':
-        'BBU+pmR8w3yBlJyM5S+J6EsJjM4FyC+KnO0FJ1FvOoB0GlN5QjRqGzTsIcrEzO8KlCpCnPkJ7EmFyiBkVtKkST',
-    'Gulmi Durbar':
-        'BBSk8kRqw7yB9V0LzHqMtC9IxJvJpRmDsB/HxJpKrP1B7B7SuLrKmSkC6PsGgCkH8KzEyOsGvC6JoWoM',
-    'Isma':
-        'BBT8jlR2k6yBpI1H8GrJxKB4DrKyN3HxC9KkM3F5ErJqSnI1B8SuTqD2IuG4N3CoE4K7J7EF6QhbmPzMjB',
-    'Kali Gandaki':
-        'BBUwtiR46/yBwNxJ0JuF0DpJiM9HJjJoSvOkKuT0ThK4GgI5FwQO0NpOkFzKyLjInM9RKhBmK3N8QnJfpOxQ',
-    'Madane':
-        'BBRkunR0z2yBxN2PxNXhJqOO3MjSUjVuK/D1Y0CzTuJiFyOxDqGpK2JpCkRqC8K7FiNoCwBuM',
-    'Malika':
-        'BBRwjoRs34yBlJ9FZ2Q5LPnFzI3N4C1ItGtTpDsEvdwLnGyE1LyNYyN1PwO8JtD+ZkM4M/HyH',
-    'Ruru': 'BBL+qiRmr+yBlV9RhF3Q+ClMyLhBiN9I6OvFwKHiDwT2IuEzN4W',
-    'Satyawoti':
-        'BBSutkRo1+yBlHvHnSwOKkJhM+HzDqJzJtFvNyJ/HhRqLpX7FlH4Y9PgW5nB+L6IkLpDsHmRzJ4VoHmK',
-  },
-  'Kapilvastu': {
-    'Banganga':
-        'BBWu66Qos5yB1CpK2HzP9FpCmK9WuRUJvPmMzK6SoNnErZiKgEoWxDgL3G8PqGiBiO9EkavEqbJ6PtYuH7boDlPxEzX4G',
-    'Buddhabhumi':
-        'BBmB4q+Quz2yB7PpG/K4GnWyDhK/DoEsZpJlEvOvPtF9P1MyH1KxCvOjUVlKtOjFctNkPdqDhM+F2DyLvJ1CjL3I3CX7KsKxHD0K6O6FyH3MsZA8GuGuYrEmI1HgcyCtCsMgHoTvB4W8OkOjMsCjPyOtK0D',
-    'Kapilvastu':
-        'BBXsj7Q663yB5PhOtQ7B9I+HhTrOkJhUvK3LsEnL9MF8CzQiL8D0D9NkL1EyIwDbuNuOkFWmKwOkU2KyC2MxHuKsWlM0KKwP',
-    'Krishnanagar':
-        'BBPou6QwxyyBvQ5E7EgRtIiFhN7CuBnlBtDrT4DrpB2MyI6P/GgJ2EtF+P+F+O/H0Q2NG',
-    'Maharajganj':
-        'BBWui6Qq90yBxIvD3K+EjGjG6DrM3ImG3V7H8GhKiPvJZ9WgN2CuIhF8E/QkQwE0H+PiJ+JzDyR4I4C2CkLxLwJ9F1DpDiM',
-    'Shivaraj':
-        'BBX23+Q6qzyB/bxClI2HtYsE7GtGrZAxH4M5O5F9O1TnHzPyC1d0UsH8erKmO1Osb1LyGlHmQhCwLtPYodG0N8KC7C0iByBwa',
-    'Bijayanagar':
-        'BBV6w6Q6zxyB1NFgIzQ9F9OyFxO0QqE2L3L4TkB0OtPoPmDuLjI4L+BiUzHuBoRsHuGjIsQlQiCxGmHrb2LlO2O7esK',
-    'Mayadevi':
-        'BBQy96Qqj4yB/LlB/b0HzItFzX6H5KwHtE5hCqK4GgMsBwC7LmI4JC0MiTsO+I9HuQ8B6PiO',
-    'Shuddhodhan':
-        'BBRu66Qos5yB9QvJ/c8RnOrHhO8DvQhGtHwIhI7I8WnSyNnFWhH0X5H0IuFgczH4J+EkEoL1H0P',
-    'Yasodhara':
-        'BBRkn5Qo52yBnIlLvC8L/LrBjLjK1BhW4K5tB4V8H4IlG5DsM4F8FzD+NhL7D7C0Q+MGrEoLwK4L',
-  },
-  'Palpa': {
-    'Rampur':
-        'BBYohgRk0ozB7Q3K3LsDmHvL9K9gB4RjPwJ/PwB/PvQjMyM5VgP6BkBxMhGxIuT/ByMwF/Wqc2C6HzF8PiJuKgC8SlL6U6F8GhFqJ/B2a',
-    'Tansen':
-        'BBZmvhR6s/yBrKyI/KnBjLgV7K/F/I2HxF1FlN0KhLpYgBrSwIVmFlNsI9EqSiFuQlBwOzOyB9P+EiHgFvV0FiFjHsN2DoHpH0O4C8KyI8E',
-    'Baganaskali':
-        'BBSu9gRgvhzBtRuHjGrClMnT9M9GF7O2I7FyF2FgJ1H8KgGkL/UgLoBsKxIJ4GyByWjE0PqE6K7J4J',
-    'Mathagadhi':
-        'BBf6l/QurizB5OmJlG6MhKWnD0hB9ToE9BxPjHvNsFldxWyNtM3FmBvH8Q5SxBhUuHvGuDpP6CrF6KlIkMmKG2K2QH0F/J0M3CiOmDtCgL+M+GmMoTkGsCrTqMlI5C9HpR',
-    'Nisdi':
-        'BBayv9QgokzB0KB+KhJ8D0V2LW2NycvF2O6R2JjB6K1MsL+K+gBlHwL4LrD8Q4KmBiR7JvEjO4CtSlP/V/E7Fzd5K/MkFrZA9X/PUYlQ2G7L',
-    'Purbakhola':
-        'BBa4ugRm6jzB/K4BiGyIjByM/O5BxM6VwQkMvBgQvJgQ5LpN9JtDwF1O1Nxc1LV8BjI9GpR6C9YiKVmG5M6OlJ+I8IlC4L6C4V4K+CuFlUgZuF',
-    'Rainadevi Chhahara':
-        'BBb44hR+58yBtLdxSkP5T3CwGnQnNAxGjGuDvThZkF3OrBzO9GqExYnHzLS3OsRZsDnIsLuBmJrKsF4KjDwYwf+aqHtN0NlH0JmHGgWsOSoFwQ',
-    'Rambha':
-        'BBSu/gRm8jzB1Q/B6JlQ/YtFtFmU3K9C5C3VmC3LzJ3JsD9b+HqRkOpDge3NwCwN0P+MpGqD2B2WzJiL',
-    'Ribdikot':
-        'BBW6whRkp9yB/EwV9EhHxB+PvO0OrZgBzVvKhB7QvIsEoIpPvNrGwSzZjGzD+D5Q4TbtDwTyGkGoNAvGoQ6T4CySjPqGqD',
-    'Tinau':
-        'BBfii/Q4rgzBxN2CzFgK1QIF1KjMlK5KmI4J/c4Cpb5FnKgC7RsJvG1C3O0IpMzIhL6KzI4DrKoQqHwTnCrDmQkG0DvS0ZwNsGnIqPwIrEiB8QoJ8FrF2ElFmNvIWfsS',
-  },
-  'Parasi (Nawalparasi West)': {
-    'Bardaghat':
-        'BBVmq5QqmmzB5RvRqF5JxJ3GiClc7DlSqFvH8MS6SiM+D3MojByPkJtHkkBR3C0oB9ZlE7JjJnKgL5CkSrUC2EsIvT6T',
-    'Ramgram':
-        'BBS+g6Qo5izB5WehEsJnV1J+KzDwIrXlLrDkE9b6F9I8PhDwfgDoF+PrKiFrH2PsFsI3G4H4MiIHmG',
-    'Sunawal':
-        'BBX4r8Q61jzBjjBe1I1K5cpObvI4OsEIlG3MhI4G3HrFrIsH1PsKhF9GrG0BnS8a3DwLwQ0FZ+LySiSoCrB0M7Q6SlDkOuIiM',
-    'Palhinandan': 'BBJ6w4Q85izBlR+MtJGX9Iib56B8MnCpEwamLsDvIsX',
-    'Pratapapur': 'BBMwz4Q6jlzB1E2LtY/MrR0ErNzImT1pB6KsPmGrKgIwD6IzH4KqKlBiI',
-    'Sarawal':
-        'BBT2y4Qw2jzB7O6G/HvDlGsK5KrP0K3WY+IuJF2J1J4cuGiErJ0UtBmhBqT2HmKjJyHnjBxP9D4M5ShM7MR',
-    'Susta':
-        'BBR032Qw+kzBsN0IsRzEuYgN2E1LmKmHpF6J6RwRtH4N1FpO/PyFtQuHhFrQvXsCtBiUzRlJpJrR',
-  },
-  'Pyuthan': {
-    'Pyuthan':
-        'BBYmxmR8uxyB5G2SrH2FLyP2FqHlKqDtK4L1KI1R+biB1JxHjLSjN6JnGwFvNtQgDwIpMjFxF/NK6JnS5G9MwXxO+SqOyLjHoTkD',
-    'Sworgadwari':
-        'BBUismRw+wyBtNCxLkHnW3M5J1LMxL5JtSoLhJjY7IoO5kBuRnLuRxB4F7JuHyLoLiEgN4boBoP4L2I7CmX9QwP',
-    'Airawati':
-        'BBZ21jRyq0yBlL8JpK9BzFhM7LsbxNyL9RNqC/GxDtWiDrQqL3VsG5EoGxW4IoCsJxJsGyElClfgGlC6E+LkLiE8C6RlCwHuJ2InKgV8F2H',
-    'Gaumukhi':
-        'BBV8umRi51yBlI5K6D1YgJiBkEnU8FxFoG2M8M8I8GlFoMmNyPrCuXwLlIgmBtJ0E3PuR5LxBvPrKoG3QvBtMhNnC7K8F',
-    'Jhimaruk':
-        'BBQ8umRi51yB5OgBpGqKxOyDlN1F1DpOsI/P7BhNzE9S+J9E8CxR0c8BgSiTjEoU/IhB5D2Y',
-    'Mallarani':
-        'BBWg/kRsj1yB/VxKhTrOgF7R7F1HoK/UtJ1ImCvHI1U+LO2F7BpEyPgOJkFyFvIqMuQ/CvFwN5JoGRkNyHkLhB2JwJwN',
-    'Mandavi':
-        'BBQuskR8vxyBnXgKjLhE7JpKnC9gB5H1JqOrbmKO+KoNuC9U6Y+HnLiJ6JuSLyL6J2LlUgN',
-    'Naubahini':
-        'BBaospRkl1yB9YjNxPsCnMlN7GmF7M7InG1M7FyF/RhT5MvBqFrMmKpD1FpHMxPsH1F6G1S8G6GsJrF2P4W+KxCmNgZ2InBkTgV8QqEqIwIzBwY',
-    'Sarumarani':
-        'BBY8whRo/zyB3Q7QoG5M9H7K8E7F/EpNwC1OlRxL0J3R2R1EsMhDsB9HiMiJ6IlCrBjK+J1D6H2JmBqsBqCsUrGxErJyJ3InCnGyWrG6E',
-  },
-  'Rolpa': {
-    'Rolpa':
-        'CBT8krRkuuyB8E6a5N8HpU9D/LhD1czWuM3MtM5E6QhVnV1Q3F/H+L7E+ExWgSuKwE6HoamPgPqBoGiGrGgQBQxvC4mBlH6C+B6Q/D4L1DpQ1MxJxDtYtJvBlHtQ6PzcmH3NkF8U4MsD4JqMxImQSgL',
-    'Gangadev':
-        'BBU+htRyzqyBjT+JpPjBnUxIPzKhRyGDtM1LO9OlJuGjJG/PkJlM+IoBqN/IiE8PmL3ByIoOmTuJ8GzCyP8G',
-    'Lungri':
-        'BBUs+oRinzyBtM5K1IoBlN/Y9KyC1P3WrJsFnHnQ4YpE6J/KqEhNpBvNiQsH2K4LgOyD0W2QzL6DlM2M4LsU7D8S',
-    'Madi':
-        'BBV0rrRohtyBnGhG/OpBnalPnM7JiB/b6BzO8H1eoToM2LNEuMiRxGQ0KoUyIvG0H/CsSnc9GN4G0LsG8F2TjFmC',
-    'Paribartan':
-        'BBWsxsRsiuyB3O1QzUgXjJuFM7cmH1Q3GjOkFlC7F1TzLrGO3Goc+GgDrSgJ1J6MmDkT9JsKqRiJYwDqVrU2L1LghBsBkL',
-    'Runtigadhi':
-        'BBb8+nR4osyBlH4NzQqezGtC/ToKlGlLnLhEtHxL3F8JtRyB5F/D0N1UsLrDlB5NiF9OuFvIpLhLkGhHwFxWsMnZ0gBuGoGoN4J0FvK+VtM2UiWiHqFhG',
-    'Sunchhahari':
-        'BBhBs+oRinzyBuHrM8D7S3LrUmM1M0L5DzW1Q/NxDrDvHiGhKyN5H0IwD4RhKmN3CgT6EoPzH6J0M7cunBxGoPiG6HsRoH2EmJyZyMvBoGtOmE5L0RpTiBbwMlLgJ/O6CkB1IpIvI7QpE',
-    'Sunil Smriti':
-        'BBdmvoRmswyB3InJhQrHqBwNpEiN5JgL3YqEzF5HoB5R+QvP8ClX3L1InBnP5GxQgUnKmKgF8N2NyDuY2MyJ2DqQgE3L9B5QgVvG2HsKuQkLE+E3RiKzIvDxN6H',
-    'Thabang':
-        'BBVonsRqxyyBxZxM1ElJrRnHhG5HyGnP8ctnBnL7M7E5akJtF0U/W4O2QrBuKsT2SjJ6JiI6J6B8O7HGnHqPCqNjO4b',
-    'Tribeni':
-        'BBWi/pRw2pyBnIuHhEoY5B0OY+XhMpE9EyW9L8E/DkN3MrDrJ1uBpFiGhWhHuM1UgP9kB8X3SmPjF4B/GyNN6GiKkN2CM2P',
-  },
-  'Rukum East': {
-    'Bhoome':
-        'BBhBg2vRwquyBtQsE7EoTjJ2D9E6LnHjBG8Q7Vua7C6OhHkE3MimB/XiXBpxBkO3bBpNoHpP8HF5B7OhI5JkJ5JrT1SmKharBjL2L/gBuU9JmJuJnH+asNiJ5C4NqLsCwM8FwJtLwC2M',
-    'Putha Uttanganga':
-        'BBtB2yyRmwwyBtJ6JpKmB7IxKnOgCxI+PhLtBmBsMqKgQlH2OkMqJkEkU5PmHvI+W1J4F9FhHhOsB1HiPxYrR5K+FvH0OnRtHwPrcxBvHjXtBvH7LT3T4L7RsChNiHjE8C5O8VtaF7QoHkB+E5LkJ1D8EnTuQrEyNuRlCqHyJ6H6R9K8V5H2HmV+J6N',
-    'Sisne':
-        'BBqBs1yR0wwyBjRpV9J5N1HlV7V6H5R+KxJ5HmCpHhL/LzBxLzN/CvC1MvJuLvM7FpLrC6C3NrNhJoH9a8IgX4PHtBjMiJ3agKrU2LyCC4TxJ4UuQmcyLqJ+MOqD/FwR3CUjW4QW6GgMwSkV0J/D0M8GgO+OrK0PyH6NnG0FvFmX',
-  },
-  'Rupandehi': {
-    'Butwal':
-        'BBT4w9Qy2+yBlQiG3LMzI7OT/RlNQzSxLsSxN+GqCpD9f8GC6KiOgQ1D4LwIoOW/G6I2C4OrJwG/B8R',
-    'Devdaha':
-        'BBa6j6Q+zgzBoE3VzNqB2ElR8TQU0I+LwEqSjGuBmEkSjMBvIoL5M+PiEkNnIoFyGjCiU/ModMkM5K6OB+HhP3C9LxSzFavLvQ7a4DC2I',
-    'Lumbini Sanskritik':
-        'BCWm65Qgl7yBxHdxKmNtNjM7C2F5O9G/EjJ/M+C5BzH7NI5FxS4OhZiI8IuHvIwQiGiO7DoOsHgJ7CkH4I/G6KqHoFoCyNEzfpDmHjKvaNKmK',
-    'Sainamaina':
-        'BBVq+9Qy08yBjPoE3LvI/P2D7MtQ/GjPB3RiWhS3QrL8VhF8BhO8UtImU9BiC+IjHkM2DyIR4OoH0LxBuUjIkO5K0I',
-    'Siddharthanagar': 'BBK+i5Q+o+yB1OkGkC7tB2IpJ2SoU1G+E+J2M5B8JsHqPrQ/O',
-    'Tilottama':
-        'BBR6r8Q27+yBrGmSjSkMtBlEpSkG9LvETzIpNoBpC1TmFxTgJxIvE/OhKvByLjKqTwF2Y+MgRiE',
-    'Gaidahawa':
-        'BBWq+7Qkv7yBjPyG7J3G/R8CjQrDmBtJ5JP0ErMnCxNpHnFgH5KxHxLuUlMoPoG0T8SlU/B9B8JiSqBZyMwHyG9J0ImV3B',
-    'Kanchan':
-        'BBPw/7Q2i7yBnFzDlV4B+JzIvHxGaxMhSpB+B7JmUgCpBpJwT1FieoF9BiO7ViF4QsL',
-    'Kotahimai':
-        'BBQ624Qi28yBjTmGlEnJrMuHlG9EsCpO9H1NqO1EoBjXgN9CgFkJoTsKjGwT3D5LlD2G4BsP',
-    'Marchawari':
-        'BBNk91Qg66yBiL6E8LsI4F+T8MyI0IwDrCqO8DgLtKpB7H3LnIoChL5IjQ7W',
-    'Mayadevi':
-        'BBYuu6Qo07yB/P+LsIgJ1GyLrSjGiG0G5B+K6F0IiBsX5NjP2G9E1SnU1IqJiDvPxI1F3BrPmD1G4D6L4FhIlBxUuNkMyKlN4RelBuJ',
-    'Om Satiya':
-        'BBS8j6Qus/yBtJiT0NpBnE4VrLShEvJ6DvP1ElK7J1ThGoBEhZ8WkRrHpP6H1RgJ4M8GrCtFiShCgK',
-    'Rohini': 'BBM+35QwygzB/KuG9JpC5FkK1MuC4Dj0C2OjGU+ViGnB8J2T2EmK5DwP',
-    'Sammarimai': 'BBL8m3Q2+7yBhNxD3F9T7LrI9K9EoS5QqLkE0GtJ6FyS8NHS4e',
-    'Siyari':
-        'BBTk/6Qkr9yBxQvFxLkKiKwBwEgPxNuCtM3NxF3U6B9KhGzGsSkG2GxLrI/IqP/L+I8QiPwG0BgKgKmE/EiJ',
-    'Suddhodhan':
-        'BBRmn8Q+l8yBtFBqD+f9GpCrSyNzM9FoNpIgFhJ/JlEzB/JhPvGnI5QyHrFqPC8J4GwNnI0K0Q',
-  },
-  'Dailekh': {
-    'Aathbis':
-        'BBXyu3Rqh5xBhDnM5UxM5I/ZlQ2ClJoMCqJjP9IzCwFvMhYwKjH8GjN4JA0BzI8YjMuP2IoT0L6OuPoI2Z6JmQwSkblRLhI3G',
-    'Chamunda Bindrasaini':
-        'BBPit2Rki6xBvEyFjoB7LhS5O+DtGnExSpTlK0NhLEzG6N5L6MmYqLmOiM8DuG0UkM0M',
-    'Dullu':
-        'BBQ2t0Rks5xB1FqP8D2MzL1BhSqQnFqS5qBBvGtLoJxe2G9J1EtJ0LxOiY3LmUvHqTmKoEyS',
-    'Narayan':
-        'BBU+jzRii+xBzF5D9C3TjHvFiEjYxEjMC1UoQ1EySgK4GmKsPlB6MuQ6LzC6I4I+B8L/JwG7RtIjIsKnRxCrG9F',
-    'Bhagawatimai':
-        'BBVoi0R+r/xB5KhFpgBgGzTqOzLhSpHhBpH/U4BlH3N3NyH9MiLpE6HvR0MzC4FnNkMtD0BmQxD4MkHwF+C4ToPwQ8TqN',
-    'Bhairabi':
-        'BBW6g3R647xB5SxPtDnQ1PpC9RwJhWrIlKuD/MqNnMqFrGzEkFvSiSpQ0L2B7D1MsGtOiS6OkoB8L4C9F6U+CiKuG/D2I4Fqd',
-    'Dungeshwor':
-        'BBQijxR6w9xBlH5GD9K/J7KvBtO2O9VtC5X6NxC2M2FkH8NqUsF4D2ZjMuD3FoNzM0C5HwR',
-    'Gurans':
-        'BBcg3xRk76xB1M1F5NyCuC6X1O+VwBuOgK8KE+KmH6G5FqN/XtClTlSlKzDkNldmElRsIrHsDhQjCvPuJtFhB9IgL5JCrJ0J5NqQzKgE8T2OmB2EuJ1G+J',
-    'Mahabu':
-        'BBSu02Ruy8xBrD9GzW/EnMqK5IzI5L0C5MtQrPmBpM/O0K/DgNpNmKtDiWsI+RvJ2PqCuDoQ6SyPpH4H',
-    'Naumule':
-        'BBXoi0R+r/xBZ7PrczVgChOuNzbsG+FoRyCkIrK8RuIgKvG9B7LoMtK0WgFuH4UPiKtVyY9G2QJ8P+H2JqBiNvF0F/gBgDhPjT',
-    'Thantikandh':
-        'BBR0i3R8g6xBvC6DhTxCApKjMzMtGzUhM7D1LlP2C1FkP+IBpJmJnMmQ1C6Iga6UyMiDoM9C2P',
-  },
-  'Dolpa': {
-    'Thulibheri':
-        'BBmBmm4Ro21yBzT3BlIhG3P+EhFnZqG9NhahJ/b1IQgJjW5D7JwEhVwBjP5DkCnahEvKkFtM1E7P+ChQzGhLkClL1J5JqX/OwFlXoGzFkUmIiK4ayYwL8J5FsLwVoJsKzN2UhE0SmYoS2RF+Hkb8KoB4P8L0F+Q',
-    'Tripurasundari':
-        'BBdoj5R0swyBpUuJWqL/V6Q/F2sBvR6J9N5BlYnSiEzS0N1UnJrKrLvV7J6FxYvLhK3a4M9N6c1MJhQkIrL2H4F+H1JyMAoJ+JoFmPgJkH4MvEuLiE+BoP8PkJ',
-    'Chharka Tangsong':
-        'BBtCw06R6p/yBhIoIZwWxHpBhK6L6D2N3NkOiLgP3M2DpFoI7OuCtC9RtJjBwBjN5H1IpI6J7MtGlP7E3S4ClQ9EkCzK7RlI/cvfzTlSnNiErI/EoBlKlRflKgFnL7CzGvSnHlbwB1NhSxQwClTjK/hBiN3djGnP0G1LmClZgTgM+NcmM3F6N+E0UIoC1dsNvkBlCvOyNhDmQuU4ViP8J/BoPuIyF8NgOwH0KiNlJ8FvWQS2OnF2E1BsV0EyV6cwI8FzGwhBoGqGiI2P5YoOqDgK8HzG4LjC+M+EkKsG4fyTmcgCyYlG8Q5OiL',
-    'Dolpo Buddha':
-        'BBpCw06R6p/yBxJlM6OhLmG7Q/BxYxTlcrG3f9EjKkC9M0G3L/J7HnOpD1P6YpGhIvhBnG7F0G5cvIzExV2BrVoF1ER1OwWPmJ7FrOvOwP3U6E3SoP/NgM8IyO4Q+E0LqYtJuN5B2MsLyI9FjC0S3GsKmE4QgJ8LgXrG+NwLuNiCvEiNuNgYyQ5H0U9dwNnPqWnI4O7OuGqTuP8TwUoQ2IoYjEwMrDpR/HpBhOkJjJZvFkJsGkVlJsS3R5Bta0XhCyV/KkH9N7IpNiCrFyNrNiGtMnFlUoP0CkK7J4HjHsO',
-    'Jagadulla':
-        'BBwB+3+RipvyB3KyCtEwU5L2KhBwM7J2CnS/K7P+Q7N8DzJ5N5W0IrH/avVoPpX1BjKxEzHthB7PjJ9BnPtLhEtQkCkRrcvH1J2OrXevY1EnI+Ptb4VxWuHuI2DoQxEmaqF+XuJiQ2GqCyKnUya3L6JkNsOwE+I2TyODgMrMwM1BqJtMsTwGyG0Q2ByXvQWhIoLgRqc',
-    'Kaike':
-        'BBmBuo3R003yBnKhGxF7NnPtI7JgC3VhPlQtUxNiDmCwOrNwkBnC2dzUH5N9ElM4F9Nb/S/LvCpT8XxVkH3bnBpImI7PhC/JmVpY2LyGiVvB8JvEkW6DP/Igc2IiaiJpG+NiFoZ4P9EmIiG0T4B2FgJjP8N5E4S',
-    'Mudkechula':
-        'BBYgk5RuhqyBxR6V9Pub2EoIdwY1OsXwH2JjRscxK9TnJ9JxMAxPmK2I1hB4EjE0K1dIxY1O7OTrN6I1RqIhMoOmHkVG2PqHoXoB',
-    'Shey Phoksundo':
-        'BB3CgxhSqq6yB3IxavUnQtP7TtGpT3O8OpWoIvNoPzU+dxQ6HtN/XwEhNtNhC9NvL/WsG/I7LlE3Q4GrKkCzSxI+F1MrLtN6BpYuJ9EzL1VrT1KjP8HrWzF9Q3P7L7KnB9HjbmMjFiFjVwCnagW5QVpLsRzJiN4EqX2BwVnPsHgb6WzI0J6N8N7D8P9QoSgL8J1CiBvM6L1KuEvU4KxC8C2H+XyMgGhH8R2FN0JgHgYsEdqTgP6BsGuqBvPqGqBoHiTuZCnDgV+JwRwC0chI4I7K1EtHkKwG+f3NgImC4HxOmGjD+N9JqCgB2MiD4QoFgQ3FuO/L7DzCoK6LsNxDoNjKlCjH+KLwS',
-  },
-  'Humla': {
-    'Adanchuli':
-        'BBRqyjSgvgyBAvN5G7HoDpLnU1LrKvMWvP+NsGoiBldoJlB0N5KoauBQkW7MkfhU6JH8QhHsO',
-    'Chankheli':
-        'BBlC6/kS8miyBsKtZ0OgM0DrJgRmHkEuOwKyH4RnJyE0HtEiSwLiGoLhF2O0iBN8QyG6HoGkY+MqDmK4PiS1DsOpNuP3W6CkK9CibwG+H7JqY1HsBlGuMyH4JzBsI5WiSgKiIjB0Kxa4hBnFqSnFtBlL6OrL5FvGpLxHyCnL1QxOsJ7CnR/PlD7GoG1K3KuClK9OtB5J4EpF3ItToK1IXrN3M8DrToI7NpC/PtM9T0G5MvBtSvXqB3B1T7DvU4CrI5HvI7G7YqL6G2H5H+U9E8UjV6IQ',
-    'Kharpunath':
-        'BB8B4mrSu9kyBtP4WrOqNhS2DlK3P9MpDnGjYxG5HO7Q1OziBnLiFvLhG6B/X8NvUjBhR6E9JvUjVxR6GrLtMlI5ZmMtepCrHwM3LwiBuE8F/LqHoK8VmIzJoZgK2UpD+W6EiT0H+L6kBkeiKZ2bqKqH0IgexB4ZtQiJ0C8GkMiUasN2N+Z0NwWuG7DmJzZyK3QnLpLqEtL1LhJ+Ie0IjR8H/F2OlCoP1P7CnEuO3KjF9L9PhEkJ7VzM',
-    'Namkha':
-        'BB3CoixSmm/xBnKlJlOsOpXvJxLyJ7YuE/F7KtLoG7diE1PkGlJoLzPwDrLzLRjOvQnHvWnX3BvJgOlM6IlQgHqCqOhJjEzTzGsKlOuEpFlF5KqGlDxWjQ5L5KrClInIrFtKyEnP/FpMgDxIjItG2C7R7G5OVjV9KMhLnPqItW0M2DiTlG+O6KiR3JoDjPwJjS3JhMkCxPuJjYoMhdqP2J2a8BoYnUmF+c/DqRwPyL8R6bub9B+GwKiOgE4FnIsHqNyL5QgI6FsVlFAmO4H2F8HpRiQoEzB+S9I6Q/N+NrGucsBgO4TpCkPgI/KoauIwJwNjBpMygBvL0jB5GwB3Iwa8B2VzH0KsBoa',
-    'Sarkegad':
-        'BBemwnSqkiyBjU+IvKxHjEtO/QlHzDsJzO/LrKuZpMhR5QvLrQpbiYtLiHrOI7QiU5J8MjfkD9PkK7GyFmEkUIwEiHvM4LqCsHlMuemI6ZsLuMyR5GwUkV5E+JkBiR',
-    'Simkot':
-        'BB8By4wSsujyBvWtG9ZzNrN1NhUZ7GjMhJzC3ZuQ/dyBpHzI1bpKhKa5kBjezH9L5EhTqD9W/J1U0JnZ7VlIpHnKhB7nBoazT8G8J6KsCkQ6LmDyW6KpGqFmFmOtE0GrKkE0TpOiJ/GpC5ImQ/NmM4BwJwWoXwQoHSkOsL0L0PvDmJnL2PjG8dhEuLnGgG8K8YtEyLxJqXwJmOrOuI+EnJgqBkHsGlL6EtMgTyFqP8HJrFsbsN2GsCkM',
-    'Tanjakot':
-        'BBR8/lSyk9xB7JiH7DrGnatBzN6KnJmBniBmd9NrGqE5XvNlKIhWsTnWgbvDobiL4EwGwXgDyOgG',
-  },
-  'Jajarkot': {
-    'Bheri':
-        'BBay6wR4jnyB/M1H2L/OnPxMvH5LvEhJpZ3CpKtNkD5QmFuB9DnnBmHnI2DqLwThKiXiE8RuRiHmckLsDmF8M+LmC6J4MvNgE1CuI3NGjJ2bpOyE',
-    'Chhedagad':
-        'BBgBy9zRu0iyB1F4DnUhB3K6LjGnJvPwSiIoI+EmV5OoB5GmLvNxGhHlc7RtRhXhEvTiK1DpL+DtP8axZ0OmDqFhvBiKnUmMpM+IgC0LiSzC+SqFlEwFmM8BwMnHqW0EuGwdsE4P9D',
-    'Nalagad':
-        'BBqBy6wR4jnyBoDlIqOxEkJ1b4NFmL1Mkc6BiHsK8RiK3JukBhNmBoC0ZoMLgNwQ+CmWkL4E+UpFoDpF0gB8GgB+H5I2RUsN2O8OHyYzK2dlG7CvDhP/TzStM0BvFlHvQ+B5JpG/GnSsE5D3OxTtKha7HvItQhHxFzLjBhgBpMnG/Q0D',
-    'Barekot':
-        'BBhB6u2RorpyBzgB7GnDqF9UqFjL3E9ClW/MvQnMMnCzZiNlB4JtkBoK1L0OzH6I7P6WtL0Vza6MwJmD4I4JWwK+L/BwI4LsOgNsV8HgUuIqFnH0EuC8JhG0NiE6NjNypBnN7EjVFnOlH',
-    'Junichande':
-        'BBZ851RgjjyB9IjFjW2IndjSrFzU3P+DvdrEzEtGoHpW7BvMvFlMpFmE0C9S0TpOqgB/F2Q+F4N6JmImMghB/C+EkYwL8QuH0JoJuErLsT5T8G',
-    'Kuse':
-        'BBXoj0R2kmyB7RhKhHrK1U9BnMrM9LlCNlSoT9D9ElVhInIwPvSkGoJ4K5LoUiBiG1D8ciSkW1IuLiJ2NscpO4S5WuL5I8PzO0H',
-    'Shivalaya':
-        'BBOktvRqriyBiCnN3C3mBwBtsBkNrL2RlFkL9I2I5PuKqK+DoblMqMhKoUpFivBzOlD',
-  },
-  'Jumla': {
-    'Chandannath':
-        'BBNmi9Rk4kyBrOuVlPkMjUhI5L3KCrhBqF2BuMvUwP5IkWkNmEkM6PpCpEoO',
-    'Guthichaur':
-        'BBjBgq7Rk/ryBnbwKxKoU1GpCtJhQpF9XyEla1DnQzL1HxBrK1Z1DkNxpBhE5NiGzNtC7J+Q5JkHkCmFpS4MM6GxLyN5BmR9VwLiKmHToQiM1I4T/LoS2J6WxGyNlU4L1GyToG2TpD8OoHyMaqb',
-    'Hima':
-        'BBQk77R4qiyB/CpWrI/PpZpgBxL/JkQ9V6K/P2NnB8EuU8d4QsLkOvB6PlIoHN+KnPaIqV',
-    'Kanaka Sundari':
-        'BBYmx+R29kyB5QTtb2DlB3H6M5YqOpQjEnU3NhM4GlWmWxgB3GxS2YXwG8FyB2Q2Q8IhBuSjGyDqN6QZqbnO2KgHkStOiJrF5DrNiO',
-    'Patarasi':
-        'BBsBgq7Rk/ryBvD9NZpbnHxMqD7OnG1T2GxTmU3LyGxN1J5WgMnSsFjXmPjM+PxUmB4Hub1D6QU5FqFCsUmNqF6Jgaf8SumBkK0C4L3I2KnC6LkHoNtYwPjHK9EmNiN4MoSkb3N4FxIjDpXgIG+R5FuKrTvGpJuMvM2B/LsMxOE9I1TrOvE',
-    'Sinja':
-        'BBTkw9R6gkyB5PqClEjMtXlOrGpIlD3VsNrMHpVoPZO9KmInHoBjPqcjEoLmNgB6IlWygB3GmW4NiMkEoU',
-    'Tatopani':
-        'BBkBgl7RynlyBlR+VxN6B5GyL3MLlFqS5QiDtIpF7H/T/MrV3LrOgCvIvK9L3JVlD3I5MvJjH8DrQpckH7R6T7G2K9Q6NwD6TqBgY7BgRqLkO4S+MvBsIpU+VnD+RsF6J4LdkO2HsJvP6ItMwUpF1B',
-    'Tila':
-        'BBQs57RipiyB7V5H9VoDrIqU9MwBjO3S/QpL7QhBiIjVwVlTwJ5OAnO0G9EsZ2LugB8nBkLia',
-  },
-  'Kalikot': {
-    'Khandachakra':
-        'BBUwi6Rwz8xB3L5DjW8Q3OrPhExP4BjYkF/K0H7pBxF3IkYmDyFmO4LqG2L7BwDyH9HyStKlGhBuJ2KqL2D8TvOkF',
-    'Raskot':
-        'BBO6z8Rml7xBjauBlLtDhHuI3QlVxCvI6IrJ6KtBkIjKyUwUsEjL+KqB8J0O1HwD',
-    'Tilagupha':
-        'BBawy4R0ihyB1XtErHyD7EtJ2KhO+CxOmHLtB1QlF9E8GzZiJ9EgD3VlGxUsIzL4OsPkW7Q4L6DsQ+kBiQ6ZW2H9QuarI6FrUpJzG+EAoOvJ6O',
-    'Kalika': 'BBJqw4Rux7xBnkBZ7F5cgE1InI3K2JrP+C1PmayCyT4Q',
-    'Mahawai':
-        'BBfis3R0w7xBokBavCmQiEyPrI0LmGyU/C4VhJ+E7G0ZmF+EuB2QlHM9CyO1KiO8EuJsHxD2XuE9LianZErWrKtHzJvL7Q9EjYwFzFpBhN9H1JK7P+G1QuVxYxE3TiG/V',
-    'Naraharinath':
-        'BBR+x8Ruo4xB3Y8OnGgKpNuHzmByC9OyG5T7N6G/UuJhGT/P+evKkP2CsIkIuL/CmJzQ6E6J8ViP',
-    'Pachal Jharana':
-        'BBUu16Rg69xBzR9hB/H1UwOjF1D7T1KpLiBtJuKmG+HxSiYsiBiHtImLuDibL8GoSkC6WrByI1XxDlJ4QjVlBlBuL',
-    'Palata':
-        'BBWgk7Ro4+xBvO7d2PhLmBtLkVmBmJ3Q2XyDwGrEoPiCiQ+LhC6MkZiGoQgHsDyjB1KiLSgXnE6F5gB/DhegErJ1O7d3Q7EtU',
-    'Sanni Tribeni':
-        'BBX098Rqy6xB7JzO9KpBrEkLxUvUjIkK5KuBhJ0I/HvL1L8B3LpGrErL+OxG0mBxCqNtHoG/JgTxN0M6BoIiM0LuG6BmJmG2blK0Q',
-  },
-  'Mugu': {
-    'Chhayanath Rara':
-        'BBnBorjSwkmyBxpBhI5Q+P4H6OvOzE/LoDrBgL5NqT1UzJ5Y9EgB7S5J/ZlNpFBrUkG5LsNhOsF6DuOhJ/GjSoO1KhBjPoLrhB6LtGqFuLkU6B8DiG7OuM6HmUrDiT0QhGwJgEuDniB4gB0HuDqLzJwM2F8Y6HwI3CsI8DwU',
-    'Khatyad':
-        'BBd8zgS+1hyB9D5F5LuG9IqX3N9SkGxDiBtS1Q7IlBhbR/W2KhLzC5kBobzMsD9PuGmJmb0NuX5F2F9J6J6KpO0O7FuMzPgMqD6P/GoNiEqKhC+WwEwIxGkQhL4K',
-    'Mugu Karmarong':
-        'BB3C0pgSi4nyBqFC6NpTsB/KgMnDwO0E3H5O6Q9P0tB0JwTlDwBuSzG6MuM+TqCgQnI8N7DsTsN4M2IYuTnKqF4I6J3E+OuBtCmK2K4K8GnGgQmD8CoRyOrJoL2QyHxCgRmS4PkU/J4TlOoC/GqL/W8O/FmSvH4BtP7M1CiM8FiXyHmNrKsIZ2IrOgIxMlP/B5LhL3ErHgHyFuQpF2UpT0DxH2VqB2M7J7B3J0HtZBnHhTpGpBtqBwP5BrGpT/OrEe/G/XOzJ7R1F/FiH9XxMhEpP7H9B/QpciInLwQV1BxXxGzQ6FtKF9RqX/HyIkD4N3FnSjbhN3M+ElNkHJuYvPjHnN0IxP',
-    'Soru':
-        'BBlB45iSoyjyB6KvMtDpL3gBzHtDoiBvJ/DzQiGsDhT5HlU8OtM7DhGjU5ByJrDiL3KyGjQvEvIiC9WhEpKgHnNpD5P0P/L8FtMgSnP/EqnBsKwMoU2LnDqL6G8HwB4Q8OiY6QwL4NsS7BwP5IP7UkV9U+E1H6H',
-  },
-  'Rukum West': {
-    'Aathabisakot':
-        'BBtB+sxR4zsyBxBxV+D5KFxZsUxQ7OlEtH1VnJtDoC3HlEpUlFzDgDnO3IvJ2DxK0OzCgRzDqMoGkBigByF0LuQiH8HwIuKia4OyTrE6DgHoS6JqGwQ9BwFmHuMzBgU0SkGuTtIuZzJgQKiQ5c2M5E8HrOzE1NwCxH5NsKzP/N9OzM7GzJgEvSjV5G/L',
-    'Chaurjahari':
-        'BBPs3uRmvoyBnRdsG7HmEjhBjC7IuK5VvB3JyJvMM7KycmGsL4N+B6NhSqlBxJ2NvQkB',
-    'Musikot':
-        'CBTs9vRsrryB/Q3J/JsUhJ4auBkM3PItD7QzOxP5CnV4PpQVlZ4OvC2FtHKpasMsBkK6L7CsS6RyR2BgWBKjiHsyDnJ6ElDvPR/KyIlQpIpPqIjCoV2Q5QiVuM6E',
-    'Banphikot':
-        'BBU+sxR4zsyBTkWvR4CpDgG9MNxLpJtQlcyJ3U+IjX1B/VhPrL6Q5SyK+J+R5KyP0DuH2V8OmErUyQGyZ9D6K',
-    'Sanibheri':
-        'BBV+jxR+rpyBpGF9R6KxK9JhOgMzC3RjK5L3P7FuBpQmHxJwQjByJ1NwSnqBwN6K1LgPmN8N1DyK4IwJ/CoOmF0DmEqU',
-    'Tribeni': 'BBOk2tRunryB5JxC1KvToCvS8G9R/DzKqX9FoHjOiSewEuInCsc1FuH3OwCWmZ',
-  },
-  'Salyan': {
-    'Bagachour':
-        'BBV+krRwtoyBkB1X9FyFxBvQpG/FyJ5O2EyJmStYoQnBkNgM2N2Y/F4QoL4RkFoR/ImJyCkP7Q/F7G0ClTtJxInOlL4B',
-    'Banagad Kupinde':
-        'BBlBq/uR42jyBzd0BnMgH1E2MpLHzSjStQK3KxIpJkN5I8H1JtC3D/SgF1H3PpQvQ1ClEjS1FH5B9O2HrL2N7G0M+I4F7J0MxHsNgCM8MwJmDkEwMiT+I8alEuRnPqQ+K8KzEuBkOmOE2D6SlGtB5JyQ',
-    'Sharada':
-        'BBa6hrRi2myBrGuIrM/DvSxWzPzBsK1I3HrS3JRpFpWkMjXS/KuB9a2JlHwEmKwQ2C4PqQ/E2H4DgT2JuC6I7H+H+O3EoUxGkGCsM7GyBuDuX',
-    'Chhatreshwori':
-        'BBb+krRwtoyBpNgJ9InB1JwMjN1C3NrJ1BjLlNhCsSlMJ1J3M3T+HrP/L3F1IoInFxL4C/agJ4B+I5JqM8D4HsSrK2I0P0BwSyWsMgEkDsMyBwQ+FxF',
-    'Darma': 'BBKkutRs+oyBjFnRnL3RgG3Q1N1YgVbwOoE8TsMd2kBtOgW',
-    'Dhorchaur':
-        'BBSultR6rkyBpU8XrD2J3DqXpRwClSuYrFpMuGhGtDtX8GxBBrMyGjGmHzQxFzIL7Q8ElG4KyIuQJ',
-    'Kalimati':
-        'BBjB++pRsmhyB5N0O6B+OsFmI1JmHtB+aRgL9LmX3EzErRsEhQ3NsDvR1N/TwCrKnZlS/ezJmVvVsPjd6KjDsKlY5C9NmG2CqOlN2G1XpF7HkMpDiQ5bsPkFqd+QJ+RvGgVpJwPlG8W5JmP6BkM',
-    'Kapurkot':
-        'BBUu2nRyjnyBwKkCoMmN2DwLuL7E+DuTmIrC6BiNvI6ElPkF7X4S5DwOtKjFnGnNtgBzG0MvCK7PiVtSHrP+MnH',
-    'Kumakh Malika':
-        'BBSuwuR8/myBrlB5O5L0DhWnKa/TkH3S6TzX6LA2E1MoM/GkTzE6MyJjEqNjD6QiHgKL8KxJwMjEoR',
-    'Tribeni':
-        'BBY4ipR2joyBtGlKtL8E1DvLnMlNvKjCtE5fgGlKjEvLoF5S7IrPoKtJiQ4NsRrEuIyJvDiUxPgC3CgboFyL2InIgM4F9HsP4M4TK2J',
-  },
-  'Surkhet': {
-    'Bheriganga':
-        'BBY++sRwi7xB9D2KoEoMjOsb7YyWnHwe1P5H5QvFL5U3MxH0EvVkK9S8OpRtBzJoSrU0FrL+Z3fHtL6NnBuaK0C4FrVgMpO4SoG6W',
-    'Birendranagar':
-        'BBY8nvR6l9xBtHrMxP3G4LzLiD3eziBnGzWoHvH5GLnWnG5WqO3SsV/LsLpHiSkMC0NuNpE2RmL4P0C8DwYtJuFkCwPrDiQrIsHlEmR',
-    'Gurbhakot':
-        'BBX6ntRw/+xBnJ+FvT4dzYgPOiKrN/BzMyH3F8JxFlIrN6CrO9V5BjM6JlPmG7WqJvPUvNyGzE6QwF2P6H4EpPoegN8OuB6I0N',
-    'Lekabeshi':
-        'BBT+xuRyz8xBvQ6I1CsHkIuJQmLpQ+JvNoR1GxK7OtBne/MwClP8YxWkOrbnEnM+D1KwH6G0WnH0iBoGhD4e',
-    'Panchapuri':
-        'BBgBqnyRwj4xB2HzP5J9MrE/IuB9PjKpLhCnSjIxBYuM3I+N7KzI1H4F9IvT2ClWhJiBxJ1NqG3cuOhDmGrI+NmCwHvCicunBwdW6O4J+U6DgB2KiOybhMkftZLnH4PlNsGvN0P',
-    'Barahatal':
-        'BBrBqnyRwj4xBzP+L/H9HQiPpQ0KzJ6NBsJ/K6J5CxP3PzC1RlLtNqEBzNpJnKxLkFlLtFtaJ9B/MgH9C4KpXiH7EwF5T0PjGsMhP4K9XqIldkGhD4MsG3CsGyJ2NiJhB1CmW+IwT2H3F8K0I4I9NXtMkIyBiCoSkKqLtB+PsEgJ6J+M',
-    'Chaukune':
-        'BBmBmo0Ro90xB9U5D5O3JvdVhctnBmNlM2MZuJnMqIkK+LpFsNtRsHxDvSjD3JmG+KrTvCrNiIkD8RpIlN5LjEjOqLxI2HxJflKuJ1KoT5LiMpZiK+K1B2MkQoS3EmK7EmjB1Zie9H+U3BuV4FyE/H8LgM8MsCqM',
-    'Chingad':
-        'BBU+tvRqr/xBvUwTzG/UtS7FzIoE9P1I2FlT8Z9TPlLjItJ2CrH0RnJsNqG+JwR2HtBmTmSqb8F1I6PjL+I1RmF',
-    'Simta':
-        'BBVwzrR65gyBgO1TyJ9CwT3diQrGkJkJ0InEuS8F0GgVwUvTvBgsBsC6uB9RrDtBjO7K0EpQ9KtRoP7amEhT9IjEvMvJlD',
-  },
-  'Achham': {
-    'Kamal Bazar':
-        'BBTk64R8m1xB5NdrWqRyDmGlPlCjN+QrKjH0JvZ9EhU3GjEgEnMiQrZ2EjQqKP6CySyHkL2YxBlD4WoHiJ',
-    'Mangalsen':
-        'BBX415Ry90xB5avEnHhJmD3W1YyBxHjL5CxS7F0D1IxSkBxJ/GhS1DjX0WvI8HlHuHhFuL7CYmKsKqSsLiMmDwPiMmQ1B6TkB4a',
-    'Panchdebal Binayak':
-        'BBTm92Rms2xBkN9QmPmCxDlGsWpRkReegW0LwFyCqJ7HoG4QmP2DuQnNsHUgQtJiGlHwTlW5iBnI1Z5OtP',
-    'Sanphebagar':
-        'BBb0p8RyozxBxPlO1L5ItFmTnI/FhJnF/YyCjN8E8DzYiR5EZhNmLnCsJ+HA3UiM0BoC7P8IrJsNL2MiJnGsSsR2E0HlC+JejEmbuKuE/GsPrNgC',
-    'Bannigadhi Jayagadh': 'BBJwx6Ri00xBzNoOjOgBvD1oBX1ZkN7EgZxCxGqT8DqR',
-    'Chaurpati':
-        'BBa+q8R83wxBlMvIrNM7IsJnC8PhMzBA4UrJ9HlLoCaiNhR6EzOtMlDvPrLhMrKpS5BnNwV7W2I/FqVpG4HzL2B+WsP6ckHoDkI3K+IsBsY+N',
-    'Dhakari':
-        'BBSwp3R09yxB1EkQ/TimBvJElYvUlR1E9NtVgI7L3FxE4BtV+H9U2Zhe+BxKoFsIkMyR4SL2DkXgHiS',
-    'Mellekh':
-        'BBQi77R+j2xBhZ3PtS/lBsFhQ7DpRgEjJ0L9EoIgGuFlT2L6IuQkLwE+TmJ6IzZmc+J+U1J0F',
-    'Ramaroshan':
-        'BBVk55Ryx3xB1DtQ3QlP8HnGxCpJzLvFd/VnHhJkMpGwTkGB2FkOfyNlOyQigBiZ4PsFwLtE2PnOkXtLgDrIjIjP1C',
-    'Turmakhand':
-        'BBe6y2Ril2xB7G5C7YkMzB0I3JA7GkNlQ2KnI+PjVyO3kB4PvKgOvNoB1FhRjB3TgI+HkMnMgM6EwNzPmNrGoH3PuZMiMjf1MtXpC7QgT7UyDxMqQ2FmYwUmQyD+EiU',
+  'Baglung': {
+    'Badigad': 'BBbqvpRmp7yBxZpOJxH1P0HnEmQtIR9EiIzLkDpHrGvDpW5K7FzBjF+zBx3B9HzKiI1H9MtP4E/DPnT8JoCiR0iBhGoHkJ8R6MwJ5EiJgI+KiCwXmJqL',
+    'Baglung': 'BBWivmR23hzBgM/P1B9I6MyD7I3JnEzeyJ/BaqGwIoCmN9OwHwQ2FqBgG5B9G5F+H7JmRwE2DiMzEqO3H2K7X6E5RokBpQmC',
+    'Bareng': 'BBNwrmRsi/yB3K+OnKvDlMoQ1FC4GjcvIrPwDpHqIHtEvfua7U6IiYhFoM',
+    'Dhorpatan': 'BBXi/rRmi4yB16B4F9D4GyDuNqN0JtM+KxF8WmD8NpMyLxT9yB6EhJ5MvJnDxMkPzK6FjXiOO8yBv/B+MtBkF3GwHoQhH0f8IyH9ByX',
+    'Galkot': 'BBZg3nRio+yB5b4b5R1BdjnBiFnMjLpbiVnSxE/tB6K8FwDqWqHsG0LjD+EhIuISoElQ2PzHKyHia+OlDgJ7W4KtSwRwCwLnKyQiGiGlNqK',
+    'Jaimini': 'BBRivmR23hzB1UvIlJoDhQtV1UhPmS9P2LC8FhNyQK+NpQgMkD4HyR5JqF2Eyd8I4J5MxD2B+I',
+    'Kathekhola': 'BBOw5oRwx/yBlMMpHkI2EqI3JE5H7QxFuK/MgF7L7cic9biQhCuQsK8MclDib',
+    'Nisikhola': 'BBWgnsR8rzyBpG2OsE+RpHuPwB2K/RwH/sBi6B1KuHnJtC5FkX7SmJ+DjLvRniBwczWsJ7jB2QhPQ7P4X5G6CnR2TlBuLvRmN3E',
+    'Tamankhola': 'BBR2hqRox6yBmDxgBuM9KpNzJxDtN+D3Gy5BpG6EkG8OxBwBmT+JoTxMyhBzOkOhJkBvIhQxHqB7I6N',
+    'Tarakhola': 'BBQkkpRsx+yBhgB5LhNwCxCxMmNjKhGnGoKxQvCvLuSvR8W3K8N7SqJ6UDwRxJ8IsB+U/RiU',
   },
   'Baitadi': {
-    'Dasharathchand':
-        'BBZsuiSokjxBxKxLrPsI0CuGtGoTtMkD7R+QtF3GlR8FgGpOvLlH/EjQuP9C9E7OwLtJVzR2GvBiHlQyFiG8EjK8HSsF0WuGOiP8R+NkN',
-    'Melauli':
-        'BBW08/Rw4jxBtMgL9NnByBhG9MtH5LgC1M/S+DnGpTpIxElhBsaqHkDwIqMnM6W6F1FhMkF1JkL6IlD6K2JiRwEiZtP+CgFkQ',
-    'Patan':
-        'BBjBk//R6vnxBzFqGvR1CvIyGfwKzL0M7ChE2G3S5DlI5KiG9LxR4I5VCrVwJlD+DpQlMtBpE7LuEvQnIlOwG3N8NgNuEtG+MuHxBiG+NoBgO7KwDgH/FqOmR7FoE8E7KyGwC8kBpBiPrJyHtC4Q',
-    'Puchaundi':
-        'BBZ4qjS8spxBhJT5DiSpFnGnMqErmBpKcrO/MPdvRsNvViB3OnJpX4HjDpBhUqSIiFiPoU8F4CyTzGgE+SgDoIyLkMlF1E0L8G6B1I0Q',
-    'Dilasaini':
-        'BBY4qjS8spxBqC3Z2IzQ7G5B2EzLjMmFnIxL9S/C+C5L2BjV0IjJGnZqG7byVsnB8EmC0BopBpF8H4DqOwKiH5C0NoF0d5DkQnImIpOtJ',
-    'Dogada Kedar':
-        'BBR0uiSoxmxB3S/ChFhPpSH0Crc7GpLoUjR/DhMyGxSzCtGsPrIgQwQhD4KsCyRuKuKjDwNdmkB',
-    'Pancheshwor':
-        'BBYq9/R+0ixB7K1ZmD5KjL5I/FkLpP5F5G5JvKmG5GlQ2GhJzPhPyN1EyMnVgW4C+DqjB4N9JgI8FjC0K2JqBoGsQwIsEhHmQ1GwBW0R',
-    'Shivanath':
-        'BBT6n9Ro2hxBxHqCrL5XjG/H8IxP6NhKwPnFZkH0PiP1GiJ6GmQwKlG6G6J4HJsPuMnBqE5W5FpMoMjDvI',
-    'Sigas':
-        'BBb24gS2jpxBzEoU1JwDkF4SvJ+DjH+N1MmH9DqM/M6FJqOzS5VzDrN7FkFjLrEyB7KnKlNe9RiM1O4ImD8Ftc8R5OgBvKwIxGwR2C2IsBpCyKgVuR',
-    'Surnaya':
-        'BBUwkhS++lxBqBiU3HkDoJqXhB4OlLgVlGqC/UtRqCxKxG3XuC3QsJxHqBhPvC7kB8O7EiP3QuMjD8DsLnUkR8GqL',
+    'Dasharathchand': 'BBdsuiSokjxBjJ3LnE2GxM8B0CuItGoR/N2DjQuQ7F9G9QgGgG1OpFzHvGsC5EtRyBtIoDuF4KF9E7OwLtJflRmHjC8G/PyFiG4FtKgHcqCqNyEPzB4JghBsY',
+    'Dilasaini': 'BBY4qjS8spxB2IzOJjF1FiE5BpEyIlMyBlK7G5B4EzLpMoF/HxLhThD0G/DlE3WiOncN7oBse2qB+BulBlFwQ8OwVnE4IuFyc7D2QrL+I',
+    'Dogada Kedar': 'BBO0uiSoxmxB7R7B9G3QpRKwDnX7H5PoTrNiBtpByM7BsD3GuP4QVqcuKuKZ4kB',
+    'Melauli': 'BBe08/Rw4jxB9FmJ5DpD7LmGxFnL7KzE/EsGjDhIrD4D1M/S+DnG7L3J9KV8CrIlIrSoEpE2MuG6GxCyN4M0GtNoD+F2VIpFnP4EvG0FwCwQ26BnJoB3E9FxBuI6EuR',
+    'Pancheshwor': 'BBcq9/R+0ixBlN5qBzFvClGmLhP3F7G9JzIiI/B/MnH7CkHnMxP/SyOL0LzUmVsBwCiTwDlDmCsE5E2CsB4NiP5JsI2HxDgJ8IGgHuRqIkE7GgQtH0CoB2Q',
+    'Patan': 'BBiBk//R6vnxBzFqG/U5B5R6ckD3ZlDrF3KkG3LvR2ItVBvV2JtDkE/OrM3ClE9JqEtSnIlOwG3NgN8MgFrG8K0E2EkL4MhG6DqDsHlJ0DkH/FqO4Q9F2E6E7K2G0Ckd6FqH9FOtBsPjMuO',
+    'Puchaundi': 'BBd4qjS8spxBhJT5DiS9EnGnTyD1alGhFrDcrOjOABpRqO1Y/IrjB8HpDpBhUqRJ+G4Q8R+BoEsWpGqE4S4CgIyLqMnF3E0L8G6BxBmKxImM6BqE2FhEKkF',
+    'Shivanath': 'BBU6n9Ro2hxBxHqC5G7FqEjG9PlR6JlSmZ1P0R0R9FiQoHgDwB6MkJ7H8G+J8HNoP2MpBiE1VHnD9FzGuNxN3M',
+    'Sigas': 'BBY24gS2jpxBzEoUpK6EyF+RjdyYhD+LtN6EX2PjSzUhDvO9GiFrM9F6CzJnK7Me9RmM3O6IkD2Fpc8MnHgL3XgV6B2FlGuBuUoYqN',
+    'Surnaya': 'BBVwkhS++lxBqBiU7HqD8IkkBhIyS5JwGpUjPN/gBhF3EsD/Q+IlGqBhP+FN5FpHzCjd8StH+J7NyNtD4C4PnToN8H+P',
   },
   'Bajhang': {
-    'Bungal':
-        'BBnBgmmS6hwxB1KDpPrIhSwCnKtF5K2CvIlGmFjL3MlOpLApVrNKpJpb1PxFpUxGrNnHlS+FlI8FnKlP3DwBxR+HZYrhB2fgHoMpEqFoG6DhSgJWsC4JkO6KR4b8LmPmSgvBvIiWkMqIU4ayJ6P+XgHqUqBoE4I',
-    'Jayaprithvi':
-        'BBa03iS8kyxB5F5JvG+N9KhDjJ0KzMnG5D/IlEoNnP0NvOsTjMgU9C3MqD7S1H7Q+DhSgGvW4InFwJhSgM9JsKb8Q6BWkMqM0GfgGySmEmG4L',
-    'Bitthadchir':
-        'BBUgihS+orxB9IkMnOH9IkLhUiB7M2GKpOgN5F+DpM2MlHkH9NwJ9DjF3S2JvDkErT0ObbsOyFwDMmhB9Ha',
-    'Chhabis Pathibhara':
-        'BBO+uhS4nwxBpVwBpR4JpJxxBuNWoT/U+dzU2KkBmMoJqD0OtI2O9NWPmTvLuG',
-    'Durgathali':
-        'BBN0giSk5txB9gBgU1K0P3X8GtF7PwKlTnFnHiMvG8H6GyDrHiPzHkStFuDgO',
-    'Kanda':
-        'BBiCipjSil3xB2GrOrC/NoG1JrElQ8C5U2RjWoOmC0GhHnEvKuDhN7HnLkJ5HoC/K0RpL2UxJ0DnQ2LlRnK1LuEjN6L5E7ElKqIlR0ZO2N/GqMzQiINgOiM6NjEoE6GoR0H4RiT4GmMjGwLjP8KjGwYGiNyH4G3JmOsCoR6HkFgF9JyI0VnMidtJkYjCyP4JiMvJkSnDkPhR4J9O5KhTmGzM1D1G2I8C6VjKqWtQ0Opa9DhFlGtTyH1O/MgErQrHvD1ToKxGnG1Me',
-    'Kedarsyun':
-        'BBWi0hS4jtxBtQ8GhP0HxDsH7H5GhMwGoFoHnI+I3FxD/H5nB8CxIzL1LoK7IiUhB+IjLoOI0G3L+RyD7FoK9FmIoHmSsJ0I',
-    'Khaptad Chhanna':
-        'BBS61/R62zxBrJwKnQvc7MtG4BlZ0H5IpInSmKlQ0DjQoDwJ6OjN9BrOkH8F0T6d1NgP/FwW9DiS2H8Q',
-    'Masta': 'BBOkhhSgm1xB7X9Q/IrPvHjCkM/TwOrToPzNmEnN8U4W+HkCyCkMrGiDrC6N5Kqd',
-    'Surma':
-        'BBc03iS8kyxBgC/RlG3LxSlEgB/F9SlVwGnNwLtGQlT+NV+LjRmOwKqLA4MmOlFkLwImG6K1CoKuFiSvCqPsI2KEqJ6MlhBgU1ITnRyQ5K8O5PqJtVN',
-    'Talkot':
-        'BBpBipjSil3xBxJ7YvM7FjT3BtFnIlRhCjInUwRvR6KpdsC5NsGhDxCjMrMzJkJzK+KiDwG9NwB8J6QsFuVO6PpJ6K7OoRxQ2IUmhB/TnCsP3HoGzDoQ1UyJzRqLnCgLjJ6H8HoLtDiNoEwKzGiHnOlC1RkW7C6UsEmQnG2JsCgO',
-    'Thalara':
-        'BBQwngSsxwxBrFxCtVzdtMnItB1QvL5HCjKjJvN3Ezdmb7Q8JkB4B2SgI6nB4FyDX8TiJgO',
+    'Bitthadchir': 'BBTgihS+orxB9IkMjNjB5KwM5QPrP4HY1PuN5EiD9LkdxYxF9RoK5EmErT0HnC6IwF1CoK2GqDuDya5N+I',
+    'Bungal': 'BBnBgmmS6hwxB/ZvIjnBHtI1FkFzLvMhO7dhKtGtRxX/K1FnR+C5H3I/GLnLvHxIc7NsG0FoGvH1S9L0B3KyNpHlDlc2fgH0MpE+EoG6DhSiJUmC6J4I6Bd0GwGyCTyb8LmPmSgvBvIiWiMiIwEoU3DgHuM8RgtBwK',
+    'Chhabis Pathibhara': 'BBT+uhS4nwxBvKMpDgGvH7E7E+F3C1ErE2I3FJnJ3wB6NAyevd0SjM2KkBmMoJqD0OtI2O9NWPmTvLuG',
+    'Durgathali': 'BBN0giSk5txB9gBgUnTgV9OyBhEzFLrRoJhMnF3H6FtFkOmG+CnI0c3HwD7F',
+    'Jayaprithvi': 'BBd03iS8kyxBjG1JlG6NlL9CtMqK7MhPlEoN3N8KlcgqBOvf1H/PkG/KlCrKgGhU2N/OlBzI4FKsDpI4DqE8E9F2G+EoFxGqPyCuEsJ3D4CqM0GfgGgToE4F2L',
+    'Kanda': 'BB1BipjSil3xByKhmBvB/kBgQ3V+P6BwG1FzBzd9GxGqQ5XshB7PmPrgB7KpSgRrMjF3MoIrO+ZGuPlI0N9QgTkN6NjEwVuOwYkhBnVwUtF+PN+VwHyG3JiOsCoR6HkFkF9JuI0V1Vm1BjCyP4JiMzN+iBrRkI3N7K7SmG5M1D1G2I8C6V5GmRhU+T9ZjExJpH9O2InKjFvE7HgExQ1GjDjUiKjGjGrNa',
+    'Kedarsyun': 'BBZi0hS4jtxBvD8Fzc4H9CoI7H5GrK+CyD8KnI8I/LxSkBvhBrFpL3GdoNnJ6QQ6KvMkNkB0G3LoN4BoGkG7G+FzF1Fb8NwHyIMoL4IgH',
+    'Khaptad Chhanna': 'BBY61/R62zxBhJwKzF/C9KvZ7MtG1BxNiLpU1BjKpH9DkIpL8C5XqHiIwF5IgHHFvS0SiUWyI8FhDyBkK1NgP/FiUmCsKjGkK2H8Q',
+    'Masta': 'BBIkhhSgm1xBroBtiB6vBliCuCoJ0YyP2EqNvI8BlNkrB',
+    'Surma': 'BBZ03iS8kyxBgC/R3F1L/SnEsCpEvNhIiBhK7H3EwGnNwLtGQlT+NVoIpQud6JwMiOjF0LuI2FunBK2ZuIqJ6M9e+S/NiC/Y6dlMqCpF6H',
+    'Talkot': 'BBfipjSil3xBxJ7Y7ctFhN3MxLgB7I/UwRvRmNjrBwI7B1EpN9P5JuMpKmL+CwG9N4BgKqkBwGqF5HmMpCgZ5dgOhC+e9SzN8lBrhB8PpQ6X+GyG0B0dvG2F9P5BzP6UnD4VsEmQ',
+    'Thalara': 'BBQwngSsxwxB7FiDJ9H9U3b1HOvFnY7LvIjMxhB1B1T+a7QsJFsFuLjBshBgMySTyU8IiN',
   },
   'Bajura': {
-    'Badimalika':
-        'BBWyz+R4u5xBxJrJ1cpIzG9XVhTkC/ckd5XoK9MqI6FxDoLiM9FwLuE0D0Tua6C0GqGrD8QwM2nBzK1C7E8P/KwInUVpIyI',
-    'Budhiganga':
-        'BBQ6y+Rww1xBnN2G3NzXlItFlNrTtTpNrFhQuQjKiNiLuP2B9H8KoCmOwS0FxCoKsJqCoIoO',
-    'Budhinanda':
-        'BBY21/Ro/7xB0E5ErJtI/D/btbhViClSgPgEqIxIoUWgLvI8E7PmMCyLkR8IvB2T7RoSuGsUDvW+axHCnQ0kBrKkQnVkOxJHnE+I',
-    'Tribeni':
-        'BBUov9Rm+4xBlOxGjPlPJ9J7VhP5E7J2J1PxGrQ4EvM2JzF9J9UsYpXJ3I+P4MoRuUqOiZ3R8UnMyHjCgd+B8a',
-    'Gaumul':
-        'BBawqjSo24xB9UQnStG1T8RvKnG1P9OpIvfsD7QzGpGta5ChHpiBgCjV9EvOsQ3WyFyQ8E1BgJsPgQsIwL4LwEiRmRiCuFoIkT4BwM8FkWo3BsFgL',
-    'Himali':
-        'BByB8ogSy98xBtK9X4PtIoE9IyJIoVjOsKjQoQzkByHBwW9aiRlIqH9LyGoG2TnKsHwD/DsQ2OgNuTxHiFmGqa+DuQzOkKpWyGmH+KLWkV8G6O1C8RkIuG/CyIgGqMxEoPsFuKpOiOzK+DUsrBtFwIhhBjD9FrIjUHjJrZxO/FvX/C3EvGnbhL/awDrToWHiW1F+JtX6FlbzN',
-    'Jagannath':
-        'BBU21/Ro/7xB5HhFtQmCra+InKT9V6OjFlEjC5WxI3U8C9NyUnCmKzQlG1b9BnJudsHwIgFfyWubiVgEgcsJuI',
-    'Khaptad Chhededaha':
-        'BBX6r/R8/1xBvLtE/MqKqFhLlGlVnInOrJpCyCnKvSzFnClO+H7K7WtJ4HpF2JreyI1G6MoU6HwCgBuP8MuGsPuhB1IoOwHyH/BkV',
-    'Swami Kartik': 'BBM8i9Rwz8xB+V5OoKUsa9IuQlCyQuLuK+XrD+Pnb0MjqB5LiC5MhQ9L',
+    'Badimalika': 'BBTyz+R4u5xBxJrJ1cpI9HxwB4CtXsnB3kBkJsKtLiKkTpJ6HiC8H0W4K7C4VsL1Dob+N8a3LHrO6Z/R9D1N6K',
+    'Budhiganga': 'BBO6y+Rww1xB7OqGrd1rBxX1RrF7QkQrJ4KmLa7GoRwI9H8KoCmO6TkH7D4IyN4H',
+    'Budhinanda': 'BBU21/Ro/7xB0E5ErJtI/D/blVvW/GQ6CnRsNuE2N5KgS+DsO5Z6OYwP4TgW1WmnB+FlT+Y/LgDpc+2BxckLpGqK',
+    'Gaumul': 'BBYwqjSo24xBlnB9F/V2WjV9UrLla2Dnb3VrL3K8CvF/PF/oBtHzGmP5bqEjBqC8LyHoCuIgP0b+T2FsSyLfiN4Mqd+F+OgrB6OmP9C4H',
+    'Himali': 'BBoB8ogSy98xBtK9X3IrGuWVqGpKycjLqc92BgM/CgHjP2czRqFlL6IwF0YzI2CkaoKkF+O1IyJqH+ZkEyQxOqKxWmGiHyLAyQyqD9Y8RiBgoB7FgMj7B3LxFlE3DpVpkB7H7iB1SzWuBnNoK9ImNPiX1F+JxMwF3cvDnI3JjFiC',
+    'Jagannath': 'BBT21/Ro/7xB5HhFtQmCxDiFliBuD5U0O9E5D7K9rB2CvNuV9CwJrQ/LnjB2VegUsJzBgWgHPmVwWgEgcsJuI',
+    'Khaptad Chhededaha': 'BBV6r/R8/1xBvLtEjTqJuLhKnK/dxN3HyCnKvSzFnClO+H7KnRvIZ8G1EnG2JpJyNxiBoX2WgBuP8MuGoQwcxJmTuH0G',
+    'Swami Kartik': 'BBK8i9Rwz8xB6UzOm2B1KyQuLuK+X9BsNxWwO9kB3FpLrF/BhS',
+    'Tribeni': 'BBRov9Rm+4xBnPvHhOnOJ9J7VhP5E7J2J1PxGrQkQ1VpL3JJzH+SpPkF3Q4hB2hB2NkY9d8ctBiwB',
+  },
+  'Banke': {
+    'Baijanath': 'BBgBghpRst8xBnY/OnYpGhF9QnLvG/B3TvgB3F3G3PuE3CsJwHoOhNhJ9RhGLgB/JvG9G4E5FmTwFoHwUyGMBqGkO4K1C0KgI6D+K0VsIhE6I+H/DuF8VmJrFiByIiIsGjL/B6R',
+    'Duduwa': 'BBagpiRm38xBzI6H3I5Eid1kBuI3sBsRiNtUsO0GgJoGiC0G1GyH8FwGzGkJuD2FnFuE8JmD5EsD0EyJ5C2MuRxPyEtEuJ/UnLvJkN5RHjNhLA+S',
+    'Janaki': 'BBT8tlRol7xBrJtD4BhPzEhGhK6HvItOpKhDqElRzd7BiS5e+FiBoCgN+F7FrCoM+MrIkB0M4T2MsNknBnFvB',
+    'Khajura': 'BBb29lRkn6xB8BiL7MlDzHvYrV1OQzKlNkI0C/L9F8FnC/M9FhByJvUsET+EgN2EhJqWnHyLEkHwO6E/BvEwGwG+GfgKiGMiJ+RnOiNrJvHtE4C',
+    'Kohalpur': 'BBVmooRkn+xB3PxUzU9GjTvbxoB5UiBtJuG3DZhO0JtC9CxL4KZrEjKqiB4FgC4ToLwGiF+QoYqGmY6O3M6f/MiE2F0I',
+    'Narainapur': 'BBQgshRk6gyB3d5W7JS1DzQ0b3pBqDrRgY9doJ2EqGnIiFqIhCgWqQgP7JsSA+NpYmfV0R',
+    'Nepalgunj': 'BBZonlRu37xB9J1LzEmEzG7ElD6EtE7J1FoFjJtDvG0GxH7FzG2GnGhCzG/IuUrO1RlO0O1X0d8BpEmRqKiDwIuOiK5H0EiG3BiPiHbyDkH',
+    'Rapti Sonari': 'BBnBmooRkn+xB3MqUnKLgD4NrKmY7KmDlUokB/X0TzYiDzQi2BvZi0BpxBc4F1kBtI1ImCvf3SlBsEvvB5DtS0LhFuG5dkU/VxB9K8JrSjQzO8BrWpFnCiCvFsRxBzB7RgHLoI4KmRCsO5NkQ+LtBhF4UpJ2lBmSkTwb0U+G',
+  },
+  'Bara': {
+    'Aadarsha Kotwal': 'BBRmkvQgu/zBpa4EjEvHjFwJxHvF7F4DuB/M6MP3D3S9OvSyKlD8D8C/D+E0QkFuG2SqO9IBiT',
+    'Baragadhi': 'BBPu3vQk4/zB5H2B/QxSHzTrO+IxBxRqJtFqYQ0IvG8DmXvOqElBuH6L3DB2N6E0B',
+    'Bishrampur': 'BBIu3vQs16zB5L3HxL6ClC0SpJduDvgB8InQ+Wyc',
+    'Devtal': 'BBOmgvQiu8zBjEzCrDkP9HtDpBnL9H4P/KrCyD9T5LfuCxTkQ2IjBiGkH6EiT8C',
+    'Jitpur Simara': 'BBgBms2Qwg9zBjlBkG9NlNhM/C/d+Wjb0EtC4H5fzBrL8H5MzMIxG2IpBqJoH3G5LiGNkIpN3c1P9D5PmI9EwBhO5HhKiL/G6FiKsLa2JsImXtG8iC0TqTjLkL2GyTpBmJ+R/HoF',
+    'Kalaiya': 'BBc44wQux9zB1V3DDnHvN1HzD1KhCyGjI9B7G5Eb1MhavHjC1IqNpHuD/NuJsBhD4J4J2JmJtFLvF2JwDmF5M6GqFIsMkTyVsZuLsCyJlNuI4G6LtJnH',
+    'Karaiyamai': 'BBTy8vQ42+zBzF3YzEqHvOgEhM3DpB9GsPrBsEpHqOwE8G5W2DiK6KpBuOgIwB2I7EnBpCyP8F2E3EiJ5K/G',
+    'Kolhabi': 'BBVo0xQ+lg0BxInGxX0C/J7KOsIhHyCfzOrIuMjDxHuGxK5EzBC1N3LoEkB9HgbnJ+OiHwE/mB6JkOsL7H6f0BmKo2B',
+    'Mahagadhimai': 'BBVg3uQyg+zB7WrIyE9O4PwD/M5DsF7H5G5EuJrQqBoLgIsD+DvP+K2NkI+ByClGoHsOqErDgBiLrG+P/OrE1DmHxJ5C',
+    'Nijagadh': 'BBVo0xQ+lg0BunB9VpKpxByC1MkbzEue/WyZoQ+lBzFNua3R8EjJ2NzPgGlGwLhNgHzK6WoCyflMoJ1BoIrDtFjnBjKlPpJ',
+    'Pacharauta': 'BBR43uQyl+zB3MsKlB9FjRzFwEtE7D7C3OT5CmJjQ/KtIkBkB/oB4MyE2GsTY3FqOiF4EoOgOF',
+    'Parawanipur': 'BBIq6wQss7zBjW5G6GlS3KxDH9JsY0L/D2L6HwJ',
+    'Pheta': 'BBK+9vQgl7zB3FDrBsKtJ1DMwFlKkF3IrJkFnc2L9CiM+H',
+    'Prasauni': 'BBKq2wQ+k8zB/S/QHrMlMzOiB5LiToG5GmSqW+GGoIlI+E',
+    'Simroungadh': 'BBKmztQgz/zBvLVhCpHpMoIS12B8NiJ2F9HoQiV4DgT5MI',
+    'Subarna': 'BBMkguQm49zBxICrE/NvN/D2I5lBYiG2Q7BrDyUsQ8H9EoIwMK/PD',
+  },
+  'Bardiya': {
+    'Badhaiyatal': 'BBf2nkRm+3xB+H5QqWiDiO7UiMhC+I7WyWgBkF5P4IyBJmKpO0JiCuYoKkH1HyBzDkJ0FmHvBoPmJmLnC0G7EhDwByEtJkEnI7U1HQpCjHxNiDlIpP1QyBzG0GhBjFnMoN',
+    'Bansgadhi': 'BBd4lnRkk2xBmJ0HsPyBX0H+GfuJ4OiW4N5L6S0DkG1G4O8EmJnK0JXmLoK6O1FsV9IzHtIyD5KtVlIhEiDlK7Q3O4L3O/KpRqDjJzFhD0DnN2HxBnKjHhCtY',
+    'Barbardiya': 'BBbwkpRuz3xBxW3QtJ3O9GgBYzHrPxBlJzHsHxE8D7VuHiEyC1H4K/CnB5OgM/csF0HiW0FsZxEH0H2HP2S4Q8F6QHkH1IhD9R2JnJsWrPmK0DsT',
+    'Geruwa': 'BBNmvuRq9yxBhWP9vB9X1HyEhO1LhWkGxC3NqVnLoMmJ+HxCsDjHoLxDXzJ',
+    'Gulariya': 'BBW6unRqwzxB4SkM4N1F5KqcuB4O5KgD1C8HtHjEnD0L7IzBjFmQrWboBzWnH7EjGkHlIrExFphBqHG8BgGkLpQ4BkM4RN',
+    'Madhuwan': 'BBUkgqRu8zxB1SuH3U1EnI3I7OgG3SjM6hB5dqWkBgVlNyD1MkQqN2VhDHkN0HgLlGwGzItF7CoF5HnB3GwThGrB',
+    'Rajapur': 'BBPu9qR6iyxB5NoEjQpNkN5mCsO9MkfkUqCgL6WsaLsGjLwDrDqH7I+BnL/ItNoE7HkH',
+    'Thakurbaba': 'BBXyirR080xBzLpQ5R9F/E9JoGjJiGsB4GvT6HoB8CnF0IuFmGvG1GxQqZoQhK8C2DiFqHb6X2SoKyZ7XpBlDkHhJ7LnIsOrIrE',
+  },
+  'Bhaktapur': {
+    'Bhaktapur': 'BBEuq8Qu5k0B8FtayD8VsHoI',
+    'Changunarayan': 'BBLsm8Qq4l0BiE7e6Q2DrHnIjBtS8P1FoPmZvH+X8H0cpVK/CpL',
+    'Madhyapur Thimi': 'BBE2h9Q08j0B9O6FnGthBoJqD',
+    'Suryabinayak': 'BBHuq8Qu5k0BnHkgBnR/SoH5F3K7VgatkBoH4C',
+  },
+  'Bhojpur': {
+    'Aamchowk': 'BBU85vQsrk1Bjc4XrbDrH6MpI/OzB5fhN1Y+FxN0G3BlBnQ+gBsNuKLkHxJ6NoGiI/NyR+FgGwG9FmDlB2PpUqZ',
+    'Arun': 'BBPgq0Qunn1BlF3B9R4VjQ+FzJuPhKsCzK3CtKxQjFKvHvR+Y7fodxDkFpdklBqPyD4Q',
+    'Bhojpur': 'BBT6t0Qo9l1BlnBvO4BzG9Q7HxLmHzPkBrH7F/NyDgQvPnBzNiXlWisB7VsPsI2BiLuI8CvF4J2NkL5IiGjI0W',
+    'Hatuwagadhi': 'BBPqmwQy5m1Bhb0I9UhX/MWlFjI9EoG7IrBkHlHtCxR6GnM+bNkc3XkJqLoOsC0I+f',
+    'Pauwa Dunma': 'BBNstxQ2un1B5TlVpTB4DnNoNvLiD7PyajOsH8F0PjB8H1H0UsI3EkjBpdyD',
+    'Ramprasad Rai': 'BBOsnyQq4j1B3R6QoB0NlGmIzX8V/EhYhRhGtPxU2KlW6I1FuCtSmXtOoInS8NiR',
+    'Salpa Silichho': 'BBY6t3Q+2l1ByDvQ7UvuB1ShDnE4F7YrN1CpOmT/X4JnBsDtJqI7E6IqEqO1MmQ3CiG+QiKwEvO0rBsHgUpEoJ8LuJ5C+NkFgJhK4TtMhK',
+    'Shadananda': 'BBS6t3Q+2l1B/LiCxakmB1WpG7IiMxVoFpC7H5FmFsHtZ7HhpBkIzWyGnJwGesPtXwXiMoE3F2SiD8UwuB',
+    'Tyamke Maiyum': 'BBXm40Qilk1BtL9HwF3JtI7C1BhLrPrIpxBsbzQn0B/O7Q0E5IuGnF4IgOoRwDuIlGkVwKiMb0Q3UmEgDsHiLpBkTkVwNuI6bnQiW',
+  },
+  'Chitwan': {
+    'Bharatpur': 'BBtBis/QoqyzB7GZnDmMzKwF5KlFxM4GlRlGlHnT1N/F7iB0IzB3G5ZoEjGhFkCnHjHkDgBxM9J9JuHlGLzRlH/EsHzTjLnV4I9M7DnGsD7cvFtJkMvLzKjU2DvM0OwLiSijBgX4ZyH+XsTmJkEkNvN8R8O+f0W/EeuJsKuIjDsNiMjHoIpSsQYqGqI',
+    'Ichchhakamana': 'BBe2z9Q051zBwEjXwWzSvH9P2DrGzRzEtH7NmFepCrQoLiFgN3GsJwFwTnSZ4NmKqDiCyUgOuCwNmT/E0LiFwKhM0G5GyPjPqD/Jzd3FiR1K5E3CiX9H7D3EiI1MhH',
+    'Kalika': 'BBZ2z9Q051zB7G0L9W/G3CxQrK7G0PzRnCtR9FvEsEhPtH7QtIjEmKnK9FxN+D9D2MnC4N4F0E6Q+IuEkC6PnFnBwHmO0R0E1DsGsHoQrWqS',
+    'Khairhani': 'BBTy28Q2o0zBpFuDnd1I5S6KzEqLzLuDLgJjEvsBlLjKYragG2FoKzE+JgU6HvKU+K2JzI2LsMoY+ChCkO',
+    'Madi': 'BBUoh3Q0izzBrFqCzC7VjGlK/HlBuClG1EnDyJvSpB7e+N/4BtDtF2G1JwMkBwV9OkNoJma5FnnBquCpHsenMsNc6N',
+    'Rapti': 'BBYus6Q4x2zBqKrjB5FrR0LtD0EpL6S5Kod2IqFtDyBsNrP4QsK8GsCsQ6aiJwGqmBxQsY3KvGjD6D7StP9F1OmFoBa3G/G1IjFtClViN',
+    'Ratnanagar': 'BBWgi6Qg1yzBwD7J0Q1GhH9M2E+D6DrEjCoHkGiF6ZnE2B4GqR/EwGiQlKoKuIkE2H6T5a7E1LrM1J0IT9KtIoKpJ3TnK0E',
   },
   'Dadeldhura': {
-    'Amargadhi':
-        'BBS2/9Ry3mxB1SyCzU/F3N6e7FzKhI+CzH9L9bjZwB/S6E7MpF1KkG/fuPsL1CoK2NMyKqa+HvFqMwT',
-    'Parashuram':
-        'BBpB2g7R8xjxB1S1K7QwInJnNzP5FxhB8C7QnFuCqJvJicxZuByH9L2L5F7GzY8DlDsN7pB1BvOuE5O7HjSmEjNrE3O2NrKqM1PqfdzJ6P3B+PyMiN2CuK+NhJwNHwKxK4KiFrJ8HhHuQoNiG5HqJ8FoUKsOiH8L6PG6BkHjF+e',
-    'Aalital':
-        'BBdog7R07jxBjGggBqF2K5E8MvBgTrFyGxVyGpLlRxJb5B3O/PDnIjZlK+CzKmT9NvK7M9G7JY7MnVkCxSmGmKyZtBwJhctCpJ8QoFyhB7C0P6FoJoN8QvI2S2K',
-    'Ajayameru':
-        'BBV2g+Ry1mxBrK3E5c7WvKnR4EzGlE7eyMzErEtNyGnUgJ/Qgb0R9DoGmGuKvG4NoImOtEwQqE8LmMuB9DqQvJmDBsV',
-    'Bhageshwor':
-        'BBZ+r9R4tixBzE7B/IgRxGoUsEuNxM0EmE8evO8JxKpa1NL2CnKtPrL8FtTkF9e5BjH5PFhH7LJrO7FnUyR1NkFoFocoDyVwSsL6XyHpC',
-    'Ganyapdhura':
-        'BBQyt8RompxB/JrM5OmPlU7U9CtKrYtBLzOxFzGhE1Z+ChGyjB7HqT8T0H+LiRyInBwX6HqR',
-    'Nawadurga':
-        'BBVyt8RompxB4GzJ5HpRyD1OnExKyM9d0UgGuRVpCmN+LyR6KhG6DmI1G4SrDoG7Fuc3IlD/LyOrC5OlL3C/RwL/IvC',
+    'Aalital': 'BBcog7R07jxBjGggB2F0TlF+DzBwT/X0MjOlRrJTlCpP/PBlI/YhKiDtM6S/YhR7JY9MvVmCpS4GiDgBwIuYjDgJxajC5KkTwHqHzFsgBgDwQoR6Q7IqQqH',
+    'Ajayameru': 'BBW2g+Ry1mxBle1SxTpa6FhGhGjJsFtE3FlN6NlJrE7N4P7kBsEwHyKO8L4J9DoGmGuKvG4NoImOpEuSmE+JuM0ClEkP1JuD',
+    'Amargadhi': 'BBU2/9Ry3mxB/T2ChT1G5NyfxF3KxI8CvI7MpIzBP1HlThNuC5UmF9D1FzTkG/foPuKrB4MkNhDgKmcgMxFoIyT',
+    'Bhageshwor': 'BBa+r9R4tixBpFfjNuc0CsVvMuEuEkStFiEkGqJvPuJ1J5btN2CsB3MzPrL2Kp3BrJtCrE2E1JnMlHvlBkIzLqJxCwzBwQV2K4NkMvE2F6G8FwHvC',
+    'Ganyapdhura': 'BBNyt8RompxB/JrMpPkP/NhLzIlUvYxBxHr0B2dvLqhB8iB2I5CgLgU7DsO+H8R',
+    'Nawadurga': 'BBVyt8RompxB4GzJ7HxR6D1OtEpK2MnemTuGgU1CxDiPuKuQmMhFgE2H5P+1B5IjDjM0OzF7J8DtEtKtDrL6BnIiKzItC',
+    'Parashuram': 'BBmB2g7R8xjxBvS1K7Q6ItJxNzP5FhYZ/G0FjTvHkC6K/Iya/Z4BsB9H4F4BO3F2L5F7GzY+MvU1B7TgG1E6Cxd9H1RuE9K5ErQma5aqfd3Lye0P2Y+NhJwNHuJ1KyL2ElQmZkN6DnIkMqHglB2JoMsE1EsJuC',
+  },
+  'Dailekh': {
+    'Aathbis': 'BBUyu3Rqh5xB9DzN9TlL1I9ZpQ0CjJyVjP9IzCwFzM7X2RzUgMb1BtGkG1FuHqBsL5JyEyF2KXujBogBmI6Zgc6qB',
+    'Bhagawatimai': 'BBRoi0R+r/xBxY9ElmBmUpL5R9JzDtE5cxM5K4FlN0M1DiI7RqMtC+FrNoMvDjCociIuHoC0SuiB6c',
+    'Bhairabi': 'BBX6g3R647xB5SxPvHvRtQP5MgJ1XpI/hB8VzG5EuLha8LvI8KuDnD9N6F5PqIyD9F+CsH8EqtB4Q+G3GuR4DwFrEyHoKjE6MkGiX',
+    'Chamunda Bindrasaini': 'BBPit2Rki6xBpIkG10BzVgG5CrI1D0ExFpE1SnTnKwNzKgI/P4FnD+U2jBkTmL2BiQqNkN',
+    'Dullu': 'BBR2t0Rks5xB5F6PoD+N7KtD7LwItLka1J5BnFmI9KXnUpKzCrTqPrbzE/J0LxOqsBrVmTmMqE2S',
+    'Dungeshwor': 'BBRijxR6w9xBjJtKiCjHlGdzFnZ4OnVtC5XwNzCgN4FoKiQiRgDvBiUsF6FnMwD9FsNpMuChI8R',
+    'Gurans': 'BBYg3xRk76xB/M3FvN0CuC6X3O6UuD2UsI+FhCkHkJuK5FqNtYxCrRxR/JMwFjayVlpB1BvW6J9FtBtI6KtJqDnQ8W9RqEoUsOa2EuJ',
+    'Mahabu': 'BBPu02Ruy8xBnEzHpXvH9IsNxKvI5L0ChItNpU7BjM9OwgBzU2XqI6M/IgTgB+EgR6SyP',
+    'Narayan': 'BBT+jzRii+xBzF5DnC1S5HxGiEpYvHtKwBnU2HuBoFlIgSsF+L8OmQfmMqQ2QI8F0R/ImHlStJ/I+KtXzI',
+    'Naumule': 'BBVoi0R+r/xBjBpQpd7Z2Q/kBuX0IyL7K0PsJgJhH9B/LwIxEmC9ImYmI+G6exUyW5H2SR6OiI2JuBkOvF0FncoE5TrU',
+    'Thantikandh': 'BBP0i3R8g6xBvFsEhQjDApKpNjNtBzPrTzL/HrL+BjG2P6IkJxVqQzCoJ2aoU6LCqc',
+  },
+  'Dang': {
+    'Babai': 'BBSo5nRq8kyB7hBnM1VO1HsHrErQ/UhXtUlJsO1oBiUd6L7GoT0G0D8GwI5D2YgSrCuK4NkUzEgU/I8G',
+    'Bangalachuli': 'BBZ46gR+1wyBiHnFuIxiBxGrSsJ36BgU4PyPjI8PmO6ClLgOxHiCndoM7O2FwesR0S/O4PjOs6BhLrN9Ib1Puc1JmDsBkK5ImC7LlJlLkP3C/D',
+    'Dangisharan': 'BBR4qlRk3lyB9ClDI4cxK1CrW3d7M+TlFpL7GmIzJpH2U1buU70B8ICmRyQxI4N2CyXkLPgSwL',
+    'Gadhawa': 'BBbk0/QqptyBlIsFrBwSmDikCjS2YgH6E5PwG9GxNiFfbld9KzHlB3QhZ0FtB9U8EzErMrc3P7/CmZ4CoCyJqNjBuHkJ+GnFyQkE+blJyEwNnGmR4DmN',
+    'Ghorahi': 'BBlBq2kRmntyB/Q3Q1FvenM8OhCod/NyH7CoLhTxPlMuJhPzJzG3X3O6FMlIiJ1GxDtNmGZoCxLpK/K2NrX2EhhBkTxmByRkOqElKyLsJsDpNwSgCsNoiBkY3CmHsFwBuRyQuEhGqe1IqDkMkMnL+V4CqL/MqG',
+    'Lamahi': 'BBhBykjR45lyBjL8kBhQsVnWi1BxE6gB5N0XoKyLlCgLlGakDsOnK2JwBuE2HrG4K6EhG6mBrftC9LjI3G8ClDp1BoGlRlF9LyQnNBzXoH7IFnLoK/D6DvnB4K3L+HpYmHjDlJvJkpBpkB+YyD',
+    'Rajpur': 'BBhB61/Q++qyB9bmJxQjE9GoFtHjJpNkBnCxJlZ3CiBtKiPtd8YxV4SvnBisB57BuO7hBlFvCuE1Q4jB/iB2LlCqH2DtCkfuI2I3F2kBsOKxhB8gBmJwJlHkD9HqY3K4L5DwnBnKgEGoLnH8IC0X',
+    'Rapti': 'BBR46gR+1wyB/KoTlGuCjCzKpE6J/NtgB1HxE7CzkCsBvSmIrFmD0J4G7C+LkImewDtEqiBwGkQtIyiB',
+    'Shantinagar': 'BBQ2wnRwqmyBnO+Fh3B7U4G1L8M3F/RvLnLMxE3JqI9ZiQiMuEwQ2HrH2VN8hBoMrF8RmE+L',
+    'Tulsipur': 'BBhBq8lRo/pyBxQtEvBtRlHrFjY4CtD/QrMtS9C4DjNxErDqNxLrJpEmKrNrH3EnK4TrgBkL7kB0JqH8GlImFqL8M9TsW4dsJ0CgB3ciFgJ6dyN2XgG+O/EqEwiBhOqHE4PhVuSLiQxMqC',
   },
   'Darchula': {
-    'Mahakali':
-        'BBWq/mS2inxBzLnFlQ5DvN9hBjNhF3GrJ2F9HkE/OrCxMsHvLpCzJ8G9O3KjNX5MyT0G6EkkBnEqRqRqJuCgJ4MoL6KmMxG+M',
-    'Shailyashikhar':
-        'BBVmjlS6tlxBhI2CtLyY0H4Ne6cpLxDzK0K5HlF3DpOqF7HzBnpB9LvNvFxPuHf8KnWqJtEoEoE4F7ImHuP2J8IqIqQ',
-    'Apihimal':
-        'BBnB+xpSsquxB5NkE/NhMhIOpM0Q1NgHzZN1H0SpUpB9X/GxJ5PV/auL3IExUoLhjBmM5bnL0EjHlPiKnF9F9PoIpMnEhEoIzQwSnFyLqNwU3RmCkQ0J3F4UV6B2SxPsU8XkPsC6S6KsHgSAjPggBxCmQkKwHuE+T',
-    'Byas':
-        'BB1B+xpSsquxB0E3RtE9TjKvHyClQkP/f/RA5KrHrC5S7XjPyPrU5B1S3UWzJ4FmCzMlI1JkEtU4PjRkPnImE/R9S3R8EhHub+P2H8V5FwLUqPkbgdL8L2RoMmN4B2DqK8VgS2HsYiJa6JiU4W7J8PmN+ZubuB0esFsHxIkZ/HA1F8J7I7G3XgT3G+L3dnBjCgN5GmE/TjL1G9N3RhTnRzH',
-    'Duhun': 'BBJkwnSq4nxB1J1VjHCyDloBoKrOkTiP+S4RlEgSjPoI',
-    'Lekam':
-        'BBRiljS4zkxB9RnOrCxRiD3KtE7MnI3M4P2H2M9CsI1PiLtEmCoQhE0J6QoIuC4P3DoLpJuE7KoW',
-    'Malikarjun':
-        'BBRijlS+4kxBnN5QlHtP3F8IejQ7DjP5QnIiEzJlCnQspBvLmH4MmDkT4KkN7G+OqC0JrHwLsCyM',
-    'Marma':
-        'BBao8kSy5txBhMhIwIhWlS/uB7LlPhCnSiLhT6DjQnFzd+E7U6FnFqKuMkDqLwLgFyBkI6V2HnI0QoEiEnIqM+F+PhKoFkHmPoLzElM6bnLijBDyU',
-    'Naugad':
-        'BBU6vnS+yoxBvU4RxLpNjXmFlRzHxBjIvL/E9IjUqJ1EtDlYzH3NuLxYsH/CwTmKwN+hBmQ6DyGmHmM/BwJ6R9DqY',
+    'Apihimal': 'BBjB+xpSsquxB5NkEnThNrN8QtPmIzZN9JmTtqBrJhJhP4D/GvEnUqNlL/BjW8Xx2BFpEnL0ElH/M8EzKoFmD9F3QoMlgBwSnFsGkNqGAsTxRsEwDlC0MsetG6B2SzP6V6XuNmG+WkZwD1RmwBuNiQ',
+    'Byas': 'BBhC8/qS86vxBgUmL0IvGI1KgekBse9e0GyHiMrMiO6DqNxawBnX/EpK+E/FmF8CoNtR2P7+B4S3J+c/gBwKpR7BrLqRvS8L5VjChGyH1EtDtYzTpY5G3BnG0I+QqVgCgYhiBwQlI+K3UyGtY04B1QoDnmC0hCpVqHzKvVhKlChG7VzUtQvErL5avI/D1R5Z7Z7BrS6F1LxHxVvSlNhO3BwV2dzoBosBfsOoI+InC0MsetG6B0SzP8V6XuNmG+WkZwD1RmwBwNiQxDkdwVuO',
+    'Duhun': 'BBIkwnSq4nxBzJzVlHAoEprBmJrLsTmJwVudjI6N',
+    'Lekam': 'BBRiljS4zkxBzRlNMrd1MzZoKFwF8HwN/C4H7PyJ3EwDmRpE+MiRiEvC0I+E0HtF2NtNsGhF8R',
+    'Mahakali': 'BBWq/mS2inxB5bhJhOhUS7NpT5KkFxL3ErIyIlDjEvKgH7HE9U8G3MjF/N3FiBT/MyT0GmHsRxG0kB6NiFuUggBgJkEzK4hB',
+    'Malikarjun': 'BBPijlS+4kxBpTzf7GoI9C3fhRnEkCrdykBxMyGuCwI2e4FhBkFgO7G4MD+U/G8HkEwK',
+    'Marma': 'BBUo8kSy5txBhMhIwIhWlS/uB7LlPhCnS+OrjBlF9sBiL3K8aimBgV0GnMmgB+F4QnFlD7E0KmHgNoLzEGqE7Xy2BgCkW',
+    'Naugad': 'BBT6vnS+yoxB3Y2RpHnNjXmFrQxG5D1KhKvD9I5TuJjFlL5lBuLxYsH/CwTmKR8NiOiU4WgLoM9BuJ4R/D0P',
+    'Shailyashikhar': 'BBUmjlS6tlxB3JyE3J2WmL+lBnFmFvIlE9K0K1HjF3DpO8FnL9BtlBtKjJlLzZsLoEiF7RuNrGwF1QOwS8GnIgYsnB',
+  },
+  'Dhading': {
+    'Benighat Rorang': 'BBe2n/Qg93zBsCsQjG+H4GqChC0F9JgC/X3I1CsHjYgNCoJpO2T7PtMiO/gBhNzS4MtI4KwGyQrY/IvoB4FjL2E9C2MiH4EhI+H8D4ChX2K6E4FhRgK0dxS2oBkO8T9FyG',
+    'Dhunibenshi': 'BBO688Qiu+zBybkFwC4H2NnE4H89BPqO/JgL5I/BrFthBzFgFpHlP5VpFrHvY4InS',
+    'Gajuri': 'BBP2k9Qm+7zBvO7X0U75BmZxO2CrHgY4IsDlDjC2W+EwMvHkWiMmR/KVyCjDvMxGpLiC',
+    'Galchhi': 'BBVm5/Q4o8zBxFyK1OxG8EmSvM+GhL0bhIrJ0K1UjEnPhJvDInKtjBtCI5FwkB9fqLhCwMyGxCkDwKoBfxOyU3OgD8S',
+    'Ganga Jamuna': 'BBS8klRqq8zBlQKpNvQ9XzKpInTwJ/WsI/E2J+EkF1ftDvPqgBqN2C2P7M4OkCiQqO2GKyRgY6CnVwb',
+    'Jwalamukhi': 'BBI6uiR8w4zBjJgS/VgH5V3DtVp4BwdxPkhB+H6Lgc',
+    'Khaniyabas': 'BBMm/kRm0+zB9ShHrGnhB7VtSrElX6D3S+X0K2MmQ0RE6L2LZ6anP+V',
+    'Netrawati': 'BBN+tjRq+7zB5R0IzF4RlM5BrPlNkGvU7E/NwK1S6QhKsC8XkGnP+FoCwJ8Z',
+    'Nilkhantha': 'BBU23iR0q6zB/Q8JvK2S6EyLnGkO0C6N/oB1Q5QE9E8KtFHqGhsB5DpRiO9Q7C/JyKuFuI3P6V4DgW/GwMxSiHoL',
+    'Rubi Valley': 'BBZm/kRm0+zBoCpNoP9VnDxKsGrJ9O1SkJ9BoVvb2P6H+Q3FiR6QlCuEyH8BoFgQ8S2G6GpD+NsIgNwV3IyxBhzB4a5QtJhMyK3R/CxUjb7PjE',
+    'Siddhalek': 'BBQ85gRkm5zB/H0P7LzE4DqJvEgIld+VZ2I/EpB7ErK4HvahFnZ2KpH5G/EkG9HY3Tsb3E',
+    'Thakre': 'BBQoy+Qwh+zBlDsLxOoOpJxBmBrGrb7E+KtPxNlf4JxC/E7EqFnUujBuCHoKiJwDkEoPzK2U',
+    'Tripurasundari': 'BBNymjR026zBxGxDjHkPMzmCpL/KerOjHjN4SuMqDyN+VjBsRiKtCmtBjO5C',
+  },
+  'Dhankuta': {
+    'Chaubise': 'BBR+5sQ8tr1BqKnIuiBkB8I1EQqQ0K2MzD6J+KsRvR4VrOtDrU6G1K/FAuX1O4MrCnsB+JpExJ9e',
+    'Chhathar Jorpati': 'BBNg5uQo5r1B9I7GH5PlH9M4P9HsVsGgT9BuHtNqBxTwetIlM4egOgV96Bqe',
+    'Dhankuta': 'BBJ0ouQ01q1BnQt/BmhBvFmemXwG/HyLyVhJ2c/S+BrVrG',
+    'Mahalaxmi': 'BBP6pxQu8q1B/N/UqJtQ4IlrBoNzKwK+PwSGwEjFsFwO/EyPwDyhBpFoGzHlBpTsUjIxH',
+    'Pakhribas': 'BBOgoxQ2op1B5egJ9K5RjGkI3VxSjCpRwSrR9C3P8ehMuRsH6N2Q+GmRoGgBnN0K',
+    'Sahidbhumi': 'BBQsivQu1o1BzK1ErfuF2Dhc5I5E/CrLsLxbhJ9BsC1DoKmB+EnGmFkIgNVwZ8X+C4PvSsR',
+    'Sangurigadhi': 'BBX+5sQ8tr1B3C7RzMrPqFnb+M5QzFpZiInOvJ3JoB/K2HnWmYpB4E6BrLubgDsL6I6E3E+eiG0E3EiI4G4DkDkaiNue7I2EtiBjB',
+  },
+  'Dhanusha': {
+    'Aurahi': 'BBIq7pQ62w0BzK7B1C5KzJS0KlgBuG0H6OhFc2U',
+    'Bateshwor': 'BBKo2sQ6zu0BzK9B5JxK4CzFgWIkClNkagGqLkMvJuC5C0H',
+    'Bideha': 'BBR2jpQmzx0B9O6C1IlJkJpMyF/Y/HrL4B5N2GsDkC+MsLgGpEiG0JR2C6KuJkBpDgWlH1C5BoN',
+    'Chhireshwornath': 'BBOwssQ02v0BpmBlQoBpMkH4JyJX1C5IgElI+H0CIpNoWgOqJwMTkM2QwElImJ',
+    'Dhanauji': 'BBK8upQyqv0BpF4a5MtH/LxfsJ2C8CxP8ENiF+F1E6KoM8D',
+    'Dhanushadham': 'BBUwosQkwx0B9WlBuIjFiB/JrGrD6GjB3MjQkN1CxGhH2N6FiGnRuoBkIsMzD8KoLb0HmMsHzHsKlMjI5jBqInLoQ',
+    'Ganeshman Charnath': 'BBbulsQm0y0B8BzO7FnMiHlJ2IRoJ9O+YrJ6OGoK2H0HrKlMrH6C/C6M1FgP6EoR1DnD2yBtU4yBnfsqB9LgC/FvVxJ/BuXhnBwFF3ElJzH7G1Ob9Y8N',
+    'Hansapur': 'BBTkyrQ+0w0B1JR/B4IrG1BlCwG/O1B9C7HpMmEpE3F6JhVb1UoJlDoVqFmE+GvM6BkGmDxC8MsMuIoI9C',
+    'Janak Nandini': 'BBJ+zoQ4oz0BpLrU3H0C1M9HehEgOyB+I3f6LqJ6CkK',
+    'Janakpurdham': 'BBRskrQq8t0BlOoG6DyQuH6CpC6GjIf7H2PpPRrKoH9GvMnM7D2E5KzJvFEzN4QvUwOmE6W7H',
+    'Kamala': 'BBO+zoQ4oz0B0HhY5Cpb+KlCHoL8Q4E/C+K6OFwGhGuQ0OnHwD/BiJxWyL/agD',
+    'Laxminiya': 'BBN6hsQunu0BI+L3IlBlB+QrFoC/KjLhIU0BnGpHvB9D7PoNhHgOaoRyE',
+    'Mithila': 'BBd43vQ6lw0BnR2D/O5E9L0GvN3QpUiBwHhJjS/FiCzK9KjOyf7C6CzHyJ/BjDzHmSiDqBrHueyDkMuJ2HvHiB0K0LqIyJvGkMuBiOlTyI3B9GwVpS4DzHmLlhB8Q',
+    'Mithila Bihari': 'BBRwhrQ+pw0B7E5F+D/IjGlDwNxDpK5IvODkI5PmP0BiCyLygBmNhGoR1N5FyGiHjF4EzHhDnCyG',
+    'Mukhiyapatti Musaharmiya': 'BBHsnoQirt0BzLqK6B+NlGsF5Z/wBmNuF6PvD',
+    'Nagarain': 'BBJq9oQuxu0BxD2PngBzLUhdyLjN+MyPqJnFuI0F5GiI',
+    'Sabaila': 'BBUulsQm0y0B5hB1CtD/IqG5F7BlHnZtLuExQiOuCmCvGsG2BgC3IwOqCyE0E5GkBsGsDhBgKtIkF+WmBlImN8GqH',
+    'Shahidnagar': 'BBU0jrQwxy0BxMgF1UpPnC4GnOMuCjL/Q7EMjLkKuD6BnNmH2CqD/VsJyIyBjHiHgByDmSpEsFoZuL8BmHpG6F',
+  },
+  'Dolakha': {
+    'Baitedhar': 'BBIuk8Q+oz0BhU7D/brc2VtjB4f+I6RwUxOqYjH4C',
+    'Bhimeshwor': 'BBPm59Qwnw0BnKyPhSkLnJmWpMvLjdzHqJtVkc5d1OtWsK5D+B3H8Y5B4UuPnEkKkGkR',
+    'Bigu': 'BBlByjiRwx10Btb1OjIe1O5iB9tBuBpd/Q3OrSmd3YkJvfgNzM/F1X8M3K8X8YibgPqK+jB4IF+IrK2RlC0WjP+Z2JkSxHqE6F/DkQuF2HoQsH+KyW+QPyBwH5V+EzQkO9J2BdnJtGlC1gBiN3fiB7E0GqDkgB',
+    'Gaurishankar': 'BBmBss+Qu330BvCrhB5U9EL/MxL7GvGpNlE1XxRrHtH3xBmVlcmsBgvB8mB4S2KtGuX8BmQ0jBkIdub2OjI4L4KqKlR8HG8UxTuSR6TmPkRkKJ8G2RLmLrKkEqBmHzHiJhrB+DhgB9HPtiB6KlK6C9Q3K3OnOzFjDkH',
+    'Jiri': 'BBYss+Qu330B3Ob/FsK5K9B5D5PnNpOgB9O1G7HxtBtZ3S77BrLnKsIjOkL5HwN4GgF4JsUmE0J0YtBoPwRkHmE2XwGqNyL8GI4M+UmF',
+    'Kalinchowk': 'BBM429Qq9y0BjbzV/HpPqCjJojB3nB2K6D+J9ImI+D0O7DgG2X/M0M1FiZ',
+    'Melung': 'BBL6k7Qknx0BlmBwB9a6H2E9hCiV8HsJnMsMqZ5FyQsIrDyHwEgG/H',
+    'Shailung': 'BBRmq7Qolx0BjGc4DlFvE5T/FgIxHvErIsD6FxQrMpZsU9R0PtqBsOsQ0Q+EyDuStMiG2OmWjcie',
+    'Tamakoshi': 'BBI896Qy0y0BvT+V/MzRtclKzNtR4WrR8/B7GtUif',
+  },
+  'Dolpa': {
+    'Chharka Tangsong': '3DB9Bw06R6p/yB5IkKB0U/NwC3D6IkEwM9NwO6JwR1f8LUzMvMtGwBjNpFpI5KuJhKQnDtH7OrEjewB1ExDkC3KlRvHhHrNnqB/kBtTuBnFtNpiBgC7N1tBwB1NhSxQsC3W/JteiN3d5GhMwJhoBwX4N0VzGkhB0G0Rh2C6N6C2OoUkUqNwUuCsMsU0W4R7O2H/QfjHqkBsFga0Z6I6KlHiemEmCiKsFWkQlZoYmLxJ8eoGgF8F2eiXqmBrHkfhPoHBB9QumDBBPaBBPUBBNQBBLKBBdcBBzBlBBBLJBBhBbBBLEBBPMBBxBABBpBHBBXGBBxBiBBBRyBBBXwCBBRkBBBxBuBBBVQBBnCNBBdIBBvBEBBvCPBBZOBBbiBBBTMBBTQBBbOBB7BDBB7BJBBTOBBBnMBBLyIBBFZBBJ1IBBFVBBBLBBNpBBB7B/BBBnCPBBnBCBBbMBBVMBBXMBBxBpOBBVwNBBW9NBB5BwMBBpBrPBBtClCBBTvDBBSsDBB3BvDBBhCsBBBlB2BBBdkCBBPMBBNMBB42B4WBBPaBBPUBBNQBBLKBBdcBBzBlBBBLJBBhBbBBLEBBPMBBxBABBpBHBBXGBBxBiBBBRyBBBXwCBBRkBBBxBuBBBVQBBnCNBBdIBBvBEBBvCPBBZOBBbiBBBTMBBTQBBbOBB7BDBB7BJBBTOBBBnMBBLyIBBFZBBJ1IBBFVBBBLBBNpBBB7B/BBBnCPBBnBCBBbMBBVMBBXMBBxBpOBBVwNBBW9NBB5BwMBBpBrPBBtClCBBTvDBBSsDBB3BvDBBhCsBBBlB2BBBdkCBBPMBBNM',
+    'Dolpo Buddha': 'BB+Bw06R6p/yBvJlQiPnHsHjfhXpmB7F1enG/EyJ7enYlLrUiZpDzKhelE5KmHlb7L5D9WkHpkBgRgB8O1HxOlOwP3U6E3SoP/NwfolBkmBrLuGgKuOtE7Igd4GsW4GsG2WvG+NwLuNiCvEiN0NkYsQ9HkiBltByXpJmKxRmK6XwlBomB2GsVjEwMnFnGuBzL5eyHtFkJsGiV7I+RhSpB7J8OtNqD5E4avLuHjLlC3C5GnNkC3L0S3TjEpV6QwD2NxJ4CzFwO',
+    'Jagadulla': 'BBrB+3+RipvyB9K4CnEqUpMsLxE4O5XpL9P8QjOgE9KjOvV+ItHhbtVqPthBnGzHthBzN1FxElTvbtB8Qxa7H5NqPhVgBpZ9E9G2hB3xB0L2H4DiQzEsa4OgoB2GqCwN5WoPnHwE6D8D3F6JkNqNiDgKkV6OF4G1JuRnEoJvMwTwGmIwoBtQMhIsL',
+    'Kaike': 'BBjBuo3R003yBnKhGlK7RvUtCjUpN1OnU5N5CzRi2CjhBzGrXmG3VpNvCpT8apW7D5G+OrsB/BjKqMxJmCvJqHpFiNqHoczG4W8DP/IsEC0X0IuB2H0YsBlGmM6Cga8R9DmIiGmQNkJmLjP8N5E4S',
+    'Mudkechula': 'BBSgk5RuhqyB1hB4xB+E+GfqZpPiV8H6N7Qya5T7dvKfzRmLiDnYgVnrBIxY1PxRmIpkBqJjE8RqIw2BwG',
+    'Shey Phoksundo': 'BBwCgxhSqq6yB3G1XvlBnmBhK3XpKwRxXqJjiBmtBhQiI9NnYwEhNtNhC9NvL1WwG3GrG3GrW8I/ctOuEtG/JpmBmLzEpLpf3e2GpYrFpS/PtM7KnB9HjbiNlG0GhuB2TlM2BlQsRzJ0kBuGmVpPuHibwV9IoN8N6QpHiLpN2XqLyE3OqMrLoEpU+K3C8C2H0VwMkIhH6RoFkEifmXwNgFgKitBxP+KuUuZCnDgVwK+SyC6b1IkI7K1ElHmJmBicgFgF1N6HmC4HxOmG/C6NhKuCvEmK4F6C6CuQyHuC1G+G4D0L9EuJnM5DjCiNsLwKxDqNjKnCjH+KFoS',
+    'Thulibheri': 'BBlBmm4Ro21yB5b5HlS2DvC3ZqG9LpFnEtT0CtB1HzXzIrEBQgJ3W7Dnc0GnI3G9IsCuBjxCzGhLoC/K5J/J+WvOkMpdqLyCwDxF+H8FvBqJkMibuUyH8KlGqI8JoMgW5NiV7DoSsYsSgSBuH8a0akN0F8S',
+    'Tripurasundari': 'BBZoj5R0swyBpUuJ1BmQzT+LjH+uBnZsHnd7T8DnS6NhVnM/VpI7J7KmG7U7H5M3e4M9N6c1MJhQ0J/PwCoMsNtM6KcgTge2c6BmE2S0N2F',
   },
   'Doti': {
-    'Dipayal Silgadhi':
-        'BBY668R4iuxBrLzBvOgOvKvFtFuY1N9ExP3LnQIwLpT+HpM2L5OpIrH4M/LvFzHqRpKiHvQ0FhLqNoGxOuOkK8UEwU/F8H+OqP+MjF',
-    'Shikhar':
-        'BBiBkw9RutpxBhI0DiBmKnKmQxJvFjIuFsJiOlGuM5QxDzFiLhHwQvMoO/BkJ5J6BxJpJ3ZvFTzDnbvP4BzF8QhHL7S2D5NyLlS2IpWB7WkYsB+CuKmU8UgElIkR5D8D2MpE6IgJwCgSvL',
-    'Aadarsha':
-        'BBX0p8R++sxBlBhTjK7UuXpXxIpUkItFyJwFoKlQhBlKiJkDDgZoKmNxB8KkLsEmLgB9EyMjNiO5JoIjMyRtH9J3F2FciPjHK',
-    'Badi Kedar':
-        'BBhBu74Ry1rxBjM6EjGsP9M+FwC6MpE2avFgM/L5HhOiFvK5JxXgE7R7GhC9PsElSpHrIiClKkHrIqNS4EzTxZtNmGpO4OEkL7OoD1NkG6B2G3QgY2CpEuW+GWrFiMsNqP8SvC8SqX',
-    'Bogatan':
-        'BBe+m1R4ztxB8R8GyX/DwK6JiOhFgM6HwF/LqE1avC5M+M9FkGrP8InBF2KiI+TrBqPxI2XsJ2KkLwDsFiWvO8GvV8WrK+FtHiFhY+PlZEjMxRhG7MwIpejQnS2B1M',
-    'Jorayal':
-        'BBewl6RsooxBC8W1IqWxLmS1D6NM8S7QiHf/I7SpX7SwCrNpPsFhM9GVqEtW/X1CX1U8L1lBkTpR7G5L6I3S0I7EwIlRmK9CoIkZgQE6B4OyJcqLoR9CgGiE2Z',
-    'K.I. Singh':
-        'BBRuh6Ry1uxBtRuNrFhWjLvDrJ1KyI1XsBpPhI9TsH9N8XsS4ZwFyJqJH4EqIsH1L6O1BkKzOuM',
-    'Purbichouki':
-        'BBTqu8Rq1wxBtF5HrY9N9IrBjI4KjHnDrP5c5BlW0MpByP4L2N+EuFtYwKwFwO/NsL0BDuMoH4KG2VnQ4Q',
-    'Sayal':
-        'BBW2t+RkhvxBxLH/R5O1MqM3IlP4D3c9MkF9OpPiHpJ+KoLkHJbhP4F1FuH+JkMxR6JnIkNhOwGhCgS4UheqR4E0dmKmX',
+    'Aadarsha': 'BBa0p8R++sxBlBhTjKjVuXhXxIpUkItF4JsFiKhQbxK4HpD1D8C6E+DDgZoK8MhDiJ0MwG+GhFsFqS5I4BtNkW/HnB3JwRhI1JjIkD4CuR7IJ',
+    'Badi Kedar': 'BBgBu74Ry1rxBjM6EjGsP9M+F6B0TjJ8flOjI7LsFpX9MzKoH/R/G4C1f5HrKqH3IlF7BgGpI8NiBmH/QzZ1OlDzJoclL8GtW4IA0FrQmWF7DmViJsIjGyIkO4PqMoCsH/FsRmY',
+    'Bogatan': 'BBc+m1R4ztxBgSgH0KnHqX+M8LrFmOkIkJ7f5BzT+M9FkGrP8InB8H+gB9J2kByUoOoH0X3HX/fqhBjIQnC2L9JvE3SyOpSuD3PvL9BxQ1IzCgJrgB7P5R2C9K',
+    'Dipayal Silgadhi': 'BBa668R4iuxBpL1BAuHtKPjEkHpMvE/D0X5c7QrVqC4kB/rB7I7L8HvLmC+EkClD3E7KoUpMMvK8L5FjCvIwN+CpP4RkKkVkBoT/GkJ+NqRoNnI',
+    'Jorayal': 'BBawl6RsooxBzCkoBnVilBkD4O7GsI3M6CpShhB7H+F7TjJhG5IyF3LxI/F4F1RtVR5E7LuL/sB6U9TzGzMka/oB8J7CmIgZuPL4C4P8NwE6GoN5BsQ',
+    'K.I. Singh': 'BBQuh6Ry1uxBlB8HnQyFpF/VxUnO+J1kBhIxWqD/NqjBgXmSmBoK2JsHtGjI8K8I8L7e4nB7EN',
+    'Purbichouki': 'BBRqu8Rq1wxB9d5V1ItB9G2KtIhDpPvc5B3W0MhB6c8QgEzXqMwEkEjHuKQAtHqL2B0HosBvPmP',
+    'Sayal': 'BBW2t+RkhvxBvR3DjF5NnUyOxIjQ6DpcxN8H9NpRqHpJ+I0K8IK3CtRkIjDiI2J4JvRgIoByFvNkRjMgS4UheqRmE8b2K4S',
+    'Shikhar': 'BBhBkw9RutpxB7HoDcyKhKiQ3JrFjIuFyIqUrFmG5QxD2CoI7L6FLwKnUqMsFyGxCwHjC9ErHiHnK1JlSlBljB9WqVnRjD3OoVhlB0CjoBkYsB0ImUgOiLwEjI+O/FsG6NrEkKwIuCwK3K',
+  },
+  'Gorkha': {
+    'Aarughat': 'BBT6xmR2z7zBzUtJlSLBrRpO1GjChQ6MrOrCzPpwBpVgDpkBgFvG+a+IiGkOubX+HinBvDkSyJkILwP4Rqa',
+    'Ajirkot': 'BBT28pRo92zBjN4C9oBvJ5JwIlOgB16BnZ7TnSwGjN0T1CEzNiH1G2Z0T2QtE8RyKyVjC4esOM+GqL+IlE+I',
+    'Bhimsen': 'BBS08jR0j3zBzF4JQ4f1VmDpH5O3StMxE5OjM9D0RrJuNlYoU2EUsFoKxCB7TkGrL4HgTtMkjByBiG',
+    'Chumanubri': 'BB6By5rRmj+zBsI3+B7jBXvH4InW7Y3KrjBjLtEmRrXyF//BiG/HzJ7FlEpX0NpU2nB3Y6H/X0P1JsFhLoPoDiZ/G4CtHutB/CsP9OkHkCuG/FiN0E2C7LqM9L6SwU/DsGoGiUzKmJakiB/G4KjawP3H+WzVrGnMoazEubpY4vBmOubgBublJwC4G+UyFwGkIvCoqByoB9F8S4J2TnbkaegPjLwKxNzF1ExJ3RmLlWlDd3M9ZnIjDvV',
+    'Dharche': 'BBhBy5rRmj+zB5IsJlVapK4GpM9CpQ1INlRvMjVtO3I5GqDtSpG/F3QnHvBmCtE/TtS3OiHoGpP3RpaMvPxJjIAnrBmYnGmK9JgaXuiBrOmoBE7I2rClRsXkLuE4KsjBoW8YwH3I8jBY',
+    'Gandaki': 'BBLwuhR692zB9VmC3DoIjtB4UnD5F+FxGjO7TqOnnBsT3EyMnR8c0a',
+    'Gorkha': 'BBS+3iRmg2zB4C9H7I3NzVC+ExtBhJlMvX9HgIxEpB7W0EmDmI7UyN0Q5B0ZitBofiOohB1F4hBnKyCTrF',
+    'Palungtar': 'BBPkzkRyzyzBnIoc7P4DvPwOplBrTxGrJgEhBjDrb9LrLyJvf+P9CmQ0W2d2FmHmNsQ7F',
+    'Shahid Lakhan': 'BBU+3iRmg2zBnP4YzRsJ7HlC5H/lB7cza2GtGtF/IkF7KxMpNkC3NoEkD2DpHoNHwQ2K+LO2J4OxFgrB0VB8I4N',
+    'Siranchowk': 'BBNiglRw01zB7kBxLjJ9clOvM0HyCwPvO8P3DoInc6HqTgP6IqVmgBhF6UzT2C',
+    'Sulikot': 'BBUw9lR8n4zBtE9NtbY1I9P5c1F+KvoBnGxSwgBqI0WuUu0BuXuUa6JvI+oBwJkN3CiBsJ6FsBnnBStiBsO/ZYlK+J',
+  },
+  'Gulmi': {
+    'Chandrakot': 'BBUgklRk3+yBtI+HrNLXtJqIjLnHnK4JxV3GjRjKiEjO5L0LzUoXvM4I0S8W1F4DpIpBmUwGyNta8UuEwfpII',
+    'Chhatrakot': 'BBQ25jRuz8yBrIiR7IzEzCnT3pB2NoGpL7CrO9TzLuCviB2J2B+QqQkQ6B+J2KN2JsQ7EwF0D',
+    'Dhurkot': 'BBW+pmR8w3yBpJ2MzS0JkFwKtM0EqCsL7NwFP5FnRZsJjLrRtU+FzPwJAxEtO8KlCkB3TqHgC0DkhBkUpL2FgEqH1HiGgD',
+    'Gulmi Durbar': 'BBTk8kRqw7yBjhB4XgB9JjHnH1S6DO1J9J1K7QnCB5RwOjL8EqFgI/C6G2GoLAiCoH8MvF0LwFO4OoUiJ',
+    'Isma': 'BBV8jlR2k6yBrItHyInIjMtBFvEuRzNvCjLsMvEhFzK+NrIkF8B/C0QkG4E6NX0H2G6O/CgF4GZgE5J7EF6Q9HuH',
+    'Kali Gandaki': 'BBUwtiR46/yBsNzJ4JwF2PnRI3K8NrM4KwGmDuM0ThKkHkJ7FmdnPmFvJqLnIpM7RMjBwK1NyQnJfjG/LrFW',
+    'Madane': 'BBSkunR0z2yB7K6WxLlK3N0QO3MhG/C7f8P1FrqBgD3D+JgFoI9F8C0E4HvM8GqD8D9H4R4E4TvJwFyS',
+    'Malika': 'BBSwjoRs34yBtK3EOwP5LPnFzI5OgDzH1G3NYlG3EX5S8W9c8SqGiHnUwO8JQoT3EgE+MuPhI2H',
+    'Musikot': 'BBUsimRoz8yB7Cpe3DqIzawD/EtQ+K9DHhTjL3HiL7PgEwDgwBjO8HrHG5QoX2CIjQ2IkH3xBw1BuGsUvF+OoF6P',
+    'Resunga': 'BBVuklRmv7yBnUhJtB1PzKxE7MwFhCnHnLAvEnGzKuCvH1K6VzMkRpCwNtR8SEmFwFnIoM0MuC1I2H2I8HxI0MkLqH',
+    'Ruru': 'BBI+qiRmr+yBnX3UN3Z4yB/Pe+O6I4MnM6LH8H',
+    'Satyawoti': 'BBRutkRo1+yBlHvHxHiCha6mB3JvFlNyJ5D1CtE5OsL5W1ErLwXrLuWroBqNgKkKhE4GkR3JyVoHuK',
+  },
+  'Humla': {
+    'Adanchuli': 'BBOqyjSgvgyBoCrI1IhI2C5QtezXWvP+NsGs2BtoBgdWkCmQlO6kBrUiKkB+L5J8U',
+    'Chankheli': 'BB5B6/kS8miyBsKtZ2M2M2H7KuOwHyE+O4K2H8ThJpCqZsLmGsMlEgasyCgMsCoL6QqXzHyYjgBFilBuG2J3I0VxO4K0FoW5WiSQqJwJlBvBmM7V+WxJwbnFtBlL6OrR5Q9M3BrG1MvEqHjLuB5BzQ/PlDnMqFrGtXnRuHrKxJnSwKjL/BhLzLkMhhBnCvQvMvT0G5MvBxSxX0B/FjamD3W1OrhBqL6GgIhI8MKqa/YkLT',
+    'Kharpunath': 'BB1B4mrSu9kyBxYkgBpX0HnL5Q/LrC/ZryCrMmErLlGwDneqMpOnBnR4GrEtVlavS0G5O9UrDpcqKrPpBzMgMxK6hB0EyGlMqHoK8VmIzJoZwGiEwD0QvC2fwN2Y+iB2b4lBwJ6JsJybrC2e/QgLuPgUYsRmQusByRnD+Ira8K1P5LhL0FnOzL1GgGDmL5QsH/FqMeiQ1SvBrE0O/KlE9IvR9G8JtS9M',
+    'Namkha': 'BBtCoixSmm/xBnKlJvO6O/W9JtJqJ1Tb9G2FtJ3LjK+H9nBgHrN6NpPmDpK/H9BpS5QjH7V5W3BvJ8NzLuF7N6YzJvDzTzIqLlM4D9FtFrKgH3DvY5a9MJvJ7HoBxQvqD3LFvKvP4IlWsM+D8SlG4N8K0RvIsNxiB3JhMkCxP2Vl1BkSgL8XSoYnUkIod1HuHYyJwPyLsT2c+Z5C0GoK8MkFBzKmHuBwHsNuL5Q0SgGmJ1G2BwPgI4FgI7R2P4ErD+WzV6blH+mByUT+CuF8Ma5J+cyHqJqOjBvW0iCjIiD9FkMdmkBzH8KsB6Z',
+    'Sarkegad': 'BBdmwnSqkiyB7TiJ3K1HxE9OtOvH1H8K1M1MrKuZpMhRrOpI1S9dgYjMO3KmIvJrB7KsUhK2P5uBkK7G2ZuEwEiH/LyK8B4KrM0ZyImdkL2LkS7G2VoZzGyFoBoR',
+    'Simkot': 'BB5By4wSsujyBtsBxRrRlQ/TX/KtP1egR/d2BrH1I3lBvJ9iB1bvN1YwC1fvDzQvGhEiKjYpWpJpHnKdloBodzT4DmK6a+M4DwYsK/G+FuFmM3DyItLyD4TpP2JjIrB5GmP7N0L4EsO8S+RgRqH4BkSmK+HuPjDsN5N+nB/GkK9HyJ4L6G1F2TcuJpJmVmK2O1OiKyEpJkpBmHoHhFiI/FtD3M+ToF4OmJ+BhHuZmPoHuBiL',
+    'Tanjakot': 'BBN8/lSyk9xBtJkH5JlIvXiBr2BuoB9NrGqE5XvNlKIhWsWtYgYpByhBySqkB8H',
+  },
+  'Ilam': {
+    'Chulachuli': 'BBYqsqQg0y1BrgBqSzIvP7IxBThQsStjB4mBnL1CpJoF3H+MiKwKvOsKuDyd1mBmDidpPgT5K6HxOlIrIuEjEiMxP1FpCkJhK2CrF0WmJ6J',
+    'Deumai': 'BBWi9rQ2i01B9C1MmFhS1G9LyHDAjL6K9EucoIgOpJgfifyXjGgKrOwTujB9byL9MnFnPoQ3FiQ3VqF8BtbtWiBpMvK7IyH',
+    'Fakfokathum': 'BBMg2vQqxy1B/JsO5XgGtF5KpZjU4HzDlKnoB0HjCmE2HoOlSgOgIoc+e',
+    'Ilam': 'BBjB6xwQ2g01BtO4LpC8JjLbpS6MYyL6LDzL6VlKP/LjM7oBuCwFmYvCqH7MoGxH1IoJ1WpHrJ8D3IjFwBjC5J6DnC7R9EpMrO6E/MiPW8IxHqMwK6VnBsDwMzEkP4VpF4FhQoPnQ+MoF+bxL',
+    'Mai': 'BBco0sQ6t11BhJsP7LnK/C4GnTgH9OvDVlGxKyGrNzE7IxO1N0FgDxHhI7b4EzHxMQ6BlOoPvWypBzRyIlPiP2G4E1H2LsRRyHxHE2G+LhH4rBqMsO2Q4C',
+    'Mai Jogmai': 'BBNkwvQqv41BlHLtVxXlZqD5UrhC8oBtCgMkMkRYkGqkBwK2ElB6H2FyCQsR',
+    'Mangsebung': 'BBXu1tQ4my1B/NqJ9ZrIvO+G9J1P3E2HhP1GxImPrM8ExBvPlJ/JsFtWiK1CkC/I4PyFkEhMwItEgPgIyZza0Isa8T6Hd4NyJsY',
+    'Rong': 'BBhBo+rQ6j61B3a4HI7L+NzJ3WrDrCzF8H/ClUpM+JpJ4YtCpL5JmFlG/c9MqNrMqHC9G3LgIpCtQzEX7F2D1FqMQHlKqL+C2b4a4P/BvJ4IhC0jBtJkFzE4Q0MsG3EyP+DsGpHC',
+    'Sandakpur': 'BBT0gwQk331B1FxCmB5HvK1EjGpkB9HO0MvW5LEbnLuSjNkLcqC7JuO3LiTgW6F6R+B4wB3K+L3I/C5Q6I',
+    'Suryodaya': 'BBfo+rQ6j61BuD1IqHB9DrG4ExPzMrG0E3QuJjFiCzjBwJ3I3PgCrgB5d0V/GgD3G8LoK4M3Q9B8JqHsJnJ2WyGwI0N5F4CxHqPmpBmZpDuVyXmHMxOsdvVrJrS+P/N/FzSsW',
+  },
+  'Jajarkot': {
+    'Barekot': 'BBjB6u2RorpyBzgB7GnE8F/b+CxG9Z7LtP5ME5C7ViG3HgKkCqH3jBiG3B0BhKyRtG2KtTyU9IwWzakPoS4JWmNqMzEmImHmL4J0BY2L2J0FemVoEsE2EnD4DyInH0EuC8JhG0NiEoSjNklBzwBnM',
+    'Bheri': 'BBZy6wR4jnyB9NzE0MvS3W9XyEvHriBpEtK3N2C7PwGpBjFjkB0HnJyE4L0SvKiXiE8RuR8GgcoLuDoFgNiLuBuMwMnPgF1CuI1NClJ6brOyE',
+    'Chhedagad': 'BBhBy9zRu0iyBpZkCrLsMjGnJ1B4J7N4IuIyI0E8UjT0DvC6I1N3G7G/b7RtRhXhEzSwKxE3L8CxIkGoBlE3MiFoBkVpWuOqDuFzvBkW/foJoCqL6RzC+SqFlEyDwE6DoUxGuZ2SgHwepD',
+    'Junichande': 'BBV851RgjjyB9IjFjW2IndjSrFzUjSgErd9F8Enb3EzWrIY8CrR6TvOyX7GqgB2JiPkTghB/C+EkY6SuasJwE1L2TpTmG',
+    'Kuse': 'BBXoj0R2kmyBpZ5UpUxB7M/M7NpEoC3PkTzDzE7UtIxI8N3I2B3JkGoJsLrM0ZhCmdkS8V3IiWyYiD8MpO4ShT0HlM4UxRuGzBiK',
+    'Nalagad': 'BBjBy6wR4jnyBmDlIsOxEmJ5b2NBmL1M4buBqZ6UpH4jBvP8BEwMkCkN6MDuMoQ+CmWkL4EqYzKwgB8GjI8kB2Q2WpOq0BvHhW5TnSjM4B5FpHvQ+BjK1GvG/PoD3J5NvP7FhTnf1apExnBpO5GpDgE',
+    'Shivalaya': 'BBKktvRqriyBvDh6BsE3mBsfzQmTpYsKiKgEwbjWggBhF+uB5OzC',
+  },
+  'Jhapa': {
+    'Arjundhara': 'BBay3qQiq31BlSxH3NhP1Fgc7ckB/GhV2FnDtBvTpG7CxB/L2H1DqKqE4arM8IyFuBoJsN0EyKxGWmGyN4E7HbQ+J/PqBY4JyQgFjI+B+G6L',
+    'Barhadashi': 'BBVqxnQmz11BzFkLnMrBnF0GvIpSvNhBegJ5JuBRiM/H5JpMF/NtKxFmFzBlGiC7LmHwCgG5JqWiFsG3IqlBmBqRhK',
+    'Bhadrapur': 'BBW04mQ8541B5J6DzEnI5LgDrH/HZoF9SqF3HxJ1OuCJtV8OjD7D7PyR8LDuG6Q9IkNsF+ajK+GgHiGxD6D8LgJ4F1SqQ',
+    'Birtamod': 'BBOmwoQqr31B1R0BrMkK9P9GxCwDmHpdzOhBhE5S4HgByDvG6KuCuIxM8XwH4HuK',
+    'Buddhashanti': 'BBQosqQ4941BhWuHxT9EmchNf3I3XGa5ZkLvB0F7b4NiPmSyH1LoL+c2MlFmGsLwJ5Y4C',
+    'Damak': 'BBMkspQ+hx1BpLiFvLpE9O9QzThJnIpSuQoK8X1IqmBqIqJ2OqMyFnLgJ',
+    'Gauradaha': 'BBYogmQuxy1B7I/CzLwHtJ3U2G9BexTjGtN4MtKjRzDI3MwX5KkaiC2TrGqIwMjHiLmG8EdmKmW6Ic8EnHgExRpErS0QjJpEHmU',
+    'Gauriganj': 'BBZihmQqsz1Bxbb5KnJ8D1P/K7H7RwBlHnHpB3GgG/DnGzIgD3GmJpH0FtW+PnLoHyEvC8JiRuD1M0K0FsJJsXvE0E3C9D8JoW+O9HqJqF',
+    'Haldibari': 'BBWo+mQyy31BrX0HjNrF5Q+IEtG1NnJxErViExBnI/LoLjIU1KoUyEkI4JO/L6JtBd/IwNiB4GkPpEiCgE6S2OkBdmQ',
+    'Jhapa': 'BBVsjnQ2301BtdyG3I7DrG4IxRhGvHuEwMtPrGxBhIlRlJiC3H9HoC5MqGeoHrL6Q4LsJzEolByN2BoOkPgCfwHpHmB',
+    'Kachanakawal': 'BBb07kQwu31BjEhDnByKkFqFxO0CpDuRrQ3K/JlX9Q1CtC7NsFxJqOR6PnoB2I/GqJiFqB7PmL6InDsGlHvChC8L0BmGkFnFmHgDpB6NnL+HoImMhEyB',
+    'Kamal': 'BBWu6oQo1y1BjSxN/gBtC1WsQrSrC2PtKIlUkJqEsSzQ0YcVtFlW5IelKlG7EkH/K3DlKmJgS0TiJ+O+QwLqEgN7E/TijB',
+    'Kankai': 'BBQwopQ2u11BhM6HpKpEnKqKjLxD3LxGiG9d1ToDX7HqHlB2BxI6GM8C5I0qB2RgG5CgIic',
+    'Mechinagar': 'BBe04mQ8541BqQtEkQ9MuClFxJrIiHxL+YjEoDsF2RiBZ+Y+MhDkM4FToG5b4MwT8EiWtHmUqM7HgDsC0F6WuE/NyIH8L7berYhMpnBjE3GxLpPxHrRETxK7IE',
+    'Shivasatakshi': 'BBS+lpQws01B/F6CxhB5Q3JT1C+IjW1BvBlOjHqBjS9L0D1XoOEsUvPghBuCgKgL4QgE4IsN/NmgB8L7B',
+  },
+  'Jumla': {
+    'Chandannath': 'BBLmi9Rk4kyBxdyhBzfjSHhiByDzDqC+EgJ5RkU3KsU4MmEkM6PpC',
+    'Guthichaur': 'BBfgq7Rk/ryBpY+HvN6WvH9C9NrnB0Era5DnQxLvH7B3KrZpDkNjlBhEnSiGzNpChK6QzJkHkC4E9RmNA4FjL2OpCkR7V+iBwV1UgmBiI6d/UkOjK+QyFyapDgPoHsM3B4f6F6B',
+    'Hima': 'BBPk77R4qiyBxL1mB1kB9pB6H3FuHtU0U/NgJsIHqM4ewR4LwR9B6MhJmJ8CsGzRiDIqV',
+    'Kanaka Sundari': 'BBWmx+R29kyBnR3DrWmIrH/Jgd/oBlB/O/QxQ8JrhBiTrV7GhR0FjD2VmCoF+UgRmJA+QlHiFmOkVjBiW5O0LoH0RnI4HtRU',
+    'Patarasi': 'BBmBgq7Rk/ryBH1H5F5B4B3fnHrMqD/OxFxakK9QgVnOhI1d2U/lBpDrDydxhBsHgKsWlIoR4DnG6GMkTwNmFwGgLkC4hB4W6H0JxD6HoKjKmdkH+Nxf6P9EoNsf4nBxtB0K3FucvTvGnJwMtRoE/G4JxOE/JjVpNhD',
+    'Sinja': 'BBSkw9R6gkyB5PqClEjMjX3N7JvesNrMHpV0RhD7CrGiJlJyBlQ4bvD2M0VlT6VzIsYnBgJ8S0WZuJ',
+    'Tatopani': 'BBmBgl7RynlyBjR8V1OqC3FkLlNA3E+R5QiD3DxI1EoDnErEdlV1JzFX1L3JzBlHlL0ElIlNpM3JVpLvRtM2CzMpRjDxKkH7RwTxGyLvRo5BoD+egesN5B+H/T8UtDqT2FwJ0LdkO2HsJrSkL/I6RpC9ExD0D',
+    'Tila': 'BBOs57RipiyB7V7H9VqD9HgUrN6Btc3cxTrCyV3pB0MrC8EnZ2JzFqWsMogBwnBkLgZ',
   },
   'Kailali': {
-    'Dhangadhi':
-        'BBlBiyxRmrnxB8EoPoKwOnNsN/I1CnlB4TxG5CqD1UnM+E3O9EvNuChUwWlIjLoB/OgMnPoKsDStLiKsBsNtH9EnKsD5YkIpDyFpQyLuGoK3d6QqK4JnNqDuHmNjHJgYkH0GZsP6EoN1GkFzUlG3H6DyH6O',
-    'Bhajani':
-        'BBZ0ruRg7txBzNiC5T5D0CgJqBkU3PhK2CgJxJiJxSHvOhTsBlKpM7MwG9IyGsJkC3duExQyM1CmSwGwK7BiNzKgGyJkJzFqKuJiG0P/I+R',
-    'Gauriganga':
-        'BBmBq3yR2mqxBrQvFtLyQ4R6V6Q4BlK8P/lBiEzDlI7NGzE/JnT5CzSgEpJ3EuKvfiK8JuMzByMjexIlC2DlQ4ZpMgJ2CoNrNnKvO2GzI9NzCyN9BuDhK2LoI8C1NygB2HoJoL7ByHrKpCrfiShGwf8QsI8D4KhK8F',
-    'Ghodaghodi':
-        'BBa4kxRivuxB1WqFhDrN7ejB3K5K/VgCS1QgJ9RrI3SiBjsB0DmIiKhMsF4NmRgH0S/DoT6C0EgK8NF0DmI+ftE2Q0B0H2kBjPib9F0X5PlKtNqJ',
-    'Godawari':
-        'BBiBi5zR2wnxBnJnLxgB1H7C2N1LnItDiK9O7F5EkGxH5O4H5D0UmG2GjF5EnNarPjHzGK/XgIoH2U9S+b3O4ZmHoQ1H8JjRudsNqFzDuC4WvJ4E5N2B9FuKyByOL0X9GhCvNkX5DsShW2C',
-    'Lamki Chuha':
-        'BBU4xvR60zxBxT5LvG7c1JhPpC9LqChP8IxPxB/TpJ5JjCxOolBxB0SkNmTgB4MuPnB+M3HsEuJ4UreulBnLsF4B4N',
-    'Tikapur':
-        'BBSijtR2pxxBrNlJpS3X3JjPzL9C1S1Q3IkF6LpUjJxB0K3J0H0K6G7M0UkOgLoDsUsCgDmiBsQQhBkd',
-    'Bardagoriya':
-        'BBNi1wR6yvxBpTjBzSjNrS1BmE5IczKxF7Q8PqH8ekB4HiJ0YqBiNiSpT0E',
-    'Chure':
-        'BBnB4r1Rq7qxB1T4PxGzFjKwD3InJpNzD/VlM7FzO2GzG7D3K7QrIiGvfsfhSsKqCqK9BiW1C6DrSwNjX+GiCMzXxBxO+FtK6N1B+M3FuGyK8JX8M+GkL8JvMoW8G6LjTqR7L2lBayV3G8PjG5BnD2NjL8O3ODvHyG',
-    'Janaki':
-        'BBQo7uR8jzxBzWhSxL9Q/VlXyR7MiBjdrQP9CrkB0X4M8OqCuM0UyBgU7IyPpCiPqC+L2JiP',
-    'Joshipur': 'BBO8gvRo9txBzEqByF8QzC+VpVYAuErdxHzN/HP1O4PiKpBjUzC/I6T6DscvD',
-    'Kailari':
-        'BBgByovR2nrxB7HnCrF3NhKiMzDlIb+oBrM9E9EuH/FxJhN0K3SKgF9UvD9IjJwC2DlN4PjSsFpT+I+C8DpM8JdsInHiUvWwNtC4O+EoM9EpD2UwO1BDoNyImCxMketM0BhK7J',
-    'Mohanyal':
-        'BBhC4xvR60zxBwIhU3B3NoLrFsetlBtJ3U4HrEoB9MzMpPiQ3KqTzEhNhSuINuNpJ6PmK+FzXkPhbzHza4DjHrOlEmK7P5Q3B3R5VuLxQkRkGoDyIgWmMqN0D4IoJkKvDyG0FyT5PyRsI3E0TpNRjHsIhCmKqHsIrEmSwD6J1N8gBnT6LtJ2KgBmK1HyJpLyIkEkOmN6L7RqIhIjDwCsN9KsT4JlGwSkDrHyDrNuR9LqFpIjKtJoM1Ma7J6I9JjDbgJ9NlClGsI',
+    'Bardagoriya': 'BBOi1wR6yvxB9TnBtYjPvJ+CoB9OpF9E2GlCxF5Q8PsHieA4DwO8EtE2YwB+MgS',
+    'Bhajani': 'BBd0ruRg7txB3B9D/D6F1bzD+Dkd3PhKQ2O9ZkDvOhT5F7XjFauG9I0GsJ5EvRiFD8BjMkGyG3GzHiFvPwM1CoSwGuNnDqI3JgImK4ExHoM6FS0L4I2HnK8T',
+    'Chure': 'BBlB4r1Rq7qxBvFkNtO0CjIlHpIiFhsBhZnJrP8J7Eb3H1TrM+JrX7DjI2SpNsXvCyBvHgI4FwW5C4P7oBwIuBpDvK0FhDpG/QgD5H6GXhBvJ8atHqGyK8JXgY6Q3MqXkH4KlXyZrMkiCrIXpKmalRuBpIkH',
+    'Dhangadhi': 'BB2BiyxRmrnxBmCyI0JzB9J8IsNiNvM+OrP1BH2FrH3BUqE3Y6JxG/C+C/UrMwFnO/E9D8FlJzDlIsFzLiR3F9DmChHnFE0F5IrElGgMnPmKuDUvLiKsBsNtH9EnK6FhGtC3SkIpD7CpKkF8EqD7KyLuGsK7dqMvC5CgGiHgHoJhNkKuLnBtHoI9DN4X0MwSlJ6B6HmPjI8HzC7GpY4BwC8MuKnE',
+    'Gauriganga': 'BBsBq3yR2mqxBnS/E3KwR+SsU6Q6BlK6PzpBwHF7LvNS7N9OpC0FxI3D1N2ExNpFqKtf8J8J6Q7GwI9YzIrC4D/P6T5E+FvH8JsDoKlIgC1HlNxMkK/H3JmBlCxImLiC2DjKqLsIiH7GzChHufgI+IkLxBwHhLnC/eiS8DkI7JwX0ToMc4H7J8E',
+    'Ghodaghodi': 'BBc4kxRivuxB5WqF9FtP7bejSrM3OwDOtQkLzR1JhKuBt2B8DsJ8IjMsF4NwSuH0QxEyI4DqCzF8N+OwNRG8LyjB7HuUyE3D+GsHuf7OsW7F4X7PnKtNqJ',
+    'Godawari': 'BBjBi5zR2wnxB9IjLnfhIuCkHhH8GpLrIpEqK9MjGnLoEvC7M4H5D8QkCqC6GkI7H5HlPmJ5BzMvSarY+H4H+WrYwKyEM1GgO/GypB8I6KxaoY0M+LxC2B2VzX8GW6J/GemBmmBvItB3P8oBvW6C',
+    'Janaki': 'BBSo7uR8jzxBnWxR9hBzoBqSlMe1c3JvEhDkIlEhFrCjlBmPgMwBjEgMuI4KF8EmRgGkC0B6UlL+eiP+jB',
+    'Joshipur': 'BBS8gvRo9txB7EwD6FyO1GmC6FqIlDmMlP5BvEsG9JCnhBzPPzO6OgKwClDvF9Z2b0DgE5FwBgG6C9D',
+    'Kailari': 'BBjByovR2nrxB7HnCrF3N7IkM1DvJpCyqBhMpF3EyHrIlK1KiLlVdoHzTvD9IjJwC2DnN4PhSqCvQ8LKgEvM8JdoDtL4F+D0TtWsJ0D4IzFuJ4EqMvF7CmVwO1BFiN0IsCXwE5L0Z7M2B3J7J',
+    'Lamki Chuha': 'BBW4xvR60zxBpUzM3Fhc1JhPpC9LuGrLhE5DqJ3TjCvQ/FjChGhTsFpEygBMgSgN6TkB8M0P3BqPpHsDiM4NtgBoqB7LgG6BuO',
+    'Mohanyal': 'BBjC4xvR60zxByIrT5BtO8L/FugBnqBxL/KwJvQ1NtUujBvP3TnUiP8BuNpJ8PoK8F3X6O/VpH5f4D9GrOlEmK5P5Q5B1S3TuHnPoRBiIsLmsBiZmIhFkImHuOzCiExMoHVuNiMjHyQ7NhB/FqImF8BpH4I6HsK9CkhB5LiZ7a+SBgNtHMnBmKpLoIqE4OuI+B+E+I9R+I3I9C8CmNrL2RsEkDkGzHoRsCYwEvHAxLkQtJpB1D0H5JjK1J2N3LLrJ2I9JjDrCuK3N9D/FqJ',
+    'Tikapur': 'BBXijtR2pxxBzNxE/Y/f5CvLzL9C3RtQ1J8E6LpUjJxB0K3J0H0K0GzCpEtGkE9D4N6D7CgDkMmOqdnBiDwiBmEiFiDjI4JwEd2c',
+  },
+  'Kalikot': {
+    'Kalika': 'BBIqw4Rux7xBtkBnB5FnYkE5MnI3K0MhfmayCyT4Q',
+    'Khandachakra': 'BBTwi6Rwz8xB3Q5CjR8P3OrP1D9bkOzgCxF3I2WoC6H+P+KwF6KzCkG4GlJgU9KhGb4K+P4X3BkGzKf3D2F',
+    'Mahawai': 'BBcis3R0w7xBokBayB4frI0LqGqTjDgXhJ+E7G0Z0G0V/ImBjB4N1KiOkEwJkIzD2XuE/JoYhHoD9hB5E1QhR7KvQ7E3X0FnGtBnNpIxKwIhhByUxWxE3TiG/V',
+    'Naraharinath': 'BBP+x8Ruo4xBzsBugBtpB2C5LqGlUrP2G9S+JzGT/PoNrH6gBNsIkIoOnFsGtO6E8J8ViP',
+    'Pachal Jharana': 'BBTu16Rg69xBzZz2B8DjG0KgB4BjG9P3Xc3K+KiG0J/SwVyjB4KtK+F6EqcpB6OmuBjHyEhX3D5EqN/YwB1BmM',
+    'Palata': 'BBVgk7Ro4+xBxOne4P1K2BlMgZvB6EpNiX4DkHxEiZsHoG0GhC6MsoByKiF2WVsP1KiL5D6c/gBhEpgB2D5GpO3evR/D1T',
+    'Raskot': 'BBN6z8Rml7xBhcuB9F5E3KuKlThf8ThKwHnKmV0UoClL6FmFyG7EyK2P1HwD',
+    'Sanni Tribeni': 'BBU098Rqy6xBxK1PxG8E5FlFnCmLlVzUvHoK7TiK7InM5K0C9KvFlFlM6LpG4pB5C0sBpgBua0VnGqFsJ6F+EsXxJ4S',
+    'Tilagupha': 'BBYwy4R0ihyB1XtEjI0DjEvJ2KhOkB3NgJlBzGzV8GzZiJ9EkD/WjG1UmInK4OsPkW7QmMsE+gBqlC3JyGvMkZhLNxJtI1J0F7EoZzMsC',
   },
   'Kanchanpur': {
-    'Bedkot':
-        'BBQ+u3RmmhxB5S7C1V7B7X3P/EuB1MzdnIxM8X1O0N3Mga+JmSrFoK2IhHyDsE4OlEkN8HkS',
-    'Belouri':
-        'BBV85xR40gxB3LS1GgawRGjIkKrEgSjL9C1F8GzLpHjYoLjG+HnGlI3G/XsK3JsN3V+UrFmGxYoMzNkO8GhFuQ6PY',
-    'Bhimdatta':
-        'BBZyw3R46+wBnK1IlSsF/Z9JzN4MvbwLtDrN0JpB0H3PgJKkCxMgL3M5XX8B/NxDxO6nB0C1BkGoPyFsErB0cuHsB/Ema+JuVgZpfepM2P',
-    'Krishnapur':
-        'BBc87wRuhlxBiHtZ6N/lB4YwEgTuOgE2H0I1GsEjXrE/RoB9I2lBiFgJqG+kBkKsfqOiHwHrM4LhNhE7GkLtdrN7JkRnQ2H3ZlH9b4O1U+ShGhJjP+IpDtH3JoN',
-    'Mahakali': 'BBJoj2R0z8wBxuB1B7U/E1J+E1UpBlCzRkItGuxB7D4kBwX',
-    'Punarbas':
-        'BBT87wRuhlxB3M8BtD7B7P1Wp3BsL5C0FjM/E+IxJ8K3WmXxGgKrVqN/GkYnL8HkD0C2M/KEjT8pB8PoLgWyC',
-    'Shuklaphanta':
-        'BBVuk3RmvjxBhHvHrfpO9kBjK/IpG1lBhF/JuD9KxJPlQuPjHmK1HsQpD6EzGgToCoFwLqPKyJ4NgHrDkWqM0YgGhNkX',
-    'Beldandi': 'BBK85xR40gxB8CvM5PXmD3TyFhHL9PiT3C4JiKpD0P9M6gB',
-    'Laljhadi':
-        'BBUoixR4vkxB/VtC7PnLkT7pB6RvPkL+CsE/RkIjK3FvC8RrJ4R2I6HmVwKqLsEgSrEkXzI2G/D1H/StO3YvE5NgmB',
+    'Bedkot': 'BBM+u3RmmhxB9nBvEpdrOhVrqBslBtboagKgSvFqK4InHqE6EsQtE+K+H2R',
+    'Beldandi': 'BBJ85xR40gxB6C1MhP2BGhL+HpSNzPgQ/D6MqL7PkwB',
+    'Belouri': 'BBU85xR40gxB7LU1HkTyF8KgNnElKyMG0O1NxBxF6G5LnHjekTjHdpFriBoXrc+UrFqG5YkMrNiO2GvE2SoPvB',
+    'Bhimdatta': 'BBayw3R46+wBvK5I5RyFja/Jzf+ZhK5B7CnNgPtG4ChLwIY8EtG7C/FkL7M5XX1Bxc6nB0C1BkGuRwLmCpH0cuHsB/Ema+JqVuYlfwBpM2PrGM',
+    'Krishnapur': 'BBiB87wRuhlxB8Ut/ByYsEmXoWwIxG2EvXzDpQlJrGwJ/DmJiBuC4GgQrHmC0FwH3BwuBoRomB4V1L+FV6FhNhEc2I1I4Cvc1NtL4a9oBhJ/NgHL2GvKxE9WsY9E1I7IiDpB8J1J1L/JqN9G/G',
+    'Laljhadi': 'BBXoixR4vkxBhW1BtEpLrLV4BlK8QrfqLC5BpG2IvJ2NyBFzOoKlM3FvCyStJ4QiImDqMtH6D+X0SwDmQxEsXzI2GlXnWvYtE',
+    'Mahakali': 'BBJoj2R0z8wBhjC1G5JgF9Q3DhE8EjCjUkItGuxB7D4rBia',
+    'Punarbas': 'BBV87wRuhlxBzM4BvDoHB/I7P1Wl3BqL9C2F5M/HgV/WnBhI+X5EgKrVkHeqelTwLmHhB8I1LOrSqpBsLW0EsL8V0B',
+    'Shuklaphanta': 'BBZuk3RmvjxBnmB3VvuBnRvH4BlCzF/PsHtC3G9SyC1D/H1K3DwHjE5EhKgPtH2FuD+E5KmWhK+RoCoJ2N8LxBmHwN8RlBkeiRmFtEqCmG9MwU',
+  },
+  'Kapilvastu': {
+    'Banganga': 'BBXu66Qos5yBzCxK0HtPjGvGgInFtD1EsIpK8OmCNvP4FoCyG7M0T0MhF3Y2N8DmdnK0Z4N9MmUwEsDpJ4kBqD0QloByK7etFzW+G',
+    'Bijayanagar': 'BBY6w6Q6zxyBjOxBuI3O9FtPyFxO0P+E2NhN+Ua2NpPgOiE0J3H0NyBgUzHmB4Q8JqF7I0T1ROlH0HzdsJnK8QlMkCC2F3M5ChHiF',
+    'Buddhabhumi': 'BBlB4q+Quz2yBpQrGldoK1N7DoEsZ3XtTbtO5OYtDuFpL3D9N7d1OxFuBzMkPdqDhM+E8DgL9DyB3FjGpCuD5I3I3CtCxMiM7FA4K2O2FwJlOqY0BiI0GmLvD2BjGuJ8EiKjImagD8Cg2BsRwOzGnCnhByW',
+    'Kapilvastu': 'BBasj7Q663yB5ShQtNE9I+H5S9NHzL+FmCmDhLzKtK6GpKrR3FgFpNgL+D2D/NiP1E0EwDrB+M0OoF+N8dqL4DuDtF6OX6F0UxG8M3FnCSqP',
+    'Krishnanagar': 'BBNou6QwxyyB/OjG5C8T/Ya+BxiDuJgBgD+HgPpHwJoEjF2Q+FuPvI6NmOwC',
+    'Maharajganj': 'BBYui6Qq90yBhHhE/M+EtGhX1F0LnHjH1MhB+VzTZ7W+PiDwJnEwCvTwO6F0H+P+EBkEgKhGgFgBiKiKiFpDgJkGqCxLwJ9F1D7DsM',
+    'Mayadevi': 'BBRy96Qqj4yB9mBwGrQrE9Q2GnD0JzHjClFllCgIwJ0L+BgG5L2EqC6DwU0S+NwJhI6PwBiCmHsO+H',
+    'Shivaraj': 'BBd23+Q6qzyBla/ChKkItJ7E1BkGlLwDhIzGjY1BnH+M7NnBnD7N/FchJ9JnHzPyC1d0UsHiHhF4M6CB1FmMjCoK7Q0drJmHzH2RNmJ3T0B0fhFgB4E0MqLgB',
+    'Shuddhodhan': 'BBTu66Qos5yBvRxJxcgSjOtHhO8DrPxGxIgJhI7I4W/R2B7JsJgHqD1J+Q1G8jBuDuH3G4PsE/HoFkGwGzHuP',
+    'Yasodhara': 'BBTkn5Qo52yBrHtLhEoMtOjC/HvJ1BhW4K5tB2MiBoHkHsFzLiFwExB6gBhL7DpGiJuDyHoPuC5GqKmK6N5C2H',
+  },
+  'Kaski': {
+    'Annapurna': 'BBjB2zuR0vnzB5XoExQxUlY7J5X3YjIuKzlB3U5eLlG5IrONpD0L9EpBV8VjUmB4F5QlHrUiJjfyCpEkHyF0EhIkKiI+YneuQ7ByOhO3C+kBkHvB5BvHkLrI2XwN8IP+EuM0hBijB0ajRiIgF2O8mB',
+    'Machhapuchchhre': 'BBeystRqpqzBlJtFxNgF5nBvWvnB8KrPpU7NnIgI/KjI7IG5N3KnExL7QuF9EjGhK4DtOvHxO0LjV+PgBgFqIueK0lB4UmH7K4YmZmY8JyQyU6XnE0C4N/MkQ2B+O5O+c',
+    'Madi': 'BBf00mRgtszBbzcoUnftI3MWnG0BgJkD7CdtRgnBwH4MzSgR/H2dydwnB7K6nBwWyN/EyJ4FGogB/Q2P3DoOzKsCvEstB9G0KhM3HhGtMhLdhUpT7TqC/qBpTlQkPhNgCtUrC',
+    'Pokhara': 'BBpB6opR2/ozB/QgI3M0S/mBvH1BuUrDtH2HqW1GgCnB2L/KyMxKnCtIrQ9K9EnRkLnFlS3SlSwLrb8FWEjJgKtIuG+BkH1NMjfqPlEqQtUL5VuL1LrB5MyLvLgX4XvF8b6NkCoCnFyJ2F1D2OkGiKtF+EyL8Q4KoEF6NiIsI',
+    'Rupa': 'BBM00mRgtszBxH4PpFrD7TwJvK/GtRsFiHrkCoHoHyPpL+K+EuIsQsJhB',
+  },
+  'Kathmandu': {
+    'Budhanilkantha': 'BBH2m/Qg2j0BlsBvDlMrVwRDzB9EgG3CsgB0I',
+    'Chandragiri': 'BBHs78Qyyh0BlJ3N3TpEyF/QyQzUkWsF0GuO',
+    'Dakshinkali': 'BBN+97Qy1h0BlL+HpSjCpBtH7FqD3JhM8ExO8ZlE6F3IwIyD4EuEpCwMiH6H',
+    'Gokarneshwar': 'BBKgy+Q2rl0BxGhZ/M9EzIjQ5HE9FpUuSkJ4tB+EnDwU6EgS',
+    'Kageshwari Manohara': 'BBKwv+Qoml0BlNqC5C1LzXxWjO/ZyNzB2GgT6HD0IkQgN+E',
+    'Kathmandu': 'BBMw29Qwsj0BrcBzNtL+P5b9IhFgDzLiV+ByDuGgK7C3C4SuJoQvRE',
+    'Kirtipur': 'BBHm68Qo2h0B1D3B/C0LzVvHmIvMtHxKyToD',
+    'Nagarjun': 'BBLu59Qwgi0B9EAyD1H9IiExDtGnNjElE2D8RjkBuLtHyFuhBgIgC',
+    'Shankharapur': 'BBLsw9Q0wk0BiPmMkDiM+MzCwCuF+H4mBpRkU3FfDjQnSnIjGpf',
+    'Tarakeshwar': 'BBG649Q6mi0BmW1kBiXyboC0UlQtEnByE',
+    'Tokha': 'BBHyk/Q+9i0BrgBzInDmEtKtUsgBsNoBxE8OuD',
+  },
+  'Kavrepalanchok': {
+    'Banepa': 'BBPo58Qsln0BzG/MzHgNlG/LzKwDjN3LrKpb4InEnD7EiF5H+QsK4EoKgZ4HxFmVsGiH',
+    'Bethanchowk': 'BBPm/5Qmln0BvIuOdtIzI6B/WnSNnWuGlNnUhThHzT2BrN0U8W6iB1C8BwZ0RiS9XmR',
+    'Bhumlu': 'BBXgq8Qy2p0B9N2HmJN4M0SrHyjByC8MrI6FtMtEjF3Q5PU9FxVhMjN6MhJ4F8DqLvMwBzK6E4EwGpDxF5CkKgC+IrWyKuC9MuO',
+    'Chauri Deurali': 'BBP2j5Q03r0B4brMxBxHmK9QsJpDiMkN+FyV6PT0JoTxK0O6BwP/I4InWxV9BrMnkB7E',
+    'Dhulikhel': 'BBR8h7Q8no0B/b3mBmOwFHnGmN1K6EqKkCpO8EdkNgM8KrDoGgMyH/MoCkOlOiGlGgKrT4C+C2S',
+    'Khanikhola': 'BBUk24Q46m0B1KyFGuMlXxH9IjKxEyEO3FtV/OqEnR9DnN6DgE2H3FkE/GzEpGkOhK3E9HwInGqOqB4OilB+OyJ',
+    'Mahabharat': 'BBc2p3Qskq0B3VlM3Q8EvFnJiFrGnH5RwMzJvF1HrD7nB4K/PpEtI4ElK4EkEmDtEF0LqV4OVyF6ErE+IkKuX0HzPkM6L+PvBkLpKyByJ4FzB2YrHqGzH1C',
+    'Mandan Deupur': 'BBPgq8Qy2p0B3CpI+MjOxK3CgBnI2Y/dtMliBiGjKuauCsMiMnHqOwC6WnK2GzHiZpMyP',
+    'Namobuddha': 'BBRy36Qm4p0BjG3ChV4QxP/GkPnYrExHlNkIgDjbhEzIyS7ToFvPuR0M6O4YnG+FckJlGyBwOoN',
+    'Panauti': 'BBa6x7Q6kl0BjJgG4C4G3IiE4MmXvH8EjCqO5EpKlN2KIoG9SnG9B6E1J/Q+XlRjSzTnCxW0I9P5B3HiLpKwGoJ8RQ4CkJjImFoJuGuHvJyK+U',
+    'Panchkhal': 'BBZ0p8Qs9o0B9IsWjK/ByF6CvGqD5E3EvB0KpLwM3F7D5F0HpCpTmOhXrOjMiG1CVzJmKhDgJkFrB9TsT3CmG/JmOhGDrFmLmJsD6MzY+d',
+    'Roshi': 'BBbmt5Qogq0BvM2FH2H3VwRxKoUnc9KyItc3CzHwL3M0H2CsHpG0B1YxJ3FqKxBwBjL5L9P4PnMRrM2KxFgXoS2IzBasKpNgOiE0IhD+aoN9HuEiI',
+    'Temal': 'BBRux6Quvq0BrJqDlK+QgCiH/QyKjcyMnLhDzC0HvHhL+IhWka1XyC3JgL1D2P4FuU7QuFkDc6V',
+  },
+  'Khotang': {
+    'Aiselukharka': 'BBQ453Qimg1BhL+CtLvKpf/F1C5W5Vja6XhG1BhJ7NhIlE3P2vBbsCksB0K4LvCoL+EwJsP2K',
+    'Baraha Pokhari': 'BBR0uvQkig1BpUkGxD9G1F4P2GmHzS+C/NuTtMsElBhiBpO1YiI7fsY5G6UoCyK/FuMuOvDoGwHgG',
+    'Diktel Rupakot Majhuwagadhi': 'BBS6x0Q+wh1B1KvL1a6B9H7btV1dT5U/IvN8ShLHxPwI9J8e+G8QsfjB6S2NiCqSzWyF2I3M0tBLkX',
+    'Diprung': 'BBJmvyQsq/0BjL4QT2mBtXnH5hBjgCvGneiexR0PwZgZ8M',
+    'Halesi Tuwachung': 'BBYu/zQ4t90Bhf7GpI8JIyPlVmL3RrHjP3X6TrUmU91B5K5e1M9K7H/ZkClJkR9IM3LkTiNkOwb2DqVsV6TvBwTqG6FWiO6GmB1N4c',
+    'Jante Dhunga': 'BBT6+vQ+ni1BhHvDhIgO5NnGjHyJ1KK1gBpN+BzMzGjJuMrEgOtT0S9C1GlH2F3PyD+G2TtGwQunBlF2JiN4G',
+    'Kepilasgadhi': 'BBT6x0Q+wh1B6VjYMjX4MztBwM0N2C6W0LrBse2RyMhBRwkBlQ4CpO2M5IpEpI8ErDuJ3JoBvR8W7HnMtS9K',
+    'Khotehang': 'BBN6+vQ+ni1ByHnOhN3GmF1J7P9lBlD5atQ1aof5EuJ5MwGoe2oB6qC7agnB1I0E',
+    'Rawabesi': 'BBNmv1Qsr+0BpS0W1NhCkB5S7Yt1B2N/c2N6cmSPwM0MgEqPiMwF2BiJ1XiF',
+    'Sakela': 'BBN8yxQolh1BflKyR4GU1mBkL3QqVghB8H6bibe9QiSvMc1UvKtImGnRvD',
+  },
+  'Lalitpur': {
+    'Bagmati': 'BBTg85Qwli0B5L6FvHrGtJuC+EqPnS0FE4XxTlE7H+PvM3H8M3T4S79B0XxGoFzIwO2K0FlM6PoP5IqPxMlC',
+    'Godawari': 'BBVwm7Qmnk0BlDzG5J+BpMjH5HrRahclLeNvYrFnEyMmCiItSmPmVkGjDoBsH6RyMnEuMuEgHqCxD2CsNrHqDI6L',
+    'Konjyosom': 'BBP+q6Q62j0BlLuK5IrCVlPlJ5BkC3Jla9IqO3BhEhSuJtCwHsG6L5FL+KwJ9DIwd',
+    'Lalitpur': 'BBQ6u8Q67i0BxC7FnJMpFyKxHQvB1JnC0DtE/GoEtM5FArG9KoRXmG1GyKiJyHnD+LiH',
+    'Mahalaxmi': 'BBJwm7Qmnk0B8JlfqNjHoC1JqMnBe2Q7EBniB4uBzI5I',
+    'Mahankal': 'BBSuq3Qw4j0BmMqH8H9PyTmEVpWkGrC2X4I9BoK4IgBcuP8IuC+B0H3GqO5jB+CtU9W5BkH/QtF1F6F',
+  },
+  'Lamjung': {
+    'Bensi Shahar': 'BBf4roR+kxzB7HsBhR/M3I9PpM0JOgSqM9DpByM3YgF1NxI4EtFxMnO+M1D3C9F+FrItG7F6JpX7CpIuNvDzFhU8FzEoPwQsD+RwM9H8BsQ0F0DuEpGa+KhIqDgL+KmG+R',
+    'Dordi': 'BBiBwmpRiw1zBiB/OhJjMxnBxZlHvKvV3D9IiE9D7Q+I1MsCxUvPvBjCuL3G9D9IkGvF9jByesL4Y/EqBxMpM+DN/R0MxJgEiMwV6Q8HrBiLoMqQqdFoP0RgNyGsM+fuJ0N6UiHpCxF0PrwBwjB',
+    'Dudhapokhari': 'BBWwmpRiw1zBpThI7RmD1VzLxQuErbjTpYtjBkXpHoC1MxJjO8C7DgNyBkCtLwPwBrCyU9I2M+D8Q+IhEwV4DmHwKynByZiJkM',
+    'Kwhola Sothar': 'BBVg6nR89uzBjOoHrD9R9MxQyHvIzGxFuBxeikB8BmQjPgrBqT8TpC8P+KrFgK9LI9W2UtX4CzD4HxMzS/H+FwFygBlN1I',
+    'Madhya Nepal': 'BBTy7mR0iuzB/I6EvFlEtB4W1HkC/MpHoDuGtFqE/NvBtZj5BichJgKgHsUvJqFsD2JxRmJiPrFkMgCqOyGuF',
+    'Marshyangdi': 'BBoB4zrRiz0zBhHqCzN5U9ftJxGrM7P5KxBtRla9mB+BxOtGlUrL1LiIpDZ9KtEqGzFzDrBrMwI7HmN2IvFxgBgI9FyM0SiDtHgYhD+W1U4LDuGvH2D+F2KYmJkOnHgM0F61BuEV5CyPqJiL8TwEsE4LpGoMjYqSmGwlBiH8K',
+    'Rainas': 'BBLsnlRqtzzBtMtG9H5RWlW3HgGlN5D0iBvf6QmGyB+agN4WlFqP',
+    'Sundarbazar': 'BBU6imR+pxzBthBrI4LzWrG7sBgOwBuFpEnDtGgNqH2HjCuB3WqIqG0DyRtN4D8CqI5JqXuG8F9FsI4C+FzMyCoMsP',
+  },
+  'Mahottari': {
+    'Aurahi': 'BBJ6htQ6ts0B7d5KhJ3SoNe4JhVoO0MKmOsJoC0Isa',
+    'Balawa': 'BBR63rQs0s0BhUlErE8EpQzIvN8HzJlIIxJwC3DoP0FkB7InHnJuI1E2KqGgH7CgK0NuVqKmE0K',
+    'Bardibas': 'BBf2ttQ64t0BuD9G/NlN2JsEG1InM/CvB5PmTgGzDhKunBwI+UwL6HzpC4xB2c2BgHya1CmTwTlF6LhI7EtM4QgM4MpHsNvJetPiUlL7B/JwGlLpIpC/KtG8HhN1JvdpDxBuH',
+    'Bhangaha': 'BBV2ttQ64t0B/QhEjCmN3K8B5dzE9EnG0KhPhHoB9F/L+O8C5B7N4JPTlPyUoBmM4GtEgHwD+JoMgDF2I1JrEgOmN',
+    'Ekadara': 'BBH+2pQuur0B9M8I1LnKyC1H9KyE0C3T6czC',
+    'Gaushala': 'BBN0ttQ6ps0B5DzQrJnCJlO5H7E0D9HwS+H+FrR5HjHyBvN8kCgW5H0pC9UvL',
+    'Jaleshwor': 'BBTg+oQyus0B/JqEoCjJ3DsD1K/GtJ6HpM5BWlIuNhKwIlesHxC0He3B8PwLjEnD8GoFgExHmDgJ0KPmK',
+    'Loharpatti': 'BBQqxrQg9t0BtMB1P3LnBrIze9L+D3Q4IoIiN9HqQ0IsE7EiUmE6B0N9O7C+FgMiHnBzKiP',
+    'Mahottari': 'BBNi5pQkts0BzMwGnFvFtEkJ3E1I+G/PhJlL+H9CyNqGyFpI+Q4GiCoPnPzF',
+    'Manara Shisawa': 'BBMkkqQgzr0B/P/GDhZ/DuExR/DlPgJ9FxDkWzP47BoG6BwhBhGgDxKpG',
+    'Matihani': 'BBPogpQk7t0BpEvFpJoFrQtahO9F4D/MyPpHgL+GkE9CtDkIuF2EhK+JwH+DuC+J+IiB',
+    'Pipara': 'BBPozqQ0rt0BxW8HvOlEzLoMjB1L9IhBtC9JvH9D6MlTyH0JoEnJoFwF4K1DwD8CrFiK',
+    'Ram Gopalpur': 'BBO+jsQgjs0BxGgGtVpKpN/SE3N0KoB8G4LqGX/DhV2L0CmB2H4TFhH+R7N1D',
+    'Samsi': 'BBMmvsQo/q0B3TGjBzHxI3DWyW1GIrG1L/J3BF/NoQSoPrIUqI',
+    'Sonama': 'BBJq4sQ8jr0B/c9T4N3hB2HvC2ZsNkCqS6HkHrG4RhSpI',
+  },
+  'Makwanpur': {
+    'Bagmati': 'BBhBwuzQ46j0BiRuEyCrJ6NQ6R92BwcpM6MiC+BqTiIoLiiB6PtP0a4DkV/N6JuE6G9KkMhM/G7EhMxIfvCjNlHtEjX+L/JibzdwEegKjPkEIxNjHsChEvHrG0IpFxNiEpMwL/C6G3f',
+    'Bakaiya': 'BBgBwo4Qwoh0BrRg7BhiB5PhInL9BpT5MhCvcqM5R+2B5NPxCsJ7RnFiBjUkH7GgG5ZjD7c4N1Ld3lByL9S4WpTqS4BdmK8RY1CyTiGwYuYOqNnHwBhN0ITuF6KqPwBrEkUjHiE',
+    'Bhimphedi': 'BBiBk16Qk3+zB7FWpHkPnIsuB3E1B1FqOzO1KnF0InMJzM+IblPmJ9IiExX8NIkI5TFtU7IxOvN+IuH3YrV5J6CrMqF+B4GzKqBjSgkB5E+H8DxB8KmGiB6EwO2F/K0J1DsO6JxIqfpJwH',
+    'Hetauda': 'BBiByv5Qg87zBtF4FxTJjH+bjGnB1aqRkD8GrMiiB6F+IlF6E0B8NlciIJ5c7RXelKrJzDqC3Iqa9MkC7QvI1VQ9K+HlDxG7QmHrLjD9D6oBgG6P1MyI/d2K0BuI4DvE+LmLyD/CyL+OmP',
+    'Indrasarowar': 'BBP465Q41g0B+EN6C3e4M3e0UqB+CgHmSxFzNoVoJoL6WmK3IsQzO9F9HwJ9V2BrGyO',
+    'Kailash': 'BBVi78Q6w7zBnWgOnP2apanNzJ2D1FgL5EvOlGhByB7K9SvEuPteI/R2HxL6OjH6MoJiInK0QOkKiLsI/HmPsL3Gyf',
+    'Makawanpurgadhi': 'BBZwz4Qyhg0B/QxCzEtKtIgBlB+MxSyJlT3CzBxHMxHuHzE+SxDzB7NmF5E5F9IsMhiBtDrGsY/OJ2JsV6JtH4YoNhJkJ2OvCggBzFsI9LvC',
+    'Manahari': 'BBbqh5Q6k6zBjTrFxIgelQ6MnpBvHgJtbsOrPSvP+LrLhB3OwN5LiPsO+bqHyKhL2IN4CjayOtVH5K4MuLgP8B5OwlB7GwIpLhDzGiHaoGrH0BpRgV',
+    'Raksirang': 'BBa4t8Qs75zBrIgIhLrL7PB7HmK3QrIxS6RHgShLwR9OlPgDxLnL5DqL/hBqR/UsHzB0FlNwL+C2V/tB8RnLwL8ID+InFlB+F2O8SuP3J+EmNqS',
+    'Thaha': 'BBWur8Qolg0B7djQoD/SmIxHlSyF9C/G3O/BSrQ8DzOwH3CyIpfqN6C8NhaoW/NsKgOBoNnGmMgF8E3JyCyNmfvZ+ewGgd',
+  },
+  'Manang': {
+    'Chame': 'BBJqisRmiuzB+GzKwErtByIvB6I0M4kB4YnOoJb8RvNqP',
+    'Naraphu': '+BBqB4u0R2nszBlG0lByE2M/M8N9IsWuG8LvIgJBmY/DyIjOvFauL1GoKjM/BlFqI7OvFnB3M3SoBvGnRlK6BtMnnBvR7E/GjX7PjV7kB5HifpdyWrEkWpnB0JrHoNiBqDlRxFlR6N1V4RVkGyHkRlGuIyOwM4CsE2U0X6GjEgM8E4JlK8QBBoR2RBBFoBBBAPBBL4EBBJoBBBHeBBHcBBBOBBjBgCBBDMBBCyCBBDWBBBzCBBH8DBBBaBBfmCBBLWBBLaBBFUBBBOBB3Bz5BBBDyBBBRWBBrBmCBBkBtYBBHsCBBDQBBPoCBBPoCBBNkBBBVkBBBDoPBBPYBBJzOBBDmPBBLlOBBBsOBBChOBBLmOBBHiFBBNhFBBP2FBBPQBBJMBBViBBBJYBBFSBBTUBBVcBBT0BBBlOvtBBBCTBBnElTBBFbBBdyDBBAgGBBRzFBBJMBBDKBBFQBBAI',
+    'Nashong': 'BBlB88xR8kxzBlO0btH+GlKnGpM+L1C8LhNzEtGgGjHjCrP+OttBgD3CuH9Q+ElZQhH7KlGvlBkYpSoGhShMxJjMbpJhL6CxPtEWpE17BqI5FwrBicuM9M4CpV6X3LkViH8PkVgHkXwR8EuMonBuMD0E4PsStB',
+    'Neshang': 'BBjB8wyRkipzBpMkHjGxH5RY3N0VyFmRpDmRnNhBzJsHjWqnBxWsElbwchoBvY/D3HyF1OoRjQRxgB0P9P6O9c1B9O+M/PxCzP0HjqBqZzN2Y5lBoN8O6HgUzC8LkN+Q4Q6DmLga0WLqGyHR8F3KwF',
+  },
+  'Morang': {
+    'Belbari': 'BBOmgpQw6s1B3rBhM3Z0FwEjI1K1IyBnQrJxPgmBrMuRiPoRxGwMiCqZoclK+TrOvE',
+    'Biratnagar': 'BBRo2lQyxp1BtNxDrDvSrSiJ7PoB3IjG9OkBjCoFzF7Y6TE8H1OytB2B0IoEyDiMVwJjGwC4H6E',
+    'Budhiganga': 'BBQq1nQgkq1B9EnHrO7BrLxP7jBhN4FnE7CtVqJoBiB/EwX2X8KyEqKzDqPqJlCqK4G0EvKqB',
+    'Dhanapalthan': 'BBNy8lQgjr1BxI6J7OL9HgXtNgH1NhYjCxY7GpMqSpDe/EsRMgH8K+WqL',
+    'Gramthan': 'BBQ61nQi6q1BrREzCgFrC3DvM2IlRzCE5NyIlC7BlF3GsBdhP5MLgG9cycgKsMqQkPoC',
+    'Jahada': 'BBRy/kQ0mq1BnTtBdgFpSqDrM3H/QmBpI5K8O9RnD7GiFnHqFgKkCnF+OjB4IkGkLtC/B6O0RoN',
+    'Kanepokhari': 'BBNk7oQq0t1B9VoE9U1LvpBqEJhJyJvIhLnJxBpUyZ0F9BwMuZ3F4rBiM5EoB',
+    'Katahari': 'BBSkkmQujr1BlFqDpD/KhXrLzG9QzRnN0C1NmZtHO0QgQyH9EYOoI4MKiBoP0HdY6H1GnClE4H',
+    'Kerabari': 'BBWgysQmlt1B1IatP1O4C5c9NmGhgBjC9MwG7c/a9CtI8RF4B7NtEzD+H3d8N+Iuf7JwU+PoSftCuNyMsO8CsS1H2TyJqf',
+    'Letang': 'BBV+0sQo8t1BtJuJtJ9DtFyG5uBxIrOwUxaySmEvavNkBF1xByEP2C9NsOwEmK9TkN6HqGjHigBkC+NlG3C6cuP2OyIrB',
+    'Miklajung': 'BBPs2pQ6/v1B+G3RtLhEzCtHucrhB+wBkHuFxGuJ+DuJtJBwhBtd0mBvKrDvKwO9MhK7EsR',
+    'Pathari Shanishchare': 'BBKmpnQk6u1BlK6DtM7UsQna8Sd8P4KuVpEiBkcjIsMjPgF',
+    'Rangeli': 'BBVw0mQojs1BjRlByBqUkL4KnNuPlK1G7FuE/BvJ7J1GxQoO8DuEhSiJ9GrDsLxuB0QvEmIlX0OSqI5JuGgF+JxEsJyP',
+    'Ratuwamai': 'BBX+2mQ83v1B3fYvdwJ7OsN7MRlGvR3HejHtoBuI9BwIyNyRvDkBhI8E6CgFxJ0OrBoOIKmFmG9DmKgI+ItGiTsNoJlEiB4S',
+    'Sundarharaicha': 'BBMg5pQmyp1B9H4duE0D3B8Nre7BnRyGtOnMElmB4K/B3GzEmCpKuc3I',
+    'Sunwarshi': 'BBao2mQq2u1BrJrF9IuGlK/HnG+DHlFvcgBrF2J7E5CjBiIxRwD3J7NkRld+GsDiShJ7DtEyQnO8J2GgCwJ8FtE6J8GmBlF+P+H6MzF1GmWhHuE',
+    'Urlabari': 'BBOs2pQ6/v1B1jB7H3X2I3L3KnYyBqTxKb7SyjB4H+Y7X+DgPrH8M6MlD0CuHoLyD',
+  },
+  'Mugu': {
+    'Chhayanath Rara': 'BBkBorjSwkmyBppBnI7QmP0H2PxOxE/LoDhPqenNpKzJyD3W5HjC3hBvG/KvNlFNxSsOpZuRToI3HnHzR6OzL9BvQwOphB8IlEqFuLqXiGlOoO6HmUrDiT6HsBqK1HmMoCXngB4gB0HuDqL5KwM2OshBlD4W',
+    'Khatyad': 'BBb8zgS+1hyB9D5F5LuG9IqX3N9SmHhFA9Q/QlJnF9U6D5c4KnLlE9kB4cpMsD9PsCqLofwL8WpFoGtK2G4ByC+JnjBmmBqD6P/GoNiEqKhEgNqE0ZxP6T',
+    'Mugu Karmarong': 'BBkC0pgSi4nyBuLtHiJ5WgMnDyOyEzH1P8QlP2sB+JmUpDwBySzG6MwMwToCwQhMmhBgLwLkLgCoSvKsKyJoRtH4FiX8M9EgQmD8CoRyOrJsG2MsNkC2fokB7JkVlOoC/GqLjUgLpL4YhVjNjC2LuN+jBrKsIlCgKxNyG/M3QfjKvRvC+DoiB7FyIhS2CrJukB3G9D3J0HjZCnLxUhtByP/E/JlXvNjEhf5RnFjHsHzW5MhEpP7H9B9Q/bgIxLwQPpIhoB2F1c2tB1Krf3nB+EnNyf5PjH9N',
+    'Soru': 'BBkB45iSoyjyB6KvMtDpL3gBzHYogBlMnCpK2H5HrBsDhT5HlU8OtM7DhGjU5BrBzF6KsCyP5TpEzZiE/MhEpKgHnNpD5P0P/L8U5f/BurBiegXpCuR2IiIxBkKkS4c4TkOwJ2S/CsJjLUpagZ7MJ/HiI',
+  },
+  'Mustang': {
+    'Barhagaun Muktichhetra': 'tLB0Bso3RkmhzB5P8gB+CsT3IqT6HmKzB2N7Q2XtK2DI6GjfwD0LizBzDuQnKoF1HyO9WsI3J6O4BqH5MsKyB+IvM3C1PzU+JjMsCjRuK7ES7FpGxHzWMtG/T5QjKiI/T0JpEiKvkB+EpC2D1sB0T7JsN2B8DrR/JhexNyBtJnHHpXnQjcoE7MtD9S6hBnDeyMuTtBoqBglBiHsNsPyF6D+PsenBBBmFqEBBR0BBBNSBBTWBBPaBBVWBB/BkBBBPGBBJSBBL+BBBlBSBBJGBBJ6GBBAEBBHtBBBDvEBBCmEBBJZBBAuDBBAsHBBBQBBAzDBBA5HBBHiMBBJvHBBJjGBBEuOBBC3GBBDzHBBB+GBBZ6HBBhBCBBdMBBRGBBKiLBBLoCBBDyBBBAuKBBBTBBDhOBBEvKBBC8VBBBbBBAVBBA2CBBAbBBD2DBBAvBBBF5EBBFjJBBB2PBBIzJBBB5PBBDkSBBHnBBBBCBBIwIBBBtYBBHcBBAm0BBBF7bBBR7WBBGoGBBGotBBBDoGBBC9FBBDhcBBDqaBBAsCBBDnuBBBAyuBBBDwGBBF76BBBG0xBBBC+CBBHlcBBA8dBBAtwBBBH0rBBBEuKBBV5iBBBGlYBBAuwBBBF8OBBKZBBBxCBBD+BBBBJBBAEBBAv7BBBBZBBAEBBB0BBBACBBX48BBBUn8BBBBgWBBF0WBBExrBBBHsWBBPmVBBHrUBBTuUBBSnRBBAsBBBLygBBBI9iBBBHnBBBC0EBBAnEBBR8EBBGwfBBDnRBBDgSBBBEBBBGBBJtSBBHyTBBBnVBBH3LBBK8KBBf4XBBWnZBBtBhCBBe9GBBJ0iBBBFniBBBDikBBBF5jBBBTslBBBInfBBLjFBBA2EBBPogBBBM9gBBBHlBBBBpBBBASBBNkjBBBJIBBRQBBLSBBJUBBVcBBFGBBLKBC9CiD4C7CBB7DsEBBHUBBVeBBJMBB7ByCBBhC0BBBpBMBBXOBBtDiBBB3BIBBZ0FBBAxBBBBFBBAuCBBCVBBDiBBBlBBBBYnGBBDIBBJgCBBBdBBnCmFBBxBEBBbOBBRWBBhBqDBBQhCBBjBoCBBlCdBBZFBBNFBBbBBBHJBBAbBBnBJBBVMBBrBEBBXKBBTcBBLEBBLHBBPCBBLMBBZHBBNFBBIq0BBBCdBBTbBCbyJiBzFBBJ72BBBBRBBDLBBJHBBNFBBLoyBBBDryBBBC8xBBBHXBBN6RBBM7RBBPpxBBBQ2vBBBBoBBBBjCBBXhCBBGyXBBNuBBBDxjBBBI7CBBD4MBBBjDBBVzCBBWyFBBFrCBBThLBBQ2LBBA1FBBJxkBBBGwjBBBB+HBBBVBBBtFBBJzkBBBAqcBBXuqBBBBplCBBDyYBBDzYBBrB+VBBc5WBBXJBBLwnCBBTQBBE1nCBBHmVBBAzVBBABBBF6UBBZhVBBOgpCBBV/1BBBEq2BBBhBxpCBBG0RBBFhBBBD85BBBBz7BBBBfBBFrBBBDnMBBA4LBBH9KBBFsKBBHk/BBBC3/BBBC5IBBDyHBBDvBBBFlFBBFmEBBGjEBBA4BBBBvBBBH0CBBV2kCBBnCqCBBJUBBRcBBNYBBJUBBHgBBBlB2CBBTUBBfUBBLOBBLUBBJIBBFOBBBkCBBAdBBATBBB8BBBfmBBBtBGBBlBABBlBPBBTLBBJABBJABBNGBBxCsBBBRCBBPHBBNABBlBEBBRSBBxBkBBBNGBBNKBBdSBBJIBBFOBBHIBBhBYBBdEBBpBKBBRKBBlBgBBBNOBBPMBBPCBBdiBBBPaBBLSBBTiBBBNgBBBROBBRIBBbYBBLQBBXWBBJKBBVYBBtB2CBBByLBBlBZBBejKBBFSBBDMBBVgKBBW1JBBFOBBNUBBvBwFBBiBtEBBZyHBBSvGBBA0BBBHUBBGxBBBPkCBBA2DBBDrDBB9CmEBB9BgCBBPeBBlCmCBBNiBBBNiBBBE0KBBHQBBDzBBBd7BBBDjGBBHoFBBRzCBBAV',
+    'Dalome': 'zcC6Bul7Ru2jzBjGAvOqZ7MqDvMwMnpB0nC9TsI2TgW+gB+NkGkWjJgOnL8D3hBogBtC6E0MuOxJqZjVoCkEuT5FuN3TwDz8BjRxNsD+D9ZvR3QmK7Q1EpJ+DtMzX5GnGvckNvL3BpH4J5O+WrI2HxOoKnF0DtQxKz1B8XgDohBjmB0B1N5HhL2IlS7CzTmH5HmDpTyMvG+EqI2KHsL1JqFqIvBkNwMwGTyM+P7C8EhIwdrE4F2R0T+QB54E6qKBBqbnkMBBR0BBBNSBBTWBBPaBBVWBB/BkBBBPGBBJSBBL+BBBlBSBBJGBBJ6GBBAEBBHtBBBDvEBBCmEBBJZBBAuDBBAsHBBBQBBAzDBBA5HBBHiMBBJvHBBJjGBBEuOBBC3GBBDzHBBB+GBBZ6HBBhBCBBdMBBRGBBKiLBBLoCBBDyBBBAuKBBBTBBDhOBBEvKBBC8VBBBbBBAVBBA2CBBAbBBD2DBBAvBBBF5EBBFjJBBB2PBBIzJBBB5PBBDkSBBHnBBBBCBBIwIBBBtYBBHcBBAm0BBBF7bBBR7WBBGoGBBGotBBBDoGBBC9FBBDhcBBDqaBBAsCBBDnuBBBAyuBBBDwGBBF76BBBG0xBBBC+CBBHlcBBA8dBBAtwBBBH0rBBBEuKBBV5iBBBGlYBBAuwBBBF8OBBKZBBBxCBBD+BBBBJBBAEBBAv7BBBBZBBAEBBB0BBBACBBX48BBBUn8BBBBgWBBF0WBBExrBBBHsWBBPmVBBHrUBBTuUBBSnRBBAsBBBLygBBBI9iBBBHnBBBC0EBBAnEBBR8EBBGwfBBDnRBBDgSBBBEBBBGBBJtSBBHyTBBBnVBBH3LBBK8KBBf4XBBWnZBBtBhCBBe9GBBJ0iBBBFniBBBDikBBBF5jBBBTslBBBInfBBLjFBBA2EBBPogBBBM9gBBBHlBBBBpBBBASBBNkjBBBJIBBRQBBLSBBJUBBVcBBFGBBLKBC9CiD4C7CBB7DsEBBHUBBVeBBJMBB7ByCBBhC0BBBpBMBBXOBBtDiBBB3BIBBZ0FBBAxBBBBFBBAuCBBCVBBDiBBBlBBBBYnGBBDIBBJgCBBBdBBnCmFBBxBEBBbOBBRWBBhBqDBBQhCBBjBoCBBlCdBBZFBBNFBBbBBBHJBBAbBBnBJBBVMBBrBEBBXKBBTcBBLEBBLHBBPCBBLMBBZHBBNFBBIq0BBBCdBBTbBCbyJiBzFBBJ72BBBBRBBDLBBJHBBNFBBLoyBBBDryBBBC8xBBBHXBBN6RBBM7RBBPpxBBBQ2vBBBBoBBBBjCBBXhCBBGyXBBNuBBBDxjBBBI7CBBD4MBBBjDBBVzCBBWyFBBFrCBBThLBBQ2LBBA1FBBJxkBBBGwjBBBB+HBBBVBBBtFBBJzkBBBAqcBBXuqBBBBplCBBDyYBBDzYBBrB+VBBc5WBBXJBBLwnCBBTQBBE1nCBBHmVBBAzVBBABBBF6UBBZhVBBOgpCBBV/1BBBEq2BBBhBxpCBBG0RBBFhBBBD85BBBBz7BBBBfBBFrBBBDnMBBA4LBBH9KBBFsKBBHk/BBBC3/BBBC5IBBDyHBBDvBBBFlFBBFmEBBGjEBBA4BBBBvBBBH0CBBV2kCBBnCqCBBJUBBRcBBNYBBJUBBHgBBBlB2CBBTUBBfUBBLOBBLUBBJIBBFOBBBkCBBAdBBATBBB8BBBfmBBBtBGBBlBABBlBPBBTLBBJABBJABBNGBBxCsBBBRCBBPHBBNABBlBEBBRSBBxBkBBBNGBBNKBBdSBBJIBBFOBBHIBBhBYBBdEBBpBKBBRKBBlBgBBBNOBBPMBBPCBBdiBBBPaBBLSBBTiBBBNgBBBROBBRIBBbYBBLQBBXWBBJKBBVYBBtB2CBBByLBBlBZBBejKBBFSBBDMBBVgKBBW1JBBFOBBNUBBvBwFBBiBtEBBZyHBBSvGBBA0BBBHUBBGxBBBPkCBBA2DBBDrDBB9CmEBB9BgCBBPeBBlCmCBBNiBBBNiBBBE0KBBHQBBDzBBBd7BBBDjGBBHoFBBRzCBBAVBB2lB07CBBFoBBBAPBBL4EBBJoBBBHeBBHcBBBOBBjBgCBBDMBBCyCBBDWBBBzCBBH8DBBBaBBfmCBBLWBBLaBBFUBBBOBB3Bz5BBBDyBBBRWBBrBmCBBkBtYBBHsCBBDQBBPoCBBPoCBBNkBBBVkBBBDoPBBPYBBJzOBBDmPBBLlOBBBsOBBChOBBLmOBBHiFBBNhFBBP2FBBPQBBJMBBViBBBJYBBFSBBTUBBVcBBT0BBBlOvtBBBCTBBnElTBBFbBBdyDBBAgGBBRzFBBJMBBDKBBFQBBAIBB8/DzzIBBR0BBBNSBBTWBBPaBBVWBB/BkBBBPGBBJSBBL+BBBlBSBBJGBBJ6GBBAEBBHtBBBDvEBBCmEBBJZBBAuDBBAsHBBBQBBAzDBBA5HBBHiMBBJvHBBJjGBBEuOBBC3GBBDzHBBB+GBBZ6HBBhBCBBdMBBRGBBKiLBBLoCBBDyBBBAuKBBBTBBDhOBBEvKBBC8VBBBbBBAVBBA2CBBAbBBD2DBBAvBBBF5EBBFjJBBB2PBBIzJBBB5PBBDkSBBHnBBBBCBBIwIBBBtYBBHcBBAm0BBBF7bBBR7WBBGoGBBGotBBBDoGBBC9FBBDhcBBDqaBBAsCBBDnuBBBAyuBBBDwGBBF76BBBG0xBBBC+CBBHlcBBA8dBBAtwBBBH0rBBBEuKBBV5iBBBGlYBBAuwBBBF8OBBKZBBBxCBBD+BBBBJBBAEBBAv7BBBBZBBAEBBB0BBBACBBX48BBBUn8BBBBgWBBF0WBBExrBBBHsWBBPmVBBHrUBBTuUBBSnRBBAsBBBLygBBBI9iBBBHnBBBC0EBBAnEBBR8EBBGwfBBDnRBBDgSBBBEBBBGBBJtSBBHyTBBBnVBBH3LBBK8KBBf4XBBWnZBBtBhCBBe9GBBJ0iBBBFniBBBDikBBBF5jBBBTslBBBInfBBLjFBBA2EBBPogBBBM9gBBBHlBBBBpBBBASBBNkjBBBJIBBRQBBLSBBJUBBVcBBFGBBLKBC9CiD4C7CBB7DsEBBHUBBVeBBJMBB7ByCBBhC0BBBpBMBBXOBBtDiBBB3BIBBZ0FBBAxBBBBFBBAuCBBCVBBDiBBBlBBBBYnGBBDIBBJgCBBBdBBnCmFBBxBEBBbOBBRWBBhBqDBBQhCBBjBoCBBlCdBBZFBBNFBBbBBBHJBBAbBBnBJBBVMBBrBEBBXKBBTcBBLEBBLHBBPCBBLMBBZHBBNFBBIq0BBBCdBBTbBCbyJiBzFBBJ72BBBBRBBDLBBJHBBNFBBLoyBBBDryBBBC8xBBBHXBBN6RBBM7RBBPpxBBBQ2vBBBBoBBBBjCBBXhCBBGyXBBNuBBBDxjBBBI7CBBD4MBBBjDBBVzCBBWyFBBFrCBBThLBBQ2LBBA1FBBJxkBBBGwjBBBB+HBBBVBBBtFBBJzkBBBAqcBBXuqBBBBplCBBDyYBBDzYBBrB+VBBc5WBBXJBBLwnCBBTQBBE1nCBBHmVBBAzVBBABBBF6UBBZhVBBOgpCBBV/1BBBEq2BBBhBxpCBBG0RBBFhBBBD85BBBBz7BBBBfBBFrBBBDnMBBA4LBBH9KBBFsKBBHk/BBBC3/BBBC5IBBDyHBBDvBBBFlFBBFmEBBGjEBBA4BBBBvBBBH0CBBV2kCBBnCqCBBJUBBRcBBNYBBJUBBHgBBBlB2CBBTUBBfUBBLOBBLUBBJIBBFOBBBkCBBAdBBATBBB8BBBfmBBBtBGBBlBABBlBPBBTLBBJABBJABBNGBBxCsBBBRCBBPHBBNABBlBEBBRSBBxBkBBBNGBBNKBBdSBBJIBBFOBBHIBBhBYBBdEBBpBKBBRKBBlBgBBBNOBBPMBBPCBBdiBBBPaBBLSBBTiBBBNgBBBROBBRIBBbYBBLQBBXWBBJKBBVYBBtB2CBBByLBBlBZBBejKBBFSBBDMBBVgKBBW1JBBFOBBNUBBvBwFBBiBtEBBZyHBBSvGBBA0BBBHUBBGxBBBPkCBBA2DBBDrDBB9CmEBB9BgCBBPeBBlCmCBBNiBBBNiBBBE0KBBHQBBDzBBBd7BBBDjGBBHoFBBRzCBBAVBBosG9CBBFfBBD1NBBFeBBCwBBBXsNBBQ9LBB1B5GBBM8OBBGjGBBEyKBBFSBBPWBBFxKBBG+DBBZiHBBS5HBBFlBBBRrNBBNgXBBRzXBBD6YBBDaBBBMBBHnaBBDgbBBTtbBBIucBBACBBLcBBDheBBBJBBDZBBmLtzGBBPaBBPUBBNQBBLKBBdcBBzBlBBBLJBBhBbBBLEBBPMBBxBABBpBHBBXGBBxBiBBBRyBBBXwCBBRkBBBxBuBBBVQBBnCNBBdIBBvBEBBvCPBBZOBBbiBBBTMBBTQBBbOBB7BDBB7BJBBTOBBBnMBBLyIBBFZBBJ1IBBFVBBBLBBNpBBB7B/BBBnCPBBnBCBBbMBBVMBBXMBBxBpOBBVwNBBW9NBB5BwMBBpBrPBBtClCBBTvDBBSsDBB3BvDBBhCsBBBlB2BBBdkCBBPMBBNMBB2xBqgIBBFfBBD1NBBFeBBCwBBBXsNBBQ9LBB1B5GBBM8OBBGjGBBEyKBBFSBBPWBBFxKBBG+DBBZiHBBS5HBBFlBBBRrNBBNgXBBRzXBBD6YBBDaBBBMBBHnaBBDgbBBTtbBBIucBBACBBLcBBDheBBBJBBDZ',
+    'Gharapjhong': 'BBWyxxR2vmzBjP1L7BpWnTrdpPtrCwM1J2DhP+Wue4EvQmkB5X+GtVyEuCIqXuJoHwNzBsF4KsC0hBxiBqL1D2sB9EqChKwkBzJqE',
+    'Lomanthang': 'jCBrBw/3RqoszByJpZzM1OoQzUmfhUkJ/NJ1OpFpH3hBpOrT3V+TrIopBznCwMvM8MpDwOpZkGA8D8ekR3BsPuL5CiW2HsF+Jie9F8XuJqM1BoItK2PtI/G/H8WwJgK3JwQoE+Q5HoPpK9E5LuC/EyPgFkgB1EuGlO/BvE7NtNvJ/hB6HpEsQzMOBBknBtoDBBFfBBD1NBBFeBBCwBBBXsNBBQ9LBB1B5GBBM8OBBGjGBBEyKBBFSBBPWBBFxKBBG+DBBZiHBBS5HBBFlBBBRrNBBNgXBBRzXBBD6YBBDaBBBMBBHnaBBDgbBBTtbBBIucBBACBBLcBBDheBBBJBBDZBBkGkWBBFfBBD1NBBFeBBCwBBBXsNBBQ9LBB1B5GBBM8OBBGjGBBEyKBBFSBBPWBBFxKBBG+DBBZiHBBS5HBBFlBBBRrNBBNgXBBRzXBBD6YBBDaBBBMBBHnaBBDgbBBTtbBBIucBBACBBLcBBDheBBBJBBDZ',
+    'Thasang': 'BBc+jwRkvjzB1O7D1ZxbldhOH/PiEgDkK1czDzK4O3JoXzB0GjLgVhKuFyH2IxBgWuNuLzB8RhgBrC+UsPkb1GnB/D+UlkB6X3EwQ3X7d7CwOvM2JqD+XuGmH',
+  },
+  'Myagdi': {
+    'Annapurna': 'BBiB0wqRu1gzBqZqEkKmLyDvNkftO8duKqJ/IgLiDsDuKjK2chE/CIgQmdiO2Zyb0HpBwOsK+Bgc1Y6lBpZ0NjR/oBzF9CzakRzhBhjBvDlLpKXtMzKrL7C/KsI6BwHtHoBmDxsBjRpFxOrNwUzT',
+    'Beni': 'BBQimqRingzB7UbjQiS1KwC6LhY1IlRuHhF+DpYyTtFwHyPmFrFoH+BGrI4DwPyIjBiFwP',
+    'Dhawalagiri': 'BBtBqqwR4s/yB0FvSvDnIrvBzYpa1B7M5NxS2U9NsEvHoTwD4JhOzGrF3IyJhW/IhGnD5PqGtGoBzQ5XyFihB/mBlK5P2OlO+K9avBjLsQvJ4L4GyChP6SvY4amI8UulB+D6BuBrR2SmJqSmB0GyK7MqfgKuerC4WiSyQ2DgkBuP+jBrLqc5GwEtL0B/VtN1IyB',
+    'Malika': 'BBXw+rRu09yBpVwF1DrKvR/B6E/MxEzHpYvF6HvNClRlK5OiI1UmeoL8I5NyHpB+CkLyHoGiHtCuCgK0ImD9hB0pB6XxFnB0QpGuG',
+    'Mangala': 'BBT84qR6g/yBxIkB3DvPFsInH9BlFsFvHxPnUkEqF1agShUOzQ+XoF+E8H5EgNwRgCuDmKmG3BtL+LjBkP',
+    'Raghuganga': 'BBeqqwR4s/yB/UiKzGkLnX0B3O4J3K7CpJgJ7dtKjfuOxDwNjKlLxUPpPlS8X3WhFvP2J3NkBjP+MlO8NpB4IyFpJyWuTsPvD3JwHnT+NrEyS1U8M6Nqa2BsvB0YwDoI',
+  },
+  'Nawalpur': {
+    'Binayi Tribeni': 'CBbuy9Q8/mzBjdhN7QuP/EpF1nBwGhIzE9HgHtJxE1BtO1HpIqU/VxJ9GuZC8BxRmK9K8JkJ+ZmEX1eiHvXpI1KuB9HsN4FqWlR7FmgB+JyhB3JgoBgQZBI1zE+gB9E0GhUoFsEuRnJ3FnI7YkbxGkFvG',
+    'Bulingtar': 'BBa08+QqvuzBhC9QpQhNuG7TrFzYzJpOwN5YoNd8KhJ6HmG+GjE0OqKtD+E5E3EYkVrFI+H2KCiSxIyE8EyCnGuH2FsBU6H7IkRsD8O7L+I',
+    'Bungdikali': 'BBRmggR+6qzB7YnHtZgMqBvM3G9LoKtW5I9RmEhM8JuB+TwQ2MhE4JkF1EwPiNgRlC4M9EnDiCuI',
+    'Devchuli': 'BBKoq+QqxtzBrKqG9a1J9YmIlKjrBoKvP0hBhLgUiG0JqOsF0Y',
+    'Gaidakot': 'BBP08+QqvuzBrHoJ5WyHtCsIgG+M+P6JvM2ZrhBmInPpgByNxUrWj2B+YlI+a2JqMjGsO8M',
+    'Hupsekot': 'BBX8t+Q2/qzBxNqX/NpXpd4BwFhSnagCtDxJhNtBoC7SoOjCsM3VqSIkD9QgHViBtYmHjN8MsQmCib2N4ClEgM6I+RnKuW4G+L',
+    'Kawasoti': 'BBV6h8QgrszB7Q5N5I9azhBnN0EtR0J8BwIpJ2PLkFmCpCuIiNuBsDwJibpB5F2GiD4M+ZzDqMkWhRvF5MuH5JzB/KoF',
+    'Madhya Bindu': 'BBaqx9Q2knzBlHkNhBuY/GWrDmRhSPrM4VnOkCCuK1LtDzR+KzJ7BsBhKxPlY0NvS3KtrB6IqCiH7GiI0EialB0NpFgFqF8QtPyOsI4C3D6LuI',
+  },
+  'Nuwakot': {
+    'Belkotgadhi': 'BBO8vgRmkg0BnlBjC3GxLvT1BvGxJtDrY0I/FoO/mBwM9G3EnSkVwE6G8HgDw/B+T6V',
+    'Bidur': 'BBV2wiR21/zBxFuCe8brIlI3FiElUnexPgBjE9KhSjPZjrBwWoT0KgB4L/ViI4HsO7F5Gma8F6E7B4G0IpGgHsC7EkF',
+    'Dupcheshwor': 'BBPoniR+xl0Brd4DjXrI5D1d+GzgBsU/G4GiHimBnB3FkjB0K2JkLlCP4LrHoFAtH/GtB',
+    'Kakani': 'BBO28/Qmzh0BlRiH3CnKrC4EzG3E7EoDxHnHrJxgCuGsJwT2B4GyLolBkCtH6fjQ+H',
+    'Kispang': 'BBM2wiR21/zBnClhBkJtCyM9PlE7X+lBkNkGuViJ4E9E0dnchXzG2GnFmb',
+    'Likhu': 'BBP2xhR2ig0BzG6I5HvCuD0KxFyBvB8X1MhEtJwOxP/FtB3F+P3HiPt1BgGyGoMvD2HmH',
+    'Meghang': 'BBS8lkRs39zB9kB3NDkf7J4J/GpGnMkH7EpTsJ7PpVJ9F7kB8OqEsBpFkN+MmM6B0F3R6RzIiCkb8VuS',
+    'Panchakanya': 'BBJ+qhRmoj0BtVmH8CzVtTbwB1bwOjV2KgF0D1DmE4F',
+    'Shivapuri': 'BBTw1gRsvj0BxGogBkDkazHmB7L7L9Q5CiDlHxHhKsNzOlBhItGdyGtRhHD/E7LqE7dgP7E6MqExEshBuTc',
+    'Suryagadhi': 'BBOqnhR6uh0BxG3W+FtEtDzK6HwC2MxImG+M4FhEsImI5F2doLwI6CkMrX3BmB9Z',
+    'Tadi': 'BBJi3iR6tj0BjsB9BzDh9B6WlElB+ZsX4BYkNmNqHwFgR',
+    'Tarakeshwar': 'BBMiwhR2r9zBxJgV5MA/UtR3DrW3G1HxGkCJvFoL3EgF9KuXkC+R2K',
+  },
+  'Okhaldhunga': {
+    'Champadevi': 'BBT422Qgp20BjNqGZmKpQnKnL2NlSlP3B5R4G7MrbvIwJpK5OtWiIxQ+XiXiJxBgKqQySzH6HmEAiY2KuE',
+    'Chishankhu Gadhi': 'BBNun0Qkh80B8CneiRjBgDtQikB5BualJrNuQvPgETi2B0IqNjb2E7H5L9PmC',
+    'Khiji Demba': 'BBQin4Qiy40BhO/H5Npe7F4EnDjO/N3LjC7MgPsBsPnagNrG0ClUkwBkzB8D6KlGodhS+MpB2K',
+    'Likhu': 'BBN422Qgp20BY7U1KtEmBzW/IzFxS0H/JlMwM/PklB+B8lBwV7CyU3MgGzPwa',
+    'Manebhanjyang': 'BBNk3zQo060B1T9V7DzV5Y9mBgMnHwRhZ4EoI+MQiOqXyJ8B+KusB9K0RzBqR',
+    'Molung': 'BBT8j1Q8r40B8OvGmG7J/CnO4TtSH/KwHnGiFqQiMwIoDkOyG7D0P8frVF7HmcnVzL1HgEL8ShQhRpC9U',
+    'Siddhicharan': 'BBb882Qqm60BtamJhkB6B/CuQhRkB7CoexJtIhHjkBkV5B0BpR6K1PzKntBwTqLmNnCuCkViQiRM7SyFiBe/EuWyL8Hlc0IlDqY+IxFiI/GtElH+FqCwT',
+    'Sunkoshi': 'BBV8j1Q8r40BzC+DhdlOnOtX9MP3EnIyF1UqQzBsClTiL/RsTsLkFnC3G8MyBsRyQsPiNtN2HSwJgL9S6QmCiQlG2J',
+  },
+  'Palpa': {
+    'Baganaskali': 'BBUu9gRgvhzB5JsGvNhBtMvT9M9GbhOsJ1G2F2F8I1HiL+FwH5Sif9HxGuFyJkU/HoCpEqQwEoKnDgGhFrD9B0H',
+    'Mathagadhi': 'BBe6l/QurizB1OiJpG+M5KqBvCghB7NmFhGdpJzd6GnfnXoQ9M5FiSpa1B3TyI/HuCjO2FgBhD9GgLzHkMmKQ4KsQJ0F/J+Y9BVsN8e6b/SiNrB7G5GiExD1D7DjO',
+    'Nisdi': 'BBdyv9QgokzBgTvDyCzF4FoNzDoH2NaQqMkN2OzE+T+RsFpCuM1MqLyKsUK+MjHiL4LnD6NiIc8PyG5BpDqG3JjF1MiE9TvQxXjElChb7MtQwFpMLllB/Pa',
+    'Purbakhola': 'BBe4ugRm6jzB/K4BTyFgHsDvBoMrQnB/KwUsQ6MjF+FsDgLnJiP3C1I9RrF0E9TjN1OPpM7NnB6D5GvHlLoCzdmL7B+LtSwKpDwH0IMuhBkL+CoItUiW4FRoMzGhC',
+    'Rainadevi Chhahara': 'BBgB44hR+58yBtLdjVwQvQ5D4FvQjNAhK/GmHhFShN5nBkEjCpGhP9BkGvX/G1KAnQ4RhBgDhIuLwBoJvKsF4KhD4YsP+NkF9FqG4Q2E+BmHrNiIoBoFvIgKmH/BoS6QwEiF4Q',
+    'Rambha': 'BBYu/gRm8jzB1Q/B0C/F0GiCSnMhW3FnIuUjL9CLthBhKpMqE7Z8DkOyD2D6GhEuEmHwDhHoe/M0BsN0P+M9G0E2E+DnCuSxM+O8EmB',
+    'Rampur': 'BBaohgRk0ozB7Q3K3LoDkHhLJ9MxKrUwYrXb3RkF9FtQzMiL1UsQoBjD7W2dqBxD8L5SiU6CyI5FsPoIFhFoIoJgMxMwdkG4ItFoGiCmOjEuO',
+    'Ribdikot': 'BBW6whRkp9yBjEkV5F1GxB+PlKuM3UsD9drJjC9ShIkFoIpPvNrG8SvXvG3FkDpQsP7ByHiGtIiPuWiFvGmQoRkEkVvQ2JT',
+    'Tansen': 'BBYmvhR6s/yB3JyIhPcvH6ShL9F/I2HxF1FlN0K1M1V0C/UwIVmFlNuFqEB/IsM0E8crCgLnNyB9P6F2GkEjVyFiI1KogB2D4N0H4B',
+    'Tinau': 'BBhBii/Q4rgzBxN2CzFgKrQKP3KjMlK/K0HiD+GlGjCgPpsBlD/rByJ7G7CtQ4I/JxI1LsOpToPoCkCqG8ShC1DiPwG4F7SwXwNsGnIqPyDiC8DhImC2SmJ2FCgJtFpElFmNrJuD3BoS',
+  },
+  'Panchthar': {
+    'Falelung': 'BBTwyzQ6/21BxcqErRvH5HjK5PI7BlFqC1T9HpekNuI2D3QuTjQgDpSoT/C2GuHgIvG0L0CQyhBiJuJxNwV',
+    'Falgunanda': 'BBNktwQg3z1Bha3pBoEhYjRpRgZraqFuCf0I0Z3LsI+K0ExCjGsZuIiIlRgF',
+    'Hilihan': 'BBP410Qmty1BxOrGvEomB3hB4FrEzWlLhNc5RlJpToDlH+T+EmH0QyLoE4b7oBkLvCmH+J',
+    'Kummayak': 'BBOwkyQ82w1B9ehDtI/KzZ4LgBzIpFtC1JsOlHrtB8DvGqNpC+CtrB+mBihB6Lic4I2G',
+    'Miklajung': 'BBUw1vQ83w1B1NmM3a5VnOmSlE1H9ZxD3MngBPjhB0P/OAtX2KgGsU5GmQqChJ4RxKkHrBwPgU+oBiNEiExMoMzD',
+    'Phidim': 'BBS49yQ6tz1BhRgD/DoUtSmOhEiRrgBzjB1E1J0Np+B2RhGtIhIsGzXiQkGyI3DmJmNbuT+GsHW0V0JoJ',
+    'Tumbewa': 'BBO2uvQkwv1BnM0DhEyMhND/T9oBsBvPyKjH+LtZ2MpM0Rkb4G8DkKzE7EusB5N4C',
+    'Yangbarak': 'BBZwyzQ6/21B4D9tByN7VhJ/I+CzN5G9F+CtNgK5GsDrkByOsGkI0mBtE2S0EwPnCqjB8cihBiyBiToSiVnHyHzItSxZxFxWyP3T1PzGiC1ElIzWP',
+  },
+  'Parasi (Nawalparasi West)': {
+    'Bardaghat': 'BBZmq5QqmmzBhRtP8D3P5J1EqFhJpCrRmJ7ChNnPqFvHkI2E8EjE2SiMgD/LkGBibkQkM1IkkBR3C0oB9ZlEhJxJ/KsL7ByRtZB4IkJvT6T',
+    'Palhinandan': 'BBK6w4Q85izBlR+MxJAT3Iib76B+K7CrCmb6L8F3IyU9H3B',
+    'Pratapapur': 'BBTwz4Q6jlzB3E2L5QjHtE2EjDxKzR6EjN5ImT1pBiIkChDiF6FmImGrKgIwD6IzH4KqKoHNBkIrIMqCqR',
+    'Ramgram': 'BBX+g6Qo5izB9WM9D+JnV1JsD1F+H4B4IxU5L7FmEhcsH3JgLoDgInHkJgG0RjB1ByJwHoM9KZvQyWsOoB1GgIoM4GW6GjP1D',
+    'Sarawal': 'BBV2y4Qw2jzB7O6G/HvDlGsK5FlIiDhFhIjC0K3W0C2KuZnP0UiK8D9JiQtBoa+KqTmThM4IpgB5Q9D4M1ShM7EkEjI1E',
+    'Sunawal': 'BBV4r8Q61jzBpjBcpPpQ/VzIbvIkP2DV5GnM3G2G/HrOnBwQxW+KavHnM0BnSyZzE0eujB6R+BrB0M/QiT/CiPsI8K',
+    'Susta': 'BBU032Qw+kzBkN6I0R5EkDyKuE1E8QkH2E1LqJ4CtEoO6RwR/CkKtE0D7FrOjFwGjbyGxH1R5UuDzBqUpIjBzStZ',
+  },
+  'Parbat': {
+    'Bihadi': 'BBM47kR6ohzBrV1EnDkKvRInBtKlIuC5FnI8O3RcpKgSTuK8R2S4J',
+    'Jaljala': 'BBKy1pRq+hzB9mBgDxBxNpJpHK1Oka5DgT3T2UW8KwR1GqS',
+    'Kushma': 'BBU8qnRg2kzBrF6GtOnQelHpKnN4BtQoL9hBuRnByT7kBsHySgGyB4BwPnQoLiI0GpGmR7TpFwLoI9DsJlH3EhGiE',
+    'Mahashila': 'BBLsslRw9izBpG1BtKuPlH3H9J1iBpJmH5DlKoGzY8WoCC2UmTyE',
+    'Modi': 'BBW8qnRg2kzBjEhkBiGhEmH4E+DrJvLnI8TqFqGlRhIzGwQjN4lBpDqP0NkRqFMwHhPuOtQ8B9YoejKhI1EiIlHxFxIuiB9FkB',
+    'Paiyu': 'BBQujjRsjhzB+MWoBuK+QHlFyP6DmKqJlHwByRuIsIhD0D5NgC5GzL7PHvJxX2D/MzH/E',
+    'Phalebas': 'BBO+ymR27jzBnMiGpPhEmB9RlMnOyBxcrT5ES3SiH1JgP4SiYImP2MgBoT9LuiB',
+  },
+  'Parsa': {
+    'Bahudarmai': 'BBP2wxQ+o5zBlRqC5dxL0L3O0IiDuFtE3CpJuHzFmK+EvEoMoNhB6D2Fc0F/IXwFoK',
+    'Bindabasini': 'BBNsrwQqy4zBvNjExF+E1M5KzB5I0GwByF5JxF3GiOwC2JzE3EgS4W0EgB0K',
+    'Birgunj': 'BBf87zQmu7zBrqB3LlXuG1JrIrLZ5FhKhIoHgBrLxQ9K9HRUqL5LpFtQ5R1B/O0Nf6I7YqK7CkIkGtJ6L8F/B0X8MmRpC5IwMiHgIoOqByDgXwIiEXzIuHsBoEuHgoB8L',
+    'Chhipaharmai': 'BBHgwwQmn2zBhUmDmMzkBkSmCuP6R9G+DrM5F',
+    'Dhobini': 'BBJk0xQ012zB1IuB3ExIhH6D9MrGwD9TyM2FgN/G0PmF',
+    'Jagarnathpur': 'BBRi4yQuo3zBtP2E7M5KnBoZ7T5GArE6JDkE3K5MjJ0LzEiM1b2OmF4HlHsN2KxG+G7N7BtDsY',
+    'Jirabhawani': 'BBQ8k0Qg63zBzPhBlMvK5MkEzEnMnMjEuDrYmPmBqFhGnEtIiXuG5CmO3H/BkG0FvDgJkY2H',
+    'Kalikamai': 'BBMwpxQm52zB7LCyD8PvJxCvD6FxTpKoHzXiJ1DuM6KqJhD0EwI6IrB',
+    'Pakaha Mainpur': 'BBHsowQqu3zBhK2EvR/F4QvkBqL8CnI2WmHkD',
+    'Parsagadhi': 'BBRu8zQim7zBnoBhMvKtJNoJlLzGiE9L9EvInOpBhH/HwLzM1EvNyd6D+K+MwCnE4L+BhBmGiawS',
+    'Paterwa Sugauli': 'BBOyh0Qu/4zB/kB7FyGlK/MexLvWhQ4BoBnZyM4K4PzEsF+KgE3F0HamMwK0PiB',
+    'Pokhariya': 'BBMorxQk33zBtQkOnXhF4F7V6XhBjGpLsFjGkJsBgBwH+JuE/DkL5JE',
+    'Sakhuwa Prasauni': 'BBRu+zQui6zBhavSepG1TWrFlL9TnBhFhNvNgBwEnMhKhGiLrIwWiG6IrDyLwWwNLhH0JglB8F',
+    'Thori': 'BBTqm0Qul3zB/XxHsDjJjGzF4HgC8D9PimCloBkN1yC0F7DoJ0M0C8VsFpCvLyPlO0yClG0I9KXnazVzEmUhRlF',
+  },
+  'Pyuthan': {
+    'Airawati': 'BBb21jRyq0yB7BiGtLyDrI3B9HjNlByN3P+V9LqFhR9DwHxElE5JuDxc6R1a4FnZoJ+EsJxJgH4ExD3Y4G5I6E+L8MqGmB6PgF5BpH8IwJ8IrM+UgI8H',
+    'Gaumukhi': 'BBS8umRi51yBlI5K6D1YgJiBkDjSoH9HmEsLwOsKoI7E+K+M8PpC0YiN1JskBjasWranMoGrQrFvS7TuJ',
+    'Jhimaruk': 'BBZ8umRi51yBxFzD7D+H7GpD3HwMhDzEtIgGnQ3Id7KkJ3PhG3C+DjL5F9GYvLkLtG7DlFwH1D1B1H2KByBzE4PsGwSuTjEoU/IhB5D2Y',
+    'Mallarani': 'BBcg/kRsj1yBhHcniB1ZoF7R/H7HqMxUtJnJqH1I/E0BvBnQ8FlHwHoDiGvIsF0D5JoSoJ5B8JiHvIqMqEmD0I7JwD2DtFsN7JsG2CuLjEqD0IgHvB+L0GI',
+    'Mandavi': 'BBTuskR8vxyBtIqCN6FvJtCtDkGxM7F5E9LnFuB/BxgB7H7J2Ozb2JSiLsNkD7VkY8IxLiOyT2kBrNyN5GR',
+    'Naubahini': 'BBYospRkl1yBzYhN7PqC9K9MlI+ExOtK/DpLpG6FrSrT1MpBkFlMwKtDpLpImU9mB0HiHoJpFqL8U2OfiN+YmKR0RqU0QmE0IyIxB0Y',
+    'Pyuthan': 'BBdmxmR8uxyBlU+mBqLqIvKuDrF8JpP6B2B2HvH2D8DmF7PyLoBlMzI/GkEpD1CtL8JrGuFrNvD1D9I8J9D1EmItL3JtGjJ6B6JnS5G9M6GS2QjP+SqO6JhHkRM',
+    'Sarumarani': 'BBY8whRo/zyBxQpQiGvNjIpLoF9FnF9L8C5OvRlM6BvIwGN0BrKsRjD+C+DgLhP8LmJ6IlCrBjK+J1D8H8JiE2gC/G3ErJyJnJ9E3FoZ',
+    'Sworgadwari': 'BBUismRw+wyBlPE5JiH1ChGxT1GxT1kByLhOjY7IgLvkB8OxPkQsEwR3K6CwK0QsL0HuUoBoPpEiBiQ0HxCgXnR2P',
+  },
+  'Ramechhap': {
+    'Doramba': 'BBO6k5Q0lw0B9OzE6OxfvBhf2PhIjEpe0VtG2LjN6E0NmVyR7EqZ/JoX9asc7XhG',
+    'Gokulganga': 'BBYmq9Q4830BlJlK7PB7F/P/cIpInWzRjLrD9QnItJxHAX3cpKnMhaxE7XzPqCrQuP5WiLiMscmKmTiV0Ty8B+xByf2G8Hf+O0Q6U',
+    'Khandadevi': 'BBU814Qghw0B5F/GvRuC6BrM5J9G/gBmfXpUjO5IwWrNrE/J6RjRiKhpBwT/a4C+IvKwfgNoPoGmEuChEyN4MgBoe',
+    'Likhu': 'BBPun4Qq600B/sBhY6K3LvFpLiJ5a5C5P8PrU8JsL8TwEsDyHxQ6VpCsQ8X0PoR2C5IyN',
+    'Manthali': 'BBb8z4Qs8x0BjU5EjKrLzPsUaqXnIwDpe5J9F/JoGZ3D5S2UpR7G1KnIzErD2DY5KrF4ClKhL4NpPjB7I6X+He2UghBlf6J+G5BsMwRtC4U0LjB6qB',
+    'Ramechhap': 'BBcu62Qoi00B9etF/byPtM3QxLtFuBtdlGhG6N/M8EtJzC7MoF3JmJnBlC3L2NxV0N8LsF3CX6KsD1DoI0E8G2KrU0QuDwThGQgBgFwPsL6bIhHqTwFqL',
+    'Sunapati': 'BBOmj5Qsiu0BhN9LtCiEnGlE/MvP4J9nBiJ8CuQpKgLsNgSiG4OzChLqNzVuGkEqe',
+    'Umakunda': 'BBiBun4Qq600BwqB7euO6OY4cyHAoIuJsD+Q0RkL+I4WscXqGuQuPLgU0O0IzKuYoHkDjHoO0F8L+S3O+W0BqlB1E+MvV9BrJwFjhBpUhTlB9MzHtB9HvVjNjChkB1OpN3J3U9c7P/CrKhf7c',
+  },
+  'Rasuwa': {
+    'Aamachhodingmo': 'BBV8voRyvh0B1T2R/doInH6WvW7V1FwFriBxnBxCpLwM1NsQuFwPrHsDhO+VsFiMxK6QuJizB3a3E6NoK8MpOsYxOqI6B6J',
+    'Gosaikunda': 'BB0B4zjRi8j0BsMzHgIlQyB3TnKzUmDvL1ErM4TvQmGkUiUiYmPyQqF5FwW8VoH5WgenI2T1RkKmqB1J+ElGqS0SwV2LkCmG0a7BqejPyiBrDoY1diF6cwgBiJpEiTuHT6MmWtBoCwR9H4H1I3CjZ6KvRxClhB8JvSmRvGoOtFLtJrMFnlBvHpEpGplBlO7PgS/P7C/KgJrRHvO/R1axUV5Jtb',
+    'Kalika': 'BBP+9jRgkh0BvP/M3R2DrJ5HYwM/IrByBnd+OzC8CkJiGlChDkHmF+HyI/Vkb2JsH2L',
+    'Naukunda': 'BBQ4zjRi8j0BvRphBlNpHxDnZnLvI6E1TsJUrB1L0J4HgMnFqK2DsPuU9CqOoK0UxB+T/HgQ',
+    'Uttargaya': 'BBX61kRi9g0BlPzXvI4B9OhJxIgWlF9H+CrH9FuC7CjJ9O0CtB9I6cmCoFlb0G1G6buXkC3ZmMnD8HuQkO6CiO2MgDqXrSgLrQtF',
+  },
+  'Rautahat': {
+    'Boudhimai': 'BBNy/sQwqh0B4ClOnHpDhF9NqD5XuMnI6BmHqJwBjOyNoSiHqFqazIN7QmN',
+    'Brindaban': 'BBZ4qxQ4+k0B1JvL/Lc7gBpc1JkB1NhLT/JkNtJpHzCalOrJtEkO7R8G8CnBuJyFFgJqOJmWkM6QsFjGmIuFkFlIiG0HQzK4J+C4JwtB',
+    'Chandrapur': 'BBiB4qxQ4+k0ByJtF3JvtB3J9CP0KhGzHjFmIlItFrFkGjM5QUrVuV4BhCxK2RRkDzIsM7FkHmHwKjHqP6J6M5B2FnHoG4G4Q2ClFgejH8GHkVvIqDnG6evLgDzDuK6HkUnHsB1BtH1NtC',
+    'Dewahi Gonahi': 'BBQ+quQy3h0BhQ2Cc1I1NvDpN6InE9FiDtGoB8E8QlN0IO4BhNgLmEiGjGyNuP5FsKjK+B',
+    'Durga Bhagawati': 'BBLgxsQq7i0BnJkG7D/J7UpM0D7EyN6C+BjK+K7CkFsF7BuJmHgB',
+    'Gadhimai': 'BBM42tQg3j0B/M3JW/O4H3KkOoBBqHiPpIoGmCXkS2V8QzI2GnTB',
+    'Garuda': 'BBQu9uQkrj0BjJ3DoBvRnGjChPqIxGvPjJZrDzOksBlF2BjGmLuD5MuQuJ+DZmOqH0CjNuJ',
+    'Gaur': 'BBI0trQq5h0BvOwNjF5NlJxC+BxQkNxGoKkF8F8F',
+    'Gujara': 'BBYi7zQ+gi0B3Q1CnG3G1FoH5M6BpP5JvKkHjHlHrM8FjD0I1RSiCyKrTEpV9ckPlO4MAyCrF1EnCiJtNwRkEkXtO0KyPyPwJonBmK',
+    'Ishanath': 'BBPkksQ2qg0B/PmMrM/CfgGxHyB4B0ElO6FgBvcwHlJ8MpCwDpI8L9BsE6EhD2MiPgC',
+    'Katahariya': 'BBS6ovQwzh0B5N1BhB+F5OQL7IkK9B6FrKxNtPqO9FyL+KQhI8GnC8L6LsR7JhJuN2EoCxCsF3MA',
+    'Madhav Narayan': 'BBO86tQo6h0BZoE7MrBsD0OgLyEjR+NVgPgN4JvUwDnSnjB2LlLiBrWgSxHgNuD',
+    'Maulapur': 'BBOu6uQ6tg0BjT+LnLlEnDgG5DnTnShH2TlRmK2EmFvJuCmHgJxCrI8PwH6KuJ1C',
+    'Paroha': 'BBMy/sQwqh0BjDoOjH6C/KnNgCjHjKrR4FzOjPhCiD1M8b+ElC+S4MgM',
+    'Phatuwa Bijayapur': 'BBW0rwQowg0BrR8JtHrK/JV/DwJ/K1QtJ2CvH5K0HvPiMOoCtF+Q0O8GzC2DgJmIvMgB0OiHxCNrIgK8KyXzCyIoGjXuO',
+    'Rajdevi': 'BBN63rQkni0BlGRnKmTzH1GjBiK5HwDzBrL3JrEsFtamJyCqF8NqJhMgNB',
+    'Rajpur': 'BBMqqsQquh0B7KkMhH1E3KyDqCpP3QxOyHxBgB/FsMgDgQlM9BkLkKsR',
+    'Yamunamai': 'BBNw3sQ8ri0BlHf8BtJjFrF9K8C9BkK/IiBpEtQwF9DiH2EmPnMqByIyOmJ',
+  },
+  'Rolpa': {
+    'Gangadev': 'BBQ+htRyzqyBzSiK9jBzJT5KjRyGBtMrLWtP7JwGnIoC7UudvPiE8PmL3B0H0NiLoG0f8H',
+    'Lungri': 'BBPs+oRinzyB7LzK7MhC3J/VvOkBpL7UnJqFzHhHwBzL2W7B4J9KoD7as/BsnB3XmQ2L2U',
+    'Madi': 'BBR0rrRohtyB37BtgBgDrtBkJ/cmSyNsLVCuMkRxGS4KmUuI1JkajZ/HpE2EkNkK+FkSvJuDgFO',
+    'Paribartan': 'BBXsxsRsiuyB3O1Q5PuJ5EwNjJwFhB9W0IzWvK1NwJzDjGpS/MvJsE9EkZgImDvSyIrJ8NgDwShK0LyS8HN0DuWxUwK1LghBwC8J',
+    'Rolpa': 'CBVs9vRsrryB/Q3J9JgUwB8SrFrBlFuJwCoLzVrCqBxN/SjcyBpIuPvNpBtb4FoD+JpGE3HwFMqCtcyUoPhE6RgTkSBMtgHsoEnJ6ElDvP0ExD3I9HkM1P3JpM4JjFoVyQ1PsQf+EqM2E',
+    'Runtigadhi': 'BBY8+nR4osyBhGyCnJmd1GIpBgMlJhC9R+JlY9axN+LjQrE0N1UgNpG3CpLoL9VjMjM2IpD+CpasMnZsgBoG8FgNqK6F7WgrB+SwH2IvG',
+    'Sunchhahari': 'BBZs+oRinzyBqLnf1L1U4XlQplB9U2BjRgPxH8IwDgLjJoO4B2FtF6T8E6QrGqHwLzjB21B4f2b0VsJb6G9OsEtLwRvTgB5CqR1UmItKrS7QpE',
+    'Sunil Smriti': 'BBemvoRmswyB5YzQQ6RhIkOtF8FxYmEzF9HoB5RoR1PyC/WhQzHqEhB5HjdgDpHsH2BsJpHiKuE8DuMwDtG+HmLoCwV2MyJa4P8GpLpBhT6PnFgdoXyF5CkGoF/0B2P',
+    'Thabang': 'BBTonsRqxyyBnW9J3f1b4jB71BnL7MlFvauJ5F6EvN6PtJ4O2QpB0KqTuSpC0E/E5C7BqI+KiUpN6K9C4X9Nsa',
+    'Tribeni': 'BBSi/pRw2pyBpIyHvG8hCzKvHtD0UrN2GF0KlQLnJxuB/IkG9SvHub35BqmBnX4C7H6MJqHmK2NsCL2Q',
+  },
+  'Rukum East': {
+    'Bhoome': 'BBdg2vRwquyBlR+EpEkTlJwD1EyLhKmCiEwLpXidlXg6BjXwVAxxB8Nja+C3XoNxJ7KpV8BpIgF6CqCzErTzS2UtmCoU1JmHoDnGyjBsO0GpBwQqWwFwJtL8BkMkOuD',
+    'Putha Uttanganga': 'BBoB2yyRmwwyB/R8LtHxKxPTlKwRpLnBnCoT4NkJxHuRwMyGkEkU5PmHvI+W1J4F9FhH3KF/K0QnZvRjKiG7GwO7RpHyPjhB/YvEpH7LRtTkO9e4IjHanLqXhdhEvLiKlC2ExLmJvD4EvT4QxEmLyKiB2P0J4GumB5TgI6V',
+    'Sisne': 'BBoBs1yR0wwyBhbjjB/H5V7mB4ThKlIkCvH9D3JnHpCtBpLnOxD7BjMvJuLzW9F0BhQrOzGgHxb2G+DrCoJmF4HyQBxBnMmFtJsFsBvB7S+J/TgR4J5OqhB8MkP4CwM8JkBiDwJmhBhJUjW+OxC6ZkkB+K3DsZiTnJ4P2HuQ3L6c',
+  },
+  'Rukum West': {
+    'Aathabisakot': 'BBrB+sxR4zsyBsBt3BmVhT5D1G1BiGrJxD7FtT5K1FQjSvItP8DrM/I/J+D/J/IhJgDvCqNmIqWvDqO6GqEynBof2a8FiT6NwPnD4JwGgQkK2GwQ9B6FqHkM3B6ToSwGmUnSipBKiQ5c2MvFoIxMvFnEyFxKxCxH5NsKzP7J1L3QjK9K4D1ZjkB',
+    'Banphikot': 'BBS+sxR4zsyBTkWlhBiJ/aviBC/M8QziB1B/V7RzRuHrBqFlMuO+K+U5KsN0C0J2WsJyD2BhGqDgF1U4U',
+    'Chaurjahari': 'BBOs3uRmvoyBnRdgLvdxCtU8S72BilBsHhE0H6JyPhMqX4C0EnToatJhFwBsEhJsC',
+    'Musikot': 'CBVs9vRsrryB/Q3J9JgUwB8SrFrBlFuJwCoLzVrCqBxN/SjcyBpIuPvNpBtb4FoD+JpGE3HwFMqCtcyUoPhE6RgTkSBMtgHsoEnJ6ElDvP0ExD3I9HkM1P3JpM4JjFoVyQ1PsQf+EqM2E',
+    'Sanibheri': 'BBX+jxR+rpyBnb0KpO9KtFmMtHsB+CpSzJtFPrG3P7FkIpZiJrCvBrEuJiFoTna3CzE0LjZuNuK1MkSmOmL9DiKgJgK7DsMwIuP',
+    'Tribeni': 'BBPk2tRunryB3JtC1KhSiJ/lB/DzKqX9FoHjOiSewEuIpCucvFLD4H9JqGpF/Dawc',
+  },
+  'Rupandehi': {
+    'Butwal': 'BBU4w9Qy2+yBjUmHpMpFlEuDR3flNQzSxLuI5HgIaoBxMiJyGzEpe4GGsL8OmP1EgM2IkPnEhIoM8CoQxJ8G',
+    'Devdaha': 'BBW6j6Q+zgzBoE1VxNsB0EpR4TMa6I8LuEwQlGoGqEkPlME7IyKxMiJ2FsX5HI2Y/OwwBxIgIiDkH5R9B3f3jBtY+EpByJ',
+    'Gaidahawa': 'BBXq+7Qkv7yBlLPrEmHpP/Hvd4BkErJ9L1B8E9drKpFkJnEnMzLuX1OyiB0QcyIlU/B5C+H+SoDZyMqKjGtMkbiEnGiXrBiC0P',
+    'Kanchan': 'BBSw/7Q2i7yBtElF3R+C7DqGsMnbpKkGaxMhSpB+B7JwQyDsC7KwT1FgdmEsDuUhY3Df8E2HKgI2J',
+    'Kotahimai': 'BBT624Qi28yBxFD5C2I3KrCvEtJzQiGY1RhInNoRvHxB3UgN/C6EgJuTyKSiL1GuIvE7MlIkBqH8V4I6F',
+    'Lumbini Sanskritik': 'BCXm65Qgl7yBxHdX4HnEzCxFiInH/LrKuFvS/P/MgD5BzH/Mc1GlT4OhZiI8IyI/IsPyG4GnFgR+HyNhCoIoL1HMX2H4J4BFvfgO2HDF9JhbHM8J',
+    'Marchawari': 'BBRk91Qg66yB6CmIoIrDmMsE+E8W+HoJ4J3DgCsWkGwE3EuIrPpP/IiC3DrI1Q1JvGxN6CnMvEH',
+    'Mayadevi': 'BBeuu6Qo07yB/P+LYyG0HuCrHgEWyHrSjGiKmamB8WlEH1JnNgHxHtLxPzHlD1IqJiDvP3I5F/GpXiIQqE2M2GzIjC/TmGEoHgMyFhIoE0C2C3IgRyCzD+JyF/B',
+    'Om Satiya': 'BBW8j6Qus/yBnJuKD4IyNrBvGwZ/NzM0EzPrGO2BzKzJvTpGiB5C1PwB/H8FPqSsQsB7FzIxJ6H1RqE8J6JhB2E8F9IwM',
+    'Rohini': 'BBO+35QwygzBpIuG/KnDtHiL1MuC4Dj0CsKhKmGoMnB0NqGhB0JwT1B0KsGNzEyP',
+    'Sainamaina': 'BBVq+9Qy08yBjPoE/L1IlP2ElNrPvIpWoEPhD9LiWhS/H1J1HJgB7EiY4DhCjVmlBzJgGsJxH6MgKgG7GyFiH+nBnUwa',
+    'Sammarimai': 'BBO8m3Q2+7yBxEmFvI3IChL5JrQ3PyC7DxEkLnQ+HrEqLkE0GtJ6FyS2PyB0CmV',
+    'Siddharthanagar': 'BBL+i5Q+o+yBpE9DrKiKkC7tB2IpJiT4S1GkJyJgK5B8JsHqPtSnQ',
+    'Siyari': 'BBVk/6Qkr9yBxQvFxLkKiL4BpC4G6FgIjF2D3UnN7DvhBhGxGsSkGVxHsH/DzHtCXxGqP/LsH2FyBmL8IgBwI0QqJiD',
+    'Suddhodhan': 'BBTmn8Q+l8yBhG4BsFschJxGnByMtR4GzL1F4DlI6HqCwG9L/EnDQ2F9GlQhPvGnHtUgQ5CwPgIwD5GkKzB',
+    'Tilottama': 'BBT6r8Q27+yBrGmSjPmMnGpEvQmG7LtEZ5IrJrD1FgFiBlf2M7Q5F/HqC3GhL3B2LhKqZ6HsWkPmNPkE8Z',
+  },
+  'Salyan': {
+    'Bagachour': 'BBV+krRwtoyB+D/TtDxD/E0F1C/FY/KnG1F+DjL0F1D2EyJmStYoQnB6a2kB/F4QsQgjB/IiJ0FwFhD4JlrB9MpIjOtLwB',
+    'Banagad Kupinde': 'BBoBq/uR42jyBzd0B1EmItIXjGwM9IAjUrT/OiB3KxI3EuS1EpF1I8H/BlI/H2FmCrKzFrI+EhI1PjQvQ1ClEjSlH1CYhQqU1O2M8I2F5J+QxIqMsB3C4OgFxBkI2QuToJybvE4Q9OgQ8KiLzED+M2Q6BgDqRhGTtKuR',
+    'Chhatreshwori': 'BBe+krRwtoyBrIoBxE4HpJnB7KwM1ZhMpE/MhJkC6QpOEvIjNjV6HzP5LxFxIsIlFnK8FnfgG2EyI7JqM8D4HsSrK2I8ImF2H1D6QqWgNiEhD2GoG2F0B6QqFtFuDyD',
+    'Darma': 'BBJkutRs+oyBrQ/iBgG7Q9HxE3F/T8bB8e6O3E2mB/NgV',
+    'Dhorchaur': 'BBQultR6rkyBlbkbNoejRgClSuYtFhMkI5KnF3SiH3BzC7NmJ3EmLxS5JpHqCjWkNsIuQJ',
+    'Kalimati': 'BBlBw6nRyjkyBqDpR5NpU4B3KhY5RtIkEzDjHlTzG8a/bwJtWgLhDoKrYhD3NmHwC6NlN+GtW7FjJiNxDkPvbgpB4P6E6P7Gwb1a+3BsP0hB5N4O6B4OkGiCvK4NpBuamGoL1GAjFmMjFPyC2JzEwBrGhFrPiF',
+    'Kapurkot': 'BBWu2nRyjnyBiTuJsHsRuL7EuGmKvH6EuE8EuDlFqFsC8B2MxGhC3C8HhhBkR3JkVrKhG7F/MrgBnG4MvCMhQiVtSFzPgOpH',
+    'Kumakh Malika': 'BBRuwuR8/myBve/NpS8CpSlF1E/GkFlbvDtG2a7a6LAgEvMqgB7LoKiDqE2R1G6C7C2OgHsWxJ8L',
+    'Sharada': 'BBgB6hrRi2myBrGuIrM/DtRzWzMsClEtFwKlH3HrSpM7DzB5cmGlBiFpMyGQnGvLsBxa4JrHqFiL2P6B2PkQ9EiI0FsInCsKiI1FmEqI0G/HsHqP2GnD5KgXlJ4E0C8NjHqCoF0S',
+    'Tribeni': 'BBW4ipR2joyBxGnKpL+ErHrRhTtJ3FhZsHrQlE9LsFnS/IhQoKtJiQ4N8P9E8J6JtDsUxPgC3CgbuF0LyIrI8L2F7HwPiNud',
+  },
+  'Sankhuwasabha': {
+    'Bhotkhola': 'BBtB0i8Q2zt1ByH7L0Q2B5BzkBhJvT3X3V7CtWuZtmB6PvFoSoNwiBrXoC7X6WnkBfihBqMkImHyN1EgbhL+IqB6Y+KkK2KgcxMoIlFzRpH8ciPmZhC2c+O8P7I0PpU+BjG4N8OmPU6UzQ1C5L6HzRxMjHiEhMhOhNjBkB9KxXrKwElJnD3G0KnD2D7H3YpK',
+    'Chainapur': 'BBT000Q87s1BkT7mB/B7YvH1ZzU1ctItYjSrR4VnWwLvDoB4HkRGqGqJM+jBwQ2uB8TyP4Q0fsKwHz5BmhBlH4L',
+    'Chichila': 'BBP0q5Qsgp1B1VK/RnJtGtboH1IvBzPiI1GyCtboMiMuEqPuQ0EmFsNeoM/I2C7DqJ',
+    'Dharmadevi': 'BBQ2x0Q6yp1B/WggB/Tg6BrLvLnC7TzM1IlMQqTrU+HgB6G3LpF7b8E9Q9H3PkVzNuEyC2N6O',
+    'Khandabari': 'BBR6+3Qklo1BnU6C7LnO3RkElS9YhNuHtZhE+TxDsI7L2WqG2anmB6TtEqW6S3B4V/IkLuCmLnH2I',
+    'Madi': 'BBJ000Q87s1B3gBzQ7KB2C9VkM/R8CtQgX/fyM0PwJ0uB',
+    'Makalu': 'BBxBss/Qgzm1B5WokBnC8XviBsXnSnN5PwFtZumB8CuWueuiBmEurBzQ1BpIwQpIoDxDrGvXxD8CjK7TrT9MsD9VpH9GrlD0H7G/Djd2NtOlJvYkFzPuK5BsKiNsP9RqIdqXrdmV/I2bjX8J3M0DvY6M/L2ZyC0O+Q+G9UmN2I6iB1O4K4IwSsBkFoUxE0O7O+I5GyPzUyG5EwLzVuF',
+    'Panchakhapan': 'BBMyo3Q67r1BhKxG3Qzf7TxPvQ1uB/DzuBqIyD0P3FwXkkBgXyUpImK7DkmB',
+    'Sabhapokhari': 'BBPop5Qits1Bh0B9IpMrHnJltB8DjmBqIlK/S7P5KxS2QjD8LoOoU5C0FiUwQwH2VJ9GuK',
+    'Silichong': 'BBe6r5Q8/m1B5KA3MlYvR/IiK9TjF5I6C9N7LtJqEnJrH/TuO1rBmPmOiQvM2LmDyI2LuMP6G3HmUEga4SwZqCqYgNnBoSxKsN/awWlVgJ1U4a9KyDrP+RtNpNrHiC',
+  },
+  'Saptari': {
+    'Agnisair Krishna Sabaran': 'BBQu3pQw7/0BxP3ClCmI/FlHnHkJ/RgClM1M7WrCnBzK+H1GtE3TgiBtEkT4DuUzKnIoHwQqd',
+    'Balan-Bihul': 'BBI8tnQ2m60BvRUnGgH1N3DoJ7kByfyQmJpBd2P',
+    'Belhi Chapena': 'BBMo3mQ6t90B1KQ3GjN5W4DpHiM9UvImLrqBmNsFkK+MyZmFpDgOkP4B',
+    'Bishnupur': 'BBLutlQ8t+0BqK9LlRzFqInXiX7D0GkN2KPU6UhbjO+IqV7N6I',
+    'BodeBarsain': 'BBNi+mQky70BkBrG5G5CtXsBclH9K/G3HoDmB9EkY7P2N4D+JjIqWH+ByoB',
+    'Chhinnamasta': 'BBMutlQ8t+0B1YkG1K7MlE4B5D5K4H/FyB1MiQ5BmFoHgIHhC4LmRuF',
+    'Dakneshwori': 'BBO+jnQ4j90BpYBmDhOxZlFpR7O2MnkBiNoCoD4K4HwCuWjBnC0P3LsC7C8K8XkM',
+    'Hanumannagar Kankalini': 'BBWoknQ8mh1BtFqDOyVpOsC+D4TrNxYhU1KxJpPjPoB3CtUxLnR4JnhB+K8J0BqN5E+EyJmPsFe8F7N+H+CgB4HoemFyNuW',
+    'Kanchanrup': 'BBXo3pQk2g1B3O4EpGyKlBwiB9WzBnWjSnWsrB3HtJ7E/TwO3CB5W0Q9CuJ7L9DnEqQ7Q0S3BoHjJgGmHmClIyP4C9BkG7L0CqG6O',
+    'Khadak': 'BBRmqpQsw80B7MF7drP3RqHd7EnH0CzLhIuJxOgVXlErS+DlT2S0JkQU+SmU0B6G5GwF+FuO',
+    'Mahadewa': 'BBIsjnQ61/0B9J+SpJsCnRvG4GhgBqe/E0EuHtGmE',
+    'Rajbiraj': 'BBQynnQ8k/0BnF/F5JK5d6Ic6GxOV1FvPiDxQwNyE8N5I9IpVsVgP0IxJsKgPxEgIuJqF',
+    'Rupani': 'BBRowpQqm+0BvV4JjT3D/mB0EyE/HhExL1I9BhChL4I9OmJuJyTCXyIkLN2CwPyX6EyUjL+BmH',
+    'Saptakoshi': 'BBP81pQk9i1BpaxVyFIiErThH3FiEnJqGxK2M9E8BmJiRkQuMpByEiIlQ6GpFmKmCuL',
+    'Shambhunath': 'BBUy1pQ2890BxLsBvJqJzX7EzCtPpLMevIxVpBF9UrWvIqBrOuUiIoHzCkB8EyRpH8dsPsOa0GyEnKyM+LqN',
+    'Surunga': 'BBV6tpQsn70B9SlUzVxC7O1KlHyCuE3F8F8Be1PyarHwZoH0P1EqNmQ+JlF0PqDpCmO4F6JpG2BkCiH9XvPhEgN3KjB',
+    'Tilathi Koiladi': 'BBP8+lQ0kg1B5MxIlF6NvFhBtJhP6E9EzBpN9K7J8ChL2RlCtDoO2FwPyOWhB1GwI1D',
+    'Tirahut': 'BBLoknQ8mh1BoDxE/J5SvKjEuGzCyIxToYgDkL+N7PsPoB2JpP8K',
+  },
+  'Sarlahi': {
+    'Bagmati': 'BBRkjyQ4wm0BxVNzGzJrB8HrbpEM5G1JzG6CpHxN5F4J7QhQxB0Q3c0U0T6NM+e0hB6Ja5GgH',
+    'Balara': 'BBRqnrQ6ik0B7RpTyBvIvN9Q+BlF4JsEcqLyItDkBhKiGmH0KhM8PqHlH8LHsT+J6TtNwGrChS',
+    'Barahathawa': 'BBY8gwQ68l0B9WzFlCyJ2G4HlIrEnC+D2JkEnCwGtJjM1S1JjH4FjJ/DiIjL3IlFoEhHxGvHsTphBuSmBwOrJiQoKzQ4ciQyB3J8QyN6F',
+    'Basbariya': 'BBMiguQi8l0B1H3CDtJjNyDiL9SrD3PqFraqWkJtSwgB0GoHnEiH4ImF',
+    'Bishnu': 'BBLu2rQs9l0BnKtCqDhKlGrB7G9O2EvLgP+FeyJ0QE6KsLzR+P',
+    'Brahmapuri': 'BBKk+tQ++o0B1RdiB5L/ThK/NrVgoBxFWmL1K2FsLmU0KiG',
+    'Chakraghatta': 'BBKi/tQ0+l0B9KqI0FiI/E0JjQfDnL7IlEyDxWiZ3BEuJ',
+    'Chandranagar': 'BBMg7tQgyo0BjGIrLlU+KtG7CpS0J6DiFtF8QewK8OtH2PuH6KvWyH',
+    'Dhanakaul': 'BBKkwtQ4jl0BvTjG5JjOK3V1HrMuGpS+OweiXlDhFsasD4P',
+    'Godaita': 'BBNkrtQuzl0BlbpEnItKzQDdxJzQ1JsD9RqKnC+B8RyR7FgRkI+EsMwTkG',
+    'Haripur': 'BBU8jwQstn0B6B2L5SvEtLsHpSvSyCnSyGoFyG5O4G6EkCnG1JjEoC9DmIsE1G3HmCxJ4V8E8KsHL6GsJcnPiJ',
+    'Haripurwa': 'BBLutuQqpq0BrUpL9JyC9ThNH5HwR1NwRMgGmInL6I4P0JqDtE',
+    'Hariwan': 'BBP6jyQ81o0B9FsDzItH1S9BxKrlB9GnFlNkI2Bzb4P5HwQyEkB5H0G0Jga8C7G4WqEgG',
+    'Ishworpur': 'BBVutuQqpq0B1B3UpDuE3PzJqL9I1JxSqhB7FtH5KuH1P6XkOiCwT4Rkd4K4jBipB4YqKZuKgV/OlOza2CrB7GxMvDzX3U',
+    'Kabilashi': 'BBRq0uQ6mn0BhUjDhFuFtInEoB8IzKcxBrY+MsCgFzJ5FzGyD3G2QgBkH3F2S2J6CiHrG2O3GjF',
+    'Kaudena': 'BBIs4rQkjm0B9B3FuK0CsWlT+H6ExDyW8ImEEoL',
+    'Lalbandi': 'BBRkwyQmgs0B3KnSpKa7pB9ZajIrlB9xCoGlG6SwE5B1LkIpHgMuEyKslB2S+B0IuH+FrDwb0jB0FwQ',
+    'Malangawa': 'BBJumtQqrn0B1T4FuBvE1Q1NwCvG9OvOqB3G2kBqT4KF',
+    'Parsa': 'BBIustQg+o0BtRoS1EzEnNyCoG1X8L/E1BrJgUiK',
+    'Ramnagar': 'BBJ6ysQuvk0B/P7G9IzPXxXmH7LuH+LyJjG7FiS2HsM',
+  },
+  'Sindhuli': {
+    'Dudhouli': 'BBiBivxQw110BjGuK0EqLjEoNjVlKvH4KpKqC/D4JppBhSflY9I1T5S7OsI1CofrqB6V92Be1e+GiDoF+NuVvT8D4IwJXToIwFgD5CuHrJsCzDyc3HuFRuOlKoMgH0R8SxGoJgRgOoBMggB',
+    'Ghyanglekha': 'BBW8j3Quor0BpV6lBlJ8BkE6M5Qud5BxTtOqI5MhInCpVoO/H+BlKpH9FiDvN+G/EuGnfoIhD7JrQsKhEsHyMkR3E2U8K8DuI',
+    'Golanjor': 'BBa0o0Qgnz0BvR2O5EjM/SxRoKvO7K7b+G3BqD9OiKvJ0J9YrC/N0KgG2HrE2GxU6S+KakI0HnR2PwYhSyPhNmVmC4LlJoBjFsJuCuN/S4XuG8D',
+    'Hariharpurgaghi': 'BBiBki2Qs7n0BhhC0BpFkN0C4MtPzH7QoMpM5HnN2DQtnBpE/FsHvVpFrFiCjR6G/GkF6I6GJrBnI6F7F+DwHkHrCPuNgP5DRlKge5EyM9d8WzHgHuQgJsB8PmY7GoOjF9DpE0G+D6L5KmQ',
+    'Kamalamai': 'BBnB611Q26t0BnJgTuDmHrHwWrV5R1GyU1HsEzK/FuBgS/UqoBxI7J9CjWrV5RrXsU/I7K9BkQ9QmHxP6QnF9N7G7C8E1mBmhB7Q0HlLuS5DwPriB/L5MuM3QgJsD6EnewUqHiWtIiO+HkGvG8R6EoCmQrOoIsCiV6MiIuOpI',
+    'Marin': 'BBai+1Q2yp0BhN+B+JmQnIiDtQ4xB3O7EjGwGhO9H9VuI/PnCzEhFoQjrB9G/RxZ9foN1DqM6H8QnMuP0HzC3MkFhNmU5BoH2EmkBtFwHwXvM0J6G6N',
+    'Phikkal': 'BBVivxQw110B2K9K4CxW0FiCkQ5O4B7R6N6H2C/KyV6DyO/OnJ6e6O0WlO8R7F6cpQ0BtG0W9HqGrU/J/E9IgFrK1WvK',
+    'Sunkoshi': 'BBOg91Qwrv0BvOjQ9B1N6a9qB/BzSmJ7BqV5lBgZ+HgIiWlQmThKipB5RkRiF4InLqL',
+    'Tinpatan': 'BBeszzQkzz0B7Od5CgL1N5H3B8RlRgPxHhMpUrHpC1KvTsG3GhT+J5KStO4HtF0DxcsMlIhF7M1JK+JrdsIqLsXrUsV6R+CkWyI8J/H6GqC+OwHiBiB8LnKwOgTyR',
+  },
+  'Sindhupalchok': {
+    'Bahrabise': 'BBWwx/Q23v0BvM2KjQ0DqFvchHhLlBzrB/IrIhC7NkjBxSicuL2BzIgKwBkLhIiMuF7E2MtP8E/M2VpMD9J4RhKlCgC0RsGoE',
+    'Balephi': 'BBJsn/Q4rs0B/fkQqBsN5S98BkiBjLidoGW2SvR9I/CuS',
+    'Bhotekoshi': 'BBWwx/Q23v0B5BtfrGnE/BzR2JuCqK/RqMEgN1VuP7E8E1M0PiXqMXkciMkFtEmMmMuF9D2FwGvjBqvB5iB1RxSsgBsCoIxJggB',
+    'Chautara Sangachowkgadhi': 'BBPgw/Qsmr0B/XlFxW6J9SO1axd5K9D3DjMlJO6nB7V0YgFwkB7FkNsGmPrB4HsIrQmR',
+    'Helambu': 'BBWy7gR0xn0BtQvUnH1rB8U3CwRiHsY1F6HsI8M9CyXmGqQzLuQ9W+NsTSoKyUWsIkIqD2OxQwVh1CqEzWqN6B4OzFwB5Y1S',
+    'Indrawoti': 'BBPilgR80p0B3HrIlPsBtLlGlmB2FzY/EoJlKoI7Zye1Y2IYsE4XoM5G4PsdawMyJoF',
+    'Jugal': 'BBrBu9jRs4t0B1FvGtF+DlMlMjFuEjchMpMY7HjQ5TrMjLiI/JvB1B0I1e1JjGjIsDpT8SgIDtMrHvFmH5kB+R1N0HwIoScoNyN4PnC0EkFmF/HyL+LyX7Doc7RsKbyK0IoHtJ2Y5KuDqTqH6DGolBkSiXtLoIRoMzK4BnO+M7MlBlJwR',
+    'Lisankhu Pakhar': 'BBN6j9Qouu0BxW4BxDjNvQ3EvQ9PuLpL5BvP2MvQkXqB0JsV+S0BoJ0JrWmT',
+    'Melamchi': 'BBUg9/Q26o0BhR5e5KuIvE9X1IX9U0S7C/EmD/Z4EvClB6I+FgBkRjU1I5lB6YnPwU2B2Y4PxVqEuJgqBuQwUvVuR',
+    'Panchpokhari Thangpal': 'BBkBi+lRsvp0B1Y6KnHuJxKzIrKcnc8RxX8DxL9LlFgIzEjF3MmDnQvO1SjB7M7VzFejBzKsJvZwVtR+JqBgTgRuKWZnP0WpNwOyBoLhGkL4F6G/G2F2F6clC2N7E4J1SgH+MtJ6WgD2KjSqQ+NqP',
+    'Sunkoshi': 'BBKkj+Qg/s0B3HkG1I9JzSrB3H1TjLnF2DzyB0dmdsHcuNogB',
+    'Tripurasundari': 'BBN80+Qgmw0BhHzD9J+I1K5DyDzOjGjRoEjKhXrP4BnWkd/YoP6TmB0rBiHiL',
+  },
+  'Siraha': {
+    'Arnama': 'BBKu4pQ++10BrM3ERrHnS1CxJtPrIduCxGqpBqEwU+KwEsU',
+    'Aurahi': 'BBIy8oQ4t20B/VzDpJ5HtCtpB+SsG0PgRhIwS2QuJ',
+    'Bariyarpatti': 'BBP47oQ2j30B3JvF1EsOtM7DoCsRhIrL1KxE1DiEkIjjB2GuC4BlLqJ6HyUwBC+I5DxB',
+    'Bhagawanpur': 'BBJ4snQ+x50BhbnMwO5iBmO2FgB+HsJsDEgMiFc/C4M',
+    'Bishnupur': 'BBG2uqQiw00BlEgezZ9UgI1K6CjV0S2M',
+    'Dhangadhimai': 'BBXyzsQoq50B/JvK1f7L4C/EnJrIsD/E5HvEvStBzFgKzQjIgLhsBqM9H6boI2H8G/EwNkIlC2LwQqhBnFoGpF/B3JuMoFtMu8B7KG',
+    'Golbazar': 'BBX2nqQkv20BtOtR4SZK5GlFrBsDzGoa4H0CrF4PqId/NrH3GsHnE4YimB+Q2FvEoPgKqFgC4J1nByKxLvQjImCgFvNvH3GlbrI',
+    'Kalyanpur': 'BBTs2rQ4nz0B/OxD7G2F0P6KjH8FoEsEtL2ZjTxILhKzS1MuB8H9E1DhD+OlHnHLlUogB9NgChJ4LzHyagD',
+    'Karjanha': 'BBN+1sQsw00B5QjDsFzK7CrKkG9ErXxLHrS+T0BgMzJ6fxE2MsPpKVvL4N',
+    'Lahan': 'BBXg0oQmu50BfzRuFtKuNqBqCpElE7LyS7F0QmIwF/J8Y+EH4LuHgD7C0E2f8LgKwKvKsPpHkBR8V7JV9V9S9VqD/MjQ9P0E',
+    'Laxmipur Patari': 'BBNm2pQu930B5SwGwCwPtNpBlKjX1KLxEtN8BvE0M4D0EnOgV0I0K4MiIpB',
+    'Mirchaiya': 'BBQ8/sQwr20B7LnBvczpBlIctM9JsKzYnErEkH7F9PrJ2D5F8pB6NjG+E8CsKrF0K6QkD6LwP',
+    'Naraha': 'BBFwqqQiu10B6Ctb4KrBoXoQuI6V',
+    'Nawarajpur': 'BBJq+nQ4l50BhHlJwB1IxY/QyH/VuI3CsTwQvF2R8O6H',
+    'Sakhuwa Nankarkatti': 'BBMg0oQmu50BrU8H7SjEmOtER/GuLlMsFuBsB1IlPvI6JrRiH6BiK6T',
+    'Siraha': 'BBQizpQw900BnpBpEvCyGhcnX0BxXyN1D9D1b2KwFuH1CgBsJiIyC6JgR2TzCnBwW+KoJxHuG',
+    'Sukhipur': 'BBO2nqQkv20BlH8DhHifzHwB1K3MlLvCxExRyO3H/RrNgFIiG7OkM0DeyH4UqH',
+  },
+  'Solukhumbu': {
+    'Khumbu Pasanglhamu': 'BB8BiwgRw2i1BnHre+CnJhM1Q5pBoKzCpGtHsBpH9MxL5C5G9T/O1IlzBnJ/LjLwIpR3XrEhEjGoFzO0DmI4IlCxE1GkEvKwKzEocoGiL7P2QpHgChYmdzSlBrPqF1F8ZUwH5Q2Z2I4fMkOpEwItR8jBhDue+MMoIsLoKyFlEmViGlGsVlQ2DpDwQ4X+hBhD4enS0Q/OnL9H4DE4M/LwKlCyc2HkKvB0J1RiO1FmW5PiFlIkfvSrBlIvI',
+    'Likhu Pike': 'BBOyq7Q6p50BhPuLnM7K5KyD/ctc3DvLhJ4CiBpKuSvNTpQuGrMka+M2LoX2OqN',
+    'Mahakulung': 'BBoBw63Qkog1BkflKsD4IkH1KvGhO6Q7G8TE+M6HoPzBgJ/J+OoNmzBkJ2MiKkDwQiLoCqH+MuHrB0CqG6pBnKiM2Q9CoJoHsexU4KpM5I9G+UzO9Q1ZxClPoSpY/MvZpC/Z3SlUD5G4HtMQxI1L1LlDhQwMnFpJ9U3KrIllB',
+    'Mapya Dudhkoshi': 'BBS+j7Q4i/0BrzB9SpdtVyKhUnUjVsGzfo5BgO8D4dgOZoRgM9LkGzCyKwEkF3ImCzDlInF0OiEkG4XsE',
+    'Necha Salyan': 'BBN633Qgz70BVmFjR6F1S4PhE+QnHRzIpNUh2BwP/DsOhSqG6PgIjHsWsF',
+    'Solu Dudhkunda': 'BBfqs7Qwo90BnR/L/Na7D3dnU3BtZ7MpbuFrIrD4KngBrWrF/HkHpG5P4XxVpDnRwEvF2K4ByFhI0chM4DwLgduc6KxDoM8KiPtLsjBucmTqBsesOsEsWxdmT/BiY1QqHhL8P',
+    'Sotang': 'BBPw63Qkog1BqB/iB0QtThH7VwY6C2SmR2zB+SpFsK1P8B9M5H7TD5Q8GwGiOjH2KrD3I',
+    'Thulung Dudhkoshi': 'BBRoz4Qs690B7NuBiH8VxP0QjD4QhQlQ0C7K5KtMjB7pBzR9FyE/N2S3PkR5FWlFuX4B1FucoUkV',
+  },
+  'Sunsari': {
+    'Baraha': 'BBaq3sQ8jn1BlJFtH2IjTzGxDwSzT7MnZxFpJnLwBlL0FexG9LjiB3YpJ9RrLvEqErJ/E1PkfiaqItJgGaiN7dqVkSrHoNuG0ZgmBiXslBiKkBoN',
+    'Barju': 'BBS8zlQopn1B1JpBvBkJoIgI/GuHlKrEjKoF1YlB7GrQmG3EWxPkarK6HoDkQrL+OwN3FqEyE2E7KuB',
+    'Bhokraha': 'BBJ83oQmrl1Br2BiP7IrLvJ+D/EjQzJkBS9KsgCjFyO+G',
+    'Dewangunj': 'BBN4zlQ8sm1B3E7DjQsL5HnDxfgMSnUuUjesGiNqQLoGzJkKkToK6FG8G',
+    'Dharan': 'BBTy+pQm0p1BsI5b9PvEqT1nBiSZ0T8MyDvSkT0GuH1ImJGxBsLwJ4JhIoO0FqZ9M6Q5C6OnSgBvU9PlYwJ',
+    'Duhabi': 'BBNs3nQ8/o1B1KtGpK0D7KxEvX1XvBiFjU7EyG9HnI/HwBjJ6biG+RlH2kB8jB',
+    'Gadhi': 'BBQ46nQypo1B5iB3iB9RmHjS3E/BpI8KtBxE1E4F/DlK9JoKYoG/KkcmF2U0sBiHwFqH/ECiT',
+    'Harinagara': 'BBNg+lQunm1BtKvGjKjTnG0JhQM7HzMoI/KytBpHV6K0JhBkGsH5F0MuG0N',
+    'Inaruwa': 'BBRmtoQ8nn1B5GrC9CuP1JyDpZzwBnVnIGnMoNvEuFyJ2ImC+jB7OmKuB6CwFrQ8QS0PuJoEgBkS',
+    'Itahari': 'BBTy+pQm0p1BzdlPvI/K9UqJjMtD2EnamINjDnKoFtVmKkMiG/CzB9E+M8I+JnF8FuHL6J0LgOhGuIgQsD',
+    'Koshi': 'BBNyjoQm1k1B9ZsCR1U5LtBzW7QxJzzB/Q3BZjQocoSuGoS8OwRsmB8a2E8P',
+    'Ramdhuni': 'BBWk6pQ+lo1B3IrHrFjRhKkF9M7I0B+E9FgDzDhHqFhBhBhStJnERzPsQ7Q5ErG+IDyemYyG+L3FZlBwLkJ6K4L+C9JyW',
+  },
+  'Surkhet': {
+    'Barahatal': 'BBoBqnyRwj4xBvP+LzHjJAoQ7W+RpDoQ5KuJtC9O3H/EzI2B1QjL3EgGtJ1BtCxS9MpIvJuIhmB7KsbvnB6DxR0RrI+L3OuSx0BkJlEsK6G8BqQ0OsDpDwVgI0T2KlG2IiJ0I/LPvO+GNoDoUkKqLhCgPsG4CrBmH+JuMpI4H',
+    'Bheriganga': 'BBV++sRwi7xBxEgO8E+IjOsbzGUvSqW/GkepGyBlL7L/O/CL5U3MxHkI9dsRvT6ClS2xBn/BFxLsJ9FmlByK1Y2LzOiT',
+    'Birendranagar': 'BBV8nvR6l9xBtHrMnRxK8E4B6IhK6CneliBnGhXoHvH5GnG5tBsOzSwd1LkFjIsNqIuCySuJ2BmF7F8hBmS0CsT5JiG2BwW',
+    'Chaukune': 'BBqBmo0Ro90xBjb9FpHlI3EqFhatF7btqB2MjJkMEkJrNmJoK2E7H2HyC+K3PwJvBXvExRrC7EmHpFhCsLpS7ClN4I+C+R9I9E9ItI9BpE3OqLnIoBlKuHLC/M8a9S6LhZmL+MrC8L8PmSnJqrBnagfnI6VtByU4F2F5H4M6L8K0C0L',
+    'Chingad': 'BBQ+tvRqr/xBhT+T3JlX3QjEpJoEnP5IgGvT0ZvTtFpG8E1E/H5I+BtHoS/JkvBgnBseuH9IgQ',
+    'Gurbhakot': 'BBQ6ntRw/+xB3c2jBhX6LpBuNhNnCvSwR7FnIpO+CjQ3b6gB9vC8P8EuL+LgItE6CvMktBuO6I0N',
+    'Lekabeshi': 'BBT+xuRyz8xBzQ8IvCiH0I8U3dmb5GxKjtBtOoC5OwSpW0GTkOrb7E9IyE/NwH6GiXnHmiBoG5Coe5IiK5EhE',
+    'Panchapuri': 'BBjBqnyRwj4xBPrIqI3H9JtMsBlHrG3CiC/OjKpLnDnU9GOQwOzIgM1IhJ1KmG/HzTqDvV1JMxJtNqG/c0NxC2FlJqO4D6BnKiHuC0bwrBiauF4EpFqHmIkb+FmP0mBhN+f9YtB3HmRpM6EnLkP',
+    'Simta': 'BBWwzrR65gyBerL0WnLwT3diKpGuOiJqJnE4QkE4JmXiT9TpE+lByDg6B3BlInQxBI7MlLyE/P7K3Q+OxbwEtTnJjI1Q5E6B',
+  },
+  'Syangja': {
+    'Aandhikhola': 'BBQq/mRwhlzBhXtEuC0J7OkR1HOpBvI9JmL3C1TwE1MrG9d4JAqG3K4H4O8W9EkE8QuPiN',
+    'Arjunchaupari': 'BBS04lR40jzBvI9BjC6J3JA+E4iBrOmDiB5HvHpInK2CzGtWuD7C7FtF0NxL4FhQgHwQ0KtP0HqC4KsN',
+    'Bhirkot': 'BBTkqkRk1kzBrP2KC2FrJH7C0cpL9QF/cxG+DvB9FwOrZA7ZiHe+J7KiJ0LoLrC8CmFzQmT8FuFtD8C',
+    'Biruwa': 'BBa6mkRounzBhJmE/FpJhE8DnNnG5DmH7IjEhCuEnNhOiEjG9GrGtGsQpcjNmRQuD5RgI+B8DnKwHwDuajGqHmHwJnNuEkFkD1EwHgbzD4DwH4N',
+    'Chapakot': 'BBdqpiRo9lzB7HqK/H9BtD6RlRP+HmHxBoY/M0FnHhG8C/GpLgB5E9KyMvdnJ/LiFnInIG6FrP5CxI2XvgBoR5B9G4J+G8PpFgCqBqMhIwLuXpIvBuP2CtF4MmF',
+    'Galyang': 'BBf2kjR8hizBnKe0DgJxMxCf8KtDpGzOuM2E4MmLjCxCmJvItGzE6G7BoavKCtD5FoF5KpU0E4CpI7ElByM9OoCtS1E9D+GzEzP9MvBxN2pB5P8M9OyFyL8JuBjE2N8HiG',
+    'Harinas': 'BBWi9gRu7nzBwO1Fe3Y0UiHuGrQ+GsGhEkGoNiOiCtE8IkEmEjH8MmGiE7DgGqJnKmN8F0R9HkBnJ0V1N7gBvPIjJ/HzdiH',
+    'Kaligandaki': 'BBQ6uiR4wgzBpHiOzP0HvKvFiD5WgInCrJhO+G9KrJpEsKzJzH3B1D3N0GvbqeiblLmYiIyR',
+    'Phedikhola': 'BBK46lRkknzBvJgB8C3oByW1VtCzJyVmDkEwJ1MoQM6VpQuU',
+    'Putalibazar': 'BBc6mkRounzBmE1MzHhO4DtD1F7YrJxC/EwEvDxGyChOwIkBiB3GyXnNwI8IdiIyOrDdsbyK5KgEuKtGulBY0FuJjBlGyIkB2alH8N/J4BzIjGvLxWrFyG',
+    'Walling': 'BBjB4njR86lzB3c4FiEjN3MlF1CuFwBtPtXqIiIvLpBpMqF/BvDhKwKB0D3G3BvT0E5GwIuGyClJlLkC1E3M0OtMuDqGgB7KyMyCvB3JqIDuLoV0D7F4HoDjLiLhHdA8ZvOsZa4FyH/ClDsK',
+  },
+  'Tanahun': {
+    'Aanbu Khaireni': 'BBW2r/QmwxzBiH2H4B/SqJiE+J9HuCxR+SmQ3D8HwLkJ8D/B/CxM0NuCwFmR/M+azElDiBoX3HmElS9C7KsL7NjCtC9UpKlE',
+    'Bandipur': 'BBbygiR+7wzBvIqW1E3NhLrD1D0DiEiK9HfrHpG4D7HxSlQ5CyR9J+HnExFyFnVoL1LuBpS2D5D6JkGkE5IsSkL2LJiK3JoGgF/BkKyOjC9IwXnRmJ',
+    'Bhanu': 'BBYygiR+7wzBrCxD4N/D2FpJO7LwGvG3GrB6ExKgHqBkGhJ8O0TgDxN+GH2D7P8H7E6SuKiBwJ6NGqD4gBxG6Q9hB+hBvQlJ1V1C5Q/W',
+    'Bhimad': 'BBVigjR8pqzBnQ7CpEoHnFiU+GoMnGuL1O7Y6DlKnF9KjLnDC9FkMrExIrIpHkB+G7c1PrW0iBxEkJgI2PBgKwQgG0b',
+    'Byas': 'BBlBoolR+ovzBnMiBhBvJ5StK7H8E1D8P9GI/CyN3OzTnGiJ/GpBrI2NvEZiC9JtIvF7HoKhSV/LjKjE6I5JjG2F/MgSpIoNvW6T7B1K3K2BtLoTkGuPvT0JmByS1bgN0IsGjEqHuJOiS/LgF6R+vBmKwL',
+    'Devghat': 'BBbwvgRqsvzB9FwIW+NjLsLnE2UvGsCrBuSzLjVlO3BrHqF1DsO3MoGoEhNrKtIdtJkL5CyMrY9C1GhNtE/F9M+CnJ+WhHsEzIyQwDkLnI+Q6JoKyQ',
+    'Ghiring': 'BBcs6hRulrzB/fExQhGqDsO/KpCwC9L5FzC6G3EhCtI+EoDmC3M/M3QgIvU5GtByNtd5B/OyJ3G8F6CjD2G+EqB0D6RuPoR9G8cqHjBwIoIhMwEDwFmL2D',
+    'Myagde': 'BBPu9jR4gszB7RwbzJlBtPwTnTjGqD7pB0K/P7GrMwJlb2RiEoIgI1BkI8NsFpCwL+PwF',
+    'Rishing': 'BBZkxgRmlvzBnKxQjQ1HtDhR6ItQRjJ1FrBoGtH7E3CyIrEBhS9H/JsFdA9VyF2NiJ0B/BnPyQiGggBD+M0R1JigBLqbsLyLhT0BrOsX',
+    'Shuklagandaki': 'BBZ23kR2tszBlGzIrGkE1NtIoG/OhQ1FqCvL7NrF2BjI1JlJgK9QrEjMoJvVwKlGnF3T0SjP+DoSuH5EgIwTqK6HvG6EDmJ5FZvLsbsU8U',
+  },
+  'Taplejung': {
+    'Aatharai Tribeni': 'BBKyt2Q4rv1BxR0ImB0I/Z0c3O1J5B5R0PnkCoM6EyTwdgR0F',
+    'Maiwakhola': 'BBOiz2Q6hv1B/QzFxTvdnM5EmChQ8uBnkByV5IqZuKoRrBiB0HpSsOtHrBlIqP3duZ',
+    'Meringden': 'BBS+/6Qkst1B7YzE1UwYxC6OtOoH5HuP9P/ClwB+M7L1DkHrOEla4dtZmIpPuHsBqVxSipBoO+MrD8TsT',
+    'Mikwakhola': 'BBgBsq3Qgzw1BlNpOzGxVizBzM+PgD6HtPuOnHqLndgR3MsR+DsBkJkXqDyDsGiJ7H6EsIsWmIxB8JzKoDd+Q2SmFuDkPkR2GnsB6sB/fY3CsGnRkCnU9UvMpYxVqE1Z9L/SwD7LkL',
+    'Phaktanglung': 'BB0B4h9Q4051BlTnXtH5Ttc9H5O7LvD5apd/zBvOnRlI6C5Z1hBhCpbpW7XqE5lB3NvQ+LtL0btCqS+KqUrEwMqYoU+UoRjC4CrGggBXosB5sBgIwIkHhE0RyM0KrHwBqqBmQ0GmT6V+U2D6NkSZ+GuUqEhD8P/L7BnLuHuEupB9T8gBwMqcnMuV2FqMzRqHiJuYjRmmBxKqDzKzRvSkPpJ/JhS1B7DzM',
+    'Phungling': 'BBRgn4Q4+y1BnSpH9MyC1IjL3VOsD/QoKzFpBvG9oBhjByQtSpBpIkLlIkPyC+G+VmZgZlEimBmGwB',
+    'Sidingba': 'BBNy93Qui41BpTnVxxB5SzbjfV1sC+b8PmLlDoJkGuM2e0cwdsHuQ3LwY+NwV',
+    'Sirijangha': 'BBpBy93Qui41B6BtG9NvV4LvYrHtQzcvdhLvd1JjHtP2BlTpN+KzVwHyD2ElSmmBqD2IkL+MxCoSqHgGkMtCiM6Z2hBmI5CsZ0iBoT0kB2C6Y6O8Luc+HuH6TmToXhHgEzPrGxMpP5V/D/P5TjInEvE2DxS5NvFkF7IvDjKlL7KG7MuO',
+    'Yangwarak': 'BBNsp2Qqvy1B3Q1DrEkSvHxD9K0VtFnB9Gtf4D3e+HnW4K3K6pB6iBqBwGnK0F',
+  },
+  'Terhathum': {
+    'Aatharai': 'BBMm8xQu6v1BqZrPwRxB2iBjRiU5XvB0hBzJ+b6B6RjhBysB7LjElHzQ/WnH',
+    'Chhathar': 'BBKmjxQqot1BlRye/O1SvKqF3chkB5Cjc+VuBm3B/btLyX4PiV',
+    'Laligurans': 'BBLmjxQqot1BmH9c3PhVuLxXiShB+HwH2TmDoKua7F0O/SapIgO',
+    'Menchhyayem': 'BBJ490Qqgu1B7U6I/QnBvL5S/MXsLrNiKhboU6HwboW',
+    'Myanglung': 'BBNs/yQq0t1BjgBkNlPqjB5GxNnXpQ2QtekalIqI/N2SRmG7O2IgKkOdhKib',
+    'Phedap': 'BBM490Qygu1BhU6Xna4N9Z+E3ZwP7JpOkGngBqHzKuVjL0XlB0L8S8QmB',
+  },
+  'Udayapur': {
+    'Belaka': 'BBaq9pQ2vj1BuE/L7LxG+P1K1BjO0KpM0LwBU+J4RyRgDhI+F+C+WlK/BgIsP6FiN+N/CqHgNoY/C0FsO29BvX+LzL7JxhBzGxfjSnI1HzE3WqG9P',
+    'Chaudandigadhi': 'BBdontQqij1BnN5OrP5F+B/H7WmK9F9CjCmIrIhE1QjjBtMqBhehnBK7EkMlDiBlV8Q+FsV7CmDrPmL1H+NMoB2L9GyJoQ0MnL0J4VZsNjH8M8VO6gBuHyKX8c',
+    'Katari': 'BBsBwsxQ2o50BnJtD7BhJnZuJdhOtSwDxHpE8D/EvEjEzdqbpOlNtP8NhC5JnKuBwN/6B/WvL6IhxBpOrZsiB54BgHe7Z+nBwJ4B2FkV2W+P+I2TgBmYwpBiS6D3JqKpCwH3K+UqKqErNzEpLkGtKqBsM2WwKlEyPyY4N1I6Q9JmC3B6KxIhHTiMjR+I',
+    'Rautamai': 'BBZkluQ+y+0ByDnQ3KpsBzKjFuBlFrS1XyKsCsDnEkDoEkG7H6f4ByPnFkF7HoN2D4NoOO4JvCyMpL4IiB6NgI7CqB6HkO4K5BqF1O8EtJ6M',
+    'Sunkoshi': 'BBPw0wQyy90BtOpLpB5H/H8ChB5NgLpI4C3L7FrQ2HzF2UqCkOxL6ZnFgC8H5Tm0B9QiT',
+    'Tapli': 'BBPqjwQ0w70B7KpK4HtO1GzPgDlNwLvVsZrJ8BiJoJuDoHqR2LoJuI2Y5ZoFjOyL1UpC',
+    'Triyuga': 'BBlBkluQ+y+0B5hBsF3GyiBrNkH3VaoLzJnQzM+GxJnB1L9NLlL2HlDsPrV8C7Q9FzQneoQhKlDlT9LtNoKtMlJzJqF7E5FrT6GvFnCxJqQhJ4KkBiE/M8XwPwCnRmbsIsJ+J2MjBCkL4c6hBtBmFsKwEgL+sB',
+    'Udayapurgadhi': 'BBfgowQyl50BtO4hB2G8O5GkPtL5BhF8HxPoFhgB3BzF4HrDjElJwDjP3LBjL1MkBrJ9Jlf1J6FpL6O0O8JWS7VqHjBsR1XyUlCmC8JuP7NqOmN4clbsFgExDwFoH6DuSvD',
   },
 };
 
-/// Boundaries that could not be joined to a canonical roster entry by
-/// name or point-in-polygon. Keyed by `districtId|geojsonName`.
+/// Boundaries that could not be joined to a canonical roster entry.
 const Map<String, String> kUnmatchedPalikaBoundaries = {};

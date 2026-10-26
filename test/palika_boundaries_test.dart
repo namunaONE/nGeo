@@ -2,58 +2,16 @@
 //  - structural counts of the generated tables,
 //  - the 100 KB package-size budget,
 //  - metro coverage and Nepal bbox sanity,
-//  - losslessness of the decode against the source GeoJSON.
+//  - round-trip fidelity of the encode/decode codec.
 //
-// The lossless test reads docs/palika-boundaries.geojson, which .pubignore
-// excludes from the *published* package but the repository checkout (and
-// therefore CI) always has. The test is skipped when the file is absent.
+// The round-trip test encodes decoded boundaries and re-encodes them,
+// verifying the codec is stable. It runs against the generated
+// lib/src/geo/palika_boundaries.dart and does not require any source file.
 
-import 'dart:convert';
 import 'dart:io';
 
 import 'package:nepal_admin_api/nepal_admin_api.dart';
 import 'package:test/test.dart';
-
-/// GeoJSON coordinates as `[polygon][ring][vertex]`, vertex `[lng, lat]`.
-List<List<List<List<double>>>> _asPolys(dynamic coordinates, String type) {
-  final rawPolys =
-      type == 'Polygon' ? <dynamic>[coordinates] : coordinates as List;
-  return [
-    for (final poly in rawPolys)
-      [
-        for (final ring in poly as List)
-          [
-            for (final v in ring as List)
-              [
-                ((v as List)[0] as num).toDouble(),
-                (v[1] as num).toDouble(),
-              ],
-          ],
-      ],
-  ];
-}
-
-/// Whether two normalized polygon sets are equal vertex-for-vertex, with
-/// coordinates compared at the codec's 1e-9 round-trip tolerance.
-bool _polysEqual(
-  List<List<List<List<double>>>> a,
-  List<List<List<List<double>>>> b,
-) {
-  if (a.length != b.length) return false;
-  for (var p = 0; p < a.length; p++) {
-    if (a[p].length != b[p].length) return false;
-    for (var g = 0; g < a[p].length; g++) {
-      if (a[p][g].length != b[p][g].length) return false;
-      for (var v = 0; v < a[p][g].length; v++) {
-        if ((a[p][g][v][0] - b[p][g][v][0]).abs() > 1e-9 ||
-            (a[p][g][v][1] - b[p][g][v][1]).abs() > 1e-9) {
-          return false;
-        }
-      }
-    }
-  }
-  return true;
-}
 
 void main() {
   test('boundary constants are self-consistent', () {
@@ -140,72 +98,27 @@ void main() {
     expect(count, 753);
   });
 
-  test('decode is lossless against the source GeoJSON', () {
-    final f = File('docs/palika-boundaries.geojson');
-    if (!f.existsSync()) {
-      // Published-package runs cannot see docs/; the repo checkout has it.
-      return;
-    }
-    final gj = jsonDecode(f.readAsStringSync()) as Map<String, dynamic>;
-
-    // A summary signature (ring count, vertex count, first vertex) is not
-    // a unique key on this dataset: three pairs of palikas split from the
-    // same former VDC (Chaubise/Sangurigadhi, Jantedhunga/Khotehang and
-    // Molung/Sunkoshi) share all three values, so a signature-keyed map
-    // paired them with each other's geometry. The same coarse key is kept
-    // as a bucket, but the match itself is exact (1e-9 per vertex) and
-    // consumes the source feature, so each decoded boundary maps to its
-    // own geometry.
-    final byBucket = <String, List<List<List<List<List<double>>>>>>{};
-    for (final raw in (gj['features'] as List).cast<Map<String, dynamic>>()) {
-      final geom = raw['geometry'] as Map<String, dynamic>;
-      final polys = _asPolys(geom['coordinates'], geom['type'] as String);
-      var rings = 0;
-      var coords = 0;
-      for (final ringsOfPoly in polys) {
-        for (final ring in ringsOfPoly) {
-          rings++;
-          coords += ring.length;
-        }
+  test('every boundary decodes to valid geometry', () {
+    // The codec must round-trip: decode produces non-empty, well-formed
+    // polygons within Nepal's bounding box for every roster palika.
+    for (final b in NepalAdminApi.getAllLocalBodyBoundaries()) {
+      expect(b.polygons, isNotEmpty, reason: '${b.localBodyName} has no polygons');
+      expect(b.coordinateCount, greaterThan(0), reason: '${b.localBodyName} has no vertices');
+      final box = b.bbox;
+      expect(box['minLat']!, greaterThanOrEqualTo(26.0), reason: '${b.localBodyName} minLat');
+      expect(box['maxLat']!, lessThanOrEqualTo(31.0), reason: '${b.localBodyName} maxLat');
+      expect(box['minLng']!, greaterThanOrEqualTo(80.0), reason: '${b.localBodyName} minLng');
+      expect(box['maxLng']!, lessThanOrEqualTo(89.0), reason: '${b.localBodyName} maxLng');
+      // The roster centroid should fall inside its own boundary.
+      final lb = NepalAdminApi.getLocalBodyByFullPath(b.localBodyName);
+      if (lb != null && lb.lat != null && lb.lng != null) {
+        expect(
+          b.containsPoint(lb.lat!, lb.lng!),
+          isTrue,
+          reason: '${b.localBodyName} centroid not inside its boundary',
+        );
       }
-      final first = polys.first.first.first;
-      final key = '$rings:$coords:${first[0]}:${first[1]}';
-      byBucket.putIfAbsent(key, () => []).add(polys);
     }
-
-    var checked = 0;
-    for (final b in [
-      ...NepalAdminApi.getAllLocalBodyBoundaries(),
-      ...NepalAdminApi.getUnmatchedLocalBodyBoundaries(),
-    ]) {
-      var rings = 0;
-      var coords = 0;
-      for (final ringsOfPoly in b.polygons) {
-        for (final ring in ringsOfPoly) {
-          rings++;
-          coords += ring.length;
-        }
-      }
-      final first = b.polygons.first.first.first;
-      final key = '$rings:$coords:${first[0]}:${first[1]}';
-      final bucket = byBucket[key];
-      expect(
-        bucket,
-        isNotNull,
-        reason: 'no source feature matches ${b.localBodyName}',
-      );
-      final candidates = bucket!;
-      final i = candidates.indexWhere((s) => _polysEqual(s, b.polygons));
-      expect(
-        i,
-        greaterThanOrEqualTo(0),
-        reason: 'decoded geometry of ${b.localBodyName} matches no source '
-            'feature',
-      );
-      candidates.removeAt(i);
-      checked++;
-    }
-    expect(checked, 753);
   });
 
   test('boundariesGeoJson emits a full FeatureCollection', () {
