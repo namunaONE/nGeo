@@ -286,11 +286,9 @@ abstract final class PalikaBoundaries {
   /// coverage marker so the 100% floor keeps measuring reachable code.
   static List<PalikaBoundary> get unmatched => <PalikaBoundary>[
         for (final e in kUnmatchedPalikaBoundaries.entries)
-          PalikaBoundary.decode(
-            districtId:
-                e.key.substring(0, e.key.indexOf('|')), // coverage:ignore-line
-            localBodyName: e.key.substring(
-                e.key.indexOf('|') + 1), // coverage:ignore-line
+          PalikaBoundary.decode( // coverage:ignore-line
+            districtId: e.key.substring(0, e.key.indexOf('|')), // coverage:ignore-line
+            localBodyName: e.key.substring(e.key.indexOf('|') + 1), // coverage:ignore-line
             encoded: e.value, // coverage:ignore-line
           ),
       ];
