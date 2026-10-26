@@ -249,8 +249,7 @@ void main() {
     }
   });
 
-  test('every roster palika has boundary geometry since the centroid fix',
-      () {
+  test('every roster palika has boundary geometry since the centroid fix', () {
     // The 2026-10-26 centroid completion let the point-in-polygon
     // fallback join the last seven upstream spelling variants, so
     // Naraphu — the long-standing honest-null example — now decodes.
