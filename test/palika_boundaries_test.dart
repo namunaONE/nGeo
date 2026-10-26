@@ -258,4 +258,22 @@ void main() {
         NepalAdminApi.getAllLocalBodies().where((b) => !b.hasBoundary).toList();
     expect(missing.length, 0);
   });
+
+  test('unmatched entry decoding stays covered while the map is empty', () {
+    // The join is complete since the 2026-10-26 centroid completion, so
+    // kUnmatchedPalikaBoundaries is empty and getUnmatchedLocalBodyBoundaries
+    // returns nothing. decodeUnmatchedEntry is the entry-parsing logic that
+    // getter would run, exercised directly so it cannot rot.
+    expect(NepalAdminApi.getUnmatchedLocalBodyBoundaries(), isEmpty);
+    final b = PalikaBoundaries.decodeUnmatchedEntry(
+      'P4.D02|Narphu',
+      kPalikaBoundaries['Manang']!['Naraphu']!,
+    );
+    expect(b.isUnmatched, isTrue);
+    expect(b.districtId, 'P4.D02');
+    expect(b.localBodyName, 'Narphu');
+    expect(b.polygonCount, greaterThan(0));
+    expect(b.toGeoJsonFeature()['properties'],
+        containsPair('districtId', 'P4.D02'));
+  });
 }
