@@ -406,19 +406,24 @@ source. This file only draws the explorer choropleth.
 - Runtime load order (explorer): same-origin `palika-boundaries.geojson`
   first, pinned CDN copies (jsDelivr, raw.githubusercontent) as fallbacks.
 - Join gate: `tool/check_boundary_join.dart` runs in CI and pins the
-  explorer join coverage — 746/753 (normalized name + districtId, then a
-  centroid-in-own-polygon fallback) with exactly 7 known misses, all
-  upstream spelling variants that are also coordinate-free: Baitedhar
-  (Dolakha), Baraha (Sunsari), Barhagaun Muktichhetra (Mustang), Bogatan
-  (Doti), Mugu Karmarong (Mugu), Naraphu (Manang), Neshang (Manang). A
-  new miss — or a fixed miss that leaves this list stale — fails the
-  build.
+  explorer join coverage — 753/753 (normalized name + districtId, then a
+  centroid-in-own-polygon fallback; expected misses: none) since the
+  2026-10-26 centroid completion. The seven upstream spelling variants
+  that used to miss (Baitedhar, Baraha, Barhagaun Muktichhetra, Bogatan,
+  Mugu Karmarong, Naraphu, Neshang) now join through the fallback. A
+  new miss — or a fixed miss that leaves the expected list stale —
+  fails the build.
+- **Centroid completion (2026-10-26):** the 27 roster rows that had no
+  open-admin-data coordinate now carry `geoSource:
+  "palika-boundaries-centroid"` — the area-weighted centroid of the
+  palika's own feature in this file, computed with the shoelace formula
+  (holes subtracted, areas weighted; never a bbox midpoint). Each was
+  verified by point-in-polygon against its own feature before shipping;
+  the derivation uses no source beyond this vendored, pinned artifact.
 - "Mappable", defined once to stop the 718-vs-726 confusion: in the
-  package it means CBS code **and** coordinates (726 of 753); in
-  `docs/data.json` it is rows with coordinates (726 of 753). The postal-list
-  adjudication coded the 8 previously uncoded rows that carried
-  open-admin-data coordinates, so the two definitions now agree; only
-  Bheri (Jajarkot) is both uncoded and unmapped.
+  package it means CBS code **and** coordinates (752 of 753); in
+  `docs/data.json` it is rows with coordinates (753 of 753). Only Bheri
+  (Jajarkot) is uncoded; every palika is now mapped.
 
 ## Website basemap (not shipped in the package)
 

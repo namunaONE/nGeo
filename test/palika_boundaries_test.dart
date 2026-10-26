@@ -249,13 +249,14 @@ void main() {
     }
   });
 
-  test('roster palikas without geometry expose it honestly', () {
-    expect(NepalAdminApi.getLocalBodyBoundary('Manang', 'Naraphu'), isNull);
+  test('every roster palika has boundary geometry since the centroid fix',
+      () {
+    // The 2026-10-26 centroid completion let the point-in-polygon
+    // fallback join the last seven upstream spelling variants, so
+    // Naraphu — the long-standing honest-null example — now decodes.
+    expect(NepalAdminApi.getLocalBodyBoundary('Manang', 'Naraphu'), isNotNull);
     final missing =
         NepalAdminApi.getAllLocalBodies().where((b) => !b.hasBoundary).toList();
-    expect(missing.length, 7);
-    for (final b in missing) {
-      expect(b.boundary, isNull, reason: '${b.name} should not decode');
-    }
+    expect(missing.length, 0);
   });
 }

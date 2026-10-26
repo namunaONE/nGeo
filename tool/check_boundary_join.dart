@@ -8,7 +8,7 @@
 // a centroid-in-own-polygon fallback, same district first, features
 // claimed at most once — and pins the coverage:
 //
-//   753 rows, 753 features, 746 joined, exactly 7 known misses.
+//   753 rows, 753 features, 753 joined, no known misses.
 //
 // It fails on drift in either direction: a palika that stops joining is a
 // regression, and a miss that gets fixed leaves the expected list stale.
@@ -24,21 +24,17 @@ const String boundariesPath = 'docs/palika-boundaries.geojson';
 
 const int expectedRows = 753;
 const int expectedFeatures = 753;
-const int expectedJoins = 746;
+const int expectedJoins = 753;
 
-// Known upstream spelling variants that no name join or centroid fallback
-// can reach: every one is also coordinate-free in the dataset. P1 fixes
-// them with verified aliases plus derived centroids and must update this
-// list in the same PR.
-const List<String> expectedMisses = <String>[
-  'Baitedhar (P3.D04 Dolakha)',
-  'Baraha (P1.D11 Sunsari)',
-  'Barhagaun Muktichhetra (P4.D06 Mustang)',
-  'Bogatan (P7.D07 Doti)',
-  'Mugu Karmarong (P6.D07 Mugu)',
-  'Naraphu (P4.D05 Manang)',
-  'Neshang (P4.D05 Manang)',
-];
+// Misses are rows neither the name join nor the centroid fallback could
+// reach. The 2026-10-26 centroid completion (area-weighted centroids of
+// the vendored boundary polygons, geoSource
+// "palika-boundaries-centroid") joined the last seven upstream spelling
+// variants — Baitedhar (Dolakha), Baraha (Sunsari), Barhagaun
+// Muktichhetra (Mustang), Bogatan (Doti), Mugu Karmarong (Mugu),
+// Naraphu (Manang), Neshang (Manang) — so the expected list is now
+// empty. A palika that stops joining is a regression and fails here.
+const List<String> expectedMisses = <String>[];
 
 // District name -> districtId, verbatim from app.js (DISTRICT_ID_BY_NAME).
 const Map<String, String> districtIdByName = <String, String>{

@@ -118,12 +118,12 @@ if (nad) {
   check(doubled + single + uncoded === 753,
     'tiers partition all 753 without loss or overlap');
   // Mappable means BOTH a code and a coordinate. That is a smaller set than
-  // either one alone: 726 have coordinates, 752 have codes, and the
-  // intersection is 726.
+  // either one alone: 753 have coordinates, 752 have codes, and the
+  // intersection is 752 — only Bheri (Jajarkot) is uncoded.
   const mappedOnly = nad.getAllLocalBodies().filter((b) => b.lat != null && b.lng != null).length;
   const mappable = nad.getMappableLocalBodies().length;
-  check(mappedOnly === 726, `726 mapped (got ${mappedOnly})`);
-  check(mappable === 726, `726 mapped AND coded (got ${mappable})`);
+  check(mappedOnly === 753, `753 mapped (got ${mappedOnly})`);
+  check(mappable === 752, `752 mapped AND coded (got ${mappable})`);
   check(mappable <= Math.min(coded, mappedOnly),
     'the mapped+coded set cannot exceed either parent set');
 
@@ -341,7 +341,7 @@ for (const [file, expectedRows, expectedCols] of [
 section('3. GeoJSON (bindings/geojson/)');
 
 for (const [file, expected] of [
-  ['local-bodies.centroids.geojson', 726],
+  ['local-bodies.centroids.geojson', 753],
   ['districts.centroids.geojson', 77],
   ['provinces.centroids.geojson', 7],
 ]) {

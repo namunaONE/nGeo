@@ -86,9 +86,10 @@ available as a legacy view:
   pinned commit), vendored same-origin (`palika-boundaries.geojson`) with
   pinned CDN fallbacks (jsDelivr → raw.githubusercontent). Joined to
   `data.json` by normalized English name + districtId, with a
-  centroid-in-own-polygon fallback — 746/753 matched; the 7 known
-  spelling-variant rows stay table-only, and the join is pinned by a CI
-  gate (`tool/check_boundary_join.dart`). Filters dim non-matching
+  centroid-in-own-polygon fallback — 753/753 matched (the seven
+  upstream spelling variants joined once every roster row carried a
+  centroid); the join is pinned by a CI gate
+  (`tool/check_boundary_join.dart`). Filters dim non-matching
   palikas (fill 0.08) instead of hiding them, so the national figure
   keeps its context.
 - Classic dots: canvas circleMarkers colored by the flag-coded type palette
@@ -141,7 +142,7 @@ available as a legacy view:
 ```bash
 dart run tool/generate_explorer_data.dart
 # reads data/nepal_local_levels.json → writes docs/data.json (753 rows,
-# incl. lat/lng/geoSource where mapped: 726/753)
+# incl. lat/lng/geoSource: 753/753)
 ```
 
 ## Local preview
