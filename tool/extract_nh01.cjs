@@ -11,6 +11,8 @@
 // Exit 0 = pass; a wrong-looking extract fails loudly instead of
 // shipping: end termini must land in Jhapa (east) and Kanchanpur (west),
 // and computed length must fall in the 800–1300 km corridor.
+// Failures are echoed as '::error::' workflow commands so they surface
+// as annotations even when raw logs are not readable externally.
 'use strict';
 const fs = require('fs');
 const path = require('path');
@@ -33,21 +35,36 @@ const OVERPASS = [
   'https://overpass.osm.jp/api/interpreter',
 ];
 
-async function overpass(query) {
+function fail(msg) {
+  console.error('EXTRACT FAILED: ' + msg);
+  console.error('::error title=extract_nh01::' + String(msg).replace(/[\r\n]+/g, ' '));
+  process.exit(1);
+}
+
+async function overpass(query, requestTimeoutMs) {
   for (const base of OVERPASS) {
+    const controller = new AbortController();
+    const timer = setTimeout(() => controller.abort(), requestTimeoutMs);
     try {
       const res = await fetch(base + '?data=' + encodeURIComponent(query), {
         headers: { 'User-Agent': 'namunaONE/nGeo extract_nh01 (one-shot pin refresh)' },
+        signal: controller.signal,
       });
       if (!res.ok) throw new Error('HTTP ' + res.status);
-      const json = await res.json();
+      const text = await res.text();
+      let json;
+      try { json = JSON.parse(text); } catch { throw new Error('non-JSON payload (' + text.slice(0, 120) + ')'); }
       if (json && Array.isArray(json.elements)) return json;
-      throw new Error('unexpected payload shape');
+      throw new Error('unexpected payload shape (' + (json.remark || 'no elements') + ')');
     } catch (err) {
-      console.error('overpass mirror failed:', base, String(err.message || err));
+      const msg = 'mirror failed: ' + base + ' — ' + String((err && err.message) || err);
+      console.error(msg);
+      console.error('::warning title=extract_nh01::' + msg.replace(/[\r\n]+/g, ' '));
+    } finally {
+      clearTimeout(timer);
     }
   }
-  throw new Error('all Overpass mirrors failed');
+  fail('all Overpass mirrors failed');
 }
 
 function haversineKm(a, b) {
@@ -64,20 +81,22 @@ function haversineKm(a, b) {
 async function main() {
   // 1) Find the NH01 route relation(s): ref=NH01 is the DoR numbering
   //    carried by OSM mappers; the name variant is a fallback so a
-  //    retagged relation is still found.
+  //    retagged relation is still found. Both branches require
+  //    type=route so boundary relations (e.g. Mahendranagar
+  //    municipality) can never pollute the member-way query.
   const findQuery =
     '[out:json][timeout:120];' +
     '(' +
-    'relation["ref"="NH01"](' + NEPAL_BBOX.join(',') + ');' +
-    'relation["name"~"[Mm]ahendra",i](' + NEPAL_BBOX.join(',') + ');' +
+    'relation["type"="route"]["route"="road"]["ref"="NH01"](' + NEPAL_BBOX.join(',') + ');' +
+    'relation["type"="route"]["route"="road"]["name"~"Mahendra",i](' + NEPAL_BBOX.join(',') + ');' +
     ');out tags;';
-  const found = await overpass(findQuery);
+  const found = await overpass(findQuery, 150000);
   const relations = found.elements.filter(
-    (e) => e.type === 'relation' && e.tags &&
-      ((e.tags.ref === 'NH01' && e.tags.route === 'road') ||
-        /mahendra/i.test(e.tags.name || '')));
+    (e) => e.type === 'relation' && e.tags && e.tags.type === 'route' &&
+      (e.tags.route === 'road' || e.tags.route === 'highway') &&
+      ((e.tags.ref === 'NH01') || /mahendra/i.test(e.tags.name || '')));
   if (!relations.length) {
-    throw new Error('no NH01 / Mahendra route relation found in Nepal bbox');
+    fail('no NH01 / Mahendra road route relation found in Nepal bbox');
   }
   const ids = relations.map((r) => r.id);
   console.log('relations:', ids.join(', '), relations.map((r) => r.tags.name));
@@ -88,7 +107,7 @@ async function main() {
     'relation(id:' + ids.join(',') + ');' +
     'way(r);' +
     'out geom;';
-  const ways = await overpass(wayQuery);
+  const ways = await overpass(wayQuery, 330000);
   const features = [];
   for (const w of ways.elements) {
     if (w.type !== 'way' || !Array.isArray(w.geometry)) continue;
@@ -110,6 +129,9 @@ async function main() {
       geometry: { type: 'LineString', coordinates: coords },
     });
   }
+  if (features.length < MIN_WAYS) {
+    fail('too few member ways: ' + features.length);
+  }
 
   // 3) Aggregate + validate: length, termini proximity, way count.
   let lengthKm = 0;
@@ -130,11 +152,8 @@ async function main() {
   console.log('ways:', features.length, 'nodes:', nodes,
     'lengthKm:', lengthKm, 'bbox:', [minLng, minLat, maxLng, maxLat].join(','));
 
-  if (features.length < MIN_WAYS) {
-    throw new Error('too few member ways: ' + features.length);
-  }
   if (lengthKm < LENGTH_MIN_KM || lengthKm > LENGTH_MAX_KM) {
-    throw new Error('length out of corridor: ' + lengthKm + ' km');
+    fail('length out of corridor: ' + lengthKm + ' km (ways: ' + features.length + ')');
   }
   for (const [lat, lng, radius, label] of ENDPOINTS) {
     let best = Infinity;
@@ -145,7 +164,7 @@ async function main() {
       }
     }
     if (best > radius) {
-      throw new Error('terminus not found near ' + label + ' (best Δ=' + best.toFixed(3) + '°)');
+      fail('terminus not found near ' + label + ' (best Δ=' + best.toFixed(3) + '°)');
     }
     console.log('terminus ok:', label, 'Δ=' + best.toFixed(3) + '°');
   }
@@ -175,9 +194,9 @@ async function main() {
   const dest = path.join(__dirname, '..', 'docs', 'nh01-highway.geojson');
   fs.writeFileSync(dest, JSON.stringify(out));
   console.log('wrote', dest, (fs.statSync(dest).size / 1024).toFixed(0) + ' KB');
+  console.log('::notice title=extract_nh01::extracted ' + features.length + ' ways, ' + lengthKm + ' km, relations ' + ids.join(','));
 }
 
 main().catch((err) => {
-  console.error('EXTRACT FAILED:', err && err.message ? err.message : err);
-  process.exit(1);
+  fail(err && err.message ? err.message : String(err));
 });
