@@ -175,6 +175,29 @@ void main(List<String> args) {
   if (total < floor) {
     stderr.writeln('\nCOVERAGE REGRESSION: ${total.toStringAsFixed(1)}% is '
         'below the ${floor.toStringAsFixed(1)}% floor.');
+    // A bare below-the-floor exit is useless for fixing it: which file,
+    // which line? Same principle as the format gate — attach one error
+    // annotation per uncovered DA record (markers excluded), with the
+    // source line text, so the offending lines are visible from the
+    // Checks tab without needing log access.
+    for (final e in considered) {
+      final records = daRecords[e.key] ?? const <int, int>{};
+      final missing = <int>[];
+      for (final n in records.keys.toList()..sort()) {
+        if (records[n] == 0 && !e.value.ignored.contains(n)) missing.add(n);
+      }
+      if (missing.isEmpty) continue;
+      List<String> src;
+      try {
+        src = File(e.key).readAsLinesSync();
+      } on Exception {
+        src = const <String>[];
+      }
+      for (final n in missing) {
+        final text = n <= src.length ? src[n - 1].trim() : '';
+        stderr.writeln('::error file=${e.key},line=$n::uncovered: ${text}');
+      }
+    }
     stderr.writeln('Either write tests for the new code, or raise the floor '
         'deliberately in tool/check_coverage.dart — not by accident.');
     exit(1);
