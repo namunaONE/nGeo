@@ -195,7 +195,7 @@ void main(List<String> args) {
       }
       for (final n in missing) {
         final text = n <= src.length ? src[n - 1].trim() : '';
-        stderr.writeln('::error file=${e.key},line=$n::uncovered: ${text}');
+        stderr.writeln('::error file=${e.key},line=$n::uncovered: $text');
       }
     }
     stderr.writeln('Either write tests for the new code, or raise the floor '
