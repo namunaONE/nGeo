@@ -322,7 +322,9 @@ void main(List<String> args) {
 
     var fVerts = 0;
     for (final rings in f['polys'] as List<List<List<List<double>>>>) {
-      for (final ring in rings) fVerts += ring.length - 1;
+      for (final ring in rings) {
+        fVerts += ring.length - 1;
+      }
     }
     uniqueVerts += fVerts;
 
@@ -377,7 +379,7 @@ void main(List<String> args) {
   w('const int kPalikaBoundaryMatchedCount = ${entries.length};');
   w('');
   w('/// Encoded boundaries, keyed by district name then local-body name');
-  w("/// spelling, e.g. \`kPalikaBoundaries['Chitwan']?['Bharatpur']\`.");
+  w("/// spelling, e.g. `kPalikaBoundaries['Chitwan']?['Bharatpur']`.");
   w('const Map<String, Map<String, String>> kPalikaBoundaries = {');
   final seen = <String>{};
   var i = 0;
@@ -398,7 +400,9 @@ void main(List<String> args) {
     }
     if (ents.isNotEmpty) {
       w("  '${_esc(district)}': {");
-      for (final e in ents) w(e);
+      for (final e in ents) {
+        w(e);
+      }
       w('  },');
     }
   }
@@ -434,18 +438,19 @@ String _esc(String s) {
   var out = StringBuffer();
   for (var i = 0; i < s.length; i++) {
     final ch = s.codeUnitAt(i);
-    if (ch == 0x27)
+    if (ch == 0x27) {
       out.write("\\'");
-    else if (ch == 0x5C)
+    } else if (ch == 0x5C) {
       out.write('\\\\');
-    else if (ch == 0x0A)
+    } else if (ch == 0x0A) {
       out.write('\\n');
-    else if (ch == 0x0D)
+    } else if (ch == 0x0D) {
       out.write('\\r');
-    else if (ch < 0x20 || ch > 0x7E)
+    } else if (ch < 0x20 || ch > 0x7E) {
       out.write('\\u${ch.toRadixString(16).padLeft(4, '0')}');
-    else
+    } else {
       out.writeCharCode(ch);
+    }
   }
   return out.toString();
 }
