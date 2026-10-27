@@ -97,7 +97,7 @@ AdministrativeCascade.formatLocalBodyDisambiguated(body);       // "…, Kathman
 ```
 
 `LabelStyle.both` falls back to whichever single script is attested, so a label
-never ends in a dangling separator — 22 of the 753 palikas have no attested
+never ends in a dangling separator - all 753 palikas now carry an attested Devanagari name (450 corroborated by two sources)
 Devanagari name. `formatLocalBodyDisambiguated` is unique across all 753.
 
 ## Theming

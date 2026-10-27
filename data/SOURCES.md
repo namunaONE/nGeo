@@ -187,7 +187,7 @@ used is quoted in `doc/REVIEW-codes.md` §7):
   `https://giwmscdnone.gov.np/media/pdf_upload/पोष्टल कोड_5aoxvqu.pdf`
   (mirror: `https://giwmscdnone.gov.np/media/pages/files/postl code english (1)_ihneau2.pdf`)
 
-**Provides:** direct 5-digit PDDPP attestation for 8 of the 9 `unverified`
+**Provides:** direct 5-digit PDDPP attestation for 8 of the 9 palikas that were unverified before v2.9.0
 palikas — Mapya Dudhkoshi 10304, Thulung Dudhkoshi 10305 (Solukhumbu);
 Paribartan 50203, Gangadev 50204, Sunil Smriti 50209 (Rolpa); Nalagad 60707
 (Jajarkot); Jagannath 70105, Khaptad Chhededaha 70107 (Bajura). Its 7-digit
@@ -232,7 +232,7 @@ silently dropping over a quarter of Nepal's local bodies.
   refused permutation guess, but whose PDDPP code a government directory
   names explicitly. `cbsCodeVerified` stays `false` for them — the
   doubly-attested rule needs CBS + postal-2025, not the postal directory.
-- `unverified` (9 → **1** since 2026-10-25) — Bheri (Jajarkot) only. The
+- `unverified` (0 as of v2.9.0 — Bheri, the last gap, resolved to 60706). The tier is retained for future gaps.
   postal-list extracts name every other Jajarkot code (60701–60707 minus the
   district's coded rows), so 60706 is a strong inference but **not a direct
   attestation**; it stays null rather than guessed.

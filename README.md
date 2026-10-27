@@ -224,9 +224,9 @@ differ only in `ब`/`व`, `ी`/`ि`, the candrabindu, or `प्प`/`प`. 
 agreed on which palika it is; they disagree on spelling. The published string
 is the primary source's.
 
-**What is missing.** 22 palikas have no attested Devanagari name and keep
-`nameNe == null` — listed by name in the CHANGELOG and pinned in the test
-suite. Nothing was invented to fill them.
+| **Honest confidence tiers** | Every code labelled `verified` (548) / `singleSource` (205) / `unverified` (0) - you choose how much to trust it |","oldString">
+| **Honest confidence tiers** | Every code labelled `verified` (548) / `singleSource` (196) / `unverified` (9) - you choose how much to trust it |","path">
+C:\Users\user\StudioProjects\nGeo\README.md
 
 ## 🏛️ Administrative attributes
 
