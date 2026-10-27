@@ -28,6 +28,7 @@ String _encode(List<List<List<List<double>>>> polys) {
       b.write(_alphabet[d]);
     } while (v > 0);
   }
+
   int zz(int v) => v < 0 ? -v * 2 - 1 : v * 2;
   put(polys.length);
   var curLat = 0, curLng = 0, anchored = false;
@@ -68,18 +69,22 @@ List<List<double>> _simplifyRing(List<List<double>> ring, double eps) {
       return dx2 * dx2 + dy2 * dy2;
     }
     var t = ((pt[0] - a[0]) * dx + (pt[1] - a[1]) * dy) / len2;
-    t = t.clamp(0, 1);
+    t = t.clamp(0, 1).toDouble();
     final px = a[0] + t * dx, py = a[1] + t * dy;
     final dx2 = pt[0] - px, dy2 = pt[1] - py;
     return dx2 * dx2 + dy2 * dy2;
   }
+
   List<List<double>> dp(List<List<double>> pts) {
     if (pts.length <= 2) return List.of(pts);
     var maxD = -1.0, idx = 1;
     final a = pts.first, b = pts.last;
     for (var i = 1; i < pts.length - 1; i++) {
       final d = perpDist(pts[i], a, b);
-      if (d > maxD) { maxD = d; idx = i; }
+      if (d > maxD) {
+        maxD = d;
+        idx = i;
+      }
     }
     if (maxD > eps * eps) {
       final left = dp(pts.sublist(0, idx + 1));
@@ -88,6 +93,7 @@ List<List<double>> _simplifyRing(List<List<double>> ring, double eps) {
     }
     return [pts.first, pts.last];
   }
+
   return dp(ring);
 }
 
@@ -104,14 +110,17 @@ bool _pointInRing(double lat, double lng, List<List<double>> ring) {
   return inside;
 }
 
-bool _pointInMultiPolygon(double lat, double lng,
-    List<List<List<List<double>>>> polys) {
+bool _pointInMultiPolygon(
+    double lat, double lng, List<List<List<List<double>>>> polys) {
   for (final rings in polys) {
     if (rings.isEmpty) continue;
     if (_pointInRing(lat, lng, rings.first)) {
       var inHole = false;
       for (var i = 1; i < rings.length; i++) {
-        if (_pointInRing(lat, lng, rings[i])) { inHole = true; break; }
+        if (_pointInRing(lat, lng, rings[i])) {
+          inHole = true;
+          break;
+        }
       }
       if (!inHole) return true;
     }
@@ -120,7 +129,7 @@ bool _pointInMultiPolygon(double lat, double lng,
 }
 
 String _normName(String s) =>
-    (s ?? '').toLowerCase().replaceAll(RegExp(r'[^a-z0-9]'), '');
+    s.toLowerCase().replaceAll(RegExp(r'[^a-z0-9]'), '');
 
 int _levenshtein(String a, String b) {
   if (a == b) return 0;
@@ -142,9 +151,17 @@ int _levenshtein(String a, String b) {
 
 String _stripTypeSuffix(String s) {
   final suffixes = [
-    'Gaunpalika', 'Nagarpalika', 'Mahanagarpalika', 'Upamahanagarpalika',
-    'Gaun Palika', 'Nagar Palika', 'Mahanagar Palika', 'Upamahanagar Palika',
-    'Municipality', 'Rural Municipality', 'Sub-Metropolitan City',
+    'Gaunpalika',
+    'Nagarpalika',
+    'Mahanagarpalika',
+    'Upamahanagarpalika',
+    'Gaun Palika',
+    'Nagar Palika',
+    'Mahanagar Palika',
+    'Upamahanagar Palika',
+    'Municipality',
+    'Rural Municipality',
+    'Sub-Metropolitan City',
     'Metropolitan City',
   ];
   var n = s.trim();
@@ -173,7 +190,8 @@ void main(List<String> args) {
   }
 
   final geo = jsonDecode(geoFile.readAsStringSync()) as Map<String, dynamic>;
-  final roster = jsonDecode(rosterFile.readAsStringSync()) as Map<String, dynamic>;
+  final roster =
+      jsonDecode(rosterFile.readAsStringSync()) as Map<String, dynamic>;
 
   // Decode highres features (all are palikas after conversion filtering).
   final features = <Map<String, dynamic>>[];
@@ -224,7 +242,7 @@ void main(List<String> args) {
   stderr.writeln('Roster palikas with centroids: ${rosterRows.length}');
 
   // Match: point-in-polygon first, name match fallback.
-  final matched = Map<String, dynamic>();
+  final matched = <String, dynamic>{};
   var unmatched = 0;
   final unmatchedList = <String>[];
   for (final row in rosterRows) {
@@ -233,8 +251,8 @@ void main(List<String> args) {
 
     // 1. Point-in-polygon.
     for (final f in features) {
-      if (_pointInMultiPolygon(lat, lng,
-          f['polys'] as List<List<List<List<double>>>>)) {
+      if (_pointInMultiPolygon(
+          lat, lng, f['polys'] as List<List<List<List<double>>>>)) {
         best = f;
         break;
       }
@@ -249,7 +267,10 @@ void main(List<String> args) {
         if (f['district'] != row['district']) continue;
         final hName = f['nameEn'] as String;
         final d = _levenshtein(nEn, _normName(_stripTypeSuffix(hName)));
-        if (d < nameBestD) { nameBestD = d; nameBest = f; }
+        if (d < nameBestD) {
+          nameBestD = d;
+          nameBest = f;
+        }
       }
       if (nameBest != null && nameBestD <= 3) best = nameBest;
     }
@@ -294,12 +315,16 @@ void main(List<String> args) {
         }
       }
       if (reader.remaining == 0) rtOk = true;
-    } catch (_) {}
+    } catch (_) {
+      // A failed round-trip probe is counted via roundTripOk, not fatal.
+    }
     if (rtOk) roundTripOk++;
 
     var fVerts = 0;
     for (final rings in f['polys'] as List<List<List<List<double>>>>) {
-      for (final ring in rings) fVerts += ring.length - 1;
+      for (final ring in rings) {
+        fVerts += ring.length - 1;
+      }
     }
     uniqueVerts += fVerts;
 
@@ -319,6 +344,16 @@ void main(List<String> args) {
 
   final out = StringBuffer();
   void w(String line) => out.writeln(line);
+
+  /// Emits one map entry, wrapping long values like dart-format does.
+  String entryLine(int indent, String key, String value) {
+    final pad = ' ' * indent;
+    final inline = '$pad$key: $value';
+    if (inline.length <= 80) return inline;
+    final valuePad = ' ' * (indent + 4);
+    return '$pad$key:\n$valuePad$value';
+  }
+
   w('// GENERATED FILE - DO NOT EDIT.');
   w('//');
   w('// Lossless boundary geometry for local bodies (palikas) of Nepal,');
@@ -344,7 +379,7 @@ void main(List<String> args) {
   w('const int kPalikaBoundaryMatchedCount = ${entries.length};');
   w('');
   w('/// Encoded boundaries, keyed by district name then local-body name');
-  w("/// spelling, e.g. \`kPalikaBoundaries['Chitwan']?['Bharatpur']\`.");
+  w("/// spelling, e.g. `kPalikaBoundaries['Chitwan']?['Bharatpur']`.");
   w('const Map<String, Map<String, String>> kPalikaBoundaries = {');
   final seen = <String>{};
   var i = 0;
@@ -355,13 +390,19 @@ void main(List<String> args) {
       final key = '$district|${entries[i]['nameEn']}';
       if (!seen.contains(key)) {
         seen.add(key);
-        ents.add("    '${_esc(entries[i]['nameEn'])}': '${entries[i]['enc']}',");
+        ents.add(entryLine(
+          4,
+          "'${_esc(entries[i]['nameEn'])}'",
+          "'${entries[i]['enc']}',",
+        ));
       }
       i++;
     }
     if (ents.isNotEmpty) {
       w("  '${_esc(district)}': {");
-      for (final e in ents) w(e);
+      for (final e in ents) {
+        w(e);
+      }
       w('  },');
     }
   }
@@ -371,6 +412,11 @@ void main(List<String> args) {
   w('const Map<String, String> kUnmatchedPalikaBoundaries = {};');
 
   final text = out.toString();
+  final bytes = utf8.encode(text).length;
+  if (bytes >= 100 * 1024) {
+    stderr.writeln('Size gate failed: $bytes bytes >= 100 KB.');
+    exit(1);
+  }
   if (check) {
     final existing = File(outPath).readAsStringSync();
     if (existing != text) {
@@ -392,13 +438,19 @@ String _esc(String s) {
   var out = StringBuffer();
   for (var i = 0; i < s.length; i++) {
     final ch = s.codeUnitAt(i);
-    if (ch == 0x27) out.write("\\'");
-    else if (ch == 0x5C) out.write('\\\\');
-    else if (ch == 0x0A) out.write('\\n');
-    else if (ch == 0x0D) out.write('\\r');
-    else if (ch < 0x20 || ch > 0x7E)
+    if (ch == 0x27) {
+      out.write("\\'");
+    } else if (ch == 0x5C) {
+      out.write('\\\\');
+    } else if (ch == 0x0A) {
+      out.write('\\n');
+    } else if (ch == 0x0D) {
+      out.write('\\r');
+    } else if (ch < 0x20 || ch > 0x7E) {
       out.write('\\u${ch.toRadixString(16).padLeft(4, '0')}');
-    else out.writeCharCode(ch);
+    } else {
+      out.writeCharCode(ch);
+    }
   }
   return out.toString();
 }
@@ -420,10 +472,12 @@ class _Reader {
     } while (digit & 32 != 0);
     return result;
   }
+
   int zigzagVlq() {
     final u = vlq();
     return (u & 1) == 1 ? -((u + 1) >> 1) : u >> 1;
   }
+
   static int _digit(int unit) {
     if (unit >= 65 && unit <= 90) return unit - 65;
     if (unit >= 97 && unit <= 122) return unit - 97 + 26;
@@ -433,12 +487,3 @@ class _Reader {
     throw const FormatException('Invalid VLQ char');
   }
 }
-
-
-
-
-
-
-
-
-

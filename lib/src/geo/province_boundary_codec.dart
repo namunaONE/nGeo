@@ -42,7 +42,8 @@ abstract final class ProvinceBoundaries {
           ProvinceBoundary.decode(
             districtName: '',
             localBodyName: kProvinceBoundaryNames[
-                    int.tryParse(e.key.replaceAll(RegExp(r'[^0-9]'), '')) ?? 0] ??
+                    int.tryParse(e.key.replaceAll(RegExp(r'[^0-9]'), '')) ??
+                        0] ??
                 '',
             encoded: e.value,
           ),

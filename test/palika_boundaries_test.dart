@@ -102,13 +102,19 @@ void main() {
     // The codec must round-trip: decode produces non-empty, well-formed
     // polygons within Nepal's bounding box for every roster palika.
     for (final b in NepalAdminApi.getAllLocalBodyBoundaries()) {
-      expect(b.polygons, isNotEmpty, reason: '${b.localBodyName} has no polygons');
-      expect(b.coordinateCount, greaterThan(0), reason: '${b.localBodyName} has no vertices');
+      expect(b.polygons, isNotEmpty,
+          reason: '${b.localBodyName} has no polygons');
+      expect(b.coordinateCount, greaterThan(0),
+          reason: '${b.localBodyName} has no vertices');
       final box = b.bbox;
-      expect(box['minLat']!, greaterThanOrEqualTo(26.0), reason: '${b.localBodyName} minLat');
-      expect(box['maxLat']!, lessThanOrEqualTo(31.0), reason: '${b.localBodyName} maxLat');
-      expect(box['minLng']!, greaterThanOrEqualTo(80.0), reason: '${b.localBodyName} minLng');
-      expect(box['maxLng']!, lessThanOrEqualTo(89.0), reason: '${b.localBodyName} maxLng');
+      expect(box['minLat']!, greaterThanOrEqualTo(26.0),
+          reason: '${b.localBodyName} minLat');
+      expect(box['maxLat']!, lessThanOrEqualTo(31.0),
+          reason: '${b.localBodyName} maxLat');
+      expect(box['minLng']!, greaterThanOrEqualTo(80.0),
+          reason: '${b.localBodyName} minLng');
+      expect(box['maxLng']!, lessThanOrEqualTo(89.0),
+          reason: '${b.localBodyName} maxLng');
       // The roster centroid should fall inside its own boundary.
       final lb = NepalAdminApi.getLocalBodyByFullPath(b.localBodyName);
       if (lb != null && lb.lat != null && lb.lng != null) {
