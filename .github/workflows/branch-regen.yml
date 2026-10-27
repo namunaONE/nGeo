@@ -83,7 +83,7 @@ jobs:
           fi
 
       - name: Trigger the Dart CI gate on the updated head
-        if: steps.commitpush.outputs.pushed == 'true' && env.fmt_rc == '0' && env.gen1_rc == '0' && env.gen2_rc == '0'
+        if: env.fmt_rc == '0' && env.gen1_rc == '0' && env.gen2_rc == '0'
         run: |
           set +e
           code=$(curl -s -o /tmp/dispatch.out -w '%{http_code}' -X POST \
@@ -98,24 +98,34 @@ jobs:
         env:
           GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
 
-      - name: Diagnostics - analyze, tests, join gate (annotated)
+      # The run page renders step summaries server-side, so every diagnostic
+      # result is dumped there. Annotations from the previous attempt never
+      # registered; the summary always does.
+      - name: Diagnostics - analyze, tests, join gate
         run: |
           set +e
           dart analyze --fatal-infos >/tmp/analyze.log 2>&1
           arc=$?
-          if [ $arc -ne 0 ]; then
-            grep -E '^[^ ]*[\s-]+(error|warning|info)[\s-]' /tmp/analyze.log | head -25 | while IFS= read -r line; do
-              echo "::error::analyze: $line"
-            done
-          fi
+          cat /tmp/analyze.log
           dart test >/tmp/test.log 2>&1
           trc=$?
-          if [ $trc -ne 0 ]; then
-            echo "::error::dart test exited $trc: $(tail -c 600 /tmp/test.log | tr '\n' ' ')"
-          fi
+          tail -c 3000 /tmp/test.log
           dart run tool/check_boundary_join.dart >/tmp/join.log 2>&1
           jrc=$?
-          if [ $jrc -ne 0 ]; then
-            echo "::error::boundary join gate exited $jrc: $(tail -c 400 /tmp/join.log | tr '\n' ' ')"
-          fi
+          cat /tmp/join.log
+          {
+            echo '## Diagnostics'
+            echo '### dart analyze (exit '"$arc"')'
+            echo '```'
+            cat /tmp/analyze.log
+            echo '```'
+            echo '### dart test, tail (exit '"$trc"')'
+            echo '```'
+            tail -c 3000 /tmp/test.log
+            echo '```'
+            echo '### boundary join gate (exit '"$jrc"')'
+            echo '```'
+            cat /tmp/join.log
+            echo '```'
+          } >> "$GITHUB_STEP_SUMMARY"
           if [ $((arc + trc + jrc)) -ne 0 ]; then exit 1; fi

@@ -92,8 +92,24 @@ jobs:
         run: git diff --exit-code -- lib/src/geo/province_boundaries.dart
       - name: Boundary join coverage gate
         run: dart run tool/check_boundary_join.dart
+      # Same principle as the formatting gate above: a bare "N issues found"
+      # is useless when the log is out of reach, so on failure the full
+      # analyzer output is attached to the run's step summary - file, line
+      # and rule, readable straight from the run page.
       - name: Analyze
-        run: dart analyze --fatal-infos
+        run: |
+          rc=0
+          dart analyze --fatal-infos >/tmp/analyze.log 2>&1 || rc=$?
+          cat /tmp/analyze.log
+          if [ $rc -ne 0 ]; then
+            {
+              echo '## dart analyze --fatal-infos'
+              echo '```'
+              cat /tmp/analyze.log
+              echo '```'
+            } >> "$GITHUB_STEP_SUMMARY"
+          fi
+          exit $rc
       - name: Run tests
         run: dart test
       - name: Coverage report

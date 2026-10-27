@@ -167,7 +167,3 @@ void main(List<String> args) {
   stdout.writeln('Wrote $outPath: ${entries.length} provinces, '
       '$uniqueVerts stored vertices.');
 }
-
-// avoid unused import warning
-// ignore: unused_element
-void _noop() {}

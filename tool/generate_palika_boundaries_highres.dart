@@ -242,7 +242,7 @@ void main(List<String> args) {
   stderr.writeln('Roster palikas with centroids: ${rosterRows.length}');
 
   // Match: point-in-polygon first, name match fallback.
-  final matched = Map<String, dynamic>();
+  final matched = <String, dynamic>{};
   var unmatched = 0;
   final unmatchedList = <String>[];
   for (final row in rosterRows) {
@@ -315,7 +315,9 @@ void main(List<String> args) {
         }
       }
       if (reader.remaining == 0) rtOk = true;
-    } catch (_) {}
+    } catch (_) {
+      // A failed round-trip probe is counted via roundTripOk, not fatal.
+    }
     if (rtOk) roundTripOk++;
 
     var fVerts = 0;
