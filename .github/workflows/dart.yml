@@ -82,8 +82,8 @@ jobs:
         run: dart run tool/generate_bindings.dart
       - name: Verify no bindings drift
         run: git diff --exit-code -- bindings/
-      - name: Regenerate palika boundaries (vendored GeoJSON)
-        run: dart run tool/generate_palika_boundaries.dart
+      - name: Regenerate palika boundaries (high-res, sthaniya.gov.np)
+        run: dart run tool/generate_palika_boundaries_highres.dart
       - name: Verify no palika boundary drift
         run: git diff --exit-code -- lib/src/geo/palika_boundaries.dart
       - name: Regenerate province boundaries (National Geoportal)

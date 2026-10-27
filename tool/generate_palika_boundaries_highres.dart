@@ -79,7 +79,10 @@ List<List<double>> _simplifyRing(List<List<double>> ring, double eps) {
     final a = pts.first, b = pts.last;
     for (var i = 1; i < pts.length - 1; i++) {
       final d = perpDist(pts[i], a, b);
-      if (d > maxD) { maxD = d; idx = i; }
+      if (d > maxD) {
+        maxD = d;
+        idx = i;
+      }
     }
     if (maxD > eps * eps) {
       final left = dp(pts.sublist(0, idx + 1));
@@ -111,7 +114,10 @@ bool _pointInMultiPolygon(double lat, double lng,
     if (_pointInRing(lat, lng, rings.first)) {
       var inHole = false;
       for (var i = 1; i < rings.length; i++) {
-        if (_pointInRing(lat, lng, rings[i])) { inHole = true; break; }
+        if (_pointInRing(lat, lng, rings[i])) {
+          inHole = true;
+          break;
+        }
       }
       if (!inHole) return true;
     }
@@ -173,7 +179,8 @@ void main(List<String> args) {
   }
 
   final geo = jsonDecode(geoFile.readAsStringSync()) as Map<String, dynamic>;
-  final roster = jsonDecode(rosterFile.readAsStringSync()) as Map<String, dynamic>;
+  final roster =
+      jsonDecode(rosterFile.readAsStringSync()) as Map<String, dynamic>;
 
   // Decode highres features (all are palikas after conversion filtering).
   final features = <Map<String, dynamic>>[];
@@ -319,6 +326,16 @@ void main(List<String> args) {
 
   final out = StringBuffer();
   void w(String line) => out.writeln(line);
+
+  /// Emits one map entry, wrapping long values like dart-format does.
+  String entryLine(int indent, String key, String value) {
+    final pad = ' ' * indent;
+    final inline = '$pad$key: $value';
+    if (inline.length <= 80) return inline;
+    final valuePad = ' ' * (indent + 4);
+    return '$pad$key:\n$valuePad$value';
+  }
+
   w('// GENERATED FILE - DO NOT EDIT.');
   w('//');
   w('// Lossless boundary geometry for local bodies (palikas) of Nepal,');
@@ -355,7 +372,11 @@ void main(List<String> args) {
       final key = '$district|${entries[i]['nameEn']}';
       if (!seen.contains(key)) {
         seen.add(key);
-        ents.add("    '${_esc(entries[i]['nameEn'])}': '${entries[i]['enc']}',");
+        ents.add(entryLine(
+          4,
+          "'${_esc(entries[i]['nameEn'])}'",
+          "'${entries[i]['enc']}',",
+        ));
       }
       i++;
     }
@@ -371,6 +392,11 @@ void main(List<String> args) {
   w('const Map<String, String> kUnmatchedPalikaBoundaries = {};');
 
   final text = out.toString();
+  final bytes = utf8.encode(text).length;
+  if (bytes >= 100 * 1024) {
+    stderr.writeln('Size gate failed: $bytes bytes >= 100 KB.');
+    exit(1);
+  }
   if (check) {
     final existing = File(outPath).readAsStringSync();
     if (existing != text) {

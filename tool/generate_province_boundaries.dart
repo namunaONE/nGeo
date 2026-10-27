@@ -112,6 +112,15 @@ void main(List<String> args) {
   final out = StringBuffer();
   void w(String line) => out.writeln(line);
 
+  /// Emits one map entry, wrapping long values like dart-format does.
+  String entryLine(int indent, String key, String value) {
+    final pad = ' ' * indent;
+    final inline = '$pad$key: $value';
+    if (inline.length <= 80) return inline;
+    final valuePad = ' ' * (indent + 4);
+    return '$pad$key:\n$valuePad$value';
+  }
+
   w('// GENERATED FILE - DO NOT EDIT.');
   w('//');
   w('// Lossless boundary geometry for all 7 provinces of Nepal,');
@@ -132,7 +141,7 @@ void main(List<String> args) {
   w('const Map<String, String> kProvinceBoundaries = {');
   for (final e in entries) {
     final code = e['code'] as int;
-    w("  'NP-P$code': '${e['enc']}',");
+    w(entryLine(2, "'NP-P$code'", "'${e['enc']}',"));
   }
   w('};');
   w('');
@@ -146,7 +155,9 @@ void main(List<String> args) {
   if (check) {
     final existing = File(outPath).readAsStringSync();
     if (existing != text) {
-      stderr.writeln('Drift detected: $outPath differs from a fresh regeneration.');
+      stderr.writeln(
+        'Drift detected: $outPath differs from a fresh regeneration.',
+      );
       exit(2);
     }
     stdout.writeln('OK: $outPath is up to date.');
