@@ -1,6 +1,6 @@
 """Offline administrative divisions of Nepal.
 
-Data as of ``2026-10-26``. Generated from
+Data as of ``2026-10-27``. Generated from
 ``data/nepal_local_levels.json`` by ``tool/generate_bindings.dart``; do not
 edit by hand.
 
@@ -15,7 +15,7 @@ import json
 import os
 from typing import Dict, List, Optional
 
-__version__ = "2.8.0"
+__version__ = "2.9.0"
 
 _DATA_PATH = os.path.join(os.path.dirname(os.path.abspath(__file__)), "data.json")
 with open(_DATA_PATH, encoding="utf-8") as _fh:

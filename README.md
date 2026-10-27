@@ -24,10 +24,10 @@ Pure Dart package. Zero runtime dependencies. Data ships in the box.
 |---------|-------------|
 | **Flutter widgets** | [`nepal_admin_widgets`](https://pub.dev/packages/nepal_admin_widgets) ([source](https://github.com/namunaONE/Nepal-Local-Government-Data/tree/main/packages/nepal_admin_widgets)) — cascading Province → District → Palika pickers, palika-type chips, CBS trust badges and summary cards; bilingual, offline, with a runnable component gallery in example/ |
 | **Bindings for 5 ecosystems** | Dart · TypeScript/JavaScript · Python · CSV · GeoJSON — all generated from one dataset, drift-checked in CI |
-| **Bilingual** | Devanagari names for all 7 provinces, 77 districts and **731/753 palikas** - never transliterated, never guessed |
+| **Bilingual** | Devanagari names for all 7 provinces, 77 districts and **753/753 palikas** - never transliterated, never guessed |
 | **Bilingual search** | `search('भरतपुर')` and `search('Bharatpur')` return the same palika; fragments match too |
 | **Complete hierarchy** | Province → District → Local Body (palika) |
-| **Official codes** | 752/753 palikas with CBS 5-digit codes (PDDPP), all 77 districts (3-digit), all 7 provinces (NP-P1…NP-P7) |
+| **Official codes** | 753/753 palikas with CBS 5-digit codes (PDDPP), all 77 districts (3-digit), all 7 provinces (NP-P1…NP-P7) |
 | **Honest confidence tiers** | Every code labelled `verified` (548) / `singleSource` (196) / `unverified` (9) — you choose how much to trust it |
 | **Ward counts** | 745/753 palikas with verified ward counts; declared vs substantiated totals reported side by side; 8 documented roster-defect gaps |
 | **Administrative attributes** | District HQ, area and website (77/77); province capital, area and website (7/7); palika website/email/phone and postal codes |
@@ -47,7 +47,7 @@ Pure Dart package. Zero runtime dependencies. Data ships in the box.
 
 ```yaml
 dependencies:
-  nepal_admin_api: ^2.8.0
+  nepal_admin_api: ^2.9.0
 ```
 
 ```bash
@@ -216,7 +216,7 @@ NepalAdminApi.search('चितवन').districts;       // Chitwan
 |---|---|---|
 | Province | 7/7 | 6/7 |
 | District | 77/77 | 77/77 |
-| Local body | **731/753** | 450/731 |
+| Local body | **753/753** | 450/753 |
 
 **What `nameNeVerified == false` means.** Not that the name is wrong. It means
 the two rosters spell the *same* name differently in orthography — 262 pairs
@@ -377,7 +377,7 @@ Step 4: Schema v2 with CBS codes embedded (tool/merge/apply_cbs_codes.dart)
 Step 5: Confidence tiers — single-source codes recovered from the CBS roster,
         with a bijection gate so no two palikas share a code
         (tool/merge/resolve_code_tiers.dart)
-       │ 548 verified + 204 singleSource = 752/753 codes (99.9%)
+       │ 548 verified + 205 singleSource = 753/753 codes (100%)
        ▼
 Step 6: Devanagari names at all three levels, corroborated against a second
         bilingual source (tool/merge/attach_bilingual.dart)
@@ -389,6 +389,12 @@ Step 7: Administrative attributes — HQ, area, website, contact, postal codes
        ▼
 Step 8: Codegen (tool/generate.dart) + website payload
         (tool/generate_explorer_data.dart)
+        │
+        ▼
+Step 9 (2026-10-27): Government of Nepal administrative code table — resolves
+        the last uncoded code (Bheri → 60706) and fills the last 20 Devanagari
+        names (tool/merge/apply_npl_codes.dart)
+        │ 753/753 codes, 753/753 Devanagari
 
 All of the above runs in one command:
    dart run tool/pipeline.dart

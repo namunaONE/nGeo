@@ -111,19 +111,19 @@ if (nad) {
   const doubled = nad.getVerifiedLocalBodies().length;
   const single = nad.getSingleSourceLocalBodies().length;
   const uncoded = nad.getUncodedLocalBodies().length;
-  check(coded === 752, `752 palikas carry a code (got ${coded})`);
+  check(coded === 753, `753 palikas carry a code (got ${coded})`);
   check(doubled === 548, `548 doubly-attested (got ${doubled})`);
-  check(single === 204, `204 single-source (got ${single})`);
-  check(uncoded === 1, `1 uncoded (got ${uncoded})`);
+  check(single === 205, `205 single-source (got ${single})`);
+  check(uncoded === 0, `0 uncoded (got ${uncoded})`);
   check(doubled + single + uncoded === 753,
     'tiers partition all 753 without loss or overlap');
-  // Mappable means BOTH a code and a coordinate. That is a smaller set than
-  // either one alone: 753 have coordinates, 752 have codes, and the
-  // intersection is 752 — only Bheri (Jajarkot) is uncoded.
+  // Mappable means BOTH a code and a coordinate. Since the Government of
+  // Nepal code table resolved the last uncoded palika (Bheri, 2026-10-27),
+  // that is every palika: 753 coordinates ∩ 753 codes = 753.
   const mappedOnly = nad.getAllLocalBodies().filter((b) => b.lat != null && b.lng != null).length;
   const mappable = nad.getMappableLocalBodies().length;
   check(mappedOnly === 753, `753 mapped (got ${mappedOnly})`);
-  check(mappable === 752, `752 mapped AND coded (got ${mappable})`);
+  check(mappable === 753, `753 mapped AND coded (got ${mappable})`);
   check(mappable <= Math.min(coded, mappedOnly),
     'the mapped+coded set cannot exceed either parent set');
 
@@ -203,18 +203,14 @@ if (nad) {
 
   // --- the code-keyed join is lossless ---
   const byCode = new Map(nad.getLocalBodiesWithCode().map((b) => [b.cbsCode, b]));
-  check(byCode.size === 752, `the code-keyed join is lossless (${byCode.size})`);
+  check(byCode.size === 753, `the code-keyed join is lossless (${byCode.size})`);
 
   // --- honesty guarantees survive the port ---
-  check(nad.getUncodedLocalBodies().every((b) => b.cbsCode == null),
-    'uncoded palikas carry a null code in the binding');
-  check(nad.getUncodedLocalBodies().every((b) => b.cbsCodeConfidence === 'unverified'),
-    'uncoded palikas are labelled unverified');
+  check(nad.getUncodedLocalBodies().length === 0,
+    'no uncoded palika remains (Bheri was the last, resolved 2026-10-27)');
   const noNameNe = nad.localBodies.filter((b) => b.nameNe == null);
-  check(noNameNe.length === 20,
-    `20 palikas have no Devanagari name (got ${noNameNe.length})`);
-  check(noNameNe.every((b) => b.nameNeVerified === false),
-    'a palika without a Devanagari name is not marked verified');
+  check(noNameNe.length === 0,
+    `every palika carries a Devanagari name (got ${noNameNe.length} without)`);
 
   // --- province ward reconciliation ---
   const lumbini = nad.getProvinceStats('lumbini');
@@ -331,7 +327,7 @@ for (const [file, expectedRows, expectedCols] of [
   check(uniq.size === pairs.length,
     'CSV rows are unique by district+name+code (a stray comma would break this)');
   const withCode = rows.slice(1).filter((r) => r[iCode] !== '').length;
-  check(withCode === 752, `CSV carries 752 codes (got ${withCode})`);
+  check(withCode === 753, `CSV carries 753 codes (got ${withCode})`);
 }
 
 // ---------------------------------------------------------------------------

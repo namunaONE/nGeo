@@ -381,6 +381,7 @@
   },
   {
     "name": "Netrawati",
+    "nameNe": "नेत्रावती डबजोङ गाउँपालिका",
     "type": "ruralMunicipality",
     "district": "Dhading",
     "province": "Bagmati",
@@ -502,6 +503,7 @@
   },
   {
     "name": "Baitedhar",
+    "nameNe": "बैतेश्वर गाउँपालिका",
     "type": "ruralMunicipality",
     "district": "Dolakha",
     "province": "Bagmati",
@@ -1679,6 +1681,7 @@
   },
   {
     "name": "Meghang",
+    "nameNe": "म्यगङ गाउँपालिका",
     "type": "ruralMunicipality",
     "district": "Nuwakot",
     "province": "Bagmati",
@@ -1858,6 +1861,7 @@
   },
   {
     "name": "Likhu",
+    "nameNe": "लिखु तामाकोशी गाउँपालिका",
     "type": "ruralMunicipality",
     "district": "Ramechhap",
     "province": "Bagmati",
@@ -2765,6 +2769,7 @@
   },
   {
     "name": "Bhimsen",
+    "nameNe": "भिमसेनथापा गाउँपालिका",
     "type": "ruralMunicipality",
     "district": "Gorkha",
     "province": "Gandaki",
@@ -2925,6 +2930,7 @@
   },
   {
     "name": "Sulikot",
+    "nameNe": "बारपाक सुलिकोट गाउँपालिका",
     "type": "ruralMunicipality",
     "district": "Gorkha",
     "province": "Gandaki",
@@ -3221,6 +3227,7 @@
   },
   {
     "name": "Naraphu",
+    "nameNe": "नार्पा भूमि गाउँपालिका",
     "type": "ruralMunicipality",
     "district": "Manang",
     "province": "Gandaki",
@@ -3252,6 +3259,7 @@
   },
   {
     "name": "Neshang",
+    "nameNe": "मनाङ ङिस्याङ गाउँपालिका",
     "type": "ruralMunicipality",
     "district": "Manang",
     "province": "Gandaki",
@@ -3266,6 +3274,7 @@
   },
   {
     "name": "Barhagaun Muktichhetra",
+    "nameNe": "वारागुङ मुक्तिक्षेत्र गाउँपालिका",
     "type": "ruralMunicipality",
     "district": "Mustang",
     "province": "Gandaki",
@@ -3282,6 +3291,7 @@
   },
   {
     "name": "Dalome",
+    "nameNe": "लो-घेकर दामोदरकुण्ड गाउँपालिका",
     "type": "ruralMunicipality",
     "district": "Mustang",
     "province": "Gandaki",
@@ -3523,6 +3533,7 @@
   },
   {
     "name": "Bungdikali",
+    "nameNe": "बौदीकाली गाउँपालिका",
     "type": "ruralMunicipality",
     "district": "Nawalpur",
     "province": "Gandaki",
@@ -4797,9 +4808,9 @@
     "district": "Jajarkot",
     "province": "Karnali",
     "districtNe": "जाजरकोट",
-    "cbsCode": null,
+    "cbsCode": 60706,
     "cbsCodeVerified": false,
-    "cbsCodeConfidence": "unverified",
+    "cbsCodeConfidence": "singleSource",
     "isoCode": "NP-P6",
     "lat": 28.703,
     "lng": 82.181,
@@ -5075,6 +5086,7 @@
   },
   {
     "name": "Kalika",
+    "nameNe": "शुभ कालीका गाउँपालिका",
     "type": "ruralMunicipality",
     "district": "Kalikot",
     "province": "Karnali",
@@ -5550,6 +5562,7 @@
   },
   {
     "name": "Dhorchaur",
+    "nameNe": "सिद्ध कुमाख गाउँपालिका",
     "type": "ruralMunicipality",
     "district": "Salyan",
     "province": "Karnali",
@@ -5609,6 +5622,7 @@
   },
   {
     "name": "Kumakh Malika",
+    "nameNe": "कुमाख गाउँपालिका",
     "type": "ruralMunicipality",
     "district": "Salyan",
     "province": "Karnali",
@@ -8039,6 +8053,7 @@
   },
   {
     "name": "Baraha",
+    "nameNe": "बराहक्षेत्र नगरपालिका",
     "type": "municipality",
     "district": "Sunsari",
     "province": "Koshi",
@@ -8686,6 +8701,7 @@
   },
   {
     "name": "Sunkoshi",
+    "nameNe": "लिम्चुङबुङ गाउँपालिका",
     "type": "ruralMunicipality",
     "district": "Udayapur",
     "province": "Koshi",
@@ -12823,6 +12839,7 @@
   },
   {
     "name": "Belhi Chapena",
+    "nameNe": "राजगढ गाउँपालिका",
     "type": "ruralMunicipality",
     "district": "Saptari",
     "province": "Madhesh",
@@ -14484,6 +14501,7 @@
   },
   {
     "name": "Kanda",
+    "nameNe": "साइपाल गाउँपालिका",
     "type": "ruralMunicipality",
     "district": "Bajhang",
     "province": "Sudurpashchim",
@@ -14759,6 +14777,7 @@
   },
   {
     "name": "Swami Kartik",
+    "nameNe": "स्वामीकार्तिक खापर गाउँपालिका",
     "type": "ruralMunicipality",
     "district": "Bajura",
     "province": "Sudurpashchim",
@@ -15186,6 +15205,7 @@
   },
   {
     "name": "Bogatan",
+    "nameNe": "बोगटान फुड्सिल गाउँपालिका",
     "type": "ruralMunicipality",
     "district": "Doti",
     "province": "Sudurpashchim",

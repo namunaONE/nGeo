@@ -18,34 +18,45 @@
 //   3. tool/merge/resolve_code_tiers.dart single-source tier + bijection gate
 //   4. tool/merge/attach_bilingual.dart  Devanagari names at all 3 levels
 //   5. tool/merge/attach_attributes.dart HQ / area / website / contact / postal
-//   6. tool/generate.dart                lib/src/nepal_data.dart (validates)
-//   7. tool/generate_explorer_data.dart  docs/data.json
-//   8. tool/generate_bindings.dart       CSV / GeoJSON / JS / Python bindings
+//   6. tool/merge/apply_npl_codes.dart   Gov. code table: last codes + nameNe
+//   7. tool/generate.dart                lib/src/nepal_data.dart (validates)
+//   8. tool/generate_explorer_data.dart  docs/data.json
+//   9. tool/generate_bindings.dart       CSV / GeoJSON / JS / Python bindings
 //
 // Steps 4 and 5 are ORDERED, not incidental: MoFAGA rows carry no codes, so
 // attach_attributes joins palikas by their Devanagari name, which only exists
 // once step 4 has run. Running them out of order would silently attach
 // nothing to 731 records.
 //
+// Step 6 belongs after 4 and 5 for the same reason: it fills nameNe ONLY
+// where the attach steps left it null and resolves codes ONLY where the tier
+// resolver left none, so it can never overwrite an earlier attestation — and
+// it appends every code it applies to the adjudication ledger that step 3
+// consumes on the NEXT run.
+//
 // Notes:
-//   - Steps 1-5 need data/_raw/ and the provenance manifest; run
+//   - Steps 1-6 need data/_raw/ and the provenance manifest; run
 //     tool/merge/inventory.dart first if you have just re-fetched sources.
+//     (Step 6 checks only its own npl-codes/ pins, but a clean checkout
+//     without data/_raw/ cannot run it either.)
 //   - Every step is gated on its own exit code. A non-zero anywhere aborts
 //     the run, leaving earlier artifacts untouched.
 
 import 'dart:io';
 
 const _steps = <String, String>{
-  'verifying CBS codes (step 1/8)': 'tool/merge/verify_codes.dart',
-  'applying CBS codes (step 2/8)': 'tool/merge/apply_cbs_codes.dart',
-  'resolving code confidence tiers (step 3/8)':
+  'verifying CBS codes (step 1/9)': 'tool/merge/verify_codes.dart',
+  'applying CBS codes (step 2/9)': 'tool/merge/apply_cbs_codes.dart',
+  'resolving code confidence tiers (step 3/9)':
       'tool/merge/resolve_code_tiers.dart',
-  'attaching Devanagari names (step 4/8)': 'tool/merge/attach_bilingual.dart',
-  'attaching administrative attributes (step 5/8)':
+  'attaching Devanagari names (step 4/9)': 'tool/merge/attach_bilingual.dart',
+  'attaching administrative attributes (step 5/9)':
       'tool/merge/attach_attributes.dart',
-  'generating lib/src/nepal_data.dart (step 6/8)': 'tool/generate.dart',
-  'generating docs/data.json (step 7/8)': 'tool/generate_explorer_data.dart',
-  'generating CSV / GeoJSON / JS / Python bindings (step 8/8)':
+  'applying the Nepal gov. code table (step 6/9)':
+      'tool/merge/apply_npl_codes.dart',
+  'generating lib/src/nepal_data.dart (step 7/9)': 'tool/generate.dart',
+  'generating docs/data.json (step 8/9)': 'tool/generate_explorer_data.dart',
+  'generating CSV / GeoJSON / JS / Python bindings (step 9/9)':
       'tool/generate_bindings.dart',
 };
 
@@ -82,6 +93,7 @@ void main(List<String> args) {
       final preview = script.contains('resolve_code_tiers') ||
               script.contains('attach_bilingual') ||
               script.contains('attach_attributes') ||
+              script.contains('apply_npl_codes') ||
               script.contains('generate_bindings')
           ? <String>['--dry-run']
           : const <String>[];

@@ -30,10 +30,10 @@ void main() {
       }
     });
 
-    test('733 of 753 palikas carry a Devanagari name', () {
+    test('all 753 palikas carry a Devanagari name', () {
       final named = bodies.where((b) => isDevanagari(b.nameNe)).length;
-      expect(named, 733);
-      expect(bodies.where((b) => b.nameNe == null).length, 20);
+      expect(named, 753);
+      expect(bodies.where((b) => b.nameNe == null).length, 0);
     });
 
     test('every non-null nameNe actually contains Devanagari', () {
@@ -104,8 +104,15 @@ void main() {
       });
     });
 
-    test('palikas with no attested Devanagari name stay null', () {
-      const expected = {
+    test('the last 20 nulls were filled from the 2026-10-27 code table', () {
+      // Until 2026-10-27 these 20 carried no Devanagari name at all. The
+      // Government of Nepal administrative code table (pipeline step 6)
+      // named each by its PDDPP code. The filled name is the palika's
+      // CURRENT official Devanagari while our English keeps the legacy
+      // roster spelling — the directory renames stay unapplied — so
+      // nameNeVerified stays false for every one of them
+      // (doc/REVIEW-codes.md §8.3).
+      const filled = {
         'Sunsari|Baraha',
         'Udayapur|Sunkoshi',
         'Saptari|Belhi Chapena',
@@ -127,11 +134,18 @@ void main() {
         'Bajura|Swami Kartik',
         'Doti|Bogatan',
       };
-      final actual = {
-        for (final b in bodies)
-          if (b.nameNe == null) '${b.districtName}|${b.name}',
+      final byPath = {
+        for (final b in bodies) '${b.districtName}|${b.name}': b,
       };
-      expect(actual, expected);
+      for (final path in filled) {
+        final b = byPath[path];
+        expect(b, isNotNull, reason: '$path is no longer in the roster');
+        expect(b!.nameNe, isNotNull, reason: '$path nameNe was filled');
+        expect(b.nameNeVerified, isFalse,
+            reason: '$path name is single-source (the code table)');
+      }
+      // No null nameNe remains anywhere in the roster.
+      expect(byPath.values.where((b) => b.nameNe == null), isEmpty);
     });
 
     test('no two palikas in a district share a Devanagari name', () {

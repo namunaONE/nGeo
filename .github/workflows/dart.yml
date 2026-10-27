@@ -168,11 +168,11 @@ jobs:
           assert s["ward_gaps"] == 8, s
           assert s["unreconciled_wards"] == 46, s
 
-          assert len(n.get_local_bodies_with_code()) == 752
+          assert len(n.get_local_bodies_with_code()) == 753
           assert len(n.get_verified_local_bodies()) == 548
-          assert len(n.get_single_source_local_bodies()) == 204
-          assert len(n.get_uncoded_local_bodies()) == 1
-          assert len(n.get_mappable_local_bodies()) == 752
+          assert len(n.get_single_source_local_bodies()) == 205
+          assert len(n.get_uncoded_local_bodies()) == 0
+          assert len(n.get_mappable_local_bodies()) == 753
 
           b = n.get_local_body_by_cbs(31304)
           assert b["name"] == "Bharatpur" and b["district"] == "Chitwan", b
@@ -253,10 +253,11 @@ jobs:
           flutter pub get
           flutter analyze --fatal-infos
 
-  # packages/nepal_admin_widgets. It is a Flutter package with a path
-  # dependency on this one, so `dart analyze`/`dart test` in the root job do not
-  # cover it — without this job every line of it would be unverified, which is
-  # exactly the rot this repo exists to avoid.
+  # packages/nepal_admin_widgets. It is a Flutter package that depends on the
+  # PUBLISHED nepal_admin_api (^2.7.2 — the constraint it ships against), so
+  # `dart analyze`/`dart test` in the root job do not cover it — without this
+  # job every line of it would be unverified, which is exactly the rot this
+  # repo exists to avoid.
   flutter-widgets:
     runs-on: ubuntu-latest
     defaults:

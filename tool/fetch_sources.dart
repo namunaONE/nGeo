@@ -12,6 +12,9 @@
 //   open-admin-data:  https://raw.githubusercontent.com/open-admin-data/nepal-administrative-divisions/main
 //   cbs-codes:        CKAN opendatanepal (resource IDs in SOURCES.md)
 //   mofaga:           (MoFAGA contact data - URL not publicly documented)
+//   npl-codes:        (Gov. of Nepal administrative code table - manual
+//                     harvest; the TSVs are re-exported from the vendored
+//                     .xls with tool/export_npl_codes.ps1)
 //
 // The tool will:
 //  1. Parse data/PROVENANCE.sha256 for the expected files + hashes
@@ -131,6 +134,17 @@ final sources = <String, SourceConfig>{
     baseUrl: '',
     files: [
       'mofaga_all.json',
+    ],
+    manual: true,
+  ),
+  'npl-codes': SourceConfig(
+    name: 'npl-codes',
+    baseUrl: '',
+    files: [
+      'npl-codes/1695378470_83.xls',
+      'npl-codes/pradesh_code.tsv',
+      'npl-codes/district_code.tsv',
+      'npl-codes/localunit_code.tsv',
     ],
     manual: true,
   ),

@@ -3,7 +3,7 @@
     "name": "Nepal local government structure",
     "description": "Canonical dataset of Nepal's federal administrative divisions: provinces, districts and local bodies (palikas).",
     "source": "Federal structure established by the Local Level Restructuring Commission (2017) under the Constitution of Nepal (2015); cross-checked against MoFAGA references.",
-    "dataAsOf": "2026-10-26",
+    "dataAsOf": "2026-10-27",
     "totals": {
       "provinces": 7,
       "districts": 77,
@@ -1977,7 +1977,7 @@
               "cbsCode": 11302,
               "cbsCodeVerified": false,
               "cbsCodeConfidence": "singleSource",
-              "nameNe": null,
+              "nameNe": "बराहक्षेत्र नगरपालिका",
               "nameNeVerified": false
             },
             {
@@ -2527,7 +2527,7 @@
               "cbsCode": 11405,
               "cbsCodeVerified": false,
               "cbsCodeConfidence": "singleSource",
-              "nameNe": null,
+              "nameNe": "लिम्चुङबुङ गाउँपालिका",
               "nameNeVerified": false
             },
             {
@@ -4226,7 +4226,7 @@
               "cbsCode": 20111,
               "cbsCodeVerified": false,
               "cbsCodeConfidence": "singleSource",
-              "nameNe": null,
+              "nameNe": "राजगढ गाउँपालिका",
               "nameNeVerified": false
             },
             {
@@ -5399,7 +5399,7 @@
               "cbsCode": 30405,
               "cbsCodeVerified": false,
               "cbsCodeConfidence": "singleSource",
-              "nameNe": null,
+              "nameNe": "नेत्रावती डबजोङ गाउँपालिका",
               "nameNeVerified": false
             },
             {
@@ -5525,7 +5525,7 @@
               "cbsCode": 30104,
               "cbsCodeVerified": false,
               "cbsCodeConfidence": "singleSource",
-              "nameNe": null,
+              "nameNe": "बैतेश्वर गाउँपालिका",
               "nameNeVerified": false
             },
             {
@@ -6517,7 +6517,7 @@
               "cbsCode": 30506,
               "cbsCodeVerified": false,
               "cbsCodeConfidence": "singleSource",
-              "nameNe": null,
+              "nameNe": "म्यगङ गाउँपालिका",
               "nameNeVerified": false
             },
             {
@@ -6719,7 +6719,7 @@
               "cbsCode": 31003,
               "cbsCodeVerified": false,
               "cbsCodeConfidence": "singleSource",
-              "nameNe": null,
+              "nameNe": "लिखु तामाकोशी गाउँपालिका",
               "nameNeVerified": false
             },
             {
@@ -7542,7 +7542,7 @@
               "cbsCode": 40106,
               "cbsCodeVerified": false,
               "cbsCodeConfidence": "singleSource",
-              "nameNe": null,
+              "nameNe": "भिमसेनथापा गाउँपालिका",
               "nameNeVerified": false
             },
             {
@@ -7635,7 +7635,7 @@
               "wards": 8,
               "wardsVerified": true,
               "cbsCodeConfidence": "verified",
-              "nameNe": null,
+              "nameNe": "बारपाक सुलिकोट गाउँपालिका",
               "nameNeVerified": false
             }
           ],
@@ -7912,7 +7912,7 @@
               "cbsCode": 40201,
               "cbsCodeVerified": false,
               "cbsCodeConfidence": "singleSource",
-              "nameNe": null,
+              "nameNe": "नार्पा भूमि गाउँपालिका",
               "nameNeVerified": false
             },
             {
@@ -7938,7 +7938,7 @@
               "cbsCode": 40202,
               "cbsCodeVerified": false,
               "cbsCodeConfidence": "singleSource",
-              "nameNe": null,
+              "nameNe": "मनाङ ङिस्याङ गाउँपालिका",
               "nameNeVerified": false
             }
           ],
@@ -7963,7 +7963,7 @@
               "cbsCode": 40303,
               "cbsCodeVerified": false,
               "cbsCodeConfidence": "singleSource",
-              "nameNe": null,
+              "nameNe": "वारागुङ मुक्तिक्षेत्र गाउँपालिका",
               "nameNeVerified": false
             },
             {
@@ -7977,7 +7977,7 @@
               "cbsCode": 40301,
               "cbsCodeVerified": false,
               "cbsCodeConfidence": "singleSource",
-              "nameNe": null,
+              "nameNe": "लो-घेकर दामोदरकुण्ड गाउँपालिका",
               "nameNeVerified": false
             },
             {
@@ -8274,7 +8274,7 @@
               "cbsCode": 40803,
               "cbsCodeVerified": false,
               "cbsCodeConfidence": "singleSource",
-              "nameNe": null,
+              "nameNe": "बौदीकाली गाउँपालिका",
               "nameNeVerified": false
             },
             {
@@ -11429,9 +11429,9 @@
               "geoSource": "palika-boundaries-centroid",
               "wards": 13,
               "wardsVerified": true,
-              "cbsCode": null,
+              "cbsCode": 60706,
               "cbsCodeVerified": false,
-              "cbsCodeConfidence": "unverified",
+              "cbsCodeConfidence": "singleSource",
               "nameNe": "भेरी",
               "nameNeVerified": false,
               "website": "http://bherimun.gov.np",
@@ -11763,7 +11763,7 @@
               "cbsCode": 60509,
               "cbsCodeVerified": false,
               "cbsCodeConfidence": "singleSource",
-              "nameNe": null,
+              "nameNe": "शुभ कालीका गाउँपालिका",
               "nameNeVerified": false
             },
             {
@@ -12155,7 +12155,7 @@
               "cbsCode": 60904,
               "cbsCodeVerified": false,
               "cbsCodeConfidence": "singleSource",
-              "nameNe": null,
+              "nameNe": "सिद्ध कुमाख गाउँपालिका",
               "nameNeVerified": false
             },
             {
@@ -12206,7 +12206,7 @@
               "cbsCode": 60902,
               "cbsCodeVerified": false,
               "cbsCodeConfidence": "singleSource",
-              "nameNe": null,
+              "nameNe": "कुमाख गाउँपालिका",
               "nameNeVerified": false
             },
             {
@@ -12907,7 +12907,7 @@
               "cbsCode": 70201,
               "cbsCodeVerified": false,
               "cbsCodeConfidence": "singleSource",
-              "nameNe": null,
+              "nameNe": "साइपाल गाउँपालिका",
               "nameNeVerified": false
             },
             {
@@ -13168,7 +13168,7 @@
               "cbsCode": 70104,
               "cbsCodeVerified": false,
               "cbsCodeConfidence": "singleSource",
-              "nameNe": null,
+              "nameNe": "स्वामीकार्तिक खापर गाउँपालिका",
               "nameNeVerified": false
             }
           ],
@@ -13576,7 +13576,7 @@
               "cbsCode": 70607,
               "cbsCodeVerified": false,
               "cbsCodeConfidence": "singleSource",
-              "nameNe": null,
+              "nameNe": "बोगटान फुड्सिल गाउँपालिका",
               "nameNeVerified": false
             },
             {

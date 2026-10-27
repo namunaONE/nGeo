@@ -24,6 +24,7 @@ re-fetchable from the URLs below. Integrity is verified against
 | 4 | `open-admin-data/nepal-administrative-divisions` | `main` | **CC-BY-4.0** | **Yes** | 2026-10-11 |
 | 5 | opendatanepal `geographical-codes-for-states-districts-and-local-bodies` (CBS harvest) | CKAN resource IDs, see §6 | **CC-BY** (`license_id: cc-by`, re-verified at fetch) | **Yes — via NOTICE** | 2026-10-11 |
 | 7 | Nepal Post local-level code list (giwmscdnone.gov.np portal PDFs) | n/a — referenced, not vendored | Government of Nepal publication (no stated licence) | No | 2026-10-25 |
+| 8 | Government of Nepal administrative code table (`1695378470_83.xls`, user-provided) | n/a — vendored workbook + pinned TSV exports | Government of Nepal administrative data; redistribution with attribution per the provider's direction | **Yes — via NOTICE** | 2026-10-27 |
 
 ## File-level pins and blob SHAs
 
@@ -236,6 +237,13 @@ silently dropping over a quarter of Nepal's local bodies.
   district's coded rows), so 60706 is a strong inference but **not a direct
   attestation**; it stays null rather than guessed.
 
+  Since 2026-10-27 the Government of Nepal administrative code table (see the
+  code-table section below) attests that last code directly, closing the
+  tiers: `singleSource` (204 → **205**), `unverified` (1 → **0**), 753/753
+  coded. The resolver consumes the hand-curated code adjudications ledger
+  (`data/_stage/code_adjudications.json`, Pass A2), so a full pipeline re-run
+  re-derives the directory codes instead of stripping them.
+
 Two invariants are machine-enforced, so a wrong code cannot ship:
 
 - **Bijection** — the assignment set is forced one-to-one; no two palikas can
@@ -249,6 +257,46 @@ Per-record evidence for all 753 palikas is written to
 > **Honesty note.** `singleSource` is *one* source, not two. It is offered for
 > joins and clearly labelled; anything load-bearing (payments, statutory
 > filings, addressing) should use `verified` only.
+
+## Government of Nepal administrative code table (`apply_npl_codes.dart`, 2026-10-27)
+
+- File: `1695378470_83.xls` — the Government of Nepal's administrative code
+  table. Three sheets: province codes (1–7), a district register (77 rows —
+  the `S.N.` column is a serial, **not** a code; the `Code` column carries
+  the 3-digit PDD), and all 753 local units with their 5-digit PDDPP code and
+  an "Updated name" pair (English + Unicode Devanagari). Vendored under
+  `data/_raw/npl-codes/`.
+- Retrieved: 2026-10-27, user-provided. The workbook has no stable public
+  URL, so `tool/fetch_sources.dart` lists the source as `manual` (the mofaga
+  precedent) — a fresh checkout cannot fetch it; the workbook must be
+  supplied by hand.
+- License: Government of Nepal administrative data; the provider directs
+  redistribution with attribution (carried in `bindings/*/NOTICE`).
+- Interface: the `.xls` is legacy BIFF, so `tool/export_npl_codes.ps1`
+  (Excel COM) exports the three sheets to UTF-8 TSVs beside it —
+  `pradesh_code.tsv`, `district_code.tsv`, `localunit_code.tsv` — and all
+  four files are pinned in `data/PROVENANCE.sha256`. A re-export that
+  differs byte-wise fails the provenance gate loudly instead of feeding the
+  merge different data silently.
+- What the merge consumes (and deliberately does not):
+  - Local-unit codes are applied ONLY where the dataset has none (Bheri,
+    Jajarkot → 60706), always at the `singleSource` tier. Every applied code
+    is appended to `data/_stage/code_adjudications.json`, which
+    `resolve_code_tiers.dart` (Pass A2) reserves on later full runs.
+  - District codes are cross-checked three ways before anything is written:
+    the district sheet's `Code` column == the PDD prefixes derived from the
+    local-unit sheet == the dataset's district `cbsCode` values (77/77).
+  - `nameNe` is filled ONLY where it is null (20 palikas), from the Unicode
+    Devanagari column, with `nameNeVerified = false`; internal whitespace is
+    normalised, characters kept verbatim. Sheets 1–2 carry legacy
+    Preeti-font Devanagari and are read only for their English/code columns.
+  - Name variants (55) — including the directory's renames ("Bheri Malika",
+    "Limchungbung", "Rajgadh", "Siddha Kumakh", "Kumakh", "Saipal",
+    "Shuva Kalika") and legacy spellings ours carries ("Nalagad" vs
+    "Nalgad", "Budhanilkantha" vs "Budhanilkhantha") — are REPORTED in
+    `data/_stage/npl_codes.json` and `doc/_apply-npl-codes-raw.txt`, never
+    applied. Adopting a rename needs a Gazette confirmation
+    (`doc/REVIEW-codes.md` §8).
 
 ## Boundaries — removed (v2.7.2)
 
@@ -462,6 +510,12 @@ Get-ChildItem -Recurse -File data\_raw | ForEach-Object {
 
 A mismatch means the upstream source has changed and the merge must be
 re-reviewed — **not** silently re-accepted.
+
+Two sources cannot be re-fetched at all: `mofaga/mofaga_all.json` (a manual
+harvest) and `data/_raw/npl-codes/*` (a user-provided Government of Nepal
+workbook). `tool/fetch_sources.dart` reports both as `[MANUAL]`; to rebuild
+the npl-codes pins, supply the workbook, run `tool/export_npl_codes.ps1`,
+and pin the four files.
 
 ---
 

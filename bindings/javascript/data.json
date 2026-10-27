@@ -1,8 +1,8 @@
 {
   "meta": {
     "name": "Nepal administrative divisions",
-    "version": "2.8.0",
-    "dataAsOf": "2026-10-26",
+    "version": "2.9.0",
+    "dataAsOf": "2026-10-27",
     "source": "Federal structure established by the Local Level Restructuring Commission (2017) under the Constitution of Nepal (2015); cross-checked against MoFAGA references.",
     "totals": {
       "provinces": 7,
@@ -18,10 +18,10 @@
       "localBodies": 753,
       "districts": 77,
       "provinces": 7,
-      "withCbsCode": 752,
+      "withCbsCode": 753,
       "doublyAttestedCodes": 548,
-      "singleSourceCodes": 204,
-      "withNameNe": 733,
+      "singleSourceCodes": 205,
+      "withNameNe": 753,
       "nameNeCorroborated": 450,
       "withCoordinates": 753,
       "withWards": 745,
@@ -3385,6 +3385,7 @@
     },
     {
       "name": "Baraha",
+      "nameNe": "बराहक्षेत्र नगरपालिका",
       "nameNeVerified": false,
       "type": "municipality",
       "district": "Sunsari",
@@ -4023,6 +4024,7 @@
     },
     {
       "name": "Sunkoshi",
+      "nameNe": "लिम्चुङबुङ गाउँपालिका",
       "nameNeVerified": false,
       "type": "ruralMunicipality",
       "district": "Udayapur",
@@ -6023,6 +6025,7 @@
     },
     {
       "name": "Belhi Chapena",
+      "nameNe": "राजगढ गाउँपालिका",
       "nameNeVerified": false,
       "type": "ruralMunicipality",
       "district": "Saptari",
@@ -7378,6 +7381,7 @@
     },
     {
       "name": "Netrawati",
+      "nameNe": "नेत्रावती डबजोङ गाउँपालिका",
       "nameNeVerified": false,
       "type": "ruralMunicipality",
       "district": "Dhading",
@@ -7520,6 +7524,7 @@
     },
     {
       "name": "Baitedhar",
+      "nameNe": "बैतेश्वर गाउँपालिका",
       "nameNeVerified": false,
       "type": "ruralMunicipality",
       "district": "Dolakha",
@@ -8670,6 +8675,7 @@
     },
     {
       "name": "Meghang",
+      "nameNe": "म्यगङ गाउँपालिका",
       "nameNeVerified": false,
       "type": "ruralMunicipality",
       "district": "Nuwakot",
@@ -8904,6 +8910,7 @@
     },
     {
       "name": "Likhu",
+      "nameNe": "लिखु तामाकोशी गाउँपालिका",
       "nameNeVerified": false,
       "type": "ruralMunicipality",
       "district": "Ramechhap",
@@ -9831,6 +9838,7 @@
     },
     {
       "name": "Bhimsen",
+      "nameNe": "भिमसेनथापा गाउँपालिका",
       "nameNeVerified": false,
       "type": "ruralMunicipality",
       "district": "Gorkha",
@@ -9947,6 +9955,7 @@
     },
     {
       "name": "Sulikot",
+      "nameNe": "बारपाक सुलिकोट गाउँपालिका",
       "nameNeVerified": false,
       "type": "ruralMunicipality",
       "district": "Gorkha",
@@ -10252,6 +10261,7 @@
     },
     {
       "name": "Naraphu",
+      "nameNe": "नार्पा भूमि गाउँपालिका",
       "nameNeVerified": false,
       "type": "ruralMunicipality",
       "district": "Manang",
@@ -10287,6 +10297,7 @@
     },
     {
       "name": "Neshang",
+      "nameNe": "मनाङ ङिस्याङ गाउँपालिका",
       "nameNeVerified": false,
       "type": "ruralMunicipality",
       "district": "Manang",
@@ -10304,6 +10315,7 @@
     },
     {
       "name": "Barhagaun Muktichhetra",
+      "nameNe": "वारागुङ मुक्तिक्षेत्र गाउँपालिका",
       "nameNeVerified": false,
       "type": "ruralMunicipality",
       "district": "Mustang",
@@ -10321,6 +10333,7 @@
     },
     {
       "name": "Dalome",
+      "nameNe": "लो-घेकर दामोदरकुण्ड गाउँपालिका",
       "nameNeVerified": false,
       "type": "ruralMunicipality",
       "district": "Mustang",
@@ -10659,6 +10672,7 @@
     },
     {
       "name": "Bungdikali",
+      "nameNe": "बौदीकाली गाउँपालिका",
       "nameNeVerified": false,
       "type": "ruralMunicipality",
       "district": "Nawalpur",
@@ -14246,9 +14260,9 @@
       "districtNe": "जाजरकोट",
       "province": "Karnali",
       "isoCode": "NP-P6",
-      "cbsCode": null,
+      "cbsCode": 60706,
       "cbsCodeVerified": false,
-      "cbsCodeConfidence": "unverified",
+      "cbsCodeConfidence": "singleSource",
       "lat": 28.703,
       "lng": 82.181,
       "geoSource": "palika-boundaries-centroid",
@@ -14620,6 +14634,7 @@
     },
     {
       "name": "Kalika",
+      "nameNe": "शुभ कालीका गाउँपालिका",
       "nameNeVerified": false,
       "type": "ruralMunicipality",
       "district": "Kalikot",
@@ -15064,6 +15079,7 @@
     },
     {
       "name": "Dhorchaur",
+      "nameNe": "सिद्ध कुमाख गाउँपालिका",
       "nameNeVerified": false,
       "type": "ruralMunicipality",
       "district": "Salyan",
@@ -15126,6 +15142,7 @@
     },
     {
       "name": "Kumakh Malika",
+      "nameNe": "कुमाख गाउँपालिका",
       "nameNeVerified": false,
       "type": "ruralMunicipality",
       "district": "Salyan",
@@ -15914,6 +15931,7 @@
     },
     {
       "name": "Kanda",
+      "nameNe": "साइपाल गाउँपालिका",
       "nameNeVerified": false,
       "type": "ruralMunicipality",
       "district": "Bajhang",
@@ -16223,6 +16241,7 @@
     },
     {
       "name": "Swami Kartik",
+      "nameNe": "स्वामीकार्तिक खापर गाउँपालिका",
       "nameNeVerified": false,
       "type": "ruralMunicipality",
       "district": "Bajura",
@@ -16681,6 +16700,7 @@
     },
     {
       "name": "Bogatan",
+      "nameNe": "बोगटान फुड्सिल गाउँपालिका",
       "nameNeVerified": false,
       "type": "ruralMunicipality",
       "district": "Doti",

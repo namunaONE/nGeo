@@ -242,8 +242,9 @@ void main() {
     });
 
     test('never emits a dangling separator', () {
-      // 22 of the 753 palikas have no attested Devanagari name; a label must
-      // not read "X · " for them.
+      // Every one of the 753 palikas carries an attested Devanagari name
+      // since the Government of Nepal code table filled the last gaps
+      // (2026-10-27); the invariants must hold regardless.
       for (final b in NepalAdminApi.getAllLocalBodies()) {
         final label =
             AdministrativeCascade.formatLocalBody(b, style: LabelStyle.both);
@@ -254,17 +255,19 @@ void main() {
     });
 
     test('falls back to English when no Devanagari name exists', () {
-      final without = NepalAdminApi.getAllLocalBodies()
-          .where((b) => b.nameNe == null)
-          .toList();
-      expect(without, isNotEmpty, reason: 'the dataset does have such cases');
-      for (final b in without) {
-        expect(
-          AdministrativeCascade.formatLocalBody(b,
-              style: LabelStyle.devanagari),
-          b.name,
-        );
-      }
+      // No dataset row lacks a Devanagari name any more, so the fallback
+      // contract is exercised on a synthetic body.
+      final without = LocalBody.fromJson({
+        'name': 'Y',
+        'type': 'M',
+        'district': 'D',
+        'province': 'P',
+      });
+      expect(
+        AdministrativeCascade.formatLocalBody(without,
+            style: LabelStyle.devanagari),
+        'Y',
+      );
     });
 
     test('every label style is non-empty for every record', () {
@@ -304,13 +307,16 @@ void main() {
           reason: 'so the qualified form must be unique');
     });
 
-    test('the qualified form stays unique even without Devanagari', () {
-      // Three of the four Sunkoshis carry a Devanagari name and one does not,
-      // so a bilingual bare label is *nearly* but not quite ambiguous. The
-      // district qualifier is what actually disambiguates, in either script.
+    test('the qualified form stays unique even when names repeat', () {
+      // Four rural municipalities share the bare name "Sunkoshi". Whether a
+      // given one carries a Devanagari name depends on the dataset version
+      // this package resolves against (the 2026-10-27 code-table fill closes
+      // the last one in nepal_admin_api 2.9.0), so what must hold in every
+      // case is the district qualifier: it disambiguates every label style,
+      // and the nameless fallback never introduces a collision.
       final sunkoshi =
           NepalAdminApi.getAllLocalBodies().where((b) => b.name == 'Sunkoshi');
-      expect(sunkoshi.where((b) => b.nameNe == null), hasLength(1));
+      expect(sunkoshi, hasLength(4));
 
       for (final style in LabelStyle.values) {
         final qualified = sunkoshi

@@ -243,20 +243,34 @@ void main() {
     testWidgets('renders an untranslated unit without a dangling separator',
         (tester) async {
       useTallViewport(tester);
-      // Udayapur's Sunkoshi has no attested Devanagari name; a dropdown full
-      // of "Sunkoshi · " is the failure this guards.
-      final s = NepalAdminApi.getLocalBodiesByDistrict('Udayapur')
-          .firstWhere((b) => b.name == 'Sunkoshi');
-      expect(s.nameNe, isNull);
+      // A body without a Devanagari name must render as the bare English
+      // name — "Sunkoshi · " with a dangling separator is the failure this
+      // guards. Which bodies are untranslated depends on the dataset this
+      // package resolves against (Udayapur's Sunkoshi was the canonical
+      // nameless case; the 2026-10-27 Government of Nepal code table filled
+      // it in nepal_admin_api 2.9.0), so the checks below hold for whatever
+      // the resolved dataset contains — including none.
+      final nameless = NepalAdminApi.getLocalBodiesByDistrict('Udayapur')
+          .where((b) => b.nameNe == null)
+          .map((b) => b.name)
+          .toSet();
 
       await tester.pumpWidget(host(const AdministrativeDropdown()));
       await choose(tester, DropdownButtonFormField<Province>, 'Koshi');
       await choose(tester, DropdownButtonFormField<District>, 'Udayapur');
       await open(tester, DropdownButtonFormField<LocalBody>);
 
-      final entry = menuNames<LocalBody>(tester)
-          .firstWhere((n) => n.contains('Sunkoshi'));
-      expect(entry, 'Sunkoshi');
+      final entries = menuNames<LocalBody>(tester);
+      for (final n in entries) {
+        final sep = n.indexOf('·');
+        if (sep < 0) continue;
+        expect(n.substring(sep + 1).trim(), isNotEmpty,
+            reason: 'entry "$n" renders a dangling separator');
+      }
+      for (final name in nameless) {
+        expect(entries, contains(name),
+            reason: '"$name" has no Devanagari name and must render bare');
+      }
     });
 
     testWidgets('an internally-created cascade survives rebuilds',

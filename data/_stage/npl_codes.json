@@ -1,0 +1,269 @@
+{
+  "provenance": {
+    "generated": "2026-10-27T06:32:29.491211Z",
+    "tool": "tool/merge/apply_npl_codes.dart",
+    "inputs": [
+      "data/_raw/npl-codes/1695378470_83.xls",
+      "data/_raw/npl-codes/pradesh_code.tsv",
+      "data/_raw/npl-codes/district_code.tsv",
+      "data/_raw/npl-codes/localunit_code.tsv",
+      "data/nepal_local_levels.json",
+      "data/_stage/code_adjudications.json"
+    ],
+    "pins": {
+      "npl-codes/1695378470_83.xls": "8F841F947FDD2CD52C03405E11258451C55AB7B0FB46BA4F55183455207BB49B",
+      "npl-codes/district_code.tsv": "11F1F9E200BCF20540049086B60982C20DE98242D31BF6BEABF0776A5DAB0612",
+      "npl-codes/localunit_code.tsv": "EEA7D02CECB5EA9EC3F9F760282A069D9BDF50D297104CCC79A047348728DB48",
+      "npl-codes/pradesh_code.tsv": "23E7029024AB475C19A1269F3FAEFF4B92FED47E190A6B32B117C37B0EC39A6A"
+    },
+    "rule": "directory attestations are applied at the singleSource tier (cbsCodeVerified=false); existing values are never overwritten; name variants are reported, not applied; nameNe is filled only where null, from the Unicode Devanagari column, with nameNeVerified=false; district PDD codes are derived from palika-code prefixes and cross-checked against our district cbsCodes; the district sheet S.N. is a serial, not a code."
+  },
+  "counts": {
+    "verified": 548,
+    "singleSource": 205,
+    "unverified": 0,
+    "coded": 753,
+    "localBodies": 753,
+    "nameNeFilled": 20,
+    "forcedPairings": 1,
+    "nameVariants": 55,
+    "typeReadIssues": 0,
+    "districtMismatches": 0
+  },
+  "forcedPairings": [
+    {
+      "province": "karnali",
+      "district": "Jajarkot",
+      "name": "Bheri",
+      "type": "municipality",
+      "code": 60706,
+      "tier": "singleSource",
+      "xlsSn": 639,
+      "xlsEnglish": "Bheri Malika Urban Municipality",
+      "xlsNepali": "भेरीमालिका नगरपालिका",
+      "affinity": "name-affine (normalized containment or distance <= 2)",
+      "basis": "forced 1-to-1 elimination inside Jajarkot: our roster and the directory each have exactly one uncoded/unclaimed unit left"
+    }
+  ],
+  "nameNeFills": [
+    {
+      "province": "koshi",
+      "district": "Sunsari",
+      "name": "Baraha",
+      "code": 11302,
+      "nameNe": "बराहक्षेत्र नगरपालिका",
+      "xlsSn": 119
+    },
+    {
+      "province": "koshi",
+      "district": "Udayapur",
+      "name": "Sunkoshi",
+      "code": 11405,
+      "nameNe": "लिम्चुङबुङ गाउँपालिका",
+      "xlsSn": 134
+    },
+    {
+      "province": "madhesh",
+      "district": "Saptari",
+      "name": "Belhi Chapena",
+      "code": 20111,
+      "nameNe": "राजगढ गाउँपालिका",
+      "xlsSn": 148
+    },
+    {
+      "province": "bagmati",
+      "district": "Dhading",
+      "name": "Netrawati",
+      "code": 30405,
+      "nameNe": "नेत्रावती डबजोङ गाउँपालिका",
+      "xlsSn": 304
+    },
+    {
+      "province": "bagmati",
+      "district": "Dolakha",
+      "name": "Baitedhar",
+      "code": 30104,
+      "nameNe": "बैतेश्वर गाउँपालिका",
+      "xlsSn": 277
+    },
+    {
+      "province": "bagmati",
+      "district": "Nuwakot",
+      "name": "Meghang",
+      "code": 30506,
+      "nameNe": "म्यगङ गाउँपालिका",
+      "xlsSn": 318
+    },
+    {
+      "province": "bagmati",
+      "district": "Ramechhap",
+      "name": "Likhu",
+      "code": 31003,
+      "nameNe": "लिखु तामाकोशी गाउँपालिका",
+      "xlsSn": 361
+    },
+    {
+      "province": "gandaki",
+      "district": "Gorkha",
+      "name": "Bhimsen",
+      "code": 40106,
+      "nameNe": "भिमसेनथापा गाउँपालिका",
+      "xlsSn": 398
+    },
+    {
+      "province": "gandaki",
+      "district": "Gorkha",
+      "name": "Sulikot",
+      "code": 40103,
+      "nameNe": "बारपाक सुलिकोट गाउँपालिका",
+      "xlsSn": 395
+    },
+    {
+      "province": "gandaki",
+      "district": "Manang",
+      "name": "Naraphu",
+      "code": 40201,
+      "nameNe": "नार्पा भूमि गाउँपालिका",
+      "xlsSn": 404
+    },
+    {
+      "province": "gandaki",
+      "district": "Manang",
+      "name": "Neshang",
+      "code": 40202,
+      "nameNe": "मनाङ ङिस्याङ गाउँपालिका",
+      "xlsSn": 405
+    },
+    {
+      "province": "gandaki",
+      "district": "Mustang",
+      "name": "Barhagaun Muktichhetra",
+      "code": 40303,
+      "nameNe": "वारागुङ मुक्तिक्षेत्र गाउँपालिका",
+      "xlsSn": 410
+    },
+    {
+      "province": "gandaki",
+      "district": "Mustang",
+      "name": "Dalome",
+      "code": 40301,
+      "nameNe": "लो-घेकर दामोदरकुण्ड गाउँपालिका",
+      "xlsSn": 408
+    },
+    {
+      "province": "gandaki",
+      "district": "Nawalpur",
+      "name": "Bungdikali",
+      "code": 40803,
+      "nameNe": "बौदीकाली गाउँपालिका",
+      "xlsSn": 444
+    },
+    {
+      "province": "karnali",
+      "district": "Kalikot",
+      "name": "Kalika",
+      "code": 60509,
+      "nameNe": "शुभ कालीका गाउँपालिका",
+      "xlsSn": 622
+    },
+    {
+      "province": "karnali",
+      "district": "Salyan",
+      "name": "Dhorchaur",
+      "code": 60904,
+      "nameNe": "सिद्ध कुमाख गाउँपालिका",
+      "xlsSn": 650
+    },
+    {
+      "province": "karnali",
+      "district": "Salyan",
+      "name": "Kumakh Malika",
+      "code": 60902,
+      "nameNe": "कुमाख गाउँपालिका",
+      "xlsSn": 648
+    },
+    {
+      "province": "sudurpashchim",
+      "district": "Bajhang",
+      "name": "Kanda",
+      "code": 70201,
+      "nameNe": "साइपाल गाउँपालिका",
+      "xlsSn": 675
+    },
+    {
+      "province": "sudurpashchim",
+      "district": "Bajura",
+      "name": "Swami Kartik",
+      "code": 70104,
+      "nameNe": "स्वामीकार्तिक खापर गाउँपालिका",
+      "xlsSn": 669
+    },
+    {
+      "province": "sudurpashchim",
+      "district": "Doti",
+      "name": "Bogatan",
+      "code": 70607,
+      "nameNe": "बोगटान फुड्सिल गाउँपालिका",
+      "xlsSn": 719
+    }
+  ],
+  "nameVariants": [
+    "Bhojpur|Tyamke Maiyum vs \"Temkemaiyum Rural Municipality\" (normalized distance 2)",
+    "Dhankuta|Sahidbhumi vs \"Shahidbhumi Rural Municipality\" (normalized distance 1)",
+    "Ilam|Ilam vs \"Illam Urban Municipality\" (normalized distance 1)",
+    "Khotang|Diprung vs \"Diprung Chuichumma Rural Municipality\" (normalized DISAGREES, distance 4)",
+    "Solukhumbu|Solu Dudhkunda vs \"Solu Dhudhakunda Urban Municipality\" (normalized distance 2)",
+    "Sunsari|Baraha vs \"Barahachhetra Urban Municipality\" (normalized DISAGREES, distance 4)",
+    "Sunsari|Bhokraha vs \"Bhokraha Narsingh Rural Municipality\" (normalized DISAGREES, distance 4)",
+    "Sunsari|Harinagara vs \"Harinagar Rural Municipality\" (normalized distance 1)",
+    "Taplejung|Phaktanglung vs \"Phaktanlung Rural Municipality\" (normalized distance 1)",
+    "Taplejung|Sirijangha vs \"Sirijanga Rural Municipality\" (normalized distance 1)",
+    "Taplejung|Yangwarak vs \"Pathivara Yangwarak Rural Municipality\" (normalized DISAGREES, distance 4)",
+    "Terhathum|Menchhyayem vs \"Menchhayayem Rural Municipality\" (normalized distance 1)",
+    "Udayapur|Sunkoshi vs \"Limchungbung Rural Municipality\" (normalized DISAGREES, distance 4)",
+    "Saptari|Belhi Chapena vs \"Rajgadh Rural Municipality\" (normalized DISAGREES, distance 4)",
+    "Chitwan|Khairhani vs \"Khairahani Urban Municipality\" (normalized distance 1)",
+    "Dhading|Netrawati vs \"Netrawati Dabjong Rural Municipality\" (normalized DISAGREES, distance 4)",
+    "Dolakha|Baitedhar vs \"Baiteshwor Rural Municipality\" (normalized DISAGREES, distance 3)",
+    "Kathmandu|Budhanilkantha vs \"Budhanilkhantha Urban Municipality\" (normalized distance 1)",
+    "Kathmandu|Gokarneshwar vs \"Gokarneshwor Urban Municipality\" (normalized distance 1)",
+    "Kathmandu|Kageshwari Manohara vs \"Kageshwori Manahara Urban Municipality\" (normalized distance 2)",
+    "Kathmandu|Tarakeshwar vs \"Tarakeshwor Urban Municipality\" (normalized distance 1)",
+    "Nuwakot|Meghang vs \"Myagang Rural Municipality\" (normalized DISAGREES, distance 3)",
+    "Nuwakot|Tarakeshwar vs \"Tarakeshwor Rural Municipality\" (normalized distance 1)",
+    "Ramechhap|Likhu vs \"Likhu Tamakoshi Rural Municipality\" (normalized DISAGREES, distance 4)",
+    "Rasuwa|Kalika vs \"Shuva Kalika Rural Municipality\" (normalized DISAGREES, distance 4)",
+    "Sindhupalchok|Chautara Sangachowkgadhi vs \"Choutara Sangachowkgadhi Urban Municipality\" (normalized distance 1)",
+    "Sindhupalchok|Melamchi vs \"Melanchi Urban Municipality\" (normalized distance 1)",
+    "Baglung|Jaimini vs \"Jaimuni Urban Municipality\" (normalized distance 1)",
+    "Gorkha|Bhimsen vs \"Bhimsenthapa Rural Municipality\" (normalized DISAGREES, distance 4)",
+    "Gorkha|Sulikot vs \"Barpak Sulikot Rural Municipality\" (normalized DISAGREES, distance 4)",
+    "Manang|Naraphu vs \"Narpa Bhumi Rural Municipality\" (normalized DISAGREES, distance 4)",
+    "Manang|Nashong vs \"Nason Rural Municipality\" (normalized distance 2)",
+    "Manang|Neshang vs \"Manang Ngisyang Rural Municipality\" (normalized DISAGREES, distance 4)",
+    "Mustang|Barhagaun Muktichhetra vs \"Varagung Muktichhetra Rural Municipality\" (normalized DISAGREES, distance 4)",
+    "Mustang|Dalome vs \"Lo Ghekar Damodarkunda Rural Municipality\" (normalized DISAGREES, distance 4)",
+    "Mustang|Gharapjhong vs \"Gharpajhong Rural Municipality\" (normalized distance 2)",
+    "Nawalpur|Bungdikali vs \"Baudikali Rural Municipality\" (normalized DISAGREES, distance 3)",
+    "Syangja|Arjunchaupari vs \"Arjun Choupari Rural Municipality\" (normalized distance 1)",
+    "Tanahun|Rishing vs \"Rhishing Rural Municipality\" (normalized distance 1)",
+    "Banke|Nepalgunj vs \"Nepalganj Sub-Metropolitian City\" (normalized distance 1)",
+    "Gulmi|Ruru vs \"Ruruchhetra Rural Municipality\" (normalized DISAGREES, distance 4)",
+    "Kapilvastu|Kapilvastu vs \"Kapilbastu Urban Municipality\" (normalized distance 1)",
+    "Pyuthan|Airawati vs \"Aairawati Rural Municipality\" (normalized distance 1)",
+    "Rolpa|Paribartan vs \"Pariwartan Rural Municipality\" (normalized distance 1)",
+    "Rolpa|Thabang vs \"Thawang Rural Municipality\" (normalized distance 1)",
+    "Jajarkot|Nalagad vs \"Nalgad Urban Municipality\" (normalized distance 1)",
+    "Jajarkot|Kuse vs \"Kushe Rural Municipality\" (normalized distance 1)",
+    "Kalikot|Kalika vs \"Shuva Kalika Rural Municipality\" (normalized DISAGREES, distance 4)",
+    "Mugu|Mugu Karmarong vs \"Mugumakarmarog Rural Municipality\" (normalized DISAGREES, distance 3)",
+    "Salyan|Dhorchaur vs \"Siddha Kumakh Rural Municipality\" (normalized DISAGREES, distance 9)",
+    "Salyan|Kumakh Malika vs \"Kumakh Rural Municipality\" (normalized DISAGREES, distance 4)",
+    "Bajhang|Jayaprithvi vs \"Jayaprithbi Urban Municipality\" (normalized distance 1)",
+    "Bajhang|Kanda vs \"Saipal Rural Municipality\" (normalized DISAGREES, distance 4)",
+    "Bajura|Swami Kartik vs \"Swamikartik Khapar Rural Municipality\" (normalized DISAGREES, distance 4)",
+    "Doti|Bogatan vs \"Bogatan Phudsil Rural Municipality\" (normalized DISAGREES, distance 4)"
+  ],
+  "typeReadIssues": [],
+  "districtMismatches": []
+}

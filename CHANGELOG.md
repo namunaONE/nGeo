@@ -4,7 +4,7 @@ All notable changes to this package are documented in this file.
 The format follows [Keep a Changelog](https://keepachangelog.com/) and the
 package adheres to [Semantic Versioning](https://semver.org/).
 
-## Unreleased
+## 2.9.0 — 2026-10-27
 
 The size release for the Dart package. `lib/src/nepal_data.dart` is
 regenerated as a compact pipe-separated roster (format version 1, decoded
@@ -30,6 +30,42 @@ objects stay identical field for field.
   hand-edited file fails at import rather than decoding half a dataset.
   Covered by the existing suite; the four unreachable guards carry
   `// coverage:ignore-line`.
+
+### Data (2026-10-27 — Government of Nepal administrative code table)
+- **The dataset is now fully coded and fully bilingual.** The Government of
+  Nepal's administrative code table (`1695378470_83.xls`, vendored under
+  `data/_raw/npl-codes/`) attests the PDDPP code of every one of the 753
+  local units. Its single unmatched code resolves Bheri (Jajarkot) — the one
+  holdout since v2.4.0 — as **60706** at the `singleSource` tier
+  (`cbsCodeVerified` stays `false`): six of the district's seven other codes
+  matched exactly, leaving exactly one uncoded palika and one unclaimed
+  directory row. Tier counts become **548 verified / 205 singleSource /
+  0 unverified; 753/753 coded; "mappable" rises 752 → 753.**
+- **The last 20 null `nameNe` values are filled** from the table's Unicode
+  Devanagari column, `nameNeVerified: false` (Baraha बराहक्षेत्र, Sunkoshi
+  लिम्चुङबुङ, Belhi Chapena राजगढ, Dhorchaur सिद्ध कुमाख, Kanda साइपाल, …).
+  Each fill is the Devanagari of the entity the joined code identifies; for
+  these 20 that is the palika's *current* official name while our English
+  keeps the legacy roster name — renames are documented in
+  `doc/REVIEW-codes.md` §8 and stay unapplied pending Gazette confirmation.
+- **`tool/merge/apply_npl_codes.dart`** (pipeline step 6 of 9) performs the
+  join behind targeted provenance and structural gates: the district
+  register's `Code` column == the PDD prefixes derived from the local-unit
+  sheet == the dataset's district codes (77/77); existing values are never
+  overwritten; the 55 name variants are reported, not applied; every applied
+  code is appended to the adjudication ledger.
+- **`data/_stage/code_adjudications.json`** — new hand-curated ledger (the 8
+  Nepal Post codes from 2026-10-25 + Bheri), consumed by a new **Pass A2** in
+  `tool/merge/resolve_code_tiers.dart` that reserves ledger codes before
+  re-deriving tiers. This fixes a latent hazard: a full pipeline re-run over
+  the adjudicated dataset would have stripped the 8 directory codes it could
+  not re-derive (the staged `code_tiers.json` still recorded the
+  pre-adjudication state). Unconsumed or conflicting ledger entries fail the
+  run.
+- **`tool/export_npl_codes.ps1`** exports the workbook's three sheets to the
+  pinned UTF-8 TSVs (the .xls is legacy BIFF; the TSVs are the stable merge
+  interface); `tool/fetch_sources.dart` lists the source as manual — it has
+  no public URL, like the mofaga harvest.
 
 ### Data (2026-10-26 — palika centroid completion)
 - **The last 27 coordinate-free palikas now carry `lat`/`lng`** with

@@ -1,0 +1,113 @@
+{
+  "comment": "Hand-curated code adjudications. Each entry is a palika CBS code attested by a government directory but NOT doubly-attested (the verified tier needs postal-2025 + CBS harvest to agree), so it carries the singleSource tier with cbsCodeVerified=false. Consumed by tool/merge/resolve_code_tiers.dart (Pass A2), which reserves these codes before re-deriving the rest - that is what makes a full pipeline run preserve adjudicated codes instead of stripping them. Edit by hand only, with a documented source for every entry; the resolver and apply_npl_codes.dart hard-fail on any conflict with the dataset. Duplicates, non-PDDPP codes and unconsumed entries all fail the run.",
+  "entries": [
+    {
+      "province": "koshi",
+      "district": "Solukhumbu",
+      "name": "Mapya Dudhkoshi",
+      "type": "ruralMunicipality",
+      "code": 10304,
+      "tier": "singleSource",
+      "source": "Nepal Post local-level code list (giwmscdnone.gov.np/media/pdf_upload/locallevelcode_tjstksd.pdf)",
+      "evidence": "quote: \"Mapya Dudhkoshi Rural Municipality · माप्य दुधकोशी गाउँपाललका · 10304\"",
+      "adjudicated": "2026-10-25",
+      "signOff": "HyaMuji (doc/REVIEW-codes.md §7)"
+    },
+    {
+      "province": "koshi",
+      "district": "Solukhumbu",
+      "name": "Thulung Dudhkoshi",
+      "type": "ruralMunicipality",
+      "code": 10305,
+      "tier": "singleSource",
+      "source": "Nepal Post local-level code list (giwmscdnone.gov.np/media/pdf_upload/locallevelcode_tjstksd.pdf)",
+      "evidence": "quote: \"Thulung Dudhkoshi Rural Municipality · थुलुङ दुधकोशी गाउँपाललका · 10305\"",
+      "adjudicated": "2026-10-25",
+      "signOff": "HyaMuji (doc/REVIEW-codes.md §7)"
+    },
+    {
+      "province": "lumbini",
+      "district": "Rolpa",
+      "name": "Paribartan",
+      "type": "ruralMunicipality",
+      "code": 50203,
+      "tier": "singleSource",
+      "source": "Nepal Post federal-structure post office list (giwmscdnone.gov.np/media/pdf_upload/पोष्टल%20कोड_5aoxvqu.pdf)",
+      "evidence": "quote: \"Post Office, Paribartan R.Mun., Rolpa · Lumbini · 50203 · 5020305 · 05\". This REVERSED the earlier free-PDDPP inference (Gangadev=50203/Paribartan=50204); the attestation wins.",
+      "adjudicated": "2026-10-25",
+      "signOff": "HyaMuji (doc/REVIEW-codes.md §7)"
+    },
+    {
+      "province": "lumbini",
+      "district": "Rolpa",
+      "name": "Gangadev",
+      "type": "ruralMunicipality",
+      "code": 50204,
+      "tier": "singleSource",
+      "source": "Nepal Post federal-structure post office list (giwmscdnone.gov.np/media/pdf_upload/पोष्टल%20कोड_5aoxvqu.pdf)",
+      "evidence": "quote: \"Post Office, Gangadev R.Mun., Rolpa · Lumbini · 50204 · 5020402 · 02\". This REVERSED the earlier free-PDDPP inference; the attestation wins.",
+      "adjudicated": "2026-10-25",
+      "signOff": "HyaMuji (doc/REVIEW-codes.md §7)"
+    },
+    {
+      "province": "lumbini",
+      "district": "Rolpa",
+      "name": "Sunil Smriti",
+      "type": "ruralMunicipality",
+      "code": 50209,
+      "tier": "singleSource",
+      "source": "Nepal Post federal-structure post office list (giwmscdnone.gov.np/media/pdf_upload/पोष्टल%20कोड_5aoxvqu.pdf)",
+      "evidence": "quote: \"Post Office, Sunil Smriti R.Mun., Rolpa · Lumbini · 50209 · 5020904 · 04\"",
+      "adjudicated": "2026-10-25",
+      "signOff": "HyaMuji (doc/REVIEW-codes.md §7)"
+    },
+    {
+      "province": "karnali",
+      "district": "Jajarkot",
+      "name": "Bheri",
+      "type": "municipality",
+      "code": 60706,
+      "tier": "singleSource",
+      "source": "Government of Nepal administrative code table (npl-codes/1695378470_83.xls, sheet localunit_code)",
+      "evidence": "row S_N 639: \"Bheri Malika Urban Municipality\" / \"भेरीमालिका नगरपालिका\" / 60706",
+      "adjudicated": "2026-10-27",
+      "signOff": "apply_npl_codes.dart forced 1-to-1 elimination (doc/REVIEW-codes.md §8)"
+    },
+    {
+      "province": "karnali",
+      "district": "Jajarkot",
+      "name": "Nalagad",
+      "type": "municipality",
+      "code": 60707,
+      "tier": "singleSource",
+      "source": "Nepal Post federal-structure post office list (giwmscdnone.gov.np/media/pdf_upload/पोष्टल%20कोड_5aoxvqu.pdf)",
+      "evidence": "quote: \"Post Office, Nalgad Mun., Jajarkot · Karnali · 60707 · 6070707 · 07\"",
+      "adjudicated": "2026-10-25",
+      "signOff": "HyaMuji (doc/REVIEW-codes.md §7)"
+    },
+    {
+      "province": "sudurpashchim",
+      "district": "Bajura",
+      "name": "Jagannath",
+      "type": "ruralMunicipality",
+      "code": 70105,
+      "tier": "singleSource",
+      "source": "Nepal Post federal-structure post office list (giwmscdnone.gov.np/media/pdf_upload/पोष्टल%20कोड_5aoxvqu.pdf)",
+      "evidence": "quote: \"Post Office, Jagannath R.Mun., Bajura · Sudur Paschim · 70105 · 7010503 · 03\"",
+      "adjudicated": "2026-10-25",
+      "signOff": "HyaMuji (doc/REVIEW-codes.md §7)"
+    },
+    {
+      "province": "sudurpashchim",
+      "district": "Bajura",
+      "name": "Khaptad Chhededaha",
+      "type": "ruralMunicipality",
+      "code": 70107,
+      "tier": "singleSource",
+      "source": "Nepal Post federal-structure post office list (giwmscdnone.gov.np/media/pdf_upload/पोष्टल%20कोड_5aoxvqu.pdf)",
+      "evidence": "quote: \"Post Office, Khaptad Chhededaha R.Mun., Bajura · Sudur Paschim · 70107 · 7010705 · 05\"",
+      "adjudicated": "2026-10-25",
+      "signOff": "HyaMuji (doc/REVIEW-codes.md §7)"
+    }
+  ]
+}

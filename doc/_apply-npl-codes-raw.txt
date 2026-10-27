@@ -1,0 +1,88 @@
+==============================================================================
+APPLY NPL-CODES DIRECTORY ATTESTATIONS
+generated: 2026-10-27T06:33:08.445536Z
+dry-run: true
+==============================================================================
+provenance: 4 npl-codes pins verified byte-exact
+  ok: pradesh rows == 7 (got 7)
+  ok: state codes are exactly 1..7
+  ok: district rows == 77 (got 77)
+  ok: district sheet S.N. is the serial 1..77 in order
+  ok: district register names distinct (77)
+  ok: district sheet Code column holds 77 distinct PDD codes
+  ok: local-unit rows == 753 (got 753)
+  ok: local-unit sheet S_N is the serial 1..753 in order
+  ok: each sheet-3 district maps to exactly one PDD (77 distinct)
+  ok: district sheet Code set == PDD set derived from local-unit prefixes (77/77)
+  ok: our provinces == 7
+  ok: our districts == 77
+  ok: our local bodies == 753
+  ok: our province cbsCodes are exactly 1..7 (the pradesh sheet agrees)
+  ok: every directory PDD is one of our district cbsCodes (77/77)
+  ok: every register district name resolves to our vocabulary with the same PDD (mismatches: 0)
+  ok: coded palikas joined to the register: 753 + 0 still uncoded = 753
+  name agreement: 697 exact, 56 variants (reported, never applied)
+    NAME Bhojpur|Tyamke Maiyum vs "Temkemaiyum Rural Municipality" (normalized distance 2)
+    NAME Dhankuta|Sahidbhumi vs "Shahidbhumi Rural Municipality" (normalized distance 1)
+    NAME Ilam|Ilam vs "Illam Urban Municipality" (normalized distance 1)
+    NAME Khotang|Diprung vs "Diprung Chuichumma Rural Municipality" (normalized DISAGREES, distance 4)
+    NAME Solukhumbu|Solu Dudhkunda vs "Solu Dhudhakunda Urban Municipality" (normalized distance 2)
+    NAME Sunsari|Baraha vs "Barahachhetra Urban Municipality" (normalized DISAGREES, distance 4)
+    NAME Sunsari|Bhokraha vs "Bhokraha Narsingh Rural Municipality" (normalized DISAGREES, distance 4)
+    NAME Sunsari|Harinagara vs "Harinagar Rural Municipality" (normalized distance 1)
+    NAME Taplejung|Phaktanglung vs "Phaktanlung Rural Municipality" (normalized distance 1)
+    NAME Taplejung|Sirijangha vs "Sirijanga Rural Municipality" (normalized distance 1)
+    NAME Taplejung|Yangwarak vs "Pathivara Yangwarak Rural Municipality" (normalized DISAGREES, distance 4)
+    NAME Terhathum|Menchhyayem vs "Menchhayayem Rural Municipality" (normalized distance 1)
+    NAME Udayapur|Sunkoshi vs "Limchungbung Rural Municipality" (normalized DISAGREES, distance 4)
+    NAME Saptari|Belhi Chapena vs "Rajgadh Rural Municipality" (normalized DISAGREES, distance 4)
+    NAME Chitwan|Khairhani vs "Khairahani Urban Municipality" (normalized distance 1)
+    NAME Dhading|Netrawati vs "Netrawati Dabjong Rural Municipality" (normalized DISAGREES, distance 4)
+    NAME Dolakha|Baitedhar vs "Baiteshwor Rural Municipality" (normalized DISAGREES, distance 3)
+    NAME Kathmandu|Budhanilkantha vs "Budhanilkhantha Urban Municipality" (normalized distance 1)
+    NAME Kathmandu|Gokarneshwar vs "Gokarneshwor Urban Municipality" (normalized distance 1)
+    NAME Kathmandu|Kageshwari Manohara vs "Kageshwori Manahara Urban Municipality" (normalized distance 2)
+    NAME Kathmandu|Tarakeshwar vs "Tarakeshwor Urban Municipality" (normalized distance 1)
+    NAME Nuwakot|Meghang vs "Myagang Rural Municipality" (normalized DISAGREES, distance 3)
+    NAME Nuwakot|Tarakeshwar vs "Tarakeshwor Rural Municipality" (normalized distance 1)
+    NAME Ramechhap|Likhu vs "Likhu Tamakoshi Rural Municipality" (normalized DISAGREES, distance 4)
+    NAME Rasuwa|Kalika vs "Shuva Kalika Rural Municipality" (normalized DISAGREES, distance 4)
+    NAME Sindhupalchok|Chautara Sangachowkgadhi vs "Choutara Sangachowkgadhi Urban Municipality" (normalized distance 1)
+    NAME Sindhupalchok|Melamchi vs "Melanchi Urban Municipality" (normalized distance 1)
+    NAME Baglung|Jaimini vs "Jaimuni Urban Municipality" (normalized distance 1)
+    NAME Gorkha|Bhimsen vs "Bhimsenthapa Rural Municipality" (normalized DISAGREES, distance 4)
+    NAME Gorkha|Sulikot vs "Barpak Sulikot Rural Municipality" (normalized DISAGREES, distance 4)
+    NAME Manang|Naraphu vs "Narpa Bhumi Rural Municipality" (normalized DISAGREES, distance 4)
+    NAME Manang|Nashong vs "Nason Rural Municipality" (normalized distance 2)
+    NAME Manang|Neshang vs "Manang Ngisyang Rural Municipality" (normalized DISAGREES, distance 4)
+    NAME Mustang|Barhagaun Muktichhetra vs "Varagung Muktichhetra Rural Municipality" (normalized DISAGREES, distance 4)
+    NAME Mustang|Dalome vs "Lo Ghekar Damodarkunda Rural Municipality" (normalized DISAGREES, distance 4)
+    NAME Mustang|Gharapjhong vs "Gharpajhong Rural Municipality" (normalized distance 2)
+    NAME Nawalpur|Bungdikali vs "Baudikali Rural Municipality" (normalized DISAGREES, distance 3)
+    NAME Syangja|Arjunchaupari vs "Arjun Choupari Rural Municipality" (normalized distance 1)
+    NAME Tanahun|Rishing vs "Rhishing Rural Municipality" (normalized distance 1)
+    NAME Banke|Nepalgunj vs "Nepalganj Sub-Metropolitian City" (normalized distance 1)
+    NAME Gulmi|Ruru vs "Ruruchhetra Rural Municipality" (normalized DISAGREES, distance 4)
+    NAME Kapilvastu|Kapilvastu vs "Kapilbastu Urban Municipality" (normalized distance 1)
+    NAME Pyuthan|Airawati vs "Aairawati Rural Municipality" (normalized distance 1)
+    NAME Rolpa|Paribartan vs "Pariwartan Rural Municipality" (normalized distance 1)
+    NAME Rolpa|Thabang vs "Thawang Rural Municipality" (normalized distance 1)
+    NAME Jajarkot|Bheri vs "Bheri Malika Urban Municipality" (normalized DISAGREES, distance 4)
+    NAME Jajarkot|Nalagad vs "Nalgad Urban Municipality" (normalized distance 1)
+    NAME Jajarkot|Kuse vs "Kushe Rural Municipality" (normalized distance 1)
+    NAME Kalikot|Kalika vs "Shuva Kalika Rural Municipality" (normalized DISAGREES, distance 4)
+    NAME Mugu|Mugu Karmarong vs "Mugumakarmarog Rural Municipality" (normalized DISAGREES, distance 3)
+    NAME Salyan|Dhorchaur vs "Siddha Kumakh Rural Municipality" (normalized DISAGREES, distance 9)
+    NAME Salyan|Kumakh Malika vs "Kumakh Rural Municipality" (normalized DISAGREES, distance 4)
+    NAME Bajhang|Jayaprithvi vs "Jayaprithbi Urban Municipality" (normalized distance 1)
+    NAME Bajhang|Kanda vs "Saipal Rural Municipality" (normalized DISAGREES, distance 4)
+    NAME Bajura|Swami Kartik vs "Swamikartik Khapar Rural Municipality" (normalized DISAGREES, distance 4)
+    NAME Doti|Bogatan vs "Bogatan Phudsil Rural Municipality" (normalized DISAGREES, distance 4)
+
+uncoded palikas: 0; unclaimed directory rows: 0
+
+nameNe fills from the directory: 0 (all previously null; nameNeVerified=false)
+  ok: all 753 local bodies are coded after this step
+  ok: no null nameNe remains after this step
+
+TIERS: 548 verified, 205 singleSource, 0 unverified; coded 753/753; nameNe nulls 0

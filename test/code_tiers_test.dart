@@ -1,7 +1,7 @@
 // Tests for the v2.4.0 additions: CBS code confidence tiers, ward-total
 // reconciliation, model round-trips and the duplicate-name lookups.
 //
-// The headline change is that a code is no longer all-or-nothing. 752 of 753
+// The headline change is that a code is no longer all-or-nothing. All 753
 // palikas now carry a CBS code of some confidence (up from 547), and the two
 // ward totals are reported side by side instead of one silently shadowing
 // the other.
@@ -30,22 +30,23 @@ void main() {
       }
     });
 
-    test('tier counts are 548 verified / 204 single-source / 1 unverified', () {
+    test('tier counts are 548 verified / 205 single-source / 0 unverified', () {
       final byTier = <CbsCodeConfidence, int>{};
       for (final b in bodies) {
         byTier[b.cbsCodeConfidence] = (byTier[b.cbsCodeConfidence] ?? 0) + 1;
       }
       expect(byTier[CbsCodeConfidence.verified], 548);
-      expect(byTier[CbsCodeConfidence.singleSource], 204);
-      expect(byTier[CbsCodeConfidence.unverified], 1);
+      expect(byTier[CbsCodeConfidence.singleSource], 205);
+      // The key is absent when the count is zero — no palika is unverified.
+      expect(byTier[CbsCodeConfidence.unverified] ?? 0, 0);
       expect(byTier.values.reduce((a, b) => a + b), 753);
     });
 
-    test('code coverage is 752/753, up from 547 before the tiers existed', () {
-      expect(NepalAdminApi.getLocalBodiesWithCode().length, 752);
-      expect(bodies.whereCoded.length, 752);
-      expect(NepalAdminApi.getUncodedLocalBodies().length, 1);
-      expect(bodies.whereUncoded.length, 1);
+    test('code coverage is 753/753, up from 547 before the tiers existed', () {
+      expect(NepalAdminApi.getLocalBodiesWithCode().length, 753);
+      expect(bodies.whereCoded.length, 753);
+      expect(NepalAdminApi.getUncodedLocalBodies().length, 0);
+      expect(bodies.whereUncoded.length, 0);
       expect(
         bodies.whereDoublyAttested.length +
             bodies.whereSingleSource.length +
@@ -64,21 +65,25 @@ void main() {
 
     test('codes are unique nationwide, so a code-keyed join is lossless', () {
       final map = bodies.byCbsCode;
-      expect(map.length, 752, reason: 'no code may map to two palikas');
+      expect(map.length, 753, reason: 'no code may map to two palikas');
       for (final entry in map.entries) {
         expect(entry.value.cbsCode, entry.key);
       }
     });
 
-    test('the 1 uncoded palika is a documented ambiguity, not an omission', () {
-      const expected = {
-        'Jajarkot|Bheri',
-      };
-      final actual = {
-        for (final b in NepalAdminApi.getUncodedLocalBodies())
-          '${b.districtName}|${b.name}',
-      };
-      expect(actual, expected);
+    test('no uncoded palika remains (Bheri was the last, resolved 2026-10-27)',
+        () {
+      // Jajarkot|Bheri was the final holdout: a documented ambiguity until
+      // the Government of Nepal administrative code table attested it as
+      // 60706 ("Bheri Malika Urban Municipality"), applied at the
+      // singleSource tier and recorded in the adjudication ledger.
+      expect(NepalAdminApi.getUncodedLocalBodies(), isEmpty);
+      expect(bodies.whereUncoded, isEmpty);
+      final bheri =
+          NepalAdminApi.getLocalBodiesByName('Bheri', 'Jajarkot').single;
+      expect(bheri.cbsCode, 60706);
+      expect(bheri.cbsCodeConfidence, CbsCodeConfidence.singleSource);
+      expect(bheri.cbsCodeVerified, isFalse);
     });
 
     test('spot checks: single-source and forced-elimination assignments', () {
@@ -105,7 +110,7 @@ void main() {
   });
 
   group('CBS code lookups', () {
-    test('getLocalBodyByCbs resolves any tier (752 reachable)', () {
+    test('getLocalBodyByCbs resolves any tier (753 reachable)', () {
       final byCode = bodies.byCbsCode;
       for (final entry in byCode.entries) {
         expect(
@@ -133,9 +138,16 @@ void main() {
       final anyCoded = bodies.whereCoded.first;
       expect(anyCoded.cbsCodeString!.length, 5);
       expect(anyCoded.districtCbsCodeString!.length, 3);
-      final uncoded = NepalAdminApi.getUncodedLocalBodies().first;
-      expect(uncoded.cbsCodeString, isNull);
-      expect(uncoded.districtCbsCodeString, isNull);
+      // No palika is uncoded any more; the null-string contract is checked
+      // on a synthetic body instead.
+      final synthetic = LocalBody.fromJson({
+        'name': 'Y',
+        'type': 'M',
+        'district': 'D',
+        'province': 'P',
+      });
+      expect(synthetic.cbsCodeString, isNull);
+      expect(synthetic.districtCbsCodeString, isNull);
     });
   });
 
@@ -255,11 +267,13 @@ void main() {
         expect(r.cbsCodeConfidence, b.cbsCodeConfidence);
         expect(r.cbsCodeVerified, b.cbsCodeVerified);
       }
-      final uncoded = NepalAdminApi.getUncodedLocalBodies().first;
-      final restored = LocalBody.fromJson(uncoded.toJson());
-      expect(restored.cbsCode, isNull);
-      expect(restored.cbsCodeConfidence, CbsCodeConfidence.unverified);
-      expect(restored.cbsCodeVerified, isFalse);
+      // Round-trip a single-source body too: Bheri's code came from the
+      // government directory, not the doubly-attested pipeline.
+      final single = NepalAdminApi.getLocalBodyByCbs(60706)!;
+      final restoredSingle = LocalBody.fromJson(single.toJson());
+      expect(restoredSingle.cbsCode, 60706);
+      expect(restoredSingle.cbsCodeConfidence, CbsCodeConfidence.singleSource);
+      expect(restoredSingle.cbsCodeVerified, isFalse);
     });
 
     test('District round-trips and re-attaches province context', () {

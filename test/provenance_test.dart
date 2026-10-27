@@ -259,11 +259,38 @@ void main() {
 
   group('the real manifest', () {
     test('every vendored input on disk matches, when the sources are here', () {
+      // data/_raw/ is gitignored, so a checkout holds only the sources
+      // someone vendored by hand. The audit treats every pinned-but-absent
+      // file as drift (by design), so this test runs only when the checkout
+      // holds the COMPLETE pinned source set — otherwise a machine that has
+      // vendored, say, only npl-codes would file false drift against sources
+      // it never had.
       final rawDir = Directory('data/_raw');
       if (!rawDir.existsSync()) {
         markTestSkipped(
           'data/_raw/ is gitignored and not present in this checkout; '
           'run `dart run tool/merge/verify_provenance.dart` locally to check',
+        );
+        return;
+      }
+      final pin = RegExp(r'^([0-9A-Fa-f]{64})\s+(\d+)\s+(\S+)\s*$');
+      final missingSources = <String>{};
+      for (final line in File('data/PROVENANCE.sha256').readAsLinesSync()) {
+        final m = pin.firstMatch(line);
+        if (m == null) continue;
+        final segs = m.group(3)!.split('/');
+        final present = segs.length == 1
+            ? File('data/_raw/${segs.first}').existsSync()
+            : Directory('data/_raw/${segs.first}').existsSync();
+        if (!present) missingSources.add(segs.first);
+      }
+      if (missingSources.isNotEmpty) {
+        final s = missingSources.toList()..sort();
+        markTestSkipped(
+          'partial checkout: data/_raw/ holds none of ${s.join(', ')}. The '
+          'audit requires every pinned source on disk before it can speak. '
+          'Fetch the public ones with `dart run tool/fetch_sources.dart`; '
+          'manual sources (see data/SOURCES.md) must be supplied by hand.',
         );
         return;
       }

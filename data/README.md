@@ -5,15 +5,16 @@ artifact in this repository: the Dart package (`lib/src/nepal_data.dart`)
 is generated from it, and the website explorer (`docs/data.json`) is derived
 from it.
 
-- **Data as of:** October 2026
+- **Data as of:** 2026-10-27
 - **Structure:** 7 provinces · 77 districts · 753 local bodies
   (6 metropolitan, 11 sub-metropolitan, 276 municipalities,
   460 rural municipalities) · 6,743 wards
 - **Codes (Schema v2 + tiers):** provinces `cbsCode` 1–7 + `isoCode` NP-P1…NP-P7,
   districts `cbsCode` 3-digit, palikas `cbsCode` 5-digit PDDPP +
-  `cbsCodeConfidence` (`verified` 548 / `singleSource` 204 / `unverified` 1 —
-  752 of 753 palikas carry a code; the 8 resolved on 2026-10-25 are attested
-  by the Nepal Post local-level code list, see `data/SOURCES.md` §7)
+  `cbsCodeConfidence` (`verified` 548 / `singleSource` 205 / `unverified` 0 —
+  all 753 palikas carry a code: 8 attested on 2026-10-25 by the Nepal Post
+  local-level code list and the last one (Bheri, 60706) on 2026-10-27 by the
+  Government of Nepal administrative code table, see `data/SOURCES.md`)
 - **Basis:** the federal structure established by the Local Level
   Restructuring Commission (2017) under the Constitution of Nepal (2015),
   cross-checked against Ministry of Federal Affairs and General
@@ -34,10 +35,10 @@ from it.
 | `provinces[].districts[].cbsCode` | int | 3-digit (e.g. `306` Kathmandu) |
 | `provinces[].districts[].localBodies[]` | object | `{ "name", "type", "cbsCode?", "cbsCodeVerified?" }` |
 | `type` | enum | `metropolitan` \| `subMetropolitan` \| `municipality` \| `ruralMunicipality` |
-| `cbsCode` | int? | 5-digit PDDPP: P=province, DD=district, PP=palika; null when unverified |
+| `cbsCode` | int? | 5-digit PDDPP: P=province, DD=district, PP=palika; set for all 753 palikas since 2026-10-27 |
 | `cbsCodeVerified` | bool | true only when doubly-attested (CBS + Postal-2025) |
 | `cbsCodeConfidence` | enum | `verified` \| `singleSource` \| `unverified` — see below |
-| `nameNe` | string? | Devanagari name; null for 20/753 (never transliterated) |
+| `nameNe` | string? | Devanagari name; all 753 carry one since 2026-10-27 (never transliterated) |
 | `nameNeVerified` | bool | true only when both bilingual sources agree on the spelling |
 | `lat` / `lng` | double? | approximate WGS84 centroid; all 753 mapped — 726 from open-admin-data, 27 area-weighted centroids of the vendored boundary polygons |
 | `geoSource` | string? | e.g. `open-admin-data`, `osm-nominatim`, `palika-boundaries-centroid` |
@@ -89,8 +90,8 @@ codes. `cbsCodeConfidence` records the difference:
 | Tier | Count | Rule |
 |---|---|---|
 | `verified` | 548 | postal-2025 **and** the CBS harvest name the same code for the same entity |
-| `singleSource` | 204 | Exactly one same-district, same-type row of the CBS roster within normalized-name Levenshtein distance 2, **or** a pairing forced by elimination inside a district whose roster matches the CBS roster type-for-type, **or** (since 2026-10-25) a code directly attested by the Nepal Post local-level code list (`data/SOURCES.md` §7) |
-| `unverified` | 1 | Bheri (Jajarkot) — its inferred 60706 is not directly attested, so it stays `null` rather than guessed |
+| `singleSource` | 205 | Exactly one same-district, same-type row of the CBS roster within normalized-name Levenshtein distance 2, **or** a pairing forced by elimination inside a district whose roster matches the CBS roster type-for-type, **or** a code directly attested by a government directory (Nepal Post local-level code list, 2026-10-25 — `data/SOURCES.md` §7; Government of Nepal administrative code table, 2026-10-27 — `data/SOURCES.md`) |
+| `unverified` | 0 | none left — Bheri (Jajarkot), the last `null`, was directly attested as 60706 by the Government of Nepal code table on 2026-10-27 |
 
 `cbsCodeVerified` remains exactly the doubly-attested case, so any code
 written against v2.x keeps behaving identically.

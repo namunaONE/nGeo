@@ -22,6 +22,14 @@
 //                  normalized name is within Levenshtein distance 2 of
 //                  ours, and that row's code is not already claimed.
 //                  One attestation, not two.
+//                  OR the code is listed in the hand-curated code
+//                  adjudications ledger (data/_stage/
+//                  code_adjudications.json): a government-directory
+//                  attestation (Nepal Post 2026-10-25, the MoFAGA npl-codes
+//                  table 2026-10-27) applied by a documented human decision
+//                  recorded in doc/REVIEW-codes.md. cbsCodeVerified stays
+//                  false either way - a directory attestation never becomes
+//                  the doubly-attested tier.
 //   unverified   - no defensible code. cbsCode stays null.
 //
 // Nothing is guessed: an ambiguous candidate (two rows tied at the best
@@ -32,7 +40,9 @@
 // Gates (any failure exits non-zero WITHOUT writing):
 //   0. provenance (shared gate: data/PROVENANCE.sha256)
 //   1. CBS CSV structural asserts (counts, code patterns, uniqueness)
-//   2. district resolution for all 77 districts (scopes candidates)
+//   1b. code adjudications ledger schema + uniqueness (if the file exists)
+//   2. district resolution for all 77 districts (scopes candidates; Pass A2
+//      also validates every ledger entry against its district)
 //   3. post-assignment bijection + district-prefix integrity
 //
 // Usage (from the package root):
@@ -124,6 +134,53 @@ void main(List<String> args) {
     cbsByDistrict.putIfAbsent(b['code']!.substring(0, 3), () => []).add(b);
   }
 
+  // ---- Load hand-curated code adjudications (optional) ---------------------
+  //
+  // data/_stage/code_adjudications.json records CBS codes attested by a
+  // government DIRECTORY (Nepal Post 2026-10-25; the MoFAGA npl-codes table,
+  // vendored 2026-10-27) but not doubly-attested, applied through the
+  // REVIEW-codes.md adjudication process. The file is hand-edited and
+  // tracked in git; a missing file simply means there are no adjudications
+  // to preserve.
+  final ledger = <String, Map<String, dynamic>>{};
+  final ledgerConsumed = <String>{};
+  final ledgerFile = File('data/_stage/code_adjudications.json');
+  if (ledgerFile.existsSync()) {
+    final parsed =
+        jsonDecode(ledgerFile.readAsStringSync()) as Map<String, dynamic>;
+    for (final raw in (parsed['entries'] as List)) {
+      final e = (raw as Map).cast<String, dynamic>();
+      final district = e['district'] as String?;
+      final name = e['name'] as String?;
+      final code = e['code'];
+      if (district == null ||
+          name == null ||
+          code is! int ||
+          e['type'] is! String ||
+          e['source'] is! String ||
+          e['evidence'] is! String) {
+        _fail(
+          'ledger entry malformed (needs district, name, type, int code, '
+          'source, evidence): $e',
+        );
+      }
+      if (e['tier'] != 'singleSource') {
+        _fail(
+          'ledger entry $district|$name must carry tier singleSource - the '
+          'ledger only holds directory-attested codes, never verified ones',
+        );
+      }
+      if (!RegExp(r'^[1-7]\d{4}$').hasMatch('$code')) {
+        _fail('ledger code $code for $district|$name is not a PDDPP code');
+      }
+      final key = '$district|$name';
+      if (ledger.containsKey(key)) {
+        _fail('ledger has duplicate entries for $key');
+      }
+      ledger[key] = e;
+    }
+  }
+
   // ---- Load our dataset ----------------------------------------------------
   final levelsFile = File('data/nepal_local_levels.json');
   final levelsJson =
@@ -213,10 +270,68 @@ void main(List<String> args) {
         });
       }
 
+      // Pass A2 - reserve hand-curated directory attestations
+      // (data/_stage/code_adjudications.json). Reserving them BEFORE
+      // re-derivation is what makes this tool idempotent on an adjudicated
+      // dataset: without it, a fresh run would strip every code it cannot
+      // re-derive from the CBS roster (the harvest's own names for these
+      // rows sit outside the distance-2 gate, and a 2-vs-2 district defeats
+      // forced elimination).
+      final ledgerHandled = <String>{};
+      for (final b in oursRows) {
+        final name = b['name'] as String;
+        final key = '$dname|$name';
+        final entry = ledger[key];
+        if (entry == null) continue;
+        ledgerConsumed.add(key);
+        final code = entry['code'] as int;
+        final holder = claimed['$code'];
+        if (holder != null) {
+          _fail(
+            'ledger code $code for $key is already claimed by $holder - '
+            'ledger and dataset disagree, stop',
+          );
+        }
+        if (entry['type'] != b['type']) {
+          _fail(
+            'ledger entry $key has type ${entry['type']} but the dataset '
+            'says ${b['type']} - reconcile before merging',
+          );
+        }
+        final have = b['cbsCode'] as int?;
+        if (have != null && have != code) {
+          _fail(
+            'dataset already codes $key as $have but the ledger attests '
+            '$code - reconcile before merging',
+          );
+        }
+        final cbsRow = (cbsByDistrict[prefix] ?? const <Map<String, String>>[])
+            .where((r) => r['code'] == '$code')
+            .toList();
+        if (cbsRow.length != 1) {
+          _fail(
+            'ledger code $code for $key does not identify exactly one CBS '
+            'roster row in district $prefix (got ${cbsRow.length})',
+          );
+        }
+        claimed['$code'] = key;
+        ledgerHandled.add(name);
+        record(
+          name: name,
+          type: b['type'] as String,
+          code: code,
+          tier: 'singleSource',
+          evidence: 'directory attestation (code adjudications ledger, '
+              '${entry['source']}): ${entry['evidence']}',
+        );
+      }
+
       for (final b in oursRows) {
         final name = b['name'] as String;
         final type = b['type'] as String;
         final have = b['cbsCode'] as int?;
+
+        if (ledgerHandled.contains(name)) continue;
 
         if (have != null && b['cbsCodeVerified'] == true) {
           record(
@@ -374,6 +489,18 @@ void main(List<String> args) {
     }
   }
 
+  // Every ledger entry must have been consumed by exactly one dataset
+  // palika. An unconsumed entry is a typo or a stale name after a roster
+  // change; silently keeping it would hide a drifted ledger.
+  for (final k in ledger.keys) {
+    if (!ledgerConsumed.contains(k)) {
+      _fail(
+        'code adjudications ledger entry "$k" matches no dataset palika - '
+        'fix or remove it',
+      );
+    }
+  }
+
   // ---- Gate 3: post-assignment invariants ----------------------------------
   final assigned = <String, String>{};
   for (final r in records) {
@@ -451,21 +578,27 @@ void main(List<String> args) {
         'data/_raw/cbs-codes/cbs_local_bodies.csv',
         'data/_raw/cbs-codes/cbs_districts.csv',
         'data/nepal_local_levels.json',
+        if (ledger.isNotEmpty) 'data/_stage/code_adjudications.json',
       ],
       'rule': 'verified = doubly-attested (carried from verify_codes.dart). '
           'singleSource = unique same-district, same-type CBS roster row '
           'within normalized-name distance <= $_maxSingleSourceDistance whose '
-          'code is unclaimed. unverified = ambiguous or no candidate, code '
-          'stays null. The assigned set is forced to be a bijection.',
+          'code is unclaimed, OR a code reserved from the hand-curated code '
+          'adjudications ledger (data/_stage/code_adjudications.json: '
+          'government-directory attestation with a documented human '
+          'decision). unverified = ambiguous or no candidate, code stays '
+          'null. The assigned set is forced to be a bijection.',
       'tier_notes': {
         'verified': 'doubly-attested: postal-2025 and CBS agree',
         'singleSource': 'single attestation from the authoritative CBS roster, '
             'either by normalized-name distance <= $_maxSingleSourceDistance '
             'or by forced elimination inside a district whose roster matches '
-            'the CBS roster type-for-type',
+            'the CBS roster type-for-type, or from the code adjudications '
+            'ledger (directory attestation, cbsCodeVerified stays false)',
         'unverified': 'no defensible code; left null on purpose',
       },
       'forcedByElimination': forcedTotal,
+      'ledgerEntries': ledger.length,
     },
     'counts': {
       'verified': tiers['verified'] ?? 0,

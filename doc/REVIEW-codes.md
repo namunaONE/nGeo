@@ -161,3 +161,103 @@ regeneration.
    196 → 204 singleSource, 744 → 752 coded, and any `dataAsOf` pin.
 3. `data/_stage/decisions_manual.json` — record this adjudication as a human
    decision (the Rolpa swap correction above all).
+
+---
+
+## 8. Addendum (2026-10-27) — Government of Nepal code table: all 753 coded
+
+**Status:** applied to `data/nepal_local_levels.json` by
+`tool/merge/apply_npl_codes.dart` (pipeline step 6 of 9). Tier counts become
+548 verified / 205 singleSource / **0 unverified**; 753/753 coded; `nameNe`
+nulls 20 → 0. `cbsCodeVerified` stays `false` for everything this step
+contributes — a directory attestation is not the doubly-attested tier.
+
+**Source:** the Government of Nepal administrative code table
+(`1695378470_83.xls`, user-provided; vendored `data/_raw/npl-codes/` with
+pinned TSV exports — see `data/SOURCES.md`). Its local-unit sheet attests
+all 753 PDDPP codes directly; its district register's `Code` column matches
+the PDD prefixes derived from the local-unit sheet and our district codes
+(77/77); the district sheet's `S.N.` is a serial, not a code.
+
+### 8.1 Bheri (Jajarkot) resolved — the §7 leftover
+
+§7 left Bheri uncoded because 60706 was only *implied* by the district
+sequence. The code table attests it directly: row S_N 639, "Bheri Malika
+Urban Municipality" / भेरीमालिका नगरपालिका / 60706. The join is code-primary
+with a forced 1↔1 elimination inside Jajarkot (our roster and the directory
+each have exactly one uncoded/unclaimed unit left) and a name-affinity guard
+("Bheri" is contained in "Bheri Malika" — en.wiki's §7.4 note "(earlier:
+Bheri Malika)" corroborates the same entity). Applied as `singleSource`,
+`cbsCodeVerified: false`.
+
+### 8.2 The stale `code_tiers.json` hazard, and the ledger fix
+
+`data/_stage/code_tiers.json` still recorded the pre-adjudication state
+(2026-10-13: 548/196/9) while the dataset carried the §7 codes applied
+out-of-band (commit `c7983e1`). A full pipeline re-run would therefore have
+**demoted all 8 Nepal Post codes** — the resolver cannot re-derive them (the
+harvest's names sit outside the distance-2 gate and the 2-vs-2 districts
+defeat forced elimination). Fix shipped with this change:
+
+- `data/_stage/code_adjudications.json` — a hand-curated, git-tracked ledger
+  of directory-attested codes (the 8 Nepal Post entries + Bheri), edited by
+  hand only, each entry carrying source + quote + sign-off. This is the
+  code-decision record §7.5.3 asked for.
+- `resolve_code_tiers.dart` gains **Pass A2**: it reserves ledger codes
+  before re-derivation (validating each entry's type, dataset-code and
+  CBS-row existence, refusing collisions), skips them in the re-derivation
+  pass, and fails the run on any unconsumed entry. The staged provenance
+  records the ledger in `inputs` and `ledgerEntries`.
+
+Pass A2 ships compile-verified only (`dart analyze`) — this machine does not
+hold the full `data/_raw/` (mofaga is a manual harvest with no public URL),
+so its first real execution happens on a machine with the complete sources.
+
+### 8.3 The 20 `nameNe` fills and the rename question
+
+The table's Unicode Devanagari column filled the last 20 null `nameNe`
+values (`nameNeVerified: false`; internal whitespace normalised, characters
+verbatim). For **all 20**, the directory's name for the joined code differs
+from our English name — these are precisely the palikas whose names changed
+after our roster snapshot, which is why `attach_bilingual` never matched
+them. Identity is established by code + district + type, attested by BOTH
+sides: the CBS roster names our exact legacy spelling at the same code
+(normalized distance 0, per `code_tiers.json` evidence) and the directory
+names the new spelling at the same code. Representative pairs:
+
+| Ours (legacy English) | Directory (current) | Code |
+|---|---|---|
+| Bheri (Jajarkot) | Bheri Malika | 60706 |
+| Sunkoshi (Udayapur) | Limchungbung | 11405 |
+| Belhi Chapena (Saptari) | Rajgadh | 20111 |
+| Dhorchaur (Salyan) | Siddha Kumakh | 60904 |
+| Kumakh Malika (Salyan) | Kumakh | 60902 |
+| Kanda (Bajhang) | Saipal | 70201 |
+| Kalika (Kalikot / Rasuwa) | Shuva Kalika | 60509 / 30304 |
+
+Public corroboration for the checked renames: an AEPC (government) roster
+lists "Sunkoshi Rural Municipality (Limchungbung)"; JICA's report lists
+"Sunkoshi (Limchungbung)"; CIJ Nepal documents the Belhi Chapena → Rajgadh
+rename; the palika's own site (dhorchaurmun.gov.np) issues notices as
+"Siddha Kumakh Rural Municipality, Dhorchaur"; the Kathmandu Post (2018)
+covers the Kanda-village RM named Saipal; en.wiki titles Kalikot's RM
+"Shuva Kalika". The remaining 13 fills are name expansions of the same
+shape (Netrawati Dabjong, Likhu Tamakoshi, Bhimsenthapa, Barpak Sulikot,
+Narpa Bhumi, Manang Ngisyang, Varagung Muktichhetra, Lo Ghekar
+Damodarkunda, Ruruchhetra, Diprung Chuichumma, Barahachhetra, Bhokraha
+Narsingh, Swamikartik Khapar, Bogatan Phudsil).
+
+**Renames stay UNAPPLIED in English** (per the §7.4 doctrine): adopting one
+needs a Gazette confirmation. The fills carry the current Devanagari of the
+same entity, flagged `nameNeVerified: false`, and the full variant list is
+preserved in `data/_stage/npl_codes.json` and `doc/_apply-npl-codes-raw.txt`.
+
+### 8.4 Follow-ups
+
+1. Run the full pipeline (steps 1–9) on a machine holding the complete
+   `data/_raw/` to regenerate the stale `code_tiers.json` with Pass A2 live
+   and confirm zero drift against the committed dataset.
+2. Adopt or reject the directory renames once Gazette confirmation exists
+   (§7.4 list + §8.3 pairs).
+3. Wards remain on hold pending CBS Census 2021 ward-level data (per the
+   standing decision).
