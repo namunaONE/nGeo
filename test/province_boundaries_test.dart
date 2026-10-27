@@ -68,8 +68,7 @@ void main() {
     }
   });
 
-  test('decoded provincial boundaries sit inside the Nepal bounding box',
-    () {
+  test('province boundaries sit inside the Nepal bounding box', () {
     for (final b in NepalAdminApi.getAllProvinceBoundaries()) {
       final box = b.bbox;
       expect(box['minLat']!, greaterThanOrEqualTo(26.0),
