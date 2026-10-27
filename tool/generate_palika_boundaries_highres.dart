@@ -28,6 +28,7 @@ String _encode(List<List<List<List<double>>>> polys) {
       b.write(_alphabet[d]);
     } while (v > 0);
   }
+
   int zz(int v) => v < 0 ? -v * 2 - 1 : v * 2;
   put(polys.length);
   var curLat = 0, curLng = 0, anchored = false;
@@ -73,6 +74,7 @@ List<List<double>> _simplifyRing(List<List<double>> ring, double eps) {
     final dx2 = pt[0] - px, dy2 = pt[1] - py;
     return dx2 * dx2 + dy2 * dy2;
   }
+
   List<List<double>> dp(List<List<double>> pts) {
     if (pts.length <= 2) return List.of(pts);
     var maxD = -1.0, idx = 1;
@@ -91,6 +93,7 @@ List<List<double>> _simplifyRing(List<List<double>> ring, double eps) {
     }
     return [pts.first, pts.last];
   }
+
   return dp(ring);
 }
 
@@ -107,8 +110,8 @@ bool _pointInRing(double lat, double lng, List<List<double>> ring) {
   return inside;
 }
 
-bool _pointInMultiPolygon(double lat, double lng,
-    List<List<List<List<double>>>> polys) {
+bool _pointInMultiPolygon(
+    double lat, double lng, List<List<List<List<double>>>> polys) {
   for (final rings in polys) {
     if (rings.isEmpty) continue;
     if (_pointInRing(lat, lng, rings.first)) {
@@ -148,9 +151,17 @@ int _levenshtein(String a, String b) {
 
 String _stripTypeSuffix(String s) {
   final suffixes = [
-    'Gaunpalika', 'Nagarpalika', 'Mahanagarpalika', 'Upamahanagarpalika',
-    'Gaun Palika', 'Nagar Palika', 'Mahanagar Palika', 'Upamahanagar Palika',
-    'Municipality', 'Rural Municipality', 'Sub-Metropolitan City',
+    'Gaunpalika',
+    'Nagarpalika',
+    'Mahanagarpalika',
+    'Upamahanagarpalika',
+    'Gaun Palika',
+    'Nagar Palika',
+    'Mahanagar Palika',
+    'Upamahanagar Palika',
+    'Municipality',
+    'Rural Municipality',
+    'Sub-Metropolitan City',
     'Metropolitan City',
   ];
   var n = s.trim();
@@ -240,8 +251,8 @@ void main(List<String> args) {
 
     // 1. Point-in-polygon.
     for (final f in features) {
-      if (_pointInMultiPolygon(lat, lng,
-          f['polys'] as List<List<List<List<double>>>>)) {
+      if (_pointInMultiPolygon(
+          lat, lng, f['polys'] as List<List<List<List<double>>>>)) {
         best = f;
         break;
       }
@@ -256,7 +267,10 @@ void main(List<String> args) {
         if (f['district'] != row['district']) continue;
         final hName = f['nameEn'] as String;
         final d = _levenshtein(nEn, _normName(_stripTypeSuffix(hName)));
-        if (d < nameBestD) { nameBestD = d; nameBest = f; }
+        if (d < nameBestD) {
+          nameBestD = d;
+          nameBest = f;
+        }
       }
       if (nameBest != null && nameBestD <= 3) best = nameBest;
     }
@@ -418,13 +432,18 @@ String _esc(String s) {
   var out = StringBuffer();
   for (var i = 0; i < s.length; i++) {
     final ch = s.codeUnitAt(i);
-    if (ch == 0x27) out.write("\\'");
-    else if (ch == 0x5C) out.write('\\\\');
-    else if (ch == 0x0A) out.write('\\n');
-    else if (ch == 0x0D) out.write('\\r');
+    if (ch == 0x27)
+      out.write("\\'");
+    else if (ch == 0x5C)
+      out.write('\\\\');
+    else if (ch == 0x0A)
+      out.write('\\n');
+    else if (ch == 0x0D)
+      out.write('\\r');
     else if (ch < 0x20 || ch > 0x7E)
       out.write('\\u${ch.toRadixString(16).padLeft(4, '0')}');
-    else out.writeCharCode(ch);
+    else
+      out.writeCharCode(ch);
   }
   return out.toString();
 }
@@ -446,10 +465,12 @@ class _Reader {
     } while (digit & 32 != 0);
     return result;
   }
+
   int zigzagVlq() {
     final u = vlq();
     return (u & 1) == 1 ? -((u + 1) >> 1) : u >> 1;
   }
+
   static int _digit(int unit) {
     if (unit >= 65 && unit <= 90) return unit - 65;
     if (unit >= 97 && unit <= 122) return unit - 97 + 26;
@@ -459,12 +480,3 @@ class _Reader {
     throw const FormatException('Invalid VLQ char');
   }
 }
-
-
-
-
-
-
-
-
-
