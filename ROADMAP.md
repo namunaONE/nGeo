@@ -42,7 +42,7 @@ already-known gaps and housekeeping.
 | 1.4 | Resolve the 7 unmatched palika boundaries | ✅ | Resolved via the 2026-10-26 centroid completion (point-in-polygon fallback joined all 7 spelling variants); `kUnmatchedPalikaBoundaries` is now empty and all 753 roster palikas carry a boundary |
 | 1.5 | Fill the 22 palikas with no attested Devanagari name | ✅ | All 753/753 now carry a Devanagari name (450 corroborated); the 22 were filled across v2.8.x–v2.9.0 |
 | 1.6 | Promote `singleSource` → `verified` where a second attestation exists | 📋 | CBS Census 2021 / MoFAGA re-harvest; directory attestations alone never promote |
-| 1.7 | Decide on high-res palika boundaries vs. the 100 KB gate | 📋 | Currently a separate file; weigh bundle size vs. detail |
+| 1.7 | Decide on high-res palika boundaries vs. the 100 KB gate | ✅ | Decided: core stays at 100 KB (eps 0.006, already high-res-derived); high-res ships as a separate optional package `packages/nepal_admin_boundaries_highres` (eps 0.001, ~75k vertices, ~300 KB, 7 tests green) |
 | 1.8 | Fix stale README feature table (said 9 unverified / 196 singleSource / 731 nameNe) | ✅ | Updated to 548 / 205 / 0 and 753/753 across README, docs/index.html, data/SOURCES.md, widgets README |
 | 1.9 | License verification for `custom.geo.json` (77-district GeoJSON) | ⏸ | Origin undocumented; on hold |
 

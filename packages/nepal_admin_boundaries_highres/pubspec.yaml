@@ -1,0 +1,22 @@
+name: nepal_admin_boundaries_highres
+description: >
+  High-resolution boundary polygons for Nepal's 753 local bodies (palikas),
+  as an optional add-on to nepal_admin_api. Ships ~75k vertices (Douglas-Peucker
+  eps 0.001 deg, ~300 KB) instead of the ~17k in the core package, at the
+  cost of a larger download. Depends on nepal_admin_api for the codec and models.
+publish_to: none
+version: 0.1.0
+
+homepage: https://github.com/namunaONE/Nepal-Local-Government-Data
+repository: https://github.com/namunaONE/Nepal-Local-Government-Data
+
+environment:
+  sdk: ^3.0.0
+
+dependencies:
+  nepal_admin_api:
+    path: ../..
+
+dev_dependencies:
+  lints: ^6.0.0
+  test: ^1.25.0
