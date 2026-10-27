@@ -484,6 +484,17 @@ in the explorer footer, per the ODbL. Dark mode reuses the same tiles with
 a CSS filter (no second tile set, no key). Centroid coordinates themselves
 derive from source #4 (open-admin-data, CC-BY-4.0, attributed in NOTICE).
 
+The NH01 highway overlay geometry (`docs/nh01-highway.geojson`) is
+derived from OpenStreetMap route relations (ref=NH01, relations
+339449 and 15086072) and **is vendored**. ODbL 1.0 position: ©
+OpenStreetMap contributors, licensed under the Open Database Licence;
+the attribution travels inside the artifact's own metadata member
+(license, relation IDs, Overpass queries, extract date) and is credited
+on the explorer (map-attrib note and the overlay popup). The extractor
+(`tool/extract_nh01.cjs`) is the artifact's provenance pin: its
+structural gates refuse a wrong-looking corridor (termini, length,
+way count) instead of shipping one.
+
 ## Re-fetching
 
 ```powershell

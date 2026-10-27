@@ -127,7 +127,19 @@ available as a legacy view:
   server-side simplified (~150 m); completeness pinned by a smoke gate
   (20 units, expected IDs, geometry present). Buffer zones, Ramsar
   sites and post-roster proposals (Bara, Phulchoki) stay out of scope.
-- **Overlays:** context layers (highways — upcoming)
+- **NH01 highway (H1):** Mahendra / Hulaki Highway, Kakarbhitta
+  (Jhapa) to Bhim Datta (Kanchanpur) — the DoR's primary east–west
+  corridor, vendored same-origin (`nh01-highway.geojson`, ~449 KB) as
+  an optional amber overlay, off by default. Geometry extracted from
+  OSM route relations by `tool/extract_nh01.cjs`, whose structural
+  gates fail the extract loudly (≥ 50 member ways, both termini in
+  Jhapa/Kanchanpur, length inside the 800–1,300 km corridor). The
+  artifact's metadata member carries the OSM relation IDs, the exact
+  Overpass queries, the extract date and the ODbL 1.0 attribution; a
+  smoke gate re-checks the corridor length, the termini and the
+  LineString shape.
+- **Overlays:** context layers (national outline, protected areas,
+  the NH01 highway; more to come)
   render in a dedicated Leaflet pane (z-index 450)
   above the figure and persist across metric switches. Each overlay is a
   `MAP_OVERLAYS` entry in `app.js` — a new layer is a data PR, not a

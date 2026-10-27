@@ -666,6 +666,27 @@ var MAP_OVERLAYS = [
       return html;
     },
   },
+  // H1 — NH01, the Mahendra (Hulaki) Highway: the DoR's primary
+  // east–west corridor, Kakarbhitta (Jhapa) to Bhim Datta (Kanchanpur).
+  // Extracted from OSM route relations (ref=NH01) by
+  // tool/extract_nh01.cjs, whose structural gates fail the extract
+  // loudly (>= 50 member ways, both termini near Kakarbhitta/Bhim Datta,
+  // length inside the 800–1,300 km corridor); the vendored artifact's
+  // metadata member carries the relation IDs, the exact Overpass
+  // queries, the extract date and the ODbL 1.0 attribution. Off by
+  // default: an amber line — context, never a competitor to the figure.
+  {
+    id: 'nh01-highway',
+    label: 'Mahendra Highway (NH01)',
+    urls: ['nh01-highway.geojson?v=1'],
+    enabledByDefault: false,
+    style: { color: '#B45309', weight: 2, opacity: 0.85, fill: false },
+    tooltip: () => '<strong>NH01 — Mahendra (Hulaki) Highway</strong>',
+    popup: () =>
+      '<strong>Mahendra Highway (NH01)</strong>' +
+      '<br>Kakarbhitta (Jhapa) — Bhim Datta (Kanchanpur) · ~1,047 km' +
+      '<br><span style="color:#64748b;font-size:12px">Geometry: OpenStreetMap (ODbL 1.0) — © OpenStreetMap contributors</span>',
+  },
 ];
 var _overlayLayers = {};  // id -> { def, layer, loaded, visible, ready }
 var _overlaysInited = false;

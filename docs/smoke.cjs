@@ -199,6 +199,44 @@ vm.createContext(sandbox);
   assert.ok(
     pointInRing([85.3240, 27.7172], outlineRing),
     'outline includes Kathmandu');
+  assert.ok(
+    sandbox.MAP_OVERLAYS.some((o) => o.id === 'nh01-highway'),
+    'NH01 highway overlay registered');
+  const nh01 = JSON.parse(fs.readFileSync(path.join(ROOT, 'nh01-highway.geojson'), 'utf8'));
+  const nh01Meta = nh01.metadata || {};
+  assert.ok(
+    Array.isArray(nh01.features) && nh01.features.length >= 50,
+    'NH01 ships its member ways, got: ' + (nh01.features && nh01.features.length));
+  assert.ok(
+    nh01Meta.wayCount === nh01.features.length,
+    'NH01 metadata.wayCount matches the feature count');
+  for (const f of nh01.features) {
+    assert.ok(
+      f.geometry && f.geometry.type === 'LineString' &&
+        Array.isArray(f.geometry.coordinates) && f.geometry.coordinates.length >= 2,
+      'NH01 feature is a LineString with geometry');
+  }
+  assert.ok(/ODbL/.test(nh01Meta.license || ''),
+    'NH01 carries the ODbL attribution: ' + nh01Meta.license);
+  assert.ok(
+    Array.isArray(nh01Meta.osmRelationIds) && nh01Meta.osmRelationIds.length > 0,
+    'NH01 records its OSM relation IDs');
+  assert.ok(
+    nh01Meta.lengthKm >= 800 && nh01Meta.lengthKm <= 1300,
+    'NH01 length in corridor, got: ' + nh01Meta.lengthKm);
+  // Termini pinned: Kakarbhitta (Jhapa, east) and Bhim Datta (Kanchanpur,
+  // west) — a mis-extracted corridor cannot pass.
+  function nh01TerminusGap(pt) {
+    let best = Infinity;
+    for (const f of nh01.features) {
+      for (const c of f.geometry.coordinates) {
+        best = Math.min(best, Math.max(Math.abs(c[0] - pt[0]), Math.abs(c[1] - pt[1])));
+      }
+    }
+    return best;
+  }
+  assert.ok(nh01TerminusGap([88.15, 26.68]) <= 0.35, 'NH01 east terminus at Kakarbhitta');
+  assert.ok(nh01TerminusGap([80.18, 28.96]) <= 0.35, 'NH01 west terminus at Bhim Datta');
   const rows = (tableBody.innerHTML.match(/<tr/g) || []).length;
   console.log(`SMOKE OK: ${data.length} records, ${rows} rows rendered, no errors`);
 })().catch((err) => {
