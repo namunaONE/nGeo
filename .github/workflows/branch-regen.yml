@@ -98,9 +98,11 @@ jobs:
         env:
           GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
 
-      # The run page renders step summaries server-side, so every diagnostic
-      # result is dumped there. Annotations from the previous attempt never
-      # registered; the summary always does.
+      # Diagnostics go two places: the step summary, and the raw logs
+      # pushed to the ci-diagnostics branch. The run page truncates and
+      # log access is unavailable from outside, so the side branch is the
+      # readable copy. Pushing a different ref with GITHUB_TOKEN triggers
+      # no workflows, so this cannot loop.
       - name: Diagnostics - analyze, tests, join gate
         run: |
           set +e
@@ -128,4 +130,14 @@ jobs:
             cat /tmp/join.log
             echo '```'
           } >> "$GITHUB_STEP_SUMMARY"
+          mkdir -p ci-diagnostics
+          cp /tmp/analyze.log /tmp/test.log /tmp/join.log ci-diagnostics/
+          printf 'arc=%s\ntrc=%s\njrc=%s\n' "$arc" "$trc" "$jrc" > ci-diagnostics/exits.txt
+          git add ci-diagnostics
+          if git diff --cached --quiet; then
+            echo "diagnostics unchanged; not pushing"
+          else
+            git commit -m "chore: publish diagnostics logs"
+            git push origin HEAD:refs/heads/ci-diagnostics --force
+          fi
           if [ $((arc + trc + jrc)) -ne 0 ]; then exit 1; fi
