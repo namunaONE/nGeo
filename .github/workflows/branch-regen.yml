@@ -1,0 +1,121 @@
+# TEMPORARY branch helper - mirrors the PR #6 precedent: run dart format
+# and the generators on CI, commit the derived artifacts, and dispatch the
+# Dart CI gate on the updated head, so the PR runs against a consistent
+# tree. This file is deleted before the squash-merge.
+name: Branch regen (temporary)
+
+on:
+  push:
+    branches: [fix/highres-boundaries-ci-green]
+
+permissions:
+  contents: write
+  actions: write
+
+concurrency:
+  group: branch-regen
+  cancel-in-progress: false
+
+jobs:
+  regen:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+      - uses: dart-lang/setup-dart@v1
+        with:
+          sdk: stable
+      - run: dart pub get
+
+      - name: dart format (same file set as the CI gate)
+        run: |
+          set +e
+          files=$(git ls-files '*.dart' | grep -v 'lib/src/nepal_data.dart')
+          dart format $files >/tmp/fmt.log 2>&1
+          rc=$?
+          cat /tmp/fmt.log
+          if [ $rc -ne 0 ]; then
+            echo "::error::dart format exited $rc: $(tail -c 400 /tmp/fmt.log | tr '\n' ' ')"
+            echo "fmt_rc=1" >> "$GITHUB_ENV"
+          else
+            echo "fmt_rc=0" >> "$GITHUB_ENV"
+          fi
+
+      - name: Regenerate high-res palika boundaries
+        run: |
+          set +e
+          dart run tool/generate_palika_boundaries_highres.dart >/tmp/gen1.log 2>&1
+          rc=$?
+          cat /tmp/gen1.log
+          if [ $rc -ne 0 ]; then
+            echo "::error::palika highres regen exited $rc: $(tail -c 500 /tmp/gen1.log | tr '\n' ' ')"
+            echo "gen1_rc=1" >> "$GITHUB_ENV"
+          else
+            echo "gen1_rc=0" >> "$GITHUB_ENV"
+          fi
+
+      - name: Regenerate province boundaries
+        run: |
+          set +e
+          dart run tool/generate_province_boundaries.dart >/tmp/gen2.log 2>&1
+          rc=$?
+          cat /tmp/gen2.log
+          if [ $rc -ne 0 ]; then
+            echo "::error::province regen exited $rc: $(tail -c 500 /tmp/gen2.log | tr '\n' ' ')"
+            echo "gen2_rc=1" >> "$GITHUB_ENV"
+          else
+            echo "gen2_rc=0" >> "$GITHUB_ENV"
+          fi
+
+      - name: Commit formatted and regenerated artifacts
+        id: commitpush
+        run: |
+          git config user.name "github-actions[bot]"
+          git config user.email "41898282+github-actions[bot]@users.noreply.github.com"
+          git add -A
+          if git diff --cached --quiet; then
+            echo "Tree already consistent; nothing to commit."
+            echo "pushed=false" >> "$GITHUB_OUTPUT"
+          else
+            git commit -m "style: dart-format and regenerate canonical high-res boundaries (temporary branch regen)"
+            git pull --rebase origin fix/highres-boundaries-ci-green
+            git push origin HEAD:fix/highres-boundaries-ci-green
+            echo "pushed=true" >> "$GITHUB_OUTPUT"
+          fi
+
+      - name: Trigger the Dart CI gate on the updated head
+        if: steps.commitpush.outputs.pushed == 'true' && env.fmt_rc == '0' && env.gen1_rc == '0' && env.gen2_rc == '0'
+        run: |
+          set +e
+          code=$(curl -s -o /tmp/dispatch.out -w '%{http_code}' -X POST \
+            -H "Authorization: Bearer $GITHUB_TOKEN" \
+            -H "Accept: application/vnd.github+json" \
+            https://api.github.com/repos/namunaONE/nGeo/actions/workflows/dart.yml/dispatches \
+            -d '{"ref":"fix/highres-boundaries-ci-green"}')
+          if [ "$code" != "204" ]; then
+            echo "::error::workflow dispatch failed (HTTP $code): $(head -c 300 /tmp/dispatch.out)"
+            exit 1
+          fi
+        env:
+          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+
+      - name: Diagnostics - analyze, tests, join gate (annotated)
+        run: |
+          set +e
+          dart analyze --fatal-infos >/tmp/analyze.log 2>&1
+          arc=$?
+          if [ $arc -ne 0 ]; then
+            grep -E '^[^ ]*[\s-]+(error|warning|info)[\s-]' /tmp/analyze.log | head -25 | while IFS= read -r line; do
+              echo "::error::analyze: $line"
+            done
+          fi
+          dart test >/tmp/test.log 2>&1
+          trc=$?
+          if [ $trc -ne 0 ]; then
+            echo "::error::dart test exited $trc: $(tail -c 600 /tmp/test.log | tr '\n' ' ')"
+          fi
+          dart run tool/check_boundary_join.dart >/tmp/join.log 2>&1
+          jrc=$?
+          if [ $jrc -ne 0 ]; then
+            echo "::error::boundary join gate exited $jrc: $(tail -c 400 /tmp/join.log | tr '\n' ' ')"
+          fi
+          if [ $((arc + trc + jrc)) -ne 0 ]; then exit 1; fi

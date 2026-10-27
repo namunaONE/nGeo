@@ -68,7 +68,7 @@ List<List<double>> _simplifyRing(List<List<double>> ring, double eps) {
       return dx2 * dx2 + dy2 * dy2;
     }
     var t = ((pt[0] - a[0]) * dx + (pt[1] - a[1]) * dy) / len2;
-    t = t.clamp(0, 1);
+    t = t.clamp(0, 1).toDouble();
     final px = a[0] + t * dx, py = a[1] + t * dy;
     final dx2 = pt[0] - px, dy2 = pt[1] - py;
     return dx2 * dx2 + dy2 * dy2;
@@ -126,7 +126,7 @@ bool _pointInMultiPolygon(double lat, double lng,
 }
 
 String _normName(String s) =>
-    (s ?? '').toLowerCase().replaceAll(RegExp(r'[^a-z0-9]'), '');
+    s.toLowerCase().replaceAll(RegExp(r'[^a-z0-9]'), '');
 
 int _levenshtein(String a, String b) {
   if (a == b) return 0;
