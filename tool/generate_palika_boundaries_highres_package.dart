@@ -175,7 +175,8 @@ void main(List<String> args) {
   final check = args.contains('--check');
   const geoPath = 'docs/palika-boundaries-highres.geojson';
   const rosterPath = 'data/nepal_local_levels.json';
-  const outPath = 'packages/nepal_admin_boundaries_highres/lib/src/highres_boundaries_data.dart';
+  const outPath =
+      'packages/nepal_admin_boundaries_highres/lib/src/highres_boundaries_data.dart';
   const eps = 0.001;
 
   final geoFile = File(geoPath);
