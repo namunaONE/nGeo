@@ -8,8 +8,8 @@ void main() {
   test('high-res constants are self-consistent', () {
     expect(kHighResPalikaBoundaryFormatVersion, '1');
     expect(kHighResPalikaBoundaryFeatureCount, 753);
-    final matchedEntries = kHighResPalikaBoundaries.values
-        .fold<int>(0, (n, m) => n + m.length);
+    final matchedEntries =
+        kHighResPalikaBoundaries.values.fold<int>(0, (n, m) => n + m.length);
     expect(matchedEntries, kHighResPalikaBoundaryMatchedCount);
     expect(
       matchedEntries + kHighResUnmatchedPalikaBoundaries.length,
@@ -22,10 +22,12 @@ void main() {
   });
 
   test('all six metros have high-res boundary polygons', () {
-    final metros = NepalAdminApi.getLocalBodiesByType(LocalBodyType.metropolitan);
+    final metros =
+        NepalAdminApi.getLocalBodiesByType(LocalBodyType.metropolitan);
     expect(metros.length, 6);
     for (final m in metros) {
-      expect(HighResPalikaBoundaries.hasBoundary(m.districtName, m.name), isTrue,
+      expect(
+          HighResPalikaBoundaries.hasBoundary(m.districtName, m.name), isTrue,
           reason: '${m.name} has no high-res boundary');
       expect(HighResPalikaBoundaries.byName(m.districtName, m.name), isNotNull,
           reason: '${m.name} failed to decode');
