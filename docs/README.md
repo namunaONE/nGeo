@@ -102,7 +102,11 @@ available as a legacy view:
   (no second tile set, no API key).
 - Sync: filters/search restyle the choropleth or rebuild dots (all
   filtered, not just the page); table-row click/Enter flies to the palika;
-  `?cbs=31304` deep-links.
+  `?cbs=31304` deep-links. The URL is the shareable explorer state:
+  `?q=`, `?province=`, `?district=`, `?type=` and `?metric=` apply as the
+  initial filters on load, every filter change rewrites the address bar
+  via `history.replaceState`, and the toolbar "Share view" button
+  copies the link.
 - Tile factory is a single `MAP_TILES` constant + `createTileLayer()` in
   `app.js`, so the tile source is defined in exactly one place.
 

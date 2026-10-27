@@ -226,7 +226,8 @@ function initExplorer() {
       // Choropleth boundary join needs the full unfiltered dataset.
       window.__explorerAll = () => allData;
       populateFilters();
-      render();
+      applyDeepLinkState();
+      applyFilters();
     })
     .catch(err => {
       console.error('Failed to load data:', err);
@@ -264,6 +265,55 @@ function initExplorer() {
       }).join('');
   }
 
+  // ---- Deep links: the URL is the shareable explorer state ----
+  // Landing on explorer.html?q=...&province=...&district=...&type=...
+  // &metric=... applies those values as the initial filter state, and
+  // every filter change rewrites the address bar via
+  // history.replaceState (no history spam), so "copy the URL" always
+  // shares the exact current view. Unmanaged params (e.g. ?cbs= for the
+  // map-focus deep link) are preserved, never dropped.
+  const MANAGED_PARAMS = ['q', 'province', 'district', 'type', 'metric'];
+
+  function setSelectValue(sel, value) {
+    if (!sel || value == null) return;
+    const opts = sel.options ? Array.from(sel.options) : [];
+    if (opts.some(o => o.value === value)) sel.value = value;
+  }
+
+  function applyDeepLinkState() {
+    const params = new URLSearchParams(window.location.search || '');
+    searchInput.value = params.get('q') || '';
+    setSelectValue(provinceFilter, params.get('province'));
+    setSelectValue(districtFilter, params.get('district'));
+    setSelectValue(typeFilter, params.get('type'));
+    const metricSel = document.getElementById('metric-filter');
+    const metric = params.get('metric');
+    if (metric && metricSel) {
+      setSelectValue(metricSel, metric);
+      if (metricSel.value === metric) setMapMetric(metric);
+    }
+  }
+
+  function syncUrl() {
+    // Guarded: the smoke harness stubs window without history, and any
+    // environment without replaceState degrades silently (the URL just
+    // stays as-is) instead of throwing inside the render path.
+    if (!window.history || typeof window.history.replaceState !== 'function') return;
+    const params = new URLSearchParams(window.location.search || '');
+    MANAGED_PARAMS.forEach(p => params.delete(p));
+    const q = searchInput.value.trim();
+    if (q) params.set('q', q);
+    if (provinceFilter.value) params.set('province', provinceFilter.value);
+    if (districtFilter.value) params.set('district', districtFilter.value);
+    if (typeFilter.value) params.set('type', typeFilter.value);
+    if (typeof _mapMetric !== 'undefined' && _mapMetric && _mapMetric !== 'type') {
+      params.set('metric', _mapMetric);
+    }
+    const qs = params.toString();
+    const url = window.location.pathname + (qs ? '?' + qs : '') + (window.location.hash || '');
+    window.history.replaceState(null, '', url);
+  }
+
   function applyFilters() {
     const search = searchInput.value.toLowerCase().trim();
     const province = provinceFilter.value;
@@ -287,6 +337,7 @@ function initExplorer() {
 
     currentPage = 1;
     render();
+    syncUrl();
   }
 
   function render() {
@@ -410,6 +461,23 @@ function initExplorer() {
     metricFilter.addEventListener('change', () => {
       setMapMetric(metricFilter.value);
       render();
+      syncUrl();
+    });
+  }
+
+  // "Share view": copies the deep link to the exact current view.
+  const shareBtn = document.getElementById('share-view');
+  if (shareBtn) {
+    shareBtn.addEventListener('click', () => {
+      const url = window.location.href;
+      if (navigator.clipboard && navigator.clipboard.writeText) {
+        navigator.clipboard.writeText(url).then(
+          () => showToast('Link copied — share this exact view'),
+          () => showToast('Copy failed — copy the address bar URL')
+        );
+      } else {
+        showToast('Copy this page URL from the address bar');
+      }
     });
   }
 }
