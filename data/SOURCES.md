@@ -547,3 +547,28 @@ and pin the four files.
 - Regenerate: dart run tool/generate_province_boundaries.dart
   (input: docs/province-boundaries.geojson).
 - Conversion tool: tool/convert_province_shp.js.
+
+
+## District boundaries (77 districts) - added 2026-10-28
+
+- Source: official portal district boundary export (Survey Department of
+  Nepal / National Geoportal lineage), user-provided on 2026-10-28; already
+  WGS 84 (EPSG:4326), full precision - no simplification.
+- Content: 77 district polygons, 55,733 stored vertices, one part each, no
+  holes; properties carry the roster districtId ('P{province}.D{rank}'),
+  the roster English and Devanagari names, the source's headquarters name
+  and the source's uppercase district name.
+- Join: 77/77 against the roster by name, with the seven spelling aliases
+  resolved at ingestion (TEHRATHUM, DHANUSA, KAVREPALANCHOWK, EASTERN and
+  WESTERN RUKUM, PARASI, TANAHU). Every districtId was cross-checked
+  against the canonical district id derivation; province numbers in the
+  source matched the roster 77/77.
+- Ground truth: five point-in-polygon checks on raw coordinates before
+  encoding (Kathmandu, Bharatpur, Pokhara, Lipulekh pass and Kalapani -
+  both in Darchula).
+- License: Government of Nepal administrative data (Survey Department /
+  National Geoportal); same position as the province boundary layer above.
+- Generated artifact: lib/src/geo/district_boundaries.dart (171 KB).
+- Regenerate: dart run tool/generate_district_boundaries.dart (input:
+  docs/district-boundaries.geojson; lossless VLQ encoding identical to the
+  palika layer - the quantised round trip is bit-exact).
