@@ -13,27 +13,19 @@ jobs:
         with:
           sdk: stable
       - run: dart pub get
-      - name: Format check
+      - name: Format diff capture
         run: |
           files=$(git ls-files '*.dart' | grep -v 'lib/src/nepal_data.dart')
           dart format --output=none --set-exit-if-changed $files > /tmp/fmt.log 2>&1 || true
           cat /tmp/fmt.log
-      - name: Analyze
-        run: |
-          dart analyze --fatal-infos > /tmp/analyze.log 2>&1 || true
-          cat /tmp/analyze.log
-      - name: District generator drift check
-        run: |
-          dart run tool/generate_district_boundaries.dart --check > /tmp/gen.log 2>&1 || true
-          cat /tmp/gen.log
-      - name: Tests
-        run: |
-          dart test > /tmp/test.log 2>&1 || true
-          tail -50 /tmp/test.log
+          dart format $files > /dev/null 2>&1
+          git diff > /tmp/fmtdiff.log
+          git checkout -- .
+          cat /tmp/fmtdiff.log
       - name: Publish logs to ci-diagnostics
         run: |
           mkdir -p ci-diagnostics
-          cp /tmp/fmt.log /tmp/analyze.log /tmp/gen.log /tmp/test.log ci-diagnostics/
+          cp /tmp/fmt.log /tmp/fmtdiff.log ci-diagnostics/
           git config user.name ci-diagnostics
           git config user.email ci@users.noreply.github.com
           git add ci-diagnostics
