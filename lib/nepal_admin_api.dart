@@ -1,4 +1,4 @@
-successfully downloaded text file (SHA: 35b1782515e42f81b10924f6ab7e2b129c8fc669)/// Administrative divisions of Nepal: provinces, districts and local bodies.
+/// Administrative divisions of Nepal: provinces, districts and local bodies.
 ///
 /// See [NepalAdminApi] for the query surface of this package.
 library;

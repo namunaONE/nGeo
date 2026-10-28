@@ -1,4 +1,4 @@
-successfully downloaded text file (SHA: 693497d1a3314ca89900908263a74a4cbb2c805e)name: Dart CI
+name: Dart CI
 
 on:
   push:

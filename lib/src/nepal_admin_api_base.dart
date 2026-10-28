@@ -1,4 +1,4 @@
-successfully downloaded text file (SHA: 53b39a37cb8fa749d6fef2084a15db9fa2d9feaa)// lib/src/nepal_admin_api_base.dart
+// lib/src/nepal_admin_api_base.dart
 //
 // Core models and the query API for Nepal's administrative divisions.
 

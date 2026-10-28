@@ -1,4 +1,4 @@
-successfully downloaded text file (SHA: 8b47c59b439263f5dd243bf3c4b12166c9369573)# Merge sources & provenance
+# Merge sources & provenance
 
 Every external dataset consumed by the merge pipeline is pinned here: the
 exact URL, the license, and the retrieval date. **No third-party data is
