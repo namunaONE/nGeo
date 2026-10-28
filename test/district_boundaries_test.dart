@@ -42,8 +42,8 @@ void main() {
     expect(b, isNotNull);
     expect(b!.districtName, 'Kathmandu');
     // Name arm of the same method.
-    expect(NepalAdminApi.getDistrictBoundary('chitwan')!.districtName,
-        'Chitwan');
+    expect(
+        NepalAdminApi.getDistrictBoundary('chitwan')!.districtName, 'Chitwan');
     expect(NepalAdminApi.getDistrictBoundary('Bharatpur'), isNull);
     expect(NepalAdminApi.hasDistrictBoundary('P3.D05'), isTrue);
     expect(NepalAdminApi.hasDistrictBoundary('kathmandu'), isTrue);
