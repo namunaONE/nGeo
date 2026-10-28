@@ -14,6 +14,7 @@
 
 import 'dart:convert';
 import 'dart:io';
+
 List<List<double>> _simplifyRing(List<List<double>> ring, double eps) {
   if (ring.length <= 2) return List.of(ring);
   double perpDist(List<double> pt, List<double> a, List<double> b) {
@@ -250,9 +251,9 @@ void main(List<String> args) {
   }
 
   // Build district-name -> districtId map from the simplified boundaries file.
-  final simpleGeo = jsonDecode(
-          File('docs/palika-boundaries.geojson').readAsStringSync())
-      as Map<String, dynamic>;
+  final simpleGeo =
+      jsonDecode(File('docs/palika-boundaries.geojson').readAsStringSync())
+          as Map<String, dynamic>;
   final districtNameToId = <String, String>{};
   final districtNameToProvinceId = <String, String>{};
   for (final raw in _maps(simpleGeo['features'])) {
@@ -311,8 +312,7 @@ void main(List<String> args) {
     final provinceId = districtNameToProvinceId[districtName] ??
         'P${rosterProvinceCbsByDistrict[districtName]}';
     final type = rosterTypeByName[key] ?? '';
-    final nameNe = rosterNameNeByName[key] ??
-        (f['nameNe'] as String?);
+    final nameNe = rosterNameNeByName[key] ?? (f['nameNe'] as String?);
     final nameEn = f['nameEn'] as String;
 
     geoFeatures.add({
@@ -336,7 +336,8 @@ void main(List<String> args) {
   geoFeatures.sort((a, b) {
     final pa = a['properties'] as Map<String, dynamic>;
     final pb = b['properties'] as Map<String, dynamic>;
-    final dc = (pa['districtId'] as String).compareTo(pb['districtId'] as String);
+    final dc =
+        (pa['districtId'] as String).compareTo(pb['districtId'] as String);
     if (dc != 0) return dc;
     return (pa['nameEn'] as String).compareTo(pb['nameEn'] as String);
   });
@@ -364,6 +365,7 @@ int _countVerts(List<Map<String, dynamic>> features) {
         }
       }
     }
+
     walk(g['coordinates']);
   }
   // each vertex counted once (points are [lng,lat] pairs -> 2 nums; count points)
@@ -372,4 +374,3 @@ int _countVerts(List<Map<String, dynamic>> features) {
 
 List<Map<String, dynamic>> _maps(dynamic v) =>
     (v as List<dynamic>).cast<Map<String, dynamic>>();
-
