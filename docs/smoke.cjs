@@ -237,6 +237,28 @@ vm.createContext(sandbox);
   }
   assert.ok(nh01TerminusGap([88.15, 26.68]) <= 0.35, 'NH01 east terminus at Kakarbhitta');
   assert.ok(nh01TerminusGap([80.18, 28.96]) <= 0.35, 'NH01 west terminus at Bhim Datta');
+  // High-detail boundary variant (explorer "High detail" toggle).
+  assert.ok(
+    fs.existsSync(path.join(ROOT, 'palika-boundaries-highres-mid.geojson')),
+    'high-detail boundary variant ships');
+  const mid = JSON.parse(fs.readFileSync(path.join(ROOT, 'palika-boundaries-highres-mid.geojson'), 'utf8'));
+  assert.ok(
+    Array.isArray(mid.features) && mid.features.length === 753,
+    'high-detail variant has 753 features, got: ' + (mid.features && mid.features.length));
+  let midVerts = 0;
+  for (const f of mid.features) {
+    function c(x) { if (Array.isArray(x) && typeof x[0] === 'number') return 1; let n = 0; for (const y of x) n += c(y); return n; }
+    midVerts += c(f.geometry.coordinates);
+  }
+  assert.ok(midVerts >= 70000,
+    'high-detail variant carries >= 70k vertices, got: ' + midVerts);
+  for (const f of mid.features) {
+    assert.ok(f.properties && f.properties.districtId,
+      'high-detail feature has districtId for the explorer join');
+  }
+  assert.ok(
+    fs.readFileSync(path.join(ROOT, 'explorer.html'), 'utf8').includes('boundary-detail-toggle'),
+    'explorer exposes the high-detail toggle');
   const rows = (tableBody.innerHTML.match(/<tr/g) || []).length;
   console.log(`SMOKE OK: ${data.length} records, ${rows} rows rendered, no errors`);
 })().catch((err) => {

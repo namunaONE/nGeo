@@ -572,6 +572,7 @@ function ensureMap() {
     });
     _map.addLayer(_cluster);
     initMapOverlays();
+    initBoundaryDetailToggle();
     if (status) status.textContent = '';
     // Deep link: explorer.html?cbs=31304
     const cbs = new URLSearchParams(window.location.search).get('cbs');
@@ -602,6 +603,12 @@ var PALIKA_BOUNDARIES_URLS = [
   'palika-boundaries.geojson?v=1',
   'https://cdn.jsdelivr.net/gh/l3lackcurtains/nepali-geo-pro-max@117fd0f3d2dabae3bd86bfe9e4c57098ffe56669/src/geo/local-units.geo.ts',
   'https://raw.githubusercontent.com/l3lackcurtains/nepali-geo-pro-max/117fd0f3d2dabae3bd86bfe9e4c57098ffe56669/src/geo/local-units.geo.ts',
+];
+// Higher-detail variant (~77k vertices, ~3 MB) for the optional "High detail"
+// toggle. Off by default: the simplified layer (16k vertices) keeps the
+// initial load fast. Loading this swaps the figure's boundary layer.
+var PALIKA_BOUNDARIES_HIGH_URLS = [
+  'palika-boundaries-highres-mid.geojson?v=1',
 ];
 // data.json rows carry district NAMES; boundary properties carry districtId
 // keys (P#.D##). This map bridges the two. Derived from the boundary data
@@ -672,6 +679,8 @@ var DOTS_LEGEND_HTML =
 var _mapMetric = 'type';
 var _boundaries = null;        // parsed FeatureCollection (753 palikas)
 var _boundariesReady = null;   // in-flight load promise
+var _boundaryDetailHigh = (localStorage.getItem('boundaryDetail') === 'high');
+var _lastMapItems = null;     // last items passed to syncMap, for detail swaps
 var _boundaryByKey = null;     // districtId|normName -> feature
 var _boundaryLayer = null;     // L.geoJSON layer
 var _boundaryDataAdded = false;
@@ -885,9 +894,10 @@ function buildBoundaryIndex(rows) {
 function loadBoundaries() {
   if (_boundaries) return Promise.resolve(_boundaries);
   if (_boundariesReady) return _boundariesReady;
+  const urls = _boundaryDetailHigh ? PALIKA_BOUNDARIES_HIGH_URLS : PALIKA_BOUNDARIES_URLS;
   _boundariesReady = (async () => {
     let lastErr = null;
-    for (const url of PALIKA_BOUNDARIES_URLS) {
+    for (const url of urls) {
       try {
         const res = await fetch(url);
         if (!res.ok) throw new Error('HTTP ' + res.status + ' loading boundaries');
@@ -906,6 +916,24 @@ function loadBoundaries() {
     throw lastErr || new Error('palika boundaries unavailable');
   })();
   return _boundariesReady;
+}
+
+function resetBoundaryState() {
+  _boundaries = null;
+  _boundariesReady = null;
+  _boundaryByKey = null;
+  _boundaryDataAdded = false;
+  if (_boundaryLayer && _map && _map.hasLayer(_boundaryLayer)) _map.removeLayer(_boundaryLayer);
+  _boundaryLayer = null;
+}
+
+function setBoundaryDetail(high) {
+  if (high === _boundaryDetailHigh) return;
+  _boundaryDetailHigh = !!high;
+  try { localStorage.setItem('boundaryDetail', _boundaryDetailHigh ? 'high' : 'low'); } catch (e) { /* ignore */ }
+  resetBoundaryState();
+  const items = _lastMapItems || (window.__explorerAll && window.__explorerAll()) || [];
+  syncMap(items);
 }
 
 // Shared popup for boundaries and dots, so both views tell the same story.
@@ -989,6 +1017,13 @@ function wireBoundaryFeature(feature, layer) {
     layer.bindPopup('<strong>' + escapeHtmlAttr(p.nameEn || 'Palika') + '</strong>' +
       '<br><span style="color:#64748b;font-size:12px">Boundary not matched to a table row</span>');
   }
+}
+
+function initBoundaryDetailToggle() {
+  const box = document.getElementById('boundary-detail-toggle');
+  if (!box) return;
+  box.checked = _boundaryDetailHigh;
+  box.addEventListener('change', () => setBoundaryDetail(box.checked));
 }
 
 function initMapOverlays() {
@@ -1169,6 +1204,7 @@ function syncMap(items) {
   // Dispatcher: render the map per the selected figure metric — the
   // palika-boundary choropleth (wards / type / cbs) or the classic dots.
   if (!document.getElementById('map')) return;
+  _lastMapItems = items;
   if (_mapMetric === 'dots') { syncDotsMap(items); return; }
   syncChoropleth(items);
 }
