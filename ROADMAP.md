@@ -19,8 +19,9 @@ Status key: ✅ shipped · 🔄 in progress · ⏸ blocked on external input · 
 | CBS codes | 753/753 coded (548 verified · 205 single-source · 0 unverified) |
 | Devanagari names | 753/753 palikas · 77/77 districts · 7/7 provinces (450 corroborated) |
 | Centroids | 753/753 mapped |
-| Palika boundaries | 746/753 joined (7 unmatched, published honestly) · ~91 KB |
+| Palika boundaries | 753/753 joined (0 unmatched) · ~101 KB (100 KB gate) |
 | Province boundaries | 7/7 high-res (National Geoportal) |
+| District boundaries | 77/77 (lossless VLQ, ~175 KB) — shipped 2026-10-28 (#15) |
 | Bindings | Dart · TS/JS · Python · CSV · GeoJSON (drift-checked in CI) |
 | Widgets | 7 Flutter components (`nepal_admin_widgets`) |
 | Docs site | Explorer (table + clustered map) · API ref · llms.txt/llms-full.txt |
