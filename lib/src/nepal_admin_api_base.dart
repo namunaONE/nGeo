@@ -1,7 +1,8 @@
-// lib/src/nepal_admin_api_base.dart
+successfully downloaded text file (SHA: 53b39a37cb8fa749d6fef2084a15db9fa2d9feaa)// lib/src/nepal_admin_api_base.dart
 //
 // Core models and the query API for Nepal's administrative divisions.
 
+import 'geo/district_boundary_codec.dart';
 import 'geo/palika_boundary_codec.dart';
 import 'geo/province_boundary_codec.dart';
 import 'nepal_data.dart';
@@ -1086,6 +1087,32 @@ class NepalAdminApi {
   /// Every province boundary as one GeoJSON FeatureCollection (RFC 7946, WGS84).
   static Map<String, Object?> provinceBoundariesGeoJson() {
     return ProvinceBoundaries.toGeoJsonFeatureCollection();
+  }
+
+  // --- District boundaries (77 districts, official portal export) ---
+
+  /// Boundary polygon for one district, decoded on demand.
+  ///
+  /// Accepts either a geometry id (e.g. 'P3.D05') or a roster name
+  /// (e.g. 'Kathmandu'); both lookups are case-insensitive. Returns null
+  /// when the geometry table does not cover the district.
+  static DistrictBoundary? getDistrictBoundary(String districtNameOrId) {
+    return DistrictBoundaries.byDistrictId(districtNameOrId) ??
+        DistrictBoundaries.byName(districtNameOrId);
+  }
+
+  /// Boundaries for all 77 districts, decoded, in district-id order.
+  static List<DistrictBoundary> getAllDistrictBoundaries() =>
+      DistrictBoundaries.all;
+
+  /// Whether the geometry table covers this district (id or name).
+  static bool hasDistrictBoundary(String districtNameOrId) =>
+      DistrictBoundaries.hasBoundary(districtNameOrId);
+
+  /// Every district boundary as one GeoJSON FeatureCollection
+  /// (RFC 7946, WGS84).
+  static Map<String, Object?> districtBoundariesGeoJson() {
+    return DistrictBoundaries.toGeoJsonFeatureCollection();
   }
 }
 
