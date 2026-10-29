@@ -1,0 +1,101 @@
+name: District elevation stats (GLO-30)
+
+# Rebuilds bindings/geojson/districts.elevation.geojson from Copernicus
+# GLO-30 and commits it when it changes. No cron trigger: GLO-30 is the
+# frozen 2021 release - the DEM never drifts upstream, so the only
+# reasons to rebuild are a tool change or the district polygons changing.
+on:
+  workflow_dispatch:
+  push:
+    paths:
+      - 'tool/elevation/**'
+      - '.github/workflows/elevation-stats.yml'
+      - 'docs/district-boundaries.geojson'
+
+permissions:
+  contents: write
+
+concurrency:
+  group: elevation-stats
+  # Deterministic artifact: the latest tool version always wins, so a
+  # newer run replaces an older one instead of queuing behind it (also
+  # un-sticks a runner stalled on network).
+  cancel-in-progress: true
+
+jobs:
+  build:
+    runs-on: ubuntu-latest
+    timeout-minutes: 45
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-python@v5
+        with:
+          python-version: '3.11'
+      - name: Install the raster stack
+        run: pip install rasterio shapely numpy
+      # Diagnostics travel as ::error annotations (readable without
+      # authentication) because raw logs and step summaries are not
+      # reachable from outside. `set +e` matters: the runner default is
+      # `bash -e {0}`, which would abort before the annotations are
+      # emitted.
+      # A run with no exit-code annotation whose log ends mid-flow was
+      # preempted by GitHub infrastructure - just re-run it; the build is
+      # deterministic, so a retry is always safe.
+      - name: Compute zonal stats and run the anchor gates
+        run: |
+          set +e
+          python -V > elevation-build.log 2>&1
+          python -m py_compile tool/elevation/build_elevation_stats.py >> elevation-build.log 2>&1
+          comp=$?
+          if [ "$comp" -ne 0 ]; then
+            grep -vE '^downloading|^retry' elevation-build.log | tail -n 20 | while IFS= read -r line; do
+              line=${line//%/%25}
+              echo "::error title=py_compile::${line:0:470}"
+            done
+            cat elevation-build.log
+            exit "$comp"
+          fi
+          python -u tool/elevation/build_elevation_stats.py >> elevation-build.log 2>&1
+          rc=$?
+          set -e
+          cat elevation-build.log
+          if [ "$rc" -ne 0 ]; then
+            tail -n 60 elevation-build.log | while IFS= read -r line; do
+              line=${line//%/%25}
+              echo "::error title=tool::${line:0:470}"
+            done
+            {
+              echo '## Elevation build failed - last tool output'
+              echo '```'
+              tail -c 6000 elevation-build.log
+              echo '```'
+            } >> "$GITHUB_STEP_SUMMARY"
+            exit "$rc"
+          fi
+      # The artifact is text (~15 KB) and is generated in CI only - it is
+      # committed, never hand-edited, so every published byte has a
+      # gate-verified, provenance-pinned build behind it. [skip ci] keeps
+      # the bot commit from re-triggering the workflow suite.
+      - name: Commit when the artifact changed
+        run: |
+          set +e
+          git config user.name 'github-actions[bot]'
+          git config user.email '41898282+github-actions[bot]@users.noreply.github.com'
+          git add bindings/geojson/districts.elevation.geojson
+          git diff --cached --quiet
+          if [ $? -eq 0 ]; then
+            echo 'districts.elevation.geojson unchanged - nothing to commit.'
+            exit 0
+          fi
+          git commit -m 'data: rebuild district elevation stats (GLO-30) [skip ci]'
+          git push > commit-push.log 2>&1
+          rc=$?
+          set -e
+          cat commit-push.log
+          if [ "$rc" -ne 0 ]; then
+            tail -n 10 commit-push.log | while IFS= read -r line; do
+              line=${line//%/%25}
+              echo "::error title=git push::${line:0:470}"
+            done
+            exit "$rc"
+          fi

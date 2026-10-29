@@ -42,4 +42,17 @@ data/SOURCES.md.
             The districts file's Devanagari column (corrupt from row 43
             in the upstream CSV) is never consumed.
 
+3. Copernicus GLO-30 (per-district elevation statistics)
+   Source:  Copernicus Digital Elevation Model (GLO-30), frozen 2021 release,
+            distributed via the public AWS Open Data bucket
+            https://copernicus-dem-30m.s3.amazonaws.com
+   License: Copernicus licence for GLO-30 - free use, including commercial,
+            with attribution.
+   Used for: per-district elevation statistics (elevMin/elevMean/elevMax,
+            integer metres) in bindings/geojson/districts.elevation.geojson.
+   Attribution: (c) DLR e.V. 2010-2014 and (c) Airbus Defence and Space GmbH
+            2014-2018 provided under COPERNICUS by the European Union and ESA.
+   Adaptation: only zonal statistics computed against the official district
+            polygons are redistributed; no DEM pixels, tiles or derived
+            meshes ship in the package.
 No other CC-BY-4.0 material is currently shipped.
