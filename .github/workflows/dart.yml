@@ -100,6 +100,8 @@ jobs:
         run: git diff --exit-code -- lib/src/geo/district_elevation.dart
       - name: Boundary join coverage gate
         run: dart run tool/check_boundary_join.dart
+      - name: Boundary topology validation gate
+        run: dart run tool/check_boundary_topology.dart
       # Same principle as the formatting gate above: a bare "N issues found"
       # is useless when the log is out of reach, so on failure the full
       # analyzer output is attached to the run's step summary - file, line
