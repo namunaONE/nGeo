@@ -7,9 +7,16 @@ from the public AWS bucket (no account; the COGs are EPSG:4326, so the
 stats need no reprojection), computes zonal min/mean/max per district and
 writes bindings/geojson/districts.elevation.geojson.
 
+Each 1-degree tile is processed on its own, against only the districts
+whose bounding box intersects it, and the per-tile results are
+accumulated (min of mins, max of maxes, sum of pixel sums / sum of pixel
+counts for the mean). No mosaic, no VRT - a district is never offered to
+a raster it cannot touch.
+
 Deterministic by construction: features sorted by districtId, integer
-metres, fixed key order, no timestamps - rebuilding from the same frozen
-2021 tiles is byte-identical, so CI only ever commits a real change.
+metres, fixed key order, no timestamps, fixed tile iteration order -
+rebuilding from the same frozen 2021 tiles is byte-identical, so CI only
+ever commits a real change.
 
 Hard-fail validation gates (see data/SOURCES.md for the anchor rationale):
   - 77/77 districts with non-null stats (full raster coverage);
@@ -40,7 +47,6 @@ from pathlib import Path
 from urllib.error import HTTPError, URLError
 from urllib.request import urlopen
 
-from rasterio.vrt import build_vrt
 from rasterstats import zonal_stats
 from shapely.geometry import shape
 from shapely.ops import unary_union
@@ -77,20 +83,22 @@ def load_districts() -> list[dict]:
         if district_id in seen:
             fail("duplicate districtId: " + district_id)
         seen.add(district_id)
+        geom = shape(feature["geometry"])
         records.append({
             "districtId": district_id,
             "nameEn": props["nameEn"],
             "nameNe": props.get("nameNe") or None,
-            "geom": shape(feature["geometry"]),
+            "geom": geom,
+            "bounds": geom.bounds,
         })
     return records
 
 
-def covering_tiles(records: list[dict]) -> list[str]:
+def covering_tiles(records: list[dict]) -> list[dict]:
     """The 1-degree GLO-30 tiles whose cells intersect any district."""
     union = unary_union([r["geom"] for r in records])
     minx, miny, maxx, maxy = union.bounds
-    names: list[str] = []
+    tiles: list[dict] = []
     for lat in range(math.floor(miny), math.floor(maxy) + 1):
         for lng in range(math.floor(minx), math.floor(maxx) + 1):
             if lat < 0 or lng < 0:
@@ -103,9 +111,20 @@ def covering_tiles(records: list[dict]) -> list[str]:
                 ]],
             })
             if cell.intersects(union):
-                names.append(
-                    "Copernicus_DSM_COG_10_N%02d_00_E%03d_00_DEM" % (lat, lng))
-    return names
+                tiles.append({
+                    "name": "Copernicus_DSM_COG_10_N%02d_00_E%03d_00_DEM"
+                            % (lat, lng),
+                    "lat": lat,
+                    "lng": lng,
+                })
+    return tiles
+
+
+def tile_hits(record: dict, tile: dict) -> bool:
+    """Whether the record's bbox can touch the tile's 1-degree cell."""
+    b = record["bounds"]
+    return not (b[2] < tile["lng"] or b[0] > tile["lng"] + 1 or
+                b[3] < tile["lat"] or b[1] > tile["lat"] + 1)
 
 
 def download_tile(name: str, dest: Path, attempts: int = 3) -> None:
@@ -125,24 +144,51 @@ def download_tile(name: str, dest: Path, attempts: int = 3) -> None:
             time.sleep(5 * attempt)
 
 
-def zonal(records: list[dict], tiles: list[str]) -> list[dict]:
+def zonal(records: list[dict], tiles: list[dict]) -> None:
+    """Accumulate per-tile zonal stats into each district record."""
+    acc = {
+        r["districtId"]: {"min": None, "max": None, "sum": 0.0, "count": 0}
+        for r in records
+    }
     with tempfile.TemporaryDirectory(prefix="glo30-") as tmp:
         tmp_dir = Path(tmp)
-        paths: list[str] = []
-        for name in tiles:
-            dest = tmp_dir / (name + ".tif")
-            print("downloading " + name + " ...")
-            download_tile(name, dest)
-            paths.append(str(dest))
-        vrt = tmp_dir / "nepal-glo30.vrt"
-        build_vrt(str(vrt), paths)
-        print("computing zonal stats ...")
-        return zonal_stats(
-            [r["geom"] for r in records],
-            str(vrt),
-            stats=["min", "mean", "max", "count"],
-            all_touched=False,
-        )
+        for tile in tiles:
+            hits = [r for r in records if tile_hits(r, tile)]
+            if not hits:
+                continue
+            dest = tmp_dir / (tile["name"] + ".tif")
+            print("downloading %s (%d districts) ..."
+                  % (tile["name"], len(hits)))
+            download_tile(tile["name"], dest)
+            tile_stats = zonal_stats(
+                [r["geom"] for r in hits],
+                str(dest),
+                stats=["min", "mean", "max", "count"],
+                all_touched=False,
+            )
+            for record, stat in zip(hits, tile_stats):
+                count = (stat or {}).get("count") or 0
+                if not count:
+                    continue
+                a = acc[record["districtId"]]
+                if a["min"] is None or stat["min"] < a["min"]:
+                    a["min"] = stat["min"]
+                if a["max"] is None or stat["max"] > a["max"]:
+                    a["max"] = stat["max"]
+                a["sum"] += stat["mean"] * count
+                a["count"] += count
+    for record in records:
+        a = acc[record["districtId"]]
+        if a["count"] == 0:
+            fail("%s (%s) has no valid pixels - tile coverage is broken"
+                 % (record["districtId"], record["nameEn"]))
+        record["elevMin"] = int(round(a["min"]))
+        record["elevMax"] = int(round(a["max"]))
+        record["meanF"] = a["sum"] / a["count"]
+        record["elevMean"] = int(round(record["meanF"]))
+        record["pixels"] = a["count"]
+        if not record["elevMin"] <= record["elevMean"] <= record["elevMax"]:
+            fail("monotonicity violated for " + record["districtId"])
 
 
 def check_anchors(records: list[dict]) -> None:
@@ -190,23 +236,12 @@ def main() -> None:
     tiles = covering_tiles(records)
     print("covering tiles: %d" % len(tiles))
 
-    stats = zonal(records, tiles)
-    for record, stat in zip(records, stats):
-        if stat["min"] is None or stat["mean"] is None or stat["max"] is None:
-            fail("%s (%s) has no valid pixels - tile coverage is broken"
-                 % (record["districtId"], record["nameEn"]))
-        record["elevMin"] = int(round(stat["min"]))
-        record["elevMean"] = int(round(stat["mean"]))
-        record["elevMax"] = int(round(stat["max"]))
-        record["meanF"] = float(stat["mean"])
-        record["pixels"] = int(stat["count"])
-        if not record["elevMin"] <= record["elevMean"] <= record["elevMax"]:
-            fail("monotonicity violated for " + record["districtId"])
-
+    zonal(records, tiles)
     check_anchors(records)
 
     records.sort(key=lambda r: r["districtId"])
-    tile_hash = hashlib.sha256(",".join(tiles).encode("utf-8")).hexdigest()
+    tile_names = [t["name"] for t in tiles]
+    tile_hash = hashlib.sha256(",".join(tile_names).encode("utf-8")).hexdigest()
     collection = {
         "type": "FeatureCollection",
         "name": "districts-elevation",
@@ -218,12 +253,13 @@ def main() -> None:
             "license": "Copernicus licence for GLO-30: free use including "
                        "commercial, with attribution",
             "crs": "EPSG:4326 (native; computed without reprojection)",
-            "tiles": tiles,
+            "tiles": tile_names,
             "tilesSha256": tile_hash,
             "statsConvention": "zonal min/mean/max of GLO-30 pixels inside "
-                               "each official district polygon "
-                               "(all_touched=False, source nodata masked), "
-                               "rounded to integer metres",
+                               "each official district polygon, accumulated "
+                               "per 1-degree tile (all_touched=False, "
+                               "source nodata masked), rounded to integer "
+                               "metres",
             "generatedBy": "tool/elevation/build_elevation_stats.py via "
                            ".github/workflows/elevation-stats.yml",
         },
