@@ -45,10 +45,12 @@ class _Row {
 
 /// 'P{1-7}.D{01-77}', validated structurally — no regex needed.
 bool _validId(String id) {
-  if (id.length != 6 || id[0] != 'P' || id[2] != '.') return false;
+  if (id.length != 6 || id[0] != 'P' || id[2] != '.' || id[3] != 'D') {
+    return false;
+  }
   final province = id.codeUnitAt(1) - 0x30;
   if (province < 1 || province > 7) return false;
-  for (var i = 3; i < 6; i++) {
+  for (var i = 4; i < 6; i++) {
     final digit = id.codeUnitAt(i) - 0x30;
     if (digit < 0 || digit > 9) return false;
   }
