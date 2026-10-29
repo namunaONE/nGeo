@@ -30,19 +30,34 @@ jobs:
           python-version: '3.11'
       - name: Install the raster stack
         run: pip install rasterio rasterstats shapely numpy
-      # The step summary exists so a failure is readable without log
-      # access: the run page renders $GITHUB_STEP_SUMMARY anonymously.
-      # `set +e` matters: the runner default is `bash -e {0}`, which
-      # would abort on the tool's exit code before the summary is
-      # written.
+      # Diagnostics travel as ::error annotations (readable without
+      # authentication) because raw logs and step summaries are not
+      # reachable from outside. `set +e` matters: the runner default is
+      # `bash -e {0}`, which would abort before the annotations are
+      # emitted.
       - name: Compute zonal stats and run the anchor gates
         run: |
           set +e
-          python tool/elevation/build_elevation_stats.py > elevation-build.log 2>&1
+          python -V > elevation-build.log 2>&1
+          python -m py_compile tool/elevation/build_elevation_stats.py >> elevation-build.log 2>&1
+          comp=$?
+          if [ "$comp" -ne 0 ]; then
+            tail -n 10 elevation-build.log | while IFS= read -r line; do
+              line=${line//%/%25}
+              echo "::error title=py_compile::${line:0:470}"
+            done
+            cat elevation-build.log
+            exit "$comp"
+          fi
+          python tool/elevation/build_elevation_stats.py >> elevation-build.log 2>&1
           rc=$?
           set -e
           cat elevation-build.log
           if [ "$rc" -ne 0 ]; then
+            tail -n 10 elevation-build.log | while IFS= read -r line; do
+              line=${line//%/%25}
+              echo "::error title=tool::${line:0:470}"
+            done
             {
               echo '## Elevation build failed - last tool output'
               echo '```'
@@ -72,11 +87,9 @@ jobs:
           set -e
           cat commit-push.log
           if [ "$rc" -ne 0 ]; then
-            {
-              echo '## git push failed'
-              echo '```'
-              cat commit-push.log
-              echo '```'
-            } >> "$GITHUB_STEP_SUMMARY"
+            tail -n 10 commit-push.log | while IFS= read -r line; do
+              line=${line//%/%25}
+              echo "::error title=git push::${line:0:470}"
+            done
             exit "$rc"
           fi
