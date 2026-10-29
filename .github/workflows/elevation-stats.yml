@@ -45,14 +45,14 @@ jobs:
           python -m py_compile tool/elevation/build_elevation_stats.py >> elevation-build.log 2>&1
           comp=$?
           if [ "$comp" -ne 0 ]; then
-            tail -n 10 elevation-build.log | while IFS= read -r line; do
+            grep -vE '^downloading|^retry' elevation-build.log | tail -n 20 | while IFS= read -r line; do
               line=${line//%/%25}
               echo "::error title=py_compile::${line:0:470}"
             done
             cat elevation-build.log
             exit "$comp"
           fi
-          python tool/elevation/build_elevation_stats.py >> elevation-build.log 2>&1
+          python -u tool/elevation/build_elevation_stats.py >> elevation-build.log 2>&1
           rc=$?
           set -e
           cat elevation-build.log

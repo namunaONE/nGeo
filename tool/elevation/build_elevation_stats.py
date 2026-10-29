@@ -203,34 +203,40 @@ def check_anchors(records: list[dict]) -> None:
                  "roster: " + ", ".join(sorted(by_name)))
         return record
 
+    # Every measured aggregate is printed BEFORE any gate can fail, so a
+    # failing gate always leaves the measured values in the run log.
+    national_min = min(r["elevMin"] for r in records)
+    holder = min(records, key=lambda r: r["elevMin"])
+    total = sum(r["pixels"] for r in records)
+    weighted = sum(r["meanF"] * r["pixels"] for r in records) / total
+    national_mean = int(round(weighted))
+    top = max(records, key=lambda r: r["elevMax"])
+    print("national elevMin = %d m (%s; gate 50-100)"
+          % (national_min, holder["nameEn"]))
+    print("national elevMean = %d m (gate 1800-2700)" % national_mean)
+    print("national elevMax = %d m (%s)" % (top["elevMax"], top["nameEn"]))
+    print("anchor Solukhumbu elevMax = %d m (gate >= 8700)"
+          % district("Solukhumbu")["elevMax"])
+    print("anchor Taplejung elevMax = %d m (gate >= 8400)"
+          % district("Taplejung")["elevMax"])
+    print("anchor Myagdi elevMax = %d m (gate >= 7900)"
+          % district("Myagdi")["elevMax"])
+    print("anchor Mustang elevMin = %d m (gate >= 1300)"
+          % district("Mustang")["elevMin"])
+
     def at_least(name: str, field: str, floor_m: int) -> None:
-        value = district(name)[field]
-        if value < floor_m:
-            fail("%s %s = %d m, expected >= %d m" % (name, field, value, floor_m))
-        print("anchor %s %s = %d m (gate >= %d)" % (name, field, value, floor_m))
+        if district(name)[field] < floor_m:
+            fail("%s %s = %d m, expected >= %d m" % (name, field, district(name)[field], floor_m))
 
     at_least("Solukhumbu", "elevMax", 8700)
     at_least("Taplejung", "elevMax", 8400)
     at_least("Myagdi", "elevMax", 7900)
     at_least("Mustang", "elevMin", 1300)
 
-    national_min = min(r["elevMin"] for r in records)
     if not 50 <= national_min <= 100:
         fail("national minimum %d m outside the 50-100 m band" % national_min)
-    holder = min(records, key=lambda r: r["elevMin"])
-    print("anchor national elevMin = %d m (%s; gate 50-100)"
-          % (national_min, holder["nameEn"]))
-
-    total = sum(r["pixels"] for r in records)
-    weighted = sum(r["meanF"] * r["pixels"] for r in records) / total
-    national_mean = int(round(weighted))
     if not 1800 <= national_mean <= 2700:
         fail("national mean %d m outside the 1800-2700 m band" % national_mean)
-    print("anchor national elevMean = %d m (gate 1800-2700)" % national_mean)
-
-    top = max(records, key=lambda r: r["elevMax"])
-    print("anchor national elevMax = %d m (%s)"
-          % (top["elevMax"], top["nameEn"]))
 
 
 def main() -> None:
