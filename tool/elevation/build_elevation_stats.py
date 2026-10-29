@@ -41,7 +41,6 @@ import hashlib
 import json
 import math
 import sys
-import numpy as np
 import tempfile
 import time
 from pathlib import Path
@@ -55,13 +54,6 @@ BUCKET = "https://copernicus-dem-30m.s3.amazonaws.com"
 DISTRICTS_GEOJSON = Path("docs/district-boundaries.geojson")
 OUT_PATH = Path("bindings/geojson/districts.elevation.geojson")
 EXPECTED_DISTRICTS = 77
-def bottom5(values):
-    """Custom rasterstats stat: the five smallest valid pixel values."""
-    arr = np.ma.compressed(values) if np.ma.is_masked(values) else np.asarray(values)
-    arr = np.sort(np.asarray(arr, dtype="float64"))
-    return ",".join("%.1f" % x for x in arr[:5])
-
-
 COPYRIGHT = chr(169)
 ATTRIBUTION = (
     COPYRIGHT + " DLR e.V. 2010-2014 and " + COPYRIGHT + " Airbus Defence "
@@ -173,7 +165,7 @@ def zonal(records: list[dict], tiles: list[dict]) -> None:
             tile_stats = zonal_stats(
                 [r["geom"] for r in hits],
                 str(dest),
-                stats=["min", "mean", "max", "count", bottom5],
+                stats=["min", "mean", "max", "count"],
                 all_touched=False,
             )
             for record, stat in zip(hits, tile_stats):
@@ -181,10 +173,9 @@ def zonal(records: list[dict], tiles: list[dict]) -> None:
                 if not count:
                     continue
                 if stat["min"] is not None and stat["min"] < 50:
-                    print("LOW %-14s in %s: min=%.1f mean=%.1f count=%d "
-                          "bottom5=[%s]"
+                    print("LOW %-16s in %s: min=%.1f mean=%.1f count=%d"
                           % (record["nameEn"], tile["name"], stat["min"],
-                             stat["mean"], count, stat["bottom5"]))
+                             stat["mean"], count))
                 a = acc[record["districtId"]]
                 if a["min"] is None or stat["min"] < a["min"]:
                     a["min"] = stat["min"]
