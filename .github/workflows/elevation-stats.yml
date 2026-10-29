@@ -1,0 +1,49 @@
+name: District elevation stats (GLO-30)
+
+# Rebuilds bindings/geojson/districts.elevation.geojson from Copernicus
+# GLO-30 and commits it when it changes. No cron trigger: GLO-30 is the
+# frozen 2021 release - the DEM never drifts upstream, so the only
+# reasons to rebuild are a tool change or the district polygons changing.
+on:
+  workflow_dispatch:
+  push:
+    paths:
+      - 'tool/elevation/**'
+      - '.github/workflows/elevation-stats.yml'
+      - 'docs/district-boundaries.geojson'
+
+permissions:
+  contents: write
+
+concurrency:
+  group: elevation-stats
+  cancel-in-progress: false
+
+jobs:
+  build:
+    runs-on: ubuntu-latest
+    timeout-minutes: 45
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-python@v5
+        with:
+          python-version: '3.11'
+      - name: Install the raster stack
+        run: pip install rasterio rasterstats shapely numpy
+      - name: Compute zonal stats and run the anchor gates
+        run: python tool/elevation/build_elevation_stats.py
+      # The artifact is text (~15 KB) and is generated in CI only - it is
+      # committed, never hand-edited, so every published byte has a
+      # gate-verified, provenance-pinned build behind it. [skip ci] keeps
+      # the bot commit from re-triggering the workflow suite.
+      - name: Commit when the artifact changed
+        run: |
+          git config user.name 'github-actions[bot]'
+          git config user.email '41898282+github-actions[bot]@users.noreply.github.com'
+          git add bindings/geojson/districts.elevation.geojson
+          if git diff --cached --quiet; then
+            echo 'districts.elevation.geojson unchanged - nothing to commit.'
+          else
+            git commit -m 'data: rebuild district elevation stats (GLO-30) [skip ci]'
+            git push
+          fi
