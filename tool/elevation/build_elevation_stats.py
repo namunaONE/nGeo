@@ -7,9 +7,9 @@ from the public AWS bucket (no account; the COGs are EPSG:4326, so the
 stats need no reprojection), computes zonal min/mean/max per district and
 writes bindings/geojson/districts.elevation.geojson.
 
-Each 1-degree tile is processed on its own, against only the districts
-whose bounding box intersects it, and the per-tile results are
-accumulated (min of mins, max of maxes, sum of pixel sums / sum of pixel
+Each 1-degree tile is processed on its own, against only the district
+parts that truly intersect its cell (each geometry clipped to the cell,
+invalid rings repaired up front), and the per-tile results are accumulated (min of mins, max of maxes, sum of pixel sums / sum of pixel
 counts for the mean). No mosaic, no VRT - a district is never offered to
 a raster it cannot touch.
 
@@ -48,7 +48,8 @@ from urllib.error import HTTPError, URLError
 from urllib.request import urlopen
 
 from rasterstats import zonal_stats
-from shapely.geometry import shape
+from shapely.geometry import MultiPolygon, Polygon, box, shape
+from shapely.validation import make_valid
 
 BUCKET = "https://copernicus-dem-30m.s3.amazonaws.com"
 DISTRICTS_GEOJSON = Path("docs/district-boundaries.geojson")
@@ -67,6 +68,31 @@ def fail(message: str) -> None:
     raise SystemExit(1)
 
 
+def keep_polygons(geom):
+    """Keep only the polygonal parts of a geometry (may be None).
+
+    make_valid() can emit lines and points alongside the polygonal
+    area, and clipping a district to a tile cell can leave nothing;
+    zonal stats need actual polygonal area.
+    """
+    if isinstance(geom, (Polygon, MultiPolygon)):
+        return geom
+    parts = []
+    for part in getattr(geom, "geoms", []):
+        if isinstance(part, (Polygon, MultiPolygon)):
+            parts.append(part)
+    polygons = [
+        p
+        for part in parts
+        for p in (part.geoms if isinstance(part, MultiPolygon) else [part])
+    ]
+    if not polygons:
+        return None
+    if len(polygons) == 1:
+        return polygons[0]
+    return MultiPolygon(polygons)
+
+
 def load_districts() -> list[dict]:
     if not DISTRICTS_GEOJSON.exists():
         fail("missing input: " + str(DISTRICTS_GEOJSON) + " (see data/SOURCES.md)")
@@ -83,6 +109,14 @@ def load_districts() -> list[dict]:
             fail("duplicate districtId: " + district_id)
         seen.add(district_id)
         geom = shape(feature["geometry"])
+        if not geom.is_valid:
+            # At least one official ring is self-intersecting (GEOS
+            # "side location conflict" in the far west); rasterizing
+            # an invalid ring is undefined, so repair it up front.
+            print("repaired invalid ring: " + district_id)
+            geom = keep_polygons(make_valid(geom))
+            if geom is None:
+                fail("no polygonal area survives validation: " + district_id)
         records.append({
             "districtId": district_id,
             "nameEn": props["nameEn"],
@@ -155,7 +189,20 @@ def zonal(records: list[dict], tiles: list[dict]) -> None:
     with tempfile.TemporaryDirectory(prefix="glo30-") as tmp:
         tmp_dir = Path(tmp)
         for tile in tiles:
-            hits = [r for r in records if tile_hits(r, tile)]
+            tile_box = box(tile["lng"], tile["lat"],
+                           tile["lng"] + 1, tile["lat"] + 1)
+            hits = []
+            for record in records:
+                if not tile_hits(record, tile):
+                    continue
+                # Clip to the tile cell. An unclipped district reads
+                # pixels from outside the raster, which rasterio
+                # returns as literal zeros that poison the stats.
+                clipped = keep_polygons(record["geom"].intersection(tile_box))
+                if clipped is None or clipped.is_empty:
+                    continue
+                record["clip"] = clipped
+                hits.append(record)
             if not hits:
                 continue
             dest = tmp_dir / (tile["name"] + ".tif")
@@ -163,7 +210,7 @@ def zonal(records: list[dict], tiles: list[dict]) -> None:
                   % (tile["name"], len(hits)))
             download_tile(tile["name"], dest)
             tile_stats = zonal_stats(
-                [r["geom"] for r in hits],
+                [r["clip"] for r in hits],
                 str(dest),
                 stats=["min", "mean", "max", "count"],
                 all_touched=False,

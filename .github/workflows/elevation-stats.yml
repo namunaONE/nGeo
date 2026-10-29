@@ -17,7 +17,10 @@ permissions:
 
 concurrency:
   group: elevation-stats
-  cancel-in-progress: false
+  # Deterministic artifact: the latest tool version always wins, so a
+  # newer run replaces an older one instead of queuing behind it (also
+  # un-sticks a runner stalled on network).
+  cancel-in-progress: true
 
 jobs:
   build:
