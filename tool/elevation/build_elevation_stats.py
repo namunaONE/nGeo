@@ -49,7 +49,6 @@ from urllib.request import urlopen
 
 from rasterstats import zonal_stats
 from shapely.geometry import shape
-from shapely.ops import unary_union
 
 BUCKET = "https://copernicus-dem-30m.s3.amazonaws.com"
 DISTRICTS_GEOJSON = Path("docs/district-boundaries.geojson")
@@ -95,31 +94,34 @@ def load_districts() -> list[dict]:
 
 
 def covering_tiles(records: list[dict]) -> list[dict]:
-    """The 1-degree GLO-30 tiles whose cells intersect any district."""
-    union = unary_union([r["geom"] for r in records])
-    minx, miny, maxx, maxy = union.bounds
+    """The 1-degree GLO-30 tiles whose cells can touch any district.
+
+    Selection is bbox-based on purpose: at least one of the official
+    portal rings is one GEOS considers invalid (a unary_union of the
+    77 polygons raises TopologyException "side location conflict" in
+    the far-west corner), and bbox overlap needs no topology at all.
+    A bbox-selected tile that no polygon actually touches is
+    harmless - it just contributes no pixels.
+    """
+    minx = min(r["bounds"][0] for r in records)
+    miny = min(r["bounds"][1] for r in records)
+    maxx = max(r["bounds"][2] for r in records)
+    maxy = max(r["bounds"][3] for r in records)
     tiles: list[dict] = []
     for lat in range(math.floor(miny), math.floor(maxy) + 1):
         for lng in range(math.floor(minx), math.floor(maxx) + 1):
             if lat < 0 or lng < 0:
                 fail("tile grid unexpectedly outside N/E: %d, %d" % (lat, lng))
-            cell = shape({
-                "type": "Polygon",
-                "coordinates": [[
-                    [lng, lat], [lng + 1, lat], [lng + 1, lat + 1],
-                    [lng, lat + 1], [lng, lat],
-                ]],
-            })
-            if cell.intersects(union):
-                tiles.append({
-                    "name": "Copernicus_DSM_COG_10_N%02d_00_E%03d_00_DEM"
-                            % (lat, lng),
-                    "lat": lat,
-                    "lng": lng,
-                })
+            for record in records:
+                if tile_hits(record, {"lat": lat, "lng": lng}):
+                    tiles.append({
+                        "name": "Copernicus_DSM_COG_10_N%02d_00_E%03d_00_DEM"
+                                % (lat, lng),
+                        "lat": lat,
+                        "lng": lng,
+                    })
+                    break
     return tiles
-
-
 def tile_hits(record: dict, tile: dict) -> bool:
     """Whether the record's bbox can touch the tile's 1-degree cell."""
     b = record["bounds"]
