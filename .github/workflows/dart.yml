@@ -116,6 +116,15 @@ jobs:
               cat /tmp/analyze.log
               echo '```'
             } >> "$GITHUB_STEP_SUMMARY"
+            # The step summary needs the web UI; the same lines are also
+            # emitted as check annotations so the failure stays readable
+            # from the API alone.
+            while IFS= read -r line; do
+              case "$line" in
+                'Analyzing'*|'Issues found'*|'') ;;
+                *) echo "::error::${line//%/%25}" ;;
+              esac
+            done < /tmp/analyze.log
           fi
           exit $rc
       - name: Run tests
