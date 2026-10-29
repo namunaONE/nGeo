@@ -307,3 +307,4 @@ def main() -> None:
 
 if __name__ == "__main__":
     main()
+# diagnostics v2: per-tile LOW lines + national pixel totals
