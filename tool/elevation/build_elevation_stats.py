@@ -24,6 +24,10 @@ Hard-fail validation gates (see data/SOURCES.md for the anchor rationale):
   - Solukhumbu elevMax >= 8700 m   (Everest 8848.86);
   - Taplejung elevMax >= 8400 m    (Kangchenjunga 8586);
   - Myagdi elevMax >= 7900 m       (Annapurna I 8091);
+  - literal 0 m pixels are excluded as GLO-30 residual void
+    artifacts (Nepal has no true 0 m terrain; the national minimum
+    is the Terai at roughly 59-70 m). The exclusion is counted,
+    printed and recorded in the artifact metadata;
   - national minimum in [50, 100] m (Kechana Kalan, Jhapa, ~70 m);
   - pixel-weighted national mean in [1800, 2700] m (published ~2112 m;
     GLO-30 is a surface model, so the band has headroom);
@@ -47,8 +51,9 @@ from pathlib import Path
 from urllib.error import HTTPError, URLError
 from urllib.request import urlopen
 
-from rasterstats import zonal_stats
-from shapely.geometry import MultiPolygon, Polygon, box, shape
+import rasterio
+from rasterio.mask import mask as raster_mask
+from shapely.geometry import MultiPolygon, Polygon, box, mapping, shape
 from shapely.validation import make_valid
 
 BUCKET = "https://copernicus-dem-30m.s3.amazonaws.com"
@@ -186,6 +191,7 @@ def zonal(records: list[dict], tiles: list[dict]) -> None:
         r["districtId"]: {"min": None, "max": None, "sum": 0.0, "count": 0}
         for r in records
     }
+    total_zero_pixels = 0
     with tempfile.TemporaryDirectory(prefix="glo30-") as tmp:
         tmp_dir = Path(tmp)
         for tile in tiles:
@@ -209,28 +215,57 @@ def zonal(records: list[dict], tiles: list[dict]) -> None:
             print("downloading %s (%d districts) ..."
                   % (tile["name"], len(hits)))
             download_tile(tile["name"], dest)
-            tile_stats = zonal_stats(
-                [r["clip"] for r in hits],
-                str(dest),
-                stats=["min", "mean", "max", "count"],
-                all_touched=False,
-            )
-            for record, stat in zip(hits, tile_stats):
-                count = (stat or {}).get("count") or 0
-                if not count:
-                    continue
-                if stat["min"] is not None and stat["min"] < 50:
-                    print("LOW %-16s in %s: min=%.1f mean=%.1f count=%d"
-                          % (record["nameEn"], tile["name"], stat["min"],
-                             stat["mean"], count))
-                a = acc[record["districtId"]]
-                if a["min"] is None or stat["min"] < a["min"]:
-                    a["min"] = stat["min"]
-                if a["max"] is None or stat["max"] > a["max"]:
-                    a["max"] = stat["max"]
-                a["sum"] += stat["mean"] * count
-                a["count"] += count
+            with rasterio.open(str(dest)) as src:
+                nodata = src.nodata
+                for record in hits:
+                    try:
+                        arr, _ = raster_mask(
+                            src, [mapping(record["clip"])],
+                            crop=True, all_touched=False, filled=False)
+                    except ValueError:
+                        # the clipped geometry misses the raster
+                        continue
+                    raw = arr[0].compressed()
+                    if nodata is not None:
+                        raw = raw[raw != nodata]
+                    if raw.size == 0:
+                        continue
+                    zero_count = int((raw == 0).sum())
+                    if zero_count:
+                        total_zero_pixels += zero_count
+                    good = raw[raw != 0]
+                    if good.size == 0:
+                        continue
+                    count = int(good.size)
+                    vmin = float(good.min())
+                    vmax = float(good.max())
+                    vmean = float(good.mean())
+                    if vmin < 50:
+                        print("LOW %-16s in %s: min=%.1f mean=%.1f "
+                              "count=%d zero=%d"
+                              % (record["nameEn"], tile["name"], vmin,
+                                 vmean, count, zero_count))
+                    a = acc[record["districtId"]]
+                    if a["min"] is None or vmin < a["min"]:
+                        a["min"] = vmin
+                    if a["max"] is None or vmax > a["max"]:
+                        a["max"] = vmax
+                    a["sum"] += vmean * count
+                    a["count"] += count
     for record in records:
+        a = acc[record["districtId"]]
+        if a["count"] == 0:
+            fail("%s (%s) has no valid pixels - tile coverage is broken"
+                 % (record["districtId"], record["nameEn"]))
+        record["elevMin"] = int(round(a["min"]))
+        record["elevMax"] = int(round(a["max"]))
+        record["meanF"] = a["sum"] / a["count"]
+        record["elevMean"] = int(round(record["meanF"]))
+        record["pixels"] = a["count"]
+        if not record["elevMin"] <= record["elevMean"] <= record["elevMax"]:
+            fail("monotonicity violated for " + record["districtId"])
+    print("total excluded zero-artifact pixels: %d" % total_zero_pixels)
+    return total_zero_pixels
         a = acc[record["districtId"]]
         if a["count"] == 0:
             fail("%s (%s) has no valid pixels - tile coverage is broken"
@@ -302,7 +337,7 @@ def main() -> None:
     tiles = covering_tiles(records)
     print("covering tiles: %d" % len(tiles))
 
-    zonal(records, tiles)
+    zero_total = zonal(records, tiles)
     check_anchors(records)
 
     records.sort(key=lambda r: r["districtId"])
@@ -321,11 +356,13 @@ def main() -> None:
             "crs": "EPSG:4326 (native; computed without reprojection)",
             "tiles": tile_names,
             "tilesSha256": tile_hash,
-            "statsConvention": "zonal min/mean/max of GLO-30 pixels inside "
-                               "each official district polygon, accumulated "
-                               "per 1-degree tile (all_touched=False, "
-                               "source nodata masked), rounded to integer "
-                               "metres",
+            "statsConvention": "zonal min/mean/max of GLO-30 pixels "
+                               "inside each official district polygon, "
+                               "accumulated per 1-degree tile (pixel-center "
+                               "rule; the raster nodata value and literal "
+                               "0 m residual voids excluded), rounded to "
+                               "integer metres",
+            "zeroPixelsExcluded": zero_total,
             "generatedBy": "tool/elevation/build_elevation_stats.py via "
                            ".github/workflows/elevation-stats.yml",
         },

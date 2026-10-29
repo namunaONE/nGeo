@@ -32,7 +32,7 @@ jobs:
         with:
           python-version: '3.11'
       - name: Install the raster stack
-        run: pip install rasterio rasterstats shapely numpy
+        run: pip install rasterio shapely numpy
       # Diagnostics travel as ::error annotations (readable without
       # authentication) because raw logs and step summaries are not
       # reachable from outside. `set +e` matters: the runner default is
@@ -60,7 +60,7 @@ jobs:
           set -e
           cat elevation-build.log
           if [ "$rc" -ne 0 ]; then
-            tail -n 10 elevation-build.log | while IFS= read -r line; do
+            tail -n 60 elevation-build.log | while IFS= read -r line; do
               line=${line//%/%25}
               echo "::error title=tool::${line:0:470}"
             done
