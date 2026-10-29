@@ -73,7 +73,7 @@
     <section class="hero">
       <div class="container">
         <div class="hero-content">
-          <span class="badge">v2.5.0 &middot; Bilingual (Devanagari) names + administrative attributes</span>
+          <span class="badge">v2.10.0 &middot; Per-district elevation stats (Copernicus GLO-30)</span>
           <h1>Nepal Administrative Divisions</h1>
           <p class="hero-subtitle">Offline, type-safe Dart package with canonical 7 provinces, 77 districts, 753 local bodies, 6,743 wards — now with official CBS codes (PDDPP format) and ISO 3166-2 province codes.</p>
           <div class="hero-stats">
@@ -241,6 +241,10 @@
           <strong>districts.centroids.geojson</strong>
           <span>77 points · derived, marked approximate</span>
         </a>
+        <a class="download-card" href="downloads/districts.elevation.geojson" download>
+          <strong>districts.elevation.geojson</strong>
+          <span>77 districts · min/mean/max elevation (GLO-30) · RFC 7946</span>
+        </a>
         <a class="download-card" href="downloads/meta.json" download>
           <strong>meta.json</strong>
           <span>version, data-as-of date, coverage counters</span>
@@ -259,10 +263,10 @@
         <div class="code-block">
           <div class="code-header">
             <span>pubspec.yaml</span>
-            <button class="copy-btn" data-copy="dependencies:&#10;  nepal_admin_api: ^2.9.0">Copy</button>
+            <button class="copy-btn" data-copy="dependencies:&#10;  nepal_admin_api: ^2.10.0">Copy</button>
           </div>
           <pre><code>dependencies:
-  nepal_admin_api: ^2.9.0</code></pre>
+  nepal_admin_api: ^2.10.0</code></pre>
         </div>
         <p class="install-note">Then run <code>dart pub get</code> or <code>flutter pub get</code></p>
       </div>
@@ -377,7 +381,7 @@ void main() {
     "description": "Offline administrative divisions of Nepal: 7 provinces, 77 districts, 753 local bodies, 6,743 wards with official CBS/NSO codes.",
     "creator": { "@type": "Organization", "name": "namunaONE", "url": "https://github.com/namunaONE" },
     "license": "https://opensource.org/licenses/MIT",
-    "version": "2.9.0",
+    "version": "2.10.0",
     "url": "https://namunaONE.github.io/Nepal-Local-Government-Data/",
     "distribution": [
       { "@type": "DataDownload", "encodingFormat": "application/json", "contentUrl": "https://namunaONE.github.io/Nepal-Local-Government-Data/data.json" },
