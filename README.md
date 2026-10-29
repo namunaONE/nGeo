@@ -28,12 +28,13 @@ Pure Dart package. Zero runtime dependencies. Data ships in the box.
 | **Bilingual search** | `search('भरतपुर')` and `search('Bharatpur')` return the same palika; fragments match too |
 | **Complete hierarchy** | Province → District → Local Body (palika) |
 | **Official codes** | 753/753 palikas with CBS 5-digit codes (PDDPP), all 77 districts (3-digit), all 7 provinces (NP-P1…NP-P7) |
-| **Honest confidence tiers** | Every code labelled `verified` (548) / `singleSource` (196) / `unverified` (9) — you choose how much to trust it |
+| **Honest confidence tiers** | Every code labelled `verified` (548) / `singleSource` (205) / `unverified` (0) — you choose how much to trust it |
 | **Ward counts** | 745/753 palikas with verified ward counts; declared vs substantiated totals reported side by side; 8 documented roster-defect gaps |
 | **Administrative attributes** | District HQ, area and website (77/77); province capital, area and website (7/7); palika website/email/phone and postal codes |
 | **Map coordinates** | All 753 palikas with approximate centroids (`lat`/`lng` + `geoSource`: open-admin-data, plus boundary-polygon centroids for the last 27); `hasCoordinates`, `whereMapped` |
 | **Boundary polygons** | All 753 palika boundaries as pure-Dart data (~91 KB, zero assets/downloads); all 753 joined to the roster; lossless ~11 m quantisation |
 | **High-res boundaries (optional)** | [`nepal_admin_boundaries_highres`](packages/nepal_admin_boundaries_highres) — ~75k vertices (~300 KB), ~4x the detail, same codec and roster; opt-in for print maps / spatial analysis |
+| **Elevation stats** | Per-district min/mean/max elevation in integer metres, from Copernicus GLO-30 (2021) zonal stats over the official district polygons — 77/77 districts, zero assets |
 | **Type-safe models** | `Province`, `District`, `LocalBody`, `LocalBodyType`, `CbsCodeConfidence` enums |
 | **Hierarchical queries** | Navigate province → district → local body with typed accessors |
 | **Typed search** | Disambiguates duplicate names by district/province context, by `fullPath`, or by district-scoped lookup |
@@ -48,7 +49,7 @@ Pure Dart package. Zero runtime dependencies. Data ships in the box.
 
 ```yaml
 dependencies:
-  nepal_admin_api: ^2.9.0
+  nepal_admin_api: ^2.10.0
 ```
 
 ```bash
@@ -225,10 +226,6 @@ differ only in `ब`/`व`, `ी`/`ि`, the candrabindu, or `प्प`/`प`. 
 agreed on which palika it is; they disagree on spelling. The published string
 is the primary source's.
 
-| **Honest confidence tiers** | Every code labelled `verified` (548) / `singleSource` (205) / `unverified` (0) - you choose how much to trust it |","oldString">
-| **Honest confidence tiers** | Every code labelled `verified` (548) / `singleSource` (196) / `unverified` (9) - you choose how much to trust it |","path">
-C:\Users\user\StudioProjects\nGeo\README.md
-
 ## 🏛️ Administrative attributes
 
 Single-source fields, documented as such in [data/SOURCES.md](data/SOURCES.md).
@@ -314,8 +311,12 @@ known gaps, which `Province.unreconciledWards` reports per province.
 | `getAllLocalBodyBoundaries()` | `List<PalikaBoundary>` | All matched boundaries, roster order |
 | `getUnmatchedLocalBodyBoundaries()` | `List<PalikaBoundary>` | The 7 unjoined source features |
 | `boundariesGeoJson()` | `Map<String, Object?>` | Everything as one RFC 7946 FeatureCollection |
+| `getDistrictElevationStats(idOrName)` | `DistrictElevationStats?` | Per-district min/mean/max elevation (Copernicus GLO-30) |
+| `getAllDistrictElevationStats()` | `List<DistrictElevationStats>` | All 77 districts, in id order |
+| `hasDistrictElevationStats(idOrName)` | `bool` | Whether the elevation table covers the district |
+| `districtElevationStatsGeoJson()` | `Map<String, Object?>` | Elevation stats as one RFC 7946 FeatureCollection (geometry null) |
 
-**Models**: `Province`, `District`, `LocalBody`, `LocalBodyType`, `CbsCodeConfidence`, `ProvinceStats`, `NationalStats`, `SearchResult`, `PalikaBoundary`
+**Models**: `Province`, `District`, `LocalBody`, `LocalBodyType`, `CbsCodeConfidence`, `ProvinceStats`, `NationalStats`, `SearchResult`, `PalikaBoundary`, `DistrictElevationStats`
 
 **Helpers**: bilingual (`nameNe`, `nameNeOrName`, `displayBoth` on all three models), `LocalBody.fullPath` (`'Bharatpur, Chitwan, Bagmati'`), `isUrban` / `isRural`, `hasCoordinates`, `hasCbsCode`, `cbsCodeString` (zero-padded, for string joins), `LocalBodyListX` (`sortedByName`, `sortedByFullPath`, `whereUrban`, `whereRural`, `whereVerified`, `whereMapped`, `whereCoded`, `whereDoublyAttested`, `whereSingleSource`, `whereUncoded`, `whereCodeAndCoordinateMapped`, `whereWardsVerified`, `ofType`, `totalWards`, `byCbsCode`), ward reconciliation (`District.wards` / `verifiedWardCoverage` / `wardsFullyVerified`, `Province.declaredWards` / `verifiedWards` / `unreconciledWards` / `wardsReconcile`)
 

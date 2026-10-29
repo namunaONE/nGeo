@@ -94,6 +94,10 @@ jobs:
         run: dart run tool/generate_district_boundaries.dart
       - name: Verify no district boundary drift
         run: git diff --exit-code -- lib/src/geo/district_boundaries.dart
+      - name: Regenerate district elevation stats (Copernicus GLO-30)
+        run: dart run tool/generate_district_elevation.dart
+      - name: Verify no district elevation drift
+        run: git diff --exit-code -- lib/src/geo/district_elevation.dart
       - name: Boundary join coverage gate
         run: dart run tool/check_boundary_join.dart
       # Same principle as the formatting gate above: a bare "N issues found"
@@ -112,6 +116,15 @@ jobs:
               cat /tmp/analyze.log
               echo '```'
             } >> "$GITHUB_STEP_SUMMARY"
+            # The step summary needs the web UI; the same lines are also
+            # emitted as check annotations so the failure stays readable
+            # from the API alone.
+            while IFS= read -r line; do
+              case "$line" in
+                'Analyzing'*|'Issues found'*|'') ;;
+                *) echo "::error::${line//%/%25}" ;;
+              esac
+            done < /tmp/analyze.log
           fi
           exit $rc
       - name: Run tests
