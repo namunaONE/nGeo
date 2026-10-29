@@ -41,6 +41,7 @@ import hashlib
 import json
 import math
 import sys
+import numpy as np
 import tempfile
 import time
 from pathlib import Path
@@ -54,6 +55,13 @@ BUCKET = "https://copernicus-dem-30m.s3.amazonaws.com"
 DISTRICTS_GEOJSON = Path("docs/district-boundaries.geojson")
 OUT_PATH = Path("bindings/geojson/districts.elevation.geojson")
 EXPECTED_DISTRICTS = 77
+def bottom5(values):
+    """Custom rasterstats stat: the five smallest valid pixel values."""
+    arr = np.ma.compressed(values) if np.ma.is_masked(values) else np.asarray(values)
+    arr = np.sort(np.asarray(arr, dtype="float64"))
+    return ",".join("%.1f" % x for x in arr[:5])
+
+
 COPYRIGHT = chr(169)
 ATTRIBUTION = (
     COPYRIGHT + " DLR e.V. 2010-2014 and " + COPYRIGHT + " Airbus Defence "
@@ -165,13 +173,18 @@ def zonal(records: list[dict], tiles: list[dict]) -> None:
             tile_stats = zonal_stats(
                 [r["geom"] for r in hits],
                 str(dest),
-                stats=["min", "mean", "max", "count"],
+                stats=["min", "mean", "max", "count", bottom5],
                 all_touched=False,
             )
             for record, stat in zip(hits, tile_stats):
                 count = (stat or {}).get("count") or 0
                 if not count:
                     continue
+                if stat["min"] is not None and stat["min"] < 50:
+                    print("LOW %-14s in %s: min=%.1f mean=%.1f count=%d "
+                          "bottom5=[%s]"
+                          % (record["nameEn"], tile["name"], stat["min"],
+                             stat["mean"], count, stat["bottom5"]))
                 a = acc[record["districtId"]]
                 if a["min"] is None or stat["min"] < a["min"]:
                     a["min"] = stat["min"]
@@ -215,6 +228,13 @@ def check_anchors(records: list[dict]) -> None:
           % (national_min, holder["nameEn"]))
     print("national elevMean = %d m (gate 1800-2700)" % national_mean)
     print("national elevMax = %d m (%s)" % (top["elevMax"], top["nameEn"]))
+    print("total pixels: %d (expect roughly 163 million for Nepal at 30 m)"
+          % total)
+    low = [r for r in records if r["elevMin"] < 50]
+    print("districts with elevMin < 50 m: %d" % len(low))
+    for r in low[:12]:
+        print("  low %-16s min=%d mean=%d pixels=%d"
+              % (r["nameEn"], r["elevMin"], r["elevMean"], r["pixels"]))
     print("anchor Solukhumbu elevMax = %d m (gate >= 8700)"
           % district("Solukhumbu")["elevMax"])
     print("anchor Taplejung elevMax = %d m (gate >= 8400)"
