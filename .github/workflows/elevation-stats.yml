@@ -35,6 +35,9 @@ jobs:
       # reachable from outside. `set +e` matters: the runner default is
       # `bash -e {0}`, which would abort before the annotations are
       # emitted.
+      # A run with no exit-code annotation whose log ends mid-flow was
+      # preempted by GitHub infrastructure - just re-run it; the build is
+      # deterministic, so a retry is always safe.
       - name: Compute zonal stats and run the anchor gates
         run: |
           set +e
