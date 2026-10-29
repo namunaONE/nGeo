@@ -9,9 +9,10 @@ writes bindings/geojson/districts.elevation.geojson.
 
 Each 1-degree tile is processed on its own, against only the district
 parts that truly intersect its cell (each geometry clipped to the cell,
-invalid rings repaired up front), and the per-tile results are accumulated (min of mins, max of maxes, sum of pixel sums / sum of pixel
-counts for the mean). No mosaic, no VRT - a district is never offered to
-a raster it cannot touch.
+invalid rings repaired up front), and the per-tile results are
+accumulated (min of mins, max of maxes, sum of pixel sums / sum of
+pixel counts for the mean). No mosaic, no VRT - a district is never
+offered to a raster it cannot touch.
 
 Deterministic by construction: features sorted by districtId, integer
 metres, fixed key order, no timestamps, fixed tile iteration order -
@@ -266,17 +267,6 @@ def zonal(records: list[dict], tiles: list[dict]) -> None:
             fail("monotonicity violated for " + record["districtId"])
     print("total excluded zero-artifact pixels: %d" % total_zero_pixels)
     return total_zero_pixels
-        a = acc[record["districtId"]]
-        if a["count"] == 0:
-            fail("%s (%s) has no valid pixels - tile coverage is broken"
-                 % (record["districtId"], record["nameEn"]))
-        record["elevMin"] = int(round(a["min"]))
-        record["elevMax"] = int(round(a["max"]))
-        record["meanF"] = a["sum"] / a["count"]
-        record["elevMean"] = int(round(record["meanF"]))
-        record["pixels"] = a["count"]
-        if not record["elevMin"] <= record["elevMean"] <= record["elevMax"]:
-            fail("monotonicity violated for " + record["districtId"])
 
 
 def check_anchors(records: list[dict]) -> None:
