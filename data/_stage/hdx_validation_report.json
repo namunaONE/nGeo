@@ -1,0 +1,588 @@
+{
+  "generated": "2026-10-30T07:33:49.170677Z",
+  "source": "HDX COD-AB v02 (Survey Department of Nepal, CC BY-IGO)",
+  "joinReport": "data/_stage/hdx_join_report.json",
+  "stats": {
+    "matched": 753,
+    "centroidContained": 753,
+    "centroidContainmentRate": 1.0,
+    "areaSanityProblems": 0,
+    "maxCentroidDeltaDeg": 0.05439286711304005,
+    "maxCentroidDeltaPalika": "Bogatan (Doti)",
+    "centroidDeltasOver0.01deg": 16,
+    "districtRollupMaxRelError": 0.4545760860296297,
+    "districtRollupMaxDistrict": "Bardiya",
+    "districtRollupOverThreshold": 49
+  },
+  "gates": {
+    "centroidContainment": {
+      "threshold": 0.99,
+      "passed": true,
+      "contained": 753,
+      "total": 753
+    },
+    "areaSanity": {
+      "passed": true,
+      "problems": []
+    },
+    "districtRollup": {
+      "threshold": 0.01,
+      "passed": false,
+      "maxRelError": 0.4545760860296297,
+      "overThreshold": 49
+    }
+  },
+  "centroidContainment": {
+    "contained": 753,
+    "notContained": []
+  },
+  "areaSanity": {
+    "problems": []
+  },
+  "centroidDeltas": {
+    "max": 0.05439286711304005,
+    "maxPalika": "Bogatan (Doti)",
+    "over0.01deg": 16
+  },
+  "districtRollup": [
+    {
+      "district": "Bardiya",
+      "hdxSum": 1104.48342579,
+      "ourArea": 2025.0,
+      "relError": 0.4545760860296297,
+      "overThreshold": true
+    },
+    {
+      "district": "Parsa",
+      "hdxSum": 784.72350388,
+      "ourArea": 1353.0,
+      "relError": 0.42001219225424985,
+      "overThreshold": true
+    },
+    {
+      "district": "Chitwan",
+      "hdxSum": 1333.74313374,
+      "ourArea": 2218.0,
+      "relError": 0.3986730686474301,
+      "overThreshold": true
+    },
+    {
+      "district": "Salyan",
+      "hdxSum": 1879.9615772,
+      "ourArea": 1462.0,
+      "relError": 0.2858834317373461,
+      "overThreshold": true
+    },
+    {
+      "district": "Nawalpur",
+      "hdxSum": 1331.43548959,
+      "ourArea": 1043.1,
+      "relError": 0.27642171372831004,
+      "overThreshold": true
+    },
+    {
+      "district": "Banke",
+      "hdxSum": 1880.54113237,
+      "ourArea": 2337.0,
+      "relError": 0.19531830022678648,
+      "overThreshold": true
+    },
+    {
+      "district": "Doti",
+      "hdxSum": 1955.6714010700002,
+      "ourArea": 2295.71,
+      "relError": 0.1481191435024458,
+      "overThreshold": true
+    },
+    {
+      "district": "Baglung",
+      "hdxSum": 1523.74210614,
+      "ourArea": 1784.0,
+      "relError": 0.14588446965246635,
+      "overThreshold": true
+    },
+    {
+      "district": "Parasi (Nawalparasi West)",
+      "hdxSum": 726.25178697,
+      "ourArea": 634.88,
+      "relError": 0.143919775343372,
+      "overThreshold": true
+    },
+    {
+      "district": "Saptari",
+      "hdxSum": 1210.7698184399999,
+      "ourArea": 1363.0,
+      "relError": 0.11168758735143075,
+      "overThreshold": true
+    },
+    {
+      "district": "Udayapur",
+      "hdxSum": 2291.39609912,
+      "ourArea": 2063.0,
+      "relError": 0.11071066365487162,
+      "overThreshold": true
+    },
+    {
+      "district": "Syangja",
+      "hdxSum": 1037.6855604400002,
+      "ourArea": 1164.0,
+      "relError": 0.10851755975944996,
+      "overThreshold": true
+    },
+    {
+      "district": "Sunsari",
+      "hdxSum": 1124.99895628,
+      "ourArea": 1257.0,
+      "relError": 0.10501276350039786,
+      "overThreshold": true
+    },
+    {
+      "district": "Parbat",
+      "hdxSum": 541.65594256,
+      "ourArea": 494.0,
+      "relError": 0.09646951935222667,
+      "overThreshold": true
+    },
+    {
+      "district": "Mugu",
+      "hdxSum": 3233.1326206699996,
+      "ourArea": 3535.0,
+      "relError": 0.08539388382744,
+      "overThreshold": true
+    },
+    {
+      "district": "Myagdi",
+      "hdxSum": 2107.06237144,
+      "ourArea": 2297.0,
+      "relError": 0.08268943341750114,
+      "overThreshold": true
+    },
+    {
+      "district": "Rautahat",
+      "hdxSum": 1038.2189734199999,
+      "ourArea": 1126.0,
+      "relError": 0.07795828293072835,
+      "overThreshold": true
+    },
+    {
+      "district": "Bara",
+      "hdxSum": 1271.1958878599999,
+      "ourArea": 1190.0,
+      "relError": 0.068231838537815,
+      "overThreshold": true
+    },
+    {
+      "district": "Palpa",
+      "hdxSum": 1462.14342333,
+      "ourArea": 1373.0,
+      "relError": 0.06492601844865252,
+      "overThreshold": true
+    },
+    {
+      "district": "Humla",
+      "hdxSum": 6007.320083240001,
+      "ourArea": 5655.0,
+      "relError": 0.0623024019876217,
+      "overThreshold": true
+    },
+    {
+      "district": "Makwanpur",
+      "hdxSum": 2280.1085664899997,
+      "ourArea": 2426.0,
+      "relError": 0.060136617275350496,
+      "overThreshold": true
+    },
+    {
+      "district": "Kalikot",
+      "hdxSum": 1639.7135399299998,
+      "ourArea": 1741.0,
+      "relError": 0.058177174078116144,
+      "overThreshold": true
+    },
+    {
+      "district": "Kapilvastu",
+      "hdxSum": 1651.09640977,
+      "ourArea": 1738.0,
+      "relError": 0.05000206572497121,
+      "overThreshold": true
+    },
+    {
+      "district": "Kathmandu",
+      "hdxSum": 413.51345308,
+      "ourArea": 395.0,
+      "relError": 0.04686950146835437,
+      "overThreshold": true
+    },
+    {
+      "district": "Rupandehi",
+      "hdxSum": 1296.77560253,
+      "ourArea": 1360.0,
+      "relError": 0.04648852755147058,
+      "overThreshold": true
+    },
+    {
+      "district": "Siraha",
+      "hdxSum": 1139.28374471,
+      "ourArea": 1188.0,
+      "relError": 0.04100694889730634,
+      "overThreshold": true
+    },
+    {
+      "district": "Arghakhanchi",
+      "hdxSum": 1239.0821427299998,
+      "ourArea": 1193.0,
+      "relError": 0.03862711041911128,
+      "overThreshold": true
+    },
+    {
+      "district": "Nuwakot",
+      "hdxSum": 1079.8161160999998,
+      "ourArea": 1121.0,
+      "relError": 0.03673852265834093,
+      "overThreshold": true
+    },
+    {
+      "district": "Gulmi",
+      "hdxSum": 1107.86200098,
+      "ourArea": 1149.0,
+      "relError": 0.035803306370757224,
+      "overThreshold": true
+    },
+    {
+      "district": "Dang",
+      "hdxSum": 3058.53850737,
+      "ourArea": 2955.0,
+      "relError": 0.035038411969543125,
+      "overThreshold": true
+    },
+    {
+      "district": "Bhaktapur",
+      "hdxSum": 123.07150539,
+      "ourArea": 119.0,
+      "relError": 0.03421433100840335,
+      "overThreshold": true
+    },
+    {
+      "district": "Kaski",
+      "hdxSum": 2084.81079429,
+      "ourArea": 2017.0,
+      "relError": 0.033619630287555824,
+      "overThreshold": true
+    },
+    {
+      "district": "Manang",
+      "hdxSum": 2321.05334119,
+      "ourArea": 2246.0,
+      "relError": 0.033416447546749814,
+      "overThreshold": true
+    },
+    {
+      "district": "Lalitpur",
+      "hdxSum": 396.74388217,
+      "ourArea": 385.0,
+      "relError": 0.030503590051948068,
+      "overThreshold": true
+    },
+    {
+      "district": "Rasuwa",
+      "hdxSum": 1500.8168194099999,
+      "ourArea": 1544.0,
+      "relError": 0.027968381211139974,
+      "overThreshold": true
+    },
+    {
+      "district": "Dolakha",
+      "hdxSum": 2146.65536371,
+      "ourArea": 2191.0,
+      "relError": 0.020239450611592845,
+      "overThreshold": true
+    },
+    {
+      "district": "Sindhupalchok",
+      "hdxSum": 2490.83730963,
+      "ourArea": 2542.0,
+      "relError": 0.020126943497246197,
+      "overThreshold": true
+    },
+    {
+      "district": "Achham",
+      "hdxSum": 1661.38726834,
+      "ourArea": 1692.0,
+      "relError": 0.018092631004728136,
+      "overThreshold": true
+    },
+    {
+      "district": "Morang",
+      "hdxSum": 1822.3403610399996,
+      "ourArea": 1855.0,
+      "relError": 0.017606274371967868,
+      "overThreshold": true
+    },
+    {
+      "district": "Lamjung",
+      "hdxSum": 1662.6699183300002,
+      "ourArea": 1692.0,
+      "relError": 0.017334563634751655,
+      "overThreshold": true
+    },
+    {
+      "district": "Tanahun",
+      "hdxSum": 1572.1444935000002,
+      "ourArea": 1546.0,
+      "relError": 0.016911056597671528,
+      "overThreshold": true
+    },
+    {
+      "district": "Surkhet",
+      "hdxSum": 2485.60536676,
+      "ourArea": 2451.0,
+      "relError": 0.014118876687066472,
+      "overThreshold": true
+    },
+    {
+      "district": "Solukhumbu",
+      "hdxSum": 3354.1421510299997,
+      "ourArea": 3312.0,
+      "relError": 0.01272407941727044,
+      "overThreshold": true
+    },
+    {
+      "district": "Terhathum",
+      "hdxSum": 670.4921040300001,
+      "ourArea": 679.0,
+      "relError": 0.012530038247422586,
+      "overThreshold": true
+    },
+    {
+      "district": "Dailekh",
+      "hdxSum": 1483.9993628299999,
+      "ourArea": 1502.0,
+      "relError": 0.011984445519307668,
+      "overThreshold": true
+    },
+    {
+      "district": "Ramechhap",
+      "hdxSum": 1564.0529900299998,
+      "ourArea": 1546.0,
+      "relError": 0.011677225116429378,
+      "overThreshold": true
+    },
+    {
+      "district": "Bhojpur",
+      "hdxSum": 1523.58864361,
+      "ourArea": 1507.0,
+      "relError": 0.011007726350364939,
+      "overThreshold": true
+    },
+    {
+      "district": "Ilam",
+      "hdxSum": 1685.2828832300002,
+      "ourArea": 1703.0,
+      "relError": 0.010403474321784996,
+      "overThreshold": true
+    },
+    {
+      "district": "Dhading",
+      "hdxSum": 1906.7068625300003,
+      "ourArea": 1926.0,
+      "relError": 0.010017205332294752,
+      "overThreshold": true
+    },
+    {
+      "district": "Gorkha",
+      "hdxSum": 3646.07574358,
+      "ourArea": 3610.0,
+      "relError": 0.009993280770083133,
+      "overThreshold": false
+    },
+    {
+      "district": "Jumla",
+      "hdxSum": 2553.7932260199996,
+      "ourArea": 2531.0,
+      "relError": 0.009005620711181179,
+      "overThreshold": false
+    },
+    {
+      "district": "Pyuthan",
+      "hdxSum": 1320.7734784499999,
+      "ourArea": 1309.0,
+      "relError": 0.00899425397249798,
+      "overThreshold": false
+    },
+    {
+      "district": "Dhankuta",
+      "hdxSum": 898.71012997,
+      "ourArea": 892.0,
+      "relError": 0.007522567230941733,
+      "overThreshold": false
+    },
+    {
+      "district": "Dhanusha",
+      "hdxSum": 1188.70295585,
+      "ourArea": 1180.0,
+      "relError": 0.0073753863135593905,
+      "overThreshold": false
+    },
+    {
+      "district": "Dolpa",
+      "hdxSum": 7944.658935369999,
+      "ourArea": 7889.0,
+      "relError": 0.007055258634807859,
+      "overThreshold": false
+    },
+    {
+      "district": "Panchthar",
+      "hdxSum": 1247.72251234,
+      "ourArea": 1241.0,
+      "relError": 0.00541701236099927,
+      "overThreshold": false
+    },
+    {
+      "district": "Bajura",
+      "hdxSum": 2290.11503882,
+      "ourArea": 2300.34,
+      "relError": 0.004444978211916614,
+      "overThreshold": false
+    },
+    {
+      "district": "Taplejung",
+      "hdxSum": 3631.8133086999997,
+      "ourArea": 3646.0,
+      "relError": 0.003891028880965537,
+      "overThreshold": false
+    },
+    {
+      "district": "Jajarkot",
+      "hdxSum": 2222.06385937,
+      "ourArea": 2230.0,
+      "relError": 0.003558807457399083,
+      "overThreshold": false
+    },
+    {
+      "district": "Sarlahi",
+      "hdxSum": 1263.43386432,
+      "ourArea": 1259.0,
+      "relError": 0.0035217349642574355,
+      "overThreshold": false
+    },
+    {
+      "district": "Rolpa",
+      "hdxSum": 1885.00965994,
+      "ourArea": 1879.0,
+      "relError": 0.0031983288664182504,
+      "overThreshold": false
+    },
+    {
+      "district": "Sankhuwasabha",
+      "hdxSum": 3469.6138824200007,
+      "ourArea": 3480.0,
+      "relError": 0.0029845165459768206,
+      "overThreshold": false
+    },
+    {
+      "district": "Kanchanpur",
+      "hdxSum": 1218.74348592,
+      "ourArea": 1222.31,
+      "relError": 0.0029178474200488697,
+      "overThreshold": false
+    },
+    {
+      "district": "Sindhuli",
+      "hdxSum": 2484.2361965,
+      "ourArea": 2491.0,
+      "relError": 0.0027152964672822136,
+      "overThreshold": false
+    },
+    {
+      "district": "Dadeldhura",
+      "hdxSum": 1502.08945653,
+      "ourArea": 1506.09,
+      "relError": 0.002656244626815072,
+      "overThreshold": false
+    },
+    {
+      "district": "Mustang",
+      "hdxSum": 3564.13326629,
+      "ourArea": 3573.0,
+      "relError": 0.0024815935376434543,
+      "overThreshold": false
+    },
+    {
+      "district": "Baitadi",
+      "hdxSum": 1492.54812783,
+      "ourArea": 1496.04,
+      "relError": 0.0023340767426003658,
+      "overThreshold": false
+    },
+    {
+      "district": "Darchula",
+      "hdxSum": 2339.6054338000004,
+      "ourArea": 2344.61,
+      "relError": 0.002134498360068315,
+      "overThreshold": false
+    },
+    {
+      "district": "Kailali",
+      "hdxSum": 3285.4923875900004,
+      "ourArea": 3292.35,
+      "relError": 0.002082892891095888,
+      "overThreshold": false
+    },
+    {
+      "district": "Okhaldhunga",
+      "hdxSum": 1076.07920165,
+      "ourArea": 1074.0,
+      "relError": 0.0019359419459962376,
+      "overThreshold": false
+    },
+    {
+      "district": "Bajhang",
+      "hdxSum": 3388.6516107000007,
+      "ourArea": 3394.21,
+      "relError": 0.0016376091343786514,
+      "overThreshold": false
+    },
+    {
+      "district": "Kavrepalanchok",
+      "hdxSum": 1393.82909537,
+      "ourArea": 1396.0,
+      "relError": 0.0015550892765042947,
+      "overThreshold": false
+    },
+    {
+      "district": "Jhapa",
+      "hdxSum": 1603.8109511800003,
+      "ourArea": 1606.0,
+      "relError": 0.001363044097135553,
+      "overThreshold": false
+    },
+    {
+      "district": "Mahottari",
+      "hdxSum": 1000.7595921700001,
+      "ourArea": 1002.0,
+      "relError": 0.001237931966067732,
+      "overThreshold": false
+    },
+    {
+      "district": "Khotang",
+      "hdxSum": 1589.1950571500001,
+      "ourArea": 1591.0,
+      "relError": 0.001134470678818266,
+      "overThreshold": false
+    },
+    {
+      "district": "Rukum West",
+      "hdxSum": 1213.06320377,
+      "ourArea": 1213.49,
+      "relError": 0.000351709721546973,
+      "overThreshold": false
+    },
+    {
+      "district": "Rukum East",
+      "hdxSum": 1160.91283312,
+      "ourArea": 1161.13,
+      "relError": 0.00018703063395153843,
+      "overThreshold": false
+    }
+  ]
+}
