@@ -293,8 +293,8 @@ vm.createContext(sandbox);
     assert.ok(pageHtml.includes('skip-link'), page + ' ships a skip link');
     assert.ok(/theme-toggle[^>]*aria-pressed/.test(pageHtml),
       page + ' theme toggle declares aria-pressed');
-    assert.ok(pageHtml.includes('styles.css?v=13'),
-      page + ' bumps the styles cache (v13)');
+    assert.ok(pageHtml.includes('styles.css?v=14'),
+      page + ' bumps the styles cache (v14)');
   }
   const explorerHtml = fs.readFileSync(path.join(ROOT, 'explorer.html'), 'utf8');
   assert.ok(!explorerHtml.includes('role="grid"'),
@@ -320,6 +320,29 @@ vm.createContext(sandbox);
     'pagination announces the current page');
   assert.ok((appSrc.match(/prefers-reduced-motion: reduce/g) || []).length === 3,
     'reduced-motion respected (header scroll, flyTo/anchors)');
+  // Bento 2.0 homepage (Wave 2): the features grid is a bento grid —
+  // one dominant bilingual cell (2x2), the CBS claim in a wide cell,
+  // asymmetric spans on a shared 6-column grid, tactile hover that
+  // collapses under reduced motion. Spans are layout truth: assert them.
+  const indexHtml = fs.readFileSync(path.join(ROOT, 'index.html'), 'utf8');
+  assert.ok((indexHtml.match(/feature-card bento-cell/g) || []).length === 8,
+    'all 8 feature cards are bento cells');
+  assert.ok(indexHtml.includes('cell-bilingual'),
+    'the bilingual cell anchors the bento (dominant cell)');
+  assert.ok(indexHtml.includes('cell-wide'),
+    'the CBS claim rides the wide cell');
+  assert.ok(indexHtml.includes('cell-full'),
+    'the pub.dev score settles as the full-width cell');
+  const bilingualFirst = indexHtml.indexOf('cell-bilingual');
+  const cbsSecond = indexHtml.indexOf('cell-wide');
+  assert.ok(bilingualFirst > -1 && bilingualFirst < cbsSecond,
+    'DOM order = visual order: bilingual cell first, CBS wide cell second');
+  assert.ok(stylesCss.includes('grid-template-columns: repeat(6, 1fr)'),
+    'the bento rides a 6-column grid');
+  assert.ok(stylesCss.includes('.cell-bilingual { grid-column: span 2; grid-row: span 2; }'),
+    'the dominant cell spans 2x2');
+  assert.ok(/prefers-reduced-motion: reduce[\s\S]{0,200}\.feature-card:hover \{ transform: none; \}/.test(stylesCss),
+    'bento hover lift collapses under reduced motion');
     const rows = (tableBody.innerHTML.match(/<tr/g) || []).length;
   console.log(`SMOKE OK: ${data.length} records, ${rows} rows rendered, no errors`);
 })().catch((err) => {
