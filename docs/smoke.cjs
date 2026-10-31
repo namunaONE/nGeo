@@ -301,8 +301,8 @@ vm.createContext(sandbox);
     'explorer table is a plain table (role="grid" retired)');
   assert.ok(!explorerHtml.includes('role="application"'),
     'map container does not capture screen-reader keys');
-  assert.ok(explorerHtml.includes('app.js?v=16'),
-    'explorer bumps the app cache (v16)');
+  assert.ok(explorerHtml.includes('app.js?v=17'),
+    'explorer bumps the app cache (v17)');
   const stylesCss = fs.readFileSync(path.join(ROOT, 'styles.css'), 'utf8');
   assert.ok(stylesCss.includes('[tabindex]:focus-visible'),
     'interactive table rows get a visible focus ring');
