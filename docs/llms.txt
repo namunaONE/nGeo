@@ -4,24 +4,24 @@
 
 ## Documentation
 
-- [Homepage](https://namunaONE.github.io/Nepal-Local-Government-Data/): Installation, quickstart, features, data sources, verification pipeline
-- [API Reference](https://namunaONE.github.io/Nepal-Local-Government-Data/api.html): Complete typed API — models, queries, JSON serialization, v1→v2 migration guide
-- [Data Explorer](https://namunaONE.github.io/Nepal-Local-Government-Data/explorer.html): Searchable, filterable table of all 753 palikas plus an interactive centroid map
-- [Brand System](https://namunaONE.github.io/Nepal-Local-Government-Data/brand.html): M3 dual-seed theme (navy #002C6D × green #4FD166) — tonal palettes, color roles, Flutter `ColorScheme` + CSS tokens
-- [Changelog](https://github.com/namunaONE/Nepal-Local-Government-Data/blob/main/CHANGELOG.md): Version history (Keep a Changelog, SemVer)
+- [Homepage](https://namunaone.github.io/nGeo/): Installation, quickstart, features, data sources, verification pipeline
+- [API Reference](https://namunaone.github.io/nGeo/api.html): Complete typed API — models, queries, JSON serialization, v1→v2 migration guide
+- [Data Explorer](https://namunaone.github.io/nGeo/explorer.html): Searchable, filterable table of all 753 palikas plus an interactive centroid map
+- [Brand System](https://namunaone.github.io/nGeo/brand.html): M3 dual-seed theme (navy #002C6D × green #4FD166) — tonal palettes, color roles, Flutter `ColorScheme` + CSS tokens
+- [Changelog](https://github.com/namunaONE/nGeo/blob/main/CHANGELOG.md): Version history (Keep a Changelog, SemVer)
 
 ## Package
 
 - [pub.dev package](https://pub.dev/packages/nepal_admin_api): v2.10.0, pure Dart, zero runtime dependencies, offline-first
-- [GitHub repository](https://github.com/namunaONE/Nepal-Local-Government-Data): Source code, issue tracker, data merge pipeline
-- [Full documentation (single file)](https://namunaONE.github.io/Nepal-Local-Government-Data/llms-full.txt): Complete text of these docs for deep AI ingestion — paste this URL into any LLM for full context
+- [GitHub repository](https://github.com/namunaONE/nGeo): Source code, issue tracker, data merge pipeline
+- [Full documentation (single file)](https://namunaone.github.io/nGeo/llms-full.txt): Complete text of these docs for deep AI ingestion — paste this URL into any LLM for full context
 
 ## Data
 
-- [Canonical dataset](https://github.com/namunaONE/Nepal-Local-Government-Data/blob/main/data/nepal_local_levels.json): Single source of truth; the Dart package is generated from it
-- [Provenance](https://github.com/namunaONE/Nepal-Local-Government-Data/blob/main/data/SOURCES.md): Per-field sources, licenses, retrieval dates, honesty notes
-- [Attribution](https://github.com/namunaONE/Nepal-Local-Government-Data/blob/main/NOTICE): MIT for code; CC-BY-4.0 attributions for adapted data fields
-- [Contributing](https://github.com/namunaONE/Nepal-Local-Government-Data/blob/main/CONTRIBUTING.md): Bug reports, PR guidelines, Conventional Commits, data pipeline docs
+- [Canonical dataset](https://github.com/namunaONE/nGeo/blob/main/data/nepal_local_levels.json): Single source of truth; the Dart package is generated from it
+- [Provenance](https://github.com/namunaONE/nGeo/blob/main/data/SOURCES.md): Per-field sources, licenses, retrieval dates, honesty notes
+- [Attribution](https://github.com/namunaONE/nGeo/blob/main/NOTICE): MIT for code; CC-BY-4.0 attributions for adapted data fields
+- [Contributing](https://github.com/namunaONE/nGeo/blob/main/CONTRIBUTING.md): Bug reports, PR guidelines, Conventional Commits, data pipeline docs
 
 ## Key facts for code generation
 

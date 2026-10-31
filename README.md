@@ -1,14 +1,14 @@
 # Nepal Administrative Data by namunaONE — `nepal_admin_api`
 
 <p align="left">
-  <img src="https://raw.githubusercontent.com/namunaONE/Nepal-Local-Government-Data/main/docs/logo-full.svg" alt="Nepal Administrative Data by namunaONE" width="420">
+  <img src="https://raw.githubusercontent.com/namunaONE/nGeo/main/docs/logo-full.svg" alt="Nepal Administrative Data by namunaONE" width="420">
 </p>
 
 [![pub package](https://img.shields.io/pub/v/nepal_admin_api.svg)](https://pub.dev/packages/nepal_admin_api)
 [![pub points](https://img.shields.io/pub/points/nepal_admin_api.svg)](https://pub.dev/packages/nepal_admin_api/score)
 [![License: MIT](https://img.shields.io/badge/License-MIT-blue.svg)](LICENSE)
-[![CI](https://github.com/namunaONE/Nepal-Local-Government-Data/actions/workflows/dart.yml/badge.svg)](https://github.com/namunaONE/Nepal-Local-Government-Data/actions/workflows/dart.yml)
-[![Website](https://img.shields.io/badge/docs-GitHub%20Pages-DC143C)](https://namunaONE.github.io/Nepal-Local-Government-Data/)
+[![CI](https://github.com/namunaONE/nGeo/actions/workflows/dart.yml/badge.svg)](https://github.com/namunaONE/nGeo/actions/workflows/dart.yml)
+[![Website](https://img.shields.io/badge/docs-GitHub%20Pages-DC143C)](https://namunaone.github.io/nGeo/)
 
 > **Offline administrative divisions of Nepal** — 7 provinces, 77 districts, 753 local bodies, 6,743 wards with **official CBS/NSO codes** (PDDPP format) and **ISO 3166-2 province codes** (NP-P1…NP-P7).
 
@@ -22,7 +22,7 @@ Pure Dart package. Zero runtime dependencies. Data ships in the box.
 
 | Feature | Description |
 |---------|-------------|
-| **Flutter widgets** | [`nepal_admin_widgets`](https://pub.dev/packages/nepal_admin_widgets) ([source](https://github.com/namunaONE/Nepal-Local-Government-Data/tree/main/packages/nepal_admin_widgets)) — cascading Province → District → Palika pickers, palika-type chips, CBS trust badges and summary cards; bilingual, offline, with a runnable component gallery in example/ |
+| **Flutter widgets** | [`nepal_admin_widgets`](https://pub.dev/packages/nepal_admin_widgets) ([source](https://github.com/namunaONE/nGeo/tree/main/packages/nepal_admin_widgets)) — cascading Province → District → Palika pickers, palika-type chips, CBS trust badges and summary cards; bilingual, offline, with a runnable component gallery in example/ |
 | **Bindings for 5 ecosystems** | Dart · TypeScript/JavaScript · Python · CSV · GeoJSON — all generated from one dataset, drift-checked in CI |
 | **Bilingual** | Devanagari names for all 7 provinces, 77 districts and **753/753 palikas** - never transliterated, never guessed |
 | **Bilingual search** | `search('भरतपुर')` and `search('Bharatpur')` return the same palika; fragments match too |
@@ -135,7 +135,7 @@ Wards: ${stats.wards}                   // 6,743 declared
   // ──────────────────────────────────────────────
   // Code confidence — join to government datasets
   // ──────────────────────────────────────────────
-  // 744 of 753 palikas carry a code. Each says how strongly it is attested.
+  // 753 of 753 palikas carry a code. Each says how strongly it is attested.
   final byCode = NepalAdminApi.getAllLocalBodies().byCbsCode; // Map<int, LocalBody>
   print('Joinable by CBS code: ${byCode.length}/753');
 
@@ -168,8 +168,8 @@ guarantees, in whichever shape you already use.
 | **Dart / Flutter** | `nepal_admin_api` (pub.dev) | typed classes, zero deps |
 | **JavaScript / TypeScript** | `npm install nepal-admin-data` | `index.js` + `index.d.ts`, zero deps |
 | **Python** | `pip install nepal-admin-data` | pure stdlib, zero deps |
-| **CSV** | [`local_bodies.csv`](https://namunaONE.github.io/Nepal-Local-Government-Data/downloads/local_bodies.csv) | 3 flat files, RFC 4180 |
-| **GeoJSON** | [`local-bodies.centroids.geojson`](https://namunaONE.github.io/Nepal-Local-Government-Data/downloads/local-bodies.centroids.geojson) | RFC 7946, WGS84 |
+| **CSV** | [`local_bodies.csv`](https://namunaone.github.io/nGeo/downloads/local_bodies.csv) | 3 flat files, RFC 4180 |
+| **GeoJSON** | [`local-bodies.centroids.geojson`](https://namunaone.github.io/nGeo/downloads/local-bodies.centroids.geojson) | RFC 7946, WGS84 |
 
 ```js
 const nad = require('nepal-admin-data');
@@ -299,9 +299,9 @@ known gaps, which `Province.unreconciledWards` reports per province.
 | `getLocalBodiesByType(type)` | `List<LocalBody>` | Palikas of one type |
 | `getLocalBodiesByName(name, district)` | `List<LocalBody>` | **Disambiguates duplicates by district** |
 | `getLocalBodyByFullPath(path)` | `LocalBody?` | **`'Bharatpur, Chitwan, Bagmati'`; null if ambiguous** |
-| `getLocalBodyByCbs(code)` | `LocalBody?` | **Any tier** — resolves 744/753 (`31304` = Bharatpur) |
+| `getLocalBodyByCbs(code)` | `LocalBody?` | **Any tier** — resolves all 753 (`31304` = Bharatpur) |
 | `getLocalBodyByCbsVerified(code)` | `LocalBody?` | **Strict tier only** — 548/753 |
-| `getLocalBodiesWithCode()` | `List<LocalBody>` | **744 — the joinable set** |
+| `getLocalBodiesWithCode()` | `List<LocalBody>` | **753 — the joinable set** |
 | `getVerifiedLocalBodies()` | `List<LocalBody>` | Doubly-attested only (548) |
 | `getSingleSourceLocalBodies()` | `List<LocalBody>` | Single attestation (196) |
 | `getUncodedLocalBodies()` | `List<LocalBody>` | No defensible code (9) |
@@ -320,7 +320,7 @@ known gaps, which `Province.unreconciledWards` reports per province.
 
 **Helpers**: bilingual (`nameNe`, `nameNeOrName`, `displayBoth` on all three models), `LocalBody.fullPath` (`'Bharatpur, Chitwan, Bagmati'`), `isUrban` / `isRural`, `hasCoordinates`, `hasCbsCode`, `cbsCodeString` (zero-padded, for string joins), `LocalBodyListX` (`sortedByName`, `sortedByFullPath`, `whereUrban`, `whereRural`, `whereVerified`, `whereMapped`, `whereCoded`, `whereDoublyAttested`, `whereSingleSource`, `whereUncoded`, `whereCodeAndCoordinateMapped`, `whereWardsVerified`, `ofType`, `totalWards`, `byCbsCode`), ward reconciliation (`District.wards` / `verifiedWardCoverage` / `wardsFullyVerified`, `Province.declaredWards` / `verifiedWards` / `unreconciledWards` / `wardsReconcile`)
 
-👉 [Full API Documentation](https://namunaONE.github.io/Nepal-Local-Government-Data/api.html)
+👉 [Full API Documentation](https://namunaone.github.io/nGeo/api.html)
 
 ---
 
@@ -328,7 +328,7 @@ known gaps, which `Province.unreconciledWards` reports per province.
 
 Interactive table with all 753 local bodies — search, filter by province/district/type, view CBS codes and verification status — plus an interactive centroid map (all 753 mapped, Leaflet + clustered dots, click a row to fly to it, `?cbs=` deep links).
 
-👉 [Open Data Explorer](https://namunaONE.github.io/Nepal-Local-Government-Data/explorer.html)
+👉 [Open Data Explorer](https://namunaone.github.io/nGeo/explorer.html)
 
 ---
 
@@ -383,7 +383,7 @@ Step 5: Confidence tiers — single-source codes recovered from the CBS roster,
        ▼
 Step 6: Devanagari names at all three levels, corroborated against a second
         bilingual source (tool/merge/attach_bilingual.dart)
-       │ 7/7 provinces, 77/77 districts, 731/753 palikas
+       │ 7/7 provinces, 77/77 districts, 753/753 palikas
        ▼
 Step 7: Administrative attributes — HQ, area, website, contact, postal codes
         (tool/merge/attach_attributes.dart)
@@ -423,8 +423,8 @@ Devanagari field holding no Devanagari.
 
 ```bash
 # Setup
-git clone https://github.com/namunaONE/Nepal-Local-Government-Data.git
-cd Nepal-Local-Government-Data
+git clone https://github.com/namunaONE/nGeo.git
+cd nGeo
 dart pub get
 
 # Run CI locally
@@ -483,8 +483,8 @@ them drift apart.
 
 Machine-readable docs live alongside the site (llms.txt convention):
 
-- [`llms.txt`](https://namunaONE.github.io/Nepal-Local-Government-Data/llms.txt) — curated index: install, API, data, links
-- [`llms-full.txt`](https://namunaONE.github.io/Nepal-Local-Government-Data/llms-full.txt) — complete documentation in one file; paste this URL into any LLM for full context
+- [`llms.txt`](https://namunaone.github.io/nGeo/llms.txt) — curated index: install, API, data, links
+- [`llms-full.txt`](https://namunaone.github.io/nGeo/llms-full.txt) — complete documentation in one file; paste this URL into any LLM for full context
 
 Guidelines for AI-generated answers using this package: always query codes/counts/coordinates from the API (never invent CBS codes, ward counts, or lat/lng); disambiguate duplicate palika names with `districtName`/`provinceName` or `fullPath`; respect `*Verified` flags and `null` gaps.
 
@@ -512,9 +512,9 @@ See [CONTRIBUTING.md](CONTRIBUTING.md) for:
 ## 🔗 Links
 
 - **Package**: [pub.dev/packages/nepal_admin_api](https://pub.dev/packages/nepal_admin_api)
-- **Documentation**: [GitHub Pages](https://namunaONE.github.io/Nepal-Local-Government-Data/)
-- **API Reference**: [/api.html](https://namunaONE.github.io/Nepal-Local-Government-Data/api.html)
-- **Data Explorer**: [/explorer.html](https://namunaONE.github.io/Nepal-Local-Government-Data/explorer.html)
-- **Repository**: [github.com/namunaONE/Nepal-Local-Government-Data](https://github.com/namunaONE/Nepal-Local-Government-Data)
-- **Issues**: [GitHub Issues](https://github.com/namunaONE/Nepal-Local-Government-Data/issues)
+- **Documentation**: [GitHub Pages](https://namunaone.github.io/nGeo/)
+- **API Reference**: [/api.html](https://namunaone.github.io/nGeo/api.html)
+- **Data Explorer**: [/explorer.html](https://namunaone.github.io/nGeo/explorer.html)
+- **Repository**: [github.com/namunaONE/nGeo](https://github.com/namunaONE/nGeo)
+- **Issues**: [GitHub Issues](https://github.com/namunaONE/nGeo/issues)
 - **Changelog**: [CHANGELOG.md](CHANGELOG.md)
