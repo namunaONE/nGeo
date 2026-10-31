@@ -132,8 +132,7 @@ void main() {
     'https://namunaone.github.io/nGeo/brand.html',
   ];
   for (final page in sitePages) {
-    need('docs/sitemap.xml', '<loc>$page</loc>',
-        'the sitemap to list $page');
+    need('docs/sitemap.xml', '<loc>$page</loc>', 'the sitemap to list $page');
   }
   need('docs/explorer.html', 'v$version', 'the footer to say v$version');
   need('docs/api.html', 'v$version', 'the footer to say v$version');
