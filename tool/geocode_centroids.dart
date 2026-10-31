@@ -25,7 +25,7 @@ const _levelsPath = 'data/nepal_local_levels.json';
 const _localUnitsPath = 'data/_raw/open-admin-data/data_all-local_unit.json';
 const _cachePath = 'data/_stage/geocodes.json';
 const _ua =
-    'nepal_admin_api-geocoder/1.0 (contact: realpoudel@duck.com; project: https://github.com/namunaONE/Nepal-Local-Government-Data)';
+    'nepal_admin_api-geocoder/1.0 (contact: realpoudel@duck.com; project: https://github.com/namunaONE/nGeo)';
 
 // Nepal bounding box: lat 26-31, lng 80-89.
 bool _inNepal(double lat, double lng) =>

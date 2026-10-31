@@ -7,8 +7,8 @@ description: >
 publish_to: none
 version: 0.1.0
 
-homepage: https://github.com/namunaONE/Nepal-Local-Government-Data
-repository: https://github.com/namunaONE/Nepal-Local-Government-Data
+homepage: https://github.com/namunaONE/nGeo
+repository: https://github.com/namunaONE/nGeo
 
 environment:
   sdk: ^3.0.0
