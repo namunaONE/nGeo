@@ -1,0 +1,20 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!-- docs/sitemap.xml — the four public pages. Deliberately no <lastmod>:
+     the site's freshness signal lives in the index JSON-LD dateModified,
+     which tool/check_site_truth.dart pins to bindings/meta.json's
+     dataAsOf. A fabricated per-page lastmod would be a second, driftier
+     date to maintain; the dataset as-of date is the honest one. -->
+<urlset xmlns="http://www.sitemaps.org/schemas/sitemap/0.9">
+  <url>
+    <loc>https://namunaone.github.io/nGeo/</loc>
+  </url>
+  <url>
+    <loc>https://namunaone.github.io/nGeo/explorer.html</loc>
+  </url>
+  <url>
+    <loc>https://namunaone.github.io/nGeo/api.html</loc>
+  </url>
+  <url>
+    <loc>https://namunaone.github.io/nGeo/brand.html</loc>
+  </url>
+</urlset>
