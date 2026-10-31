@@ -78,7 +78,7 @@ void main() {
 `name` · `cbsCode` (int?, 3-digit, e.g. 306 Kathmandu) · `provinceName` · `localBodies` · `localBodyCount` · `wards` (sums verified counts) · `localBodiesByType(type)` · `verifiedLocalBodies`.
 
 ### LocalBody
-`name` · `type` · `districtName` · `provinceName` · `cbsCode` (int?, 5-digit PDDPP, null when unverified) · `cbsCodeVerified` · `lat`/`lng` (double?, WGS84 centroid, null when unmapped) · `geoSource` (e.g. `'open-admin-data'`) · `wards` (int?, null for 8 pending roster adjudication) · `wardsVerified`. Getters: `typeName`, `isUrban`, `isRural`, `hasCoordinates`, `fullPath` (`'Name, District, Province'`). `toJson()` omits nulls; `fromJson()` restores all fields.
+`name` · `type` · `districtName` · `provinceName` · `cbsCode` (int?, 5-digit PDDPP, null only when absent) · `cbsCodeVerified` · `lat`/`lng` (double?, WGS84 centroid, null when unmapped) · `geoSource` (e.g. `'open-admin-data'`) · `wards` (int?, null for 8 pending roster adjudication) · `wardsVerified`. Getters: `typeName`, `isUrban`, `isRural`, `hasCoordinates`, `fullPath` (`'Name, District, Province'`). `toJson()` omits nulls; `fromJson()` restores all fields.
 
 ### ProvinceStats / NationalStats / SearchResult
 `ProvinceStats{districts, metro, subMetro, mun, ruralMun, total, wards}` (+`toJson`). `NationalStats{provinces:7, districts:77, metro:6, subMetro:11, municipalities:276, ruralMunicipalities:460, total:753, wards:6743}`. `SearchResult{provinces, districts, localBodies, isEmpty, length}`.
@@ -89,7 +89,7 @@ void main() {
 - `getProvinceById(id)` → by slug or ISO, case-insensitive, null when unknown
 - `getProvinceByIso('NP-P3')`, `getProvinceByCbs(3)`
 - `getAllDistricts()` → 77; `getDistrictsByProvince(idOrIso)`; `getDistrictByName('Chitwan')` (case-insensitive); `getDistrictByCbs(306)`
-- `getAllLocalBodies()` → 753; `getLocalBodiesByDistrict(name)`; `getLocalBodiesByProvince(idOrIso)`; `getLocalBodiesByType(type)`; `getLocalBodyByCbs(31304)` (null when unverified/absent); `getVerifiedLocalBodies()` (548 CBS-verified)
+- `getAllLocalBodies()` → 753; `getLocalBodiesByDistrict(name)`; `getLocalBodiesByProvince(idOrIso)`; `getLocalBodiesByType(type)`; `getLocalBodyByCbs(31304)` (null only when absent); `getVerifiedLocalBodies()` (548 CBS-verified)
 - `search(query)` → case-insensitive across names, ISO codes, full paths, type names; empty query → empty result
 - `getNationalStats()` → computed live, never hardcoded
 - `getDistrictElevationStats(idOrName)` → per-district elevation stats (`DistrictElevationStats`: districtId, nameEn, nameNe, elevMin/elevMean/elevMax in integer metres, Copernicus GLO-30); `getAllDistrictElevationStats()` → all 77
