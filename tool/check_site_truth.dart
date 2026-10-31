@@ -122,7 +122,8 @@ void main() {
     need('docs/robots.txt', 'User-agent: $bot',
         'the AI crawler $bot to be explicitly welcomed');
   }
-  need('docs/robots.txt',
+  need(
+      'docs/robots.txt',
       'Sitemap: https://namunaone.github.io/nGeo/sitemap.xml',
       'the sitemap to be declared');
   const sitePages = [
