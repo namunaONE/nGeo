@@ -117,9 +117,11 @@ void main() {
   // Coverage: the headline claims match meta.json.
   need('docs/index.html', '$withCode/$bodies palikas (100%)',
       'CBS coverage to be $withCode/$bodies (100%)');
-  need('docs/index.html',
-      '$doublyAttested doubly-attested, $singleSource single-source',
-      'the attestation split to be $doublyAttested + $singleSource');
+  need(
+    'docs/index.html',
+    '$doublyAttested doubly-attested, $singleSource single-source',
+    'the attestation split to be $doublyAttested + $singleSource',
+  );
   need('docs/explorer.html', '$withWards/$bodies palikas',
       'ward coverage to be $withWards/$bodies');
   need('docs/llms.txt',
