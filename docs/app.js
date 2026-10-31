@@ -1308,11 +1308,64 @@ function initHeaderScroll() {
   }, { passive: true });
 }
 
+// Wave 2.5: count-up hero stats when they enter the viewport ("motion
+// that explains"). Reduced-motion or no IntersectionObserver: the text
+// stays exactly as authored. The numbers are read from the DOM itself,
+// so the source HTML keeps the exact needle strings.
+function initCountUp() {
+  const stats = document.querySelector('.hero-stats');
+  if (!stats || typeof IntersectionObserver === 'undefined') return;
+  const targets = stats.querySelectorAll('.stat-value');
+  if (!targets.length) return;
+  const reduced = window.matchMedia('(prefers-reduced-motion: reduce)').matches;
+  const animate = (el) => {
+    if (reduced) return;
+    const finalText = el.textContent || '';
+    const num = parseInt(finalText.replace(/,/g, ''), 10);
+    if (!Number.isFinite(num) || num <= 0) return;
+    const duration = 700; // Emil ceiling: well under 1000ms
+    const started = performance.now();
+    const fmt = (v) => v.toLocaleString('en-US');
+    const tick = (now) => {
+      const t = Math.min(1, (now - started) / duration);
+      const eased = 1 - Math.pow(1 - t, 3); // ease-out cubic
+      el.textContent = fmt(Math.round(num * eased));
+      if (t < 1) requestAnimationFrame(tick);
+      else el.textContent = fmt(num);
+    };
+    requestAnimationFrame(tick);
+  };
+  const io = new IntersectionObserver((entries, obs) => {
+    entries.forEach((entry) => {
+      if (entry.isIntersecting) { animate(entry.target); obs.unobserve(entry.target); }
+    });
+  }, { threshold: 0.4 });
+  targets.forEach((el) => io.observe(el));
+}
+
+// Wave 2.5: bento entrance stagger — cells rise 12px and fade in, offset
+// by the --nb-motion-stagger token (40ms) per cell. Opt-in: JS adds
+// reveal-ready first (no-JS visitors see a fully rendered grid), then
+// in-view triggers the rise. Reduced-motion collapses it via CSS media.
+function initBentoReveal() {
+  const grid = document.querySelector('.features-grid');
+  if (!grid || typeof IntersectionObserver === 'undefined') return;
+  grid.classList.add('reveal-ready');
+  const io = new IntersectionObserver((entries, obs) => {
+    entries.forEach((entry) => {
+      if (entry.isIntersecting) { grid.classList.add('in-view'); obs.disconnect(); }
+    });
+  }, { threshold: 0.15 });
+  io.observe(grid);
+}
+
 // Initialize theme + nav + header on load
 document.addEventListener('DOMContentLoaded', () => {
   initTheme();
   initNav();
   initHeaderScroll();
+  initCountUp();
+  initBentoReveal();
 });
 
 // API docs nav highlighting
