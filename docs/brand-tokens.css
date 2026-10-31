@@ -113,7 +113,8 @@
   --nb-space-1: 4px; --nb-space-2: 8px; --nb-space-3: 12px; --nb-space-4: 16px;
   --nb-space-6: 24px; --nb-space-8: 32px; --nb-space-12: 48px; --nb-space-16: 64px;
   --nb-radius-sm: 8px; --nb-radius-md: 12px; --nb-radius-lg: 16px; --nb-radius-xl: 24px;
-  --nb-motion-fast: 150ms; --nb-motion-standard: 200ms; --nb-motion-emphasized: 300ms;
+  --nb-motion-fast: 150ms; --nb-motion-standard: 200ms; --nb-motion-emphasized: 300ms; --nb-motion-exit: 180ms; --nb-motion-stagger: 40ms;
+  --nb-easing-out: cubic-bezier(0.16, 1, 0.3, 1); --nb-easing-exit: cubic-bezier(0.51, 0, 0.75, 0.72);
 
   /* ---- Brand gradient / premium surfaces ---- */
   --brand-hero-gradient: linear-gradient(135deg, #1E3A8A 0%, #1D4ED8 45%, #15803D 100%);
