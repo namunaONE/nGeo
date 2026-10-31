@@ -124,10 +124,9 @@ void main() {
   );
   need('docs/explorer.html', '$withWards/$bodies palikas',
       'ward coverage to be $withWards/$bodies');
-  need('docs/llms.txt',
-      'Coverage: $withCode/$bodies palikas carry a CBS code '
-      '($doublyAttested doubly-attested, $singleSource single-source, '
-      '$uncoded null)',
+  final coverageLine =
+      'Coverage: $withCode/$bodies palikas carry a CBS code ($doublyAttested doubly-attested, $singleSource single-source, $uncoded null)';
+  need('docs/llms.txt', coverageLine,
       'the coverage line to carry the meta.json counters');
   need('docs/llms-full.txt', '**CBS codes:** $withCode/$bodies palikas carry',
       'the CBS coverage line to be $withCode/$bodies');
@@ -142,10 +141,9 @@ void main() {
   }
 
   if (failures.isEmpty) {
-    stdout.writeln('site truth OK: ${surfaces.length} surfaces agree with '
-        'pubspec.yaml v$version and bindings/meta.json ($withCode/$bodies '
-        'coded, $doublyAttested doubly attested, $singleSource single '
-        'source).');
+    final okMessage =
+        'site truth OK: ${surfaces.length} surfaces agree with pubspec.yaml v$version and bindings/meta.json ($withCode/$bodies coded, $doublyAttested doubly attested, $singleSource single source).';
+    stdout.writeln(okMessage);
     return;
   }
   for (final failure in failures) {
