@@ -350,8 +350,35 @@ html.dark .pagination button.active, html[data-theme="dark"] .pagination button.
 
 /* ---- Sections ---- */
 section { padding: var(--space-16) 0; }
-.features-grid { display: grid; grid-template-columns: repeat(auto-fit, minmax(min(100%, 280px), 1fr)); gap: var(--space-6); container-type: inline-size; }
-@container (min-width: 640px) { .features-grid { gap: var(--space-8); } }
+/* ---- Wave 2: Bento 2.0 features grid ----
+   The layout mirrors the data model: one dominant bilingual cell anchors
+   the corner (identity), the flagship CBS claim takes the wide cell, and
+   the pub.dev score settles quietly as a full-width footer cell. Hierarchy
+   by size, zero extra chrome. Spans are layout truth, asserted by smoke. */
+.features-grid { display: grid; grid-template-columns: repeat(6, 1fr); gap: var(--space-4); }
+.bento-cell { border-radius: var(--radius-xl); }
+.cell-bilingual { grid-column: span 2; grid-row: span 2; }
+.cell-bilingual { display: flex; flex-direction: column; justify-content: center; }
+.cell-wide { grid-column: span 4; }
+.cell-full { grid-column: span 6; }
+/* Bento 2.0 tactility: the hover lift (inherited from .feature-card) is
+   decorative — collapse it entirely under reduced motion. */
+@media (prefers-reduced-motion: reduce) {
+  .feature-card { transition: none; }
+  .feature-card:hover { transform: none; }
+}
+/* Bento reflow: mobile keeps the narrative — the bilingual cell stays
+   dominant (full-width) and spans collapse to the 2-column rhythm. */
+@media (max-width: 768px) {
+  .features-grid { grid-template-columns: repeat(2, 1fr); }
+  .cell-bilingual { grid-column: span 2; grid-row: span 1; }
+  .cell-wide { grid-column: span 2; }
+  .cell-full { grid-column: span 2; }
+}
+@media (max-width: 480px) {
+  .features-grid { grid-template-columns: 1fr; }
+  .cell-bilingual, .cell-wide, .cell-full { grid-column: span 1; }
+}
 .feature-card { padding: var(--space-6); background: var(--color-bg-secondary); border: 1px solid var(--color-border); border-radius: var(--radius-lg); transition: all var(--transition); }
 .feature-card:hover { border-color: color-mix(in srgb, var(--color-primary) 45%, transparent); box-shadow: var(--shadow-lg); transform: translateY(-4px); }
 .feature-icon { width: 48px; height: 48px; border-radius: var(--radius-full); background: var(--color-primary-light); color: var(--color-primary); display: flex; align-items: center; justify-content: center; margin-bottom: var(--space-4); }
