@@ -307,7 +307,7 @@ LocalBody? getLocalBodyByCbs(int cbsCode)
 List&lt;LocalBody&gt; getLocalBodiesByProvince(String provinceId)
 List&lt;LocalBody&gt; getLocalBodiesByType(LocalBodyType type)
 List&lt;LocalBody&gt; getVerifiedLocalBodies()</div>
-            <p><code>getProvinceByIso('NP-P3')</code> → Bagmati. <code>getDistrictByCbs(306)</code> → Kathmandu. <code>getLocalBodyByCbs(31304)</code> → Bharatpur (null when unverified). <code>getDistrictsByProvince</code> / <code>getLocalBodiesByProvince</code> accept an id or ISO code. <code>getVerifiedLocalBodies()</code> returns the 547 CBS-verified palikas.</p>
+            <p><code>getProvinceByIso('NP-P3')</code> → Bagmati. <code>getDistrictByCbs(306)</code> → Kathmandu. <code>getLocalBodyByCbs(31304)</code> → Bharatpur (null only when absent). <code>getDistrictsByProvince</code> / <code>getLocalBodiesByProvince</code> accept an id or ISO code. <code>getVerifiedLocalBodies()</code> returns the 548 CBS-verified palikas.</p>
           </section>
 
           <section id="v21-helpers">
@@ -482,7 +482,7 @@ print('Wards: ${stats.wards}');                // 6743</code></pre>
           <h3>New Capabilities</h3>
           <ul>
             <li>Look up by ISO code: <code>getProvinceById('NP-P3')</code></li>
-            <li>Check how strongly the code is attested: <code>lb.cbsCodeConfidence</code> — <code>verified</code> (548), <code>singleSource</code> (204), <code>unverified</code> (1). <code>lb.cbsCodeVerified</code> is true only for <code>verified</code>.</li>
+            <li>Check how strongly the code is attested: <code>lb.cbsCodeConfidence</code> — <code>verified</code> (548), <code>singleSource</code> (205), <code>unverified</code> (0). <code>lb.cbsCodeVerified</code> is true only for <code>verified</code>.</li>
             <li>District codes: <code>district.cbsCode</code> (3-digit)</li>
           </ul>
         </section>

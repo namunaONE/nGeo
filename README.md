@@ -176,13 +176,13 @@ const nad = require('nepal-admin-data');
 nad.getLocalBodyByCbs(31304).nameNe;                  // 'भरतपुर'
 nad.search('भरतपुर').localBodies.length
   === nad.search('Bharatpur').localBodies.length;     // true
-new Map(nad.getLocalBodiesWithCode().map(b => [b.cbsCode, b])).size;  // 744
+new Map(nad.getLocalBodiesWithCode().map(b => [b.cbsCode, b])).size;  // 753
 ```
 
 ```python
 import nepal_admin as nad
 nad.get_local_body_by_cbs(31304)["nameNe"]            # 'भरतपुर'
-len(nad.get_local_bodies_with_code())                 # 744
+len(nad.get_local_bodies_with_code())                 # 753
 nad.get_national_stats()["unreconciled_wards"]        # 46
 ```
 
