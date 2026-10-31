@@ -15,7 +15,7 @@
   <title>Data Explorer - Nepal Administrative Data by namunaONE</title>
   <link rel="icon" type="image/svg+xml" href="favicon.svg?v=4">
   <link rel="apple-touch-icon" href="logo.svg?v=4">
-  <link rel="stylesheet" href="styles.css?v=12">
+  <link rel="stylesheet" href="styles.css?v=13">
   <link rel="stylesheet" href="brand-tokens.css?v=1">
   <link rel="preload" href="fonts/inter-latin-wght-normal.woff2" as="font" type="font/woff2" crossorigin>
   <link rel="stylesheet" href="fonts.css?v=1">
@@ -44,7 +44,7 @@
         <a href="https://github.com/namunaONE/nGeo" class="nav-link" target="_blank" rel="noopener">GitHub</a>
       </div>
       <div class="nav-actions">
-      <button class="theme-toggle" id="theme-toggle" aria-label="Toggle dark mode" title="Toggle theme">
+      <button class="theme-toggle" id="theme-toggle" aria-label="Toggle dark mode" aria-pressed="false" title="Toggle theme">
         <svg class="theme-icon sun" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
           <circle cx="12" cy="12" r="5"/>
           <line x1="12" y1="1" x2="12" y2="3"/>
@@ -76,7 +76,7 @@
         <div class="map-head">
           <div>
             <h2 class="map-title">Local level map</h2>
-            <p class="map-sub" id="map-status" aria-live="polite">Loading map…</p>
+            <p class="map-sub" id="map-status" aria-live="polite">Loading map… Keyboard: arrow keys pan, plus and minus zoom.</p>
           </div>
                     <label class="map-figure" for="metric-filter">
             <span>Figure shown on the map</span>
@@ -100,7 +100,7 @@
             <span>High detail boundaries (~3 MB)</span>
           </label>
         </div>
-        <div id="map" class="map" role="application" aria-label="Interactive map of Nepal local bodies"></div>
+        <div id="map" class="map" aria-label="Interactive map of Nepal local bodies — arrow keys pan, plus and minus zoom"></div>
         <p class="map-attrib-note">Palika boundaries: nepali-geo-pro-max (MIT) — simplified official map. Centroids: open-admin-data vendored extract (see SOURCES). Basemap © <a href="https://www.openstreetmap.org/copyright" target="_blank" rel="noopener">OpenStreetMap</a> contributors. Protected areas overlay: WDPA (UNEP-WCMC &amp; IUCN) via the WWF Nepal Biodiversity Areas dataset. National outline: Acesmndr/nepal-geojson (MIT) — official <span lang="ne">चुच्चे map (Kalapani</span> · Lipulekh · Limpiyadhura). NH01 highway overlay: <a href="https://www.openstreetmap.org/copyright" target="_blank" rel="noopener">OpenStreetMap</a> (ODbL 1.0) — © OpenStreetMap contributors.</p>
       </section>
 
@@ -121,7 +121,7 @@
       <div class="explorer-stats" aria-live="polite"></div>
 
       <div class="table-scroll" style="overflow-x: auto;">
-        <table class="explorer-table" role="grid">
+        <table class="explorer-table">
           <thead>
             <tr>
               <th scope="col">Local Body</th>
@@ -151,6 +151,7 @@
     </div>
   </footer>
 
-  <script src="app.js?v=15"></script>
+  <script src="app.js?v=16"></script>
 </body>
 </html>
+

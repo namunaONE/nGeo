@@ -283,9 +283,47 @@ vm.createContext(sandbox);
   assert.ok(
     manifest.split(String.fromCharCode(10)).filter((l) => l.endsWith(".woff2")).length === 4,
     "fonts.sha256 manifests all 4 woff2 files");
+  // Accessibility (Wave 1.4, WCAG 2.2 AA): structural gate — no page may
+  // regress the skip link, the pressed-state theme toggle, the visible
+  // focus ring or the anchor scroll offset. String asserts, because the
+  // stub DOM cannot exercise runtime attributes.
+  const a11yPages = ['index.html', 'explorer.html', 'api.html', 'brand.html'];
+  for (const page of a11yPages) {
+    const pageHtml = fs.readFileSync(path.join(ROOT, page), 'utf8');
+    assert.ok(pageHtml.includes('skip-link'), page + ' ships a skip link');
+    assert.ok(/theme-toggle[^>]*aria-pressed/.test(pageHtml),
+      page + ' theme toggle declares aria-pressed');
+    assert.ok(pageHtml.includes('styles.css?v=13'),
+      page + ' bumps the styles cache (v13)');
+  }
+  const explorerHtml = fs.readFileSync(path.join(ROOT, 'explorer.html'), 'utf8');
+  assert.ok(!explorerHtml.includes('role="grid"'),
+    'explorer table is a plain table (role="grid" retired)');
+  assert.ok(!explorerHtml.includes('role="application"'),
+    'map container does not capture screen-reader keys');
+  assert.ok(explorerHtml.includes('app.js?v=16'),
+    'explorer bumps the app cache (v16)');
+  const stylesCss = fs.readFileSync(path.join(ROOT, 'styles.css'), 'utf8');
+  assert.ok(stylesCss.includes('[tabindex]:focus-visible'),
+    'interactive table rows get a visible focus ring');
+  assert.ok(stylesCss.includes('scroll-margin-top'),
+    'anchor targets clear the sticky header (WCAG 2.4.11)');
+  assert.ok(stylesCss.includes('--color-border-focus'),
+    'focus ring rides the border-focus token (>= 3:1 in both themes)');
+  assert.ok(appSrc.includes('aria-pressed'),
+    'applyTheme syncs the toggle pressed state');
+  assert.ok((appSrc.match(/lang="ne"/g) || []).length === 4,
+    'bilingual spans carry lang="ne" (2 popups + 2 table paths)');
+  assert.ok(appSrc.includes("toast.setAttribute('role', 'status')"),
+    'toast feedback is announced (role=status)');
+  assert.ok(appSrc.includes('aria-current'),
+    'pagination announces the current page');
+  assert.ok((appSrc.match(/prefers-reduced-motion: reduce/g) || []).length === 3,
+    'reduced-motion respected (header scroll, flyTo/anchors)');
     const rows = (tableBody.innerHTML.match(/<tr/g) || []).length;
   console.log(`SMOKE OK: ${data.length} records, ${rows} rows rendered, no errors`);
 })().catch((err) => {
   console.error('SMOKE FAILED:', err && err.message ? err.message : err);
   process.exit(1);
 });
+

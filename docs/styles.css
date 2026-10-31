@@ -185,8 +185,12 @@ p { color: var(--color-text-secondary); margin-bottom: var(--space-4); text-wrap
 ul, ol { text-wrap: pretty; }
 a { color: var(--color-primary); text-decoration: none; transition: color var(--transition); }
 a:hover { color: var(--color-primary-dark); }
-a:focus-visible, button:focus-visible, input:focus-visible, select:focus-visible {
-  outline: none; box-shadow: var(--focus-ring);
+/* Wave 1.4 (WCAG 2.2 AA): the focus indicator is a >= 2px outline on the
+   --color-border-focus token (5.9:1 on white light / #93c5fd on #0f172a
+   dark — both >= 3:1, criterion 2.4.13) plus the legacy glow. [tabindex]
+   covers the interactive explorer table rows. */
+a:focus-visible, button:focus-visible, input:focus-visible, select:focus-visible, [tabindex]:focus-visible {
+  outline: 2px solid var(--color-border-focus); outline-offset: 2px; box-shadow: var(--focus-ring);
 }
 img, svg { max-width: 100%; height: auto; vertical-align: middle; }
 code, kbd, pre { font-family: var(--font-mono); }
@@ -196,6 +200,9 @@ code, kbd, pre { font-family: var(--font-mono); }
 .visually-hidden { position: absolute; width: 1px; height: 1px; overflow: hidden; clip: rect(0 0 0 0); white-space: nowrap; }
 .skip-link { position: absolute; left: var(--space-4); top: -100px; z-index: var(--z-toast); padding: var(--space-2) var(--space-4); background: var(--color-text); color: var(--color-bg); border-radius: var(--radius-md); transition: top var(--transition-fast); }
 .skip-link:focus { top: var(--space-2); }
+/* Wave 1.4 (WCAG 2.2 AA, 2.4.11): anchored targets scroll clear of the
+   sticky header instead of hiding under it (skip link, api sections). */
+:target, .api-section[id] { scroll-margin-top: calc(var(--header-height) + var(--space-4)); }
 
 /* ---- Header / brand ---- */
 .header { position: sticky; top: 0; z-index: var(--z-header); transition: background-color var(--transition), box-shadow var(--transition-slow); }
@@ -582,4 +589,5 @@ html.dark .leaflet-popup-content code, html[data-theme="dark"] .leaflet-popup-co
   .hero-actions { gap: var(--space-3); }
   .hero-actions .btn { flex: 1 1 100%; }
 }
+
 
