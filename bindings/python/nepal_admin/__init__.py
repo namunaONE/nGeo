@@ -138,7 +138,7 @@ def get_local_body_by_full_path(path):
 
 
 def get_local_body_by_cbs(code):
-    """Any confidence tier; resolves 744 of 753."""
+    """Any confidence tier; resolves all 753."""
     return _local_body_by_cbs.get(code)
 
 

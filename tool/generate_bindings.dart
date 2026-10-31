@@ -1079,7 +1079,7 @@ classifiers = [
 dependencies = []
 
 [project.urls]
-Homepage = "https://github.com/namunaONE/nGeo"
+Homepage = "https://namunaone.github.io/nGeo/"
 Documentation = "https://namunaone.github.io/nGeo/"
 
 [tool.setuptools]

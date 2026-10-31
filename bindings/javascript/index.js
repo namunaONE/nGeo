@@ -102,7 +102,7 @@ function getLocalBodyByFullPath(path) {
   return matches.length === 1 ? matches[0] : null;
 }
 
-// Any confidence tier. Resolves 744 of 753.
+// Any confidence tier. Resolves all 753.
 const getLocalBodyByCbs = (code) => localBodyByCbs.get(code);
 
 // Strictly the doubly-attested tier.
