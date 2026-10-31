@@ -90,6 +90,10 @@ jobs:
           fi
       - name: Verify site truth (versions and stats)
         run: dart run tool/check_site_truth.dart
+      - name: Regenerate design tokens (brand/tokens.json -> docs/brand-tokens.css)
+        run: dart run tool/generate_design_tokens.dart
+      - name: Verify no brand token drift (CSS is generated, never hand-edited)
+        run: git diff --exit-code -- docs/brand-tokens.css
       - name: Regenerate CSV / GeoJSON / JS / Python bindings
         run: dart run tool/generate_bindings.dart
       - name: Verify no bindings drift
