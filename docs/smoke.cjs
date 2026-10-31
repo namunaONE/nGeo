@@ -318,8 +318,8 @@ vm.createContext(sandbox);
     'toast feedback is announced (role=status)');
   assert.ok(appSrc.includes('aria-current'),
     'pagination announces the current page');
-  assert.ok((appSrc.match(/prefers-reduced-motion: reduce/g) || []).length === 3,
-    'reduced-motion respected (header scroll, flyTo/anchors)');
+  assert.ok((appSrc.match(/prefers-reduced-motion: reduce/g) || []).length === 4,
+    'reduced-motion respected (header scroll, flyTo, anchors, count-up)');
   // Bento 2.0 homepage (Wave 2): the features grid is a bento grid —
   // one dominant bilingual cell (2x2), the CBS claim in a wide cell,
   // asymmetric spans on a shared 6-column grid, tactile hover that
