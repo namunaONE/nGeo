@@ -262,8 +262,8 @@ distinguishes them instead of collapsing both to `null`:
 | Tier | Count | Meaning | Use it for |
 |------|-------|---------|------------|
 | `verified` | 548 | postal-2025 **and** the CBS harvest name the same code | Anything load-bearing |
-| `singleSource` | 196 | One attestation from the authoritative CBS roster: a unique same-district, same-type row whose normalized name matches — or a pairing forced by elimination where the rosters agree type-for-type | Joining datasets; worth spot-checking |
-| `unverified` | 9 | No defensible code. Left `null` on purpose | Report the gap, don't guess |
+| `singleSource` | 205 | One attestation from the authoritative CBS roster: a unique same-district, same-type row whose normalized name matches — or a pairing forced by elimination where the rosters agree type-for-type | Joining datasets; worth spot-checking |
+| `unverified` | 0 | No defensible code — all 753 palikas are coded now | Nothing; the set is empty |
 
 `cbsCodeVerified` is still exactly what it always was — `true` only for the
 doubly-attested tier — so existing code keeps working unchanged. The
@@ -303,8 +303,8 @@ known gaps, which `Province.unreconciledWards` reports per province.
 | `getLocalBodyByCbsVerified(code)` | `LocalBody?` | **Strict tier only** — 548/753 |
 | `getLocalBodiesWithCode()` | `List<LocalBody>` | **753 — the joinable set** |
 | `getVerifiedLocalBodies()` | `List<LocalBody>` | Doubly-attested only (548) |
-| `getSingleSourceLocalBodies()` | `List<LocalBody>` | Single attestation (196) |
-| `getUncodedLocalBodies()` | `List<LocalBody>` | No defensible code (9) |
+| `getSingleSourceLocalBodies()` | `List<LocalBody>` | Single attestation (205) |
+| `getUncodedLocalBodies()` | `List<LocalBody>` | No defensible code (0) |
 | `search(query)` | `SearchResult` | Typed search (names, ISO, full paths) |
 | `getNationalStats()` | `NationalStats` | Computed national totals |
 | `getLocalBodyBoundary(district, name)` | `PalikaBoundary?` | Boundary polygon (753/753 covered) |
