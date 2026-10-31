@@ -952,7 +952,7 @@ function itemPopupHtml(item) {
   const tier = confidenceMeta(item);
   const tierShort = { verified: '✓ verified', singleSource: '~ single-source', unverified: '— no code' }[tier.cls];
   let html = '<strong>' + escapeHtmlAttr(item.name) + '</strong>';
-  if (item.nameNe) html += '<span class="popup-ne">' + escapeHtmlAttr(item.nameNe) + '</span><br>';
+  if (item.nameNe) html += '<span class="popup-ne" lang="ne">' + escapeHtmlAttr(item.nameNe) + '</span><br>';
   else html += '<br>';
   html += escapeHtmlAttr(item.district) + ', ' + escapeHtmlAttr(item.province) + '<br>';
   html += 'CBS: ' + cbs + ' (' + tierShort + ') · ' + wards;
@@ -1003,7 +1003,7 @@ function boundaryTip(feature) {
   const p = feature.properties || {};
   const row = feature.__row;
   let html = '<strong>' + escapeHtmlAttr(p.nameEn || '') + '</strong>';
-  if (p.nameNe) html += '<span class="popup-ne">' + escapeHtmlAttr(p.nameNe) + '</span>';
+  if (p.nameNe) html += '<span class="popup-ne" lang="ne">' + escapeHtmlAttr(p.nameNe) + '</span>';
   if (row) {
     html += '<br>' + escapeHtmlAttr(row.district);
     if (row.wards != null) html += ' · ' + row.wards + ' wards';

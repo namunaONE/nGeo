@@ -259,7 +259,31 @@ vm.createContext(sandbox);
   assert.ok(
     fs.readFileSync(path.join(ROOT, 'explorer.html'), 'utf8').includes('boundary-detail-toggle'),
     'explorer exposes the high-detail toggle');
-  const rows = (tableBody.innerHTML.match(/<tr/g) || []).length;
+  // Self-hosted fonts (Wave 1.3): no page may reference a third-party
+  // font CDN; every page loads the local type stylesheet instead.
+  const fontPages = ['index.html', 'explorer.html', 'api.html', 'brand.html'];
+  for (const page of fontPages) {
+    const pageHtml = fs.readFileSync(path.join(ROOT, page), 'utf8');
+    assert.ok(!pageHtml.includes('fonts.googleapis.com'),
+      page + " must not load Google Fonts");
+    assert.ok(!pageHtml.includes('fonts.gstatic.com'),
+      page + " must not preconnect to fonts.gstatic.com");
+    assert.ok(pageHtml.includes('fonts.css?v='),
+      page + " loads the local fonts stylesheet");
+  }
+  const fontsCss = fs.readFileSync(path.join(ROOT, 'fonts.css'), 'utf8');
+  assert.ok(fontsCss.includes('font-display: swap'),
+    "fonts.css declares font-display: swap");
+  assert.ok(!fontsCss.includes('http://') && !fontsCss.includes('https://'),
+    "fonts.css must reference only local files");
+  assert.ok(
+    fontsCss.split("@font-face {").length - 1 === 4,
+    "fonts.css declares 4 type rules (Inter, Devanagari 400/600, mono)");
+  const manifest = fs.readFileSync(path.join(ROOT, "fonts", "fonts.sha256"), "utf8");
+  assert.ok(
+    manifest.split(String.fromCharCode(10)).filter((l) => l.endsWith(".woff2")).length === 4,
+    "fonts.sha256 manifests all 4 woff2 files");
+    const rows = (tableBody.innerHTML.match(/<tr/g) || []).length;
   console.log(`SMOKE OK: ${data.length} records, ${rows} rows rendered, no errors`);
 })().catch((err) => {
   console.error('SMOKE FAILED:', err && err.message ? err.message : err);

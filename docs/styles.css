@@ -69,7 +69,7 @@
   --color-info-bg: var(--sky-100);
 
   /* ---- Typography (fluid: rem anchors, vw interpolation) ---- */
-  --font-sans: 'Inter', system-ui, -apple-system, 'Segoe UI', sans-serif;
+  --font-sans: 'Inter', 'Noto Sans Devanagari', system-ui, -apple-system, 'Segoe UI', sans-serif;
   --font-mono: 'JetBrains Mono', 'Fira Code', ui-monospace, monospace;
   --text-xs: clamp(0.7rem, 0.7rem + 0.2vw, 0.75rem);
   --text-sm: clamp(0.8rem, 0.8rem + 0.25vw, 0.875rem);
