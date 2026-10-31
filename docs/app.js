@@ -497,16 +497,24 @@ const MAP_TILES = {
   maxZoom: 19,
   attribution: '© <a href="https://www.openstreetmap.org/copyright" target="_blank" rel="noopener">OpenStreetMap</a> contributors',
 };
-// Flag-coded type palette (national symbolism, matches the map legend):
-//   metropolitan     — Nepal-flag crimson #DC143C (deep tone)
-//   subMetropolitan  — same crimson lightened 35% toward white
-//   municipality     — green (deep tone)
-//   ruralMunicipality — same green lightened 35% toward white
+// Type palette — one legend source: read live from the --map-* tokens in
+// brand-tokens.css (v3) so dots, choropleth and page legend never drift
+// apart. Falls back to the v3 hexes when CSS custom properties are
+// unreachable (offline smoke harness, ancient browsers):
+//   metro #B91C1C · sub-metro #D97706 · municipality #1D4ED8 · rural #15803D
+function cssColor(name, fallback) {
+  try {
+    const v = getComputedStyle(document.documentElement).getPropertyValue(name).trim();
+    return v || fallback;
+  } catch (e) {
+    return fallback;
+  }
+}
 const TYPE_COLORS = {
-  metropolitan: '#DC143C',
-  subMetropolitan: '#E86680',
-  municipality: '#16A34A',
-  ruralMunicipality: '#68C389',
+  metropolitan: cssColor('--map-metro', '#B91C1C'),
+  subMetropolitan: cssColor('--map-sub', '#D97706'),
+  municipality: cssColor('--map-mun', '#1D4ED8'),
+  ruralMunicipality: cssColor('--map-rural', '#15803D'),
 };
 let _map = null;
 let _cluster = null;
@@ -589,7 +597,7 @@ function ensureMap() {
 }
 
 function markerColor(item) {
-  return TYPE_COLORS[item.type] || '#64748b';
+  return TYPE_COLORS[item.type] || '#78716C';
 }
 
 // ---- Figure shown on the map: palika boundary choropleth ----
@@ -654,11 +662,12 @@ var MAP_METRICS = {
   },
   type: {
     label: 'Local level type',
+    // Single source: same palette object the dots and the table use.
     entries: [
-      { label: 'Metro', color: '#DC143C' },
-      { label: 'Sub-metro', color: '#E86680' },
-      { label: 'Municipality', color: '#16A34A' },
-      { label: 'Rural', color: '#68C389' },
+      { label: 'Metro', color: TYPE_COLORS.metropolitan },
+      { label: 'Sub-metro', color: TYPE_COLORS.subMetropolitan },
+      { label: 'Municipality', color: TYPE_COLORS.municipality },
+      { label: 'Rural', color: TYPE_COLORS.ruralMunicipality },
     ],
   },
   cbs: {
@@ -957,7 +966,7 @@ function itemPopupHtml(item) {
 
 function metricColorFor(item) {
   if (_mapMetric === 'type') {
-    return TYPE_COLORS[item.type] || '#64748b';
+    return TYPE_COLORS[item.type] || '#78716C';
   }
   if (_mapMetric === 'cbs') {
     const tier = confidenceMeta(item);
