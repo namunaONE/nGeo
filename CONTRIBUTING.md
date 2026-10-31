@@ -11,7 +11,7 @@ This project adheres to the [Contributor Covenant Code of Conduct](CODE_OF_CONDU
 ### Reporting Bugs
 
 Before submitting a bug report:
-1. Check the [issue tracker](https://github.com/namunaONE/Nepal-Local-Government-Data/issues) for existing reports
+1. Check the [issue tracker](https://github.com/namunaONE/nGeo/issues) for existing reports
 2. Ensure you're using the latest version
 3. Provide a minimal reproduction case
 
@@ -49,8 +49,8 @@ Open an issue with:
 ## Development Setup
 
 ```bash
-git clone https://github.com/namunaONE/Nepal-Local-Government-Data.git
-cd Nepal-Local-Government-Data
+git clone https://github.com/namunaONE/nGeo.git
+cd nGeo
 dart pub get
 dart test
 dart run tool/generate.dart
@@ -174,4 +174,4 @@ By contributing, you agree that your contributions will be licensed under the MI
 
 ## Questions?
 
-Open a [discussion](https://github.com/namunaONE/Nepal-Local-Government-Data/discussions) or [issue](https://github.com/namunaONE/Nepal-Local-Government-Data/issues).
+Open a [discussion](https://github.com/namunaONE/nGeo/discussions) or [issue](https://github.com/namunaONE/nGeo/issues).

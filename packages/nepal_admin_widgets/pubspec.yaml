@@ -5,9 +5,9 @@ description: >-
   verified nepal_admin_api dataset.
 version: 0.2.0
 
-homepage: https://github.com/namunaONE/Nepal-Local-Government-Data/tree/main/packages/nepal_admin_widgets
-repository: https://github.com/namunaONE/Nepal-Local-Government-Data
-issue_tracker: https://github.com/namunaONE/Nepal-Local-Government-Data/issues
+homepage: https://github.com/namunaONE/nGeo/tree/main/packages/nepal_admin_widgets
+repository: https://github.com/namunaONE/nGeo
+issue_tracker: https://github.com/namunaONE/nGeo/issues
 
 environment:
   sdk: ^3.0.0

@@ -79,7 +79,7 @@ Commons Attribution (CC-BY).
 
 The package's own code is MIT-licensed. Per-field provenance, including
 retrieval dates and the SHA-256 manifest, lives in the project repository at
-https://github.com/namunaONE/Nepal-Local-Government-Data
+https://github.com/namunaONE/nGeo
 (see NOTICE and data/SOURCES.md).
 
 Not affiliated with the Government of Nepal.
@@ -751,7 +751,7 @@ function getLocalBodyByFullPath(path) {
   return matches.length === 1 ? matches[0] : null;
 }
 
-// Any confidence tier. Resolves 744 of 753.
+// Any confidence tier. Resolves all 753.
 const getLocalBodyByCbs = (code) => localBodyByCbs.get(code);
 
 // Strictly the doubly-attested tier.
@@ -952,7 +952,7 @@ export interface District {
 
 export interface LocalBody {
   name: string;
-  /** Devanagari name. Absent for 22 of 753 - never transliterated. */
+  /** Devanagari name. Present for all 753 - never transliterated. */
   nameNe?: string;
   /** True only when two bilingual sources agree on the spelling. */
   nameNeVerified: boolean;
@@ -961,7 +961,7 @@ export interface LocalBody {
   districtNe?: string;
   province: string;
   isoCode: string;
-  /** 5-digit CBS PDDPP code. Absent for 9 of 753. */
+  /** 5-digit CBS PDDPP code. Present for all 753. */
   cbsCode?: number;
   cbsCodeVerified: boolean;
   cbsCodeConfidence: CbsCodeConfidence;
@@ -1016,7 +1016,7 @@ export const localBodies: LocalBody[];
 
 export const provinceById: Map<string, Province>;
 export const districtByName: Map<string, District>;
-/** The joinable set: 744 of 753 palikas, keyed by 5-digit CBS code. */
+/** The joinable set: all 753 palikas, keyed by 5-digit CBS code. */
 export const localBodyByCbs: Map<number, LocalBody>;
 
 export function getAllProvinces(): Province[];
@@ -1038,7 +1038,7 @@ export function getLocalBodiesByType(type: LocalBodyType): LocalBody[];
 export function getLocalBodiesByName(name: string, districtName: string): LocalBody[];
 /** Null when the path is ambiguous rather than guessing. */
 export function getLocalBodyByFullPath(path: string): LocalBody | null;
-/** Any confidence tier; resolves 744 of 753. */
+/** Any confidence tier; resolves all 753. */
 export function getLocalBodyByCbs(code: number): LocalBody | undefined;
 /** Strictly the doubly-attested tier. */
 export function getLocalBodyByCbsVerified(code: number): LocalBody | undefined;
@@ -1079,8 +1079,8 @@ classifiers = [
 dependencies = []
 
 [project.urls]
-Homepage = "https://github.com/namunaONE/Nepal-Local-Government-Data"
-Documentation = "https://namunaONE.github.io/Nepal-Local-Government-Data/"
+Homepage = "https://namunaone.github.io/nGeo/"
+Documentation = "https://namunaone.github.io/nGeo/"
 
 [tool.setuptools]
 packages = ["nepal_admin"]
@@ -1230,7 +1230,7 @@ def get_local_body_by_full_path(path):
 
 
 def get_local_body_by_cbs(code):
-    """Any confidence tier; resolves 744 of 753."""
+    """Any confidence tier; resolves all 753."""
     return _local_body_by_cbs.get(code)
 
 
@@ -1398,12 +1398,12 @@ Offline administrative divisions of Nepal for JavaScript — **7 provinces,
 Devanagari names, coordinates and ward counts.
 
 Data as of **$dataAsOf**. Generated from
-[`data/nepal_local_levels.json`](https://github.com/namunaONE/Nepal-Local-Government-Data)
+[`data/nepal_local_levels.json`](https://github.com/namunaONE/nGeo)
 by `tool/generate_bindings.dart` — do not edit by hand.
 
 - **Zero dependencies.** Pure data plus a small query layer.
 - **Bilingual.** Devanagari names for all 7 provinces, 77 districts and
-  731 of 753 palikas. Never transliterated.
+  all 753 palikas. Never transliterated.
 - **Typed.** `.d.ts` included.
 - Same data, same numbers and the same API shape as the Dart package
   [`nepal_admin_api`](https://pub.dev/packages/nepal_admin_api).
@@ -1432,7 +1432,7 @@ nad.search('भारत').localBodies.length;   // fragment match
 
 // Building a code-keyed join (the common case)
 const byCode = new Map(nad.getLocalBodiesWithCode().map(b => [b.cbsCode, b]));
-byCode.size;   // 744
+byCode.size;   // 753
 
 // National totals
 nad.getNationalStats();
@@ -1465,12 +1465,12 @@ Offline administrative divisions of Nepal for Python — **7 provinces,
 Devanagari names, coordinates and ward counts.
 
 Data as of **$dataAsOf**. Generated from
-[`data/nepal_local_levels.json`](https://github.com/namunaONE/Nepal-Local-Government-Data)
+[`data/nepal_local_levels.json`](https://github.com/namunaONE/nGeo)
 by `tool/generate_bindings.dart` — do not edit by hand.
 
 - **Zero dependencies.** Pure standard library.
 - **Bilingual.** Devanagari names for all 7 provinces, 77 districts and
-  731 of 753 palikas. Never transliterated.
+  all 753 palikas. Never transliterated.
 - Same data, same numbers and the same API shape as the Dart package
   [`nepal_admin_api`](https://pub.dev/packages/nepal_admin_api).
 
@@ -1497,7 +1497,7 @@ len(nad.search("Bharatpur")["localBodies"]) == len(nad.search("भरतपु�
 
 # Building a code-keyed join (the common case)
 by_code = {b["cbsCode"]: b for b in nad.get_local_bodies_with_code()}
-len(by_code)     # 744
+len(by_code)     # 753
 
 # With pandas, using the shipped CSV:
 #   pd.read_csv("csv/local_bodies.csv")

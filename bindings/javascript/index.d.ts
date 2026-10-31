@@ -77,7 +77,7 @@ export interface District {
 
 export interface LocalBody {
   name: string;
-  /** Devanagari name. Absent for 22 of 753 - never transliterated. */
+  /** Devanagari name. Present for all 753 - never transliterated. */
   nameNe?: string;
   /** True only when two bilingual sources agree on the spelling. */
   nameNeVerified: boolean;
@@ -86,7 +86,7 @@ export interface LocalBody {
   districtNe?: string;
   province: string;
   isoCode: string;
-  /** 5-digit CBS PDDPP code. Absent for 9 of 753. */
+  /** 5-digit CBS PDDPP code. Present for all 753. */
   cbsCode?: number;
   cbsCodeVerified: boolean;
   cbsCodeConfidence: CbsCodeConfidence;
@@ -141,7 +141,7 @@ export const localBodies: LocalBody[];
 
 export const provinceById: Map<string, Province>;
 export const districtByName: Map<string, District>;
-/** The joinable set: 744 of 753 palikas, keyed by 5-digit CBS code. */
+/** The joinable set: all 753 palikas, keyed by 5-digit CBS code. */
 export const localBodyByCbs: Map<number, LocalBody>;
 
 export function getAllProvinces(): Province[];
@@ -163,7 +163,7 @@ export function getLocalBodiesByType(type: LocalBodyType): LocalBody[];
 export function getLocalBodiesByName(name: string, districtName: string): LocalBody[];
 /** Null when the path is ambiguous rather than guessing. */
 export function getLocalBodyByFullPath(path: string): LocalBody | null;
-/** Any confidence tier; resolves 744 of 753. */
+/** Any confidence tier; resolves all 753. */
 export function getLocalBodyByCbs(code: number): LocalBody | undefined;
 /** Strictly the doubly-attested tier. */
 export function getLocalBodyByCbsVerified(code: number): LocalBody | undefined;

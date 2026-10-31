@@ -2,7 +2,7 @@
 
 > Offline Dart package (`nepal_admin_api` v2.10.0) for Nepal's administrative divisions: 7 provinces, 77 districts, 753 local bodies, 6,743 wards, with official CBS/NSO codes, ward counts, and map coordinates. Pure Dart, zero runtime dependencies. Maintained by namunaONE under HyaMuji and Taire Bhai. Not affiliated with the Government of Nepal.
 
-This file is the complete text companion to `llms.txt`. Sources of truth: the [GitHub repository](https://github.com/namunaONE/Nepal-Local-Government-Data), the [API reference page](https://namunaONE.github.io/Nepal-Local-Government-Data/api.html), and the [package on pub.dev](https://pub.dev/packages/nepal_admin_api).
+This file is the complete text companion to `llms.txt`. Sources of truth: the [GitHub repository](https://github.com/namunaONE/nGeo), the [API reference page](https://namunaone.github.io/nGeo/api.html), and the [package on pub.dev](https://pub.dev/packages/nepal_admin_api).
 
 ## Installation
 
@@ -78,7 +78,7 @@ void main() {
 `name` · `cbsCode` (int?, 3-digit, e.g. 306 Kathmandu) · `provinceName` · `localBodies` · `localBodyCount` · `wards` (sums verified counts) · `localBodiesByType(type)` · `verifiedLocalBodies`.
 
 ### LocalBody
-`name` · `type` · `districtName` · `provinceName` · `cbsCode` (int?, 5-digit PDDPP, null when unverified) · `cbsCodeVerified` · `lat`/`lng` (double?, WGS84 centroid, null when unmapped) · `geoSource` (e.g. `'open-admin-data'`) · `wards` (int?, null for 8 pending roster adjudication) · `wardsVerified`. Getters: `typeName`, `isUrban`, `isRural`, `hasCoordinates`, `fullPath` (`'Name, District, Province'`). `toJson()` omits nulls; `fromJson()` restores all fields.
+`name` · `type` · `districtName` · `provinceName` · `cbsCode` (int?, 5-digit PDDPP, null only when absent) · `cbsCodeVerified` · `lat`/`lng` (double?, WGS84 centroid, null when unmapped) · `geoSource` (e.g. `'open-admin-data'`) · `wards` (int?, null for 8 pending roster adjudication) · `wardsVerified`. Getters: `typeName`, `isUrban`, `isRural`, `hasCoordinates`, `fullPath` (`'Name, District, Province'`). `toJson()` omits nulls; `fromJson()` restores all fields.
 
 ### ProvinceStats / NationalStats / SearchResult
 `ProvinceStats{districts, metro, subMetro, mun, ruralMun, total, wards}` (+`toJson`). `NationalStats{provinces:7, districts:77, metro:6, subMetro:11, municipalities:276, ruralMunicipalities:460, total:753, wards:6743}`. `SearchResult{provinces, districts, localBodies, isEmpty, length}`.
@@ -89,7 +89,7 @@ void main() {
 - `getProvinceById(id)` → by slug or ISO, case-insensitive, null when unknown
 - `getProvinceByIso('NP-P3')`, `getProvinceByCbs(3)`
 - `getAllDistricts()` → 77; `getDistrictsByProvince(idOrIso)`; `getDistrictByName('Chitwan')` (case-insensitive); `getDistrictByCbs(306)`
-- `getAllLocalBodies()` → 753; `getLocalBodiesByDistrict(name)`; `getLocalBodiesByProvince(idOrIso)`; `getLocalBodiesByType(type)`; `getLocalBodyByCbs(31304)` (null when unverified/absent); `getVerifiedLocalBodies()` (548 CBS-verified)
+- `getAllLocalBodies()` → 753; `getLocalBodiesByDistrict(name)`; `getLocalBodiesByProvince(idOrIso)`; `getLocalBodiesByType(type)`; `getLocalBodyByCbs(31304)` (null only when absent); `getVerifiedLocalBodies()` (548 CBS-verified)
 - `search(query)` → case-insensitive across names, ISO codes, full paths, type names; empty query → empty result
 - `getNationalStats()` → computed live, never hardcoded
 - `getDistrictElevationStats(idOrName)` → per-district elevation stats (`DistrictElevationStats`: districtId, nameEn, nameNe, elevMin/elevMean/elevMax in integer metres, Copernicus GLO-30); `getAllDistrictElevationStats()` → all 77
@@ -107,7 +107,7 @@ void main() {
 ## Data verification (why AI can trust these numbers)
 
 - 5+ independent sources merged (abinrimal, sagautam5, CBS/NSO CSVs, Postal Codes 2025, nepali-geo-pro-max, open-admin-data, MoFAGA directory).
-- **CBS codes:** 752/753 palikas carry a 5-digit PDDPP code. 548 are doubly-attested (`verified`: CBS CSV + Postal-2025 agree), 204 rest on a single roster (`singleSource`), 1 is null. Never guessed.
+- **CBS codes:** 753/753 palikas carry a 5-digit PDDPP code. 548 are doubly-attested (`verified`: CBS CSV + Postal-2025 agree), 205 rest on a single roster (`singleSource`), 0 are null. Never guessed.
 - **Ward counts:** 745/753 doubly-attested (two 753-row snapshots + province-sum reconciliation; Lumbini 109/109=983 fully reconciled); 1 human decision (Janakpurdham 25); 8 null pending roster adjudication.
 - **Coordinates:** all 753 palikas carry approximate centroids — 726 from the vendored open-admin-data extract, 27 derived as area-weighted centroids of the vendored boundary polygons (`geoSource: "palika-boundaries-centroid"`).
 - **Devanagari spellings:** 72 conflicts adjudicated (49 MoFAGA-exact, 15 slug-identified, 8 human) — see `data/_stage/adjudications.json`.
@@ -121,10 +121,10 @@ void main() {
 
 ## Website
 
-- Landing + quickstart: <https://namunaONE.github.io/Nepal-Local-Government-Data/>
-- API reference: <https://namunaONE.github.io/Nepal-Local-Government-Data/api.html>
-- Interactive explorer (search, filters, CBS/wards columns, centroid map, `?cbs=` deep links): <https://namunaONE.github.io/Nepal-Local-Government-Data/explorer.html>
-- Brand system (M3 dual-seed navy #002C6D × green #4FD166; tonal palettes, color roles, Flutter theme + CSS tokens): <https://namunaONE.github.io/Nepal-Local-Government-Data/brand.html>
+- Landing + quickstart: <https://namunaone.github.io/nGeo/>
+- API reference: <https://namunaone.github.io/nGeo/api.html>
+- Interactive explorer (search, filters, CBS/wards columns, centroid map, `?cbs=` deep links): <https://namunaone.github.io/nGeo/explorer.html>
+- Brand system (M3 dual-seed navy #002C6D × green #4FD166; tonal palettes, color roles, Flutter theme + CSS tokens): <https://namunaone.github.io/nGeo/brand.html>
 
 ## Brand tokens (Flutter + web)
 
@@ -135,4 +135,4 @@ void main() {
 
 ## License
 
-MIT for code ([LICENSE](https://github.com/namunaONE/Nepal-Local-Government-Data/blob/main/LICENSE)). Adapted data fields under CC-BY-4.0 with attribution in [NOTICE](https://github.com/namunaONE/Nepal-Local-Government-Data/blob/main/NOTICE). Not affiliated with the Government of Nepal.
+MIT for code ([LICENSE](https://github.com/namunaONE/nGeo/blob/main/LICENSE)). Adapted data fields under CC-BY-4.0 with attribution in [NOTICE](https://github.com/namunaONE/nGeo/blob/main/NOTICE). Not affiliated with the Government of Nepal.

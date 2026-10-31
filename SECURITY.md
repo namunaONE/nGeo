@@ -65,4 +65,4 @@ Out of scope:
 
 Security contact: **realpoudel@duck.com**
 
-For non-security issues, use [GitHub Issues](https://github.com/namunaONE/Nepal-Local-Government-Data/issues).
+For non-security issues, use [GitHub Issues](https://github.com/namunaONE/nGeo/issues).

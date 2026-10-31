@@ -4,7 +4,7 @@
 
 - Dart SDK 3.x installed (`dart --version`).
 - A **Google account** — pub.dev login is Google-based.
-- This repo pushed to `github.com/namunaONE/Nepal-Local-Government-Data` (the pubspec `repository` points here).
+- This repo pushed to `github.com/namunaONE/nGeo` (the pubspec `repository` points here).
 
 ## Step 1 — Local quality gate (run all, fix everything)
 

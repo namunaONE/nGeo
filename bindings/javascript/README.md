@@ -5,12 +5,12 @@ Offline administrative divisions of Nepal for JavaScript — **7 provinces,
 Devanagari names, coordinates and ward counts.
 
 Data as of **2026-10-27**. Generated from
-[`data/nepal_local_levels.json`](https://github.com/namunaONE/Nepal-Local-Government-Data)
+[`data/nepal_local_levels.json`](https://github.com/namunaONE/nGeo)
 by `tool/generate_bindings.dart` — do not edit by hand.
 
 - **Zero dependencies.** Pure data plus a small query layer.
 - **Bilingual.** Devanagari names for all 7 provinces, 77 districts and
-  731 of 753 palikas. Never transliterated.
+  all 753 palikas. Never transliterated.
 - **Typed.** `.d.ts` included.
 - Same data, same numbers and the same API shape as the Dart package
   [`nepal_admin_api`](https://pub.dev/packages/nepal_admin_api).
@@ -39,7 +39,7 @@ nad.search('भारत').localBodies.length;   // fragment match
 
 // Building a code-keyed join (the common case)
 const byCode = new Map(nad.getLocalBodiesWithCode().map(b => [b.cbsCode, b]));
-byCode.size;   // 744
+byCode.size;   // 753
 
 // National totals
 nad.getNationalStats();
