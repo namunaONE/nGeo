@@ -4,7 +4,7 @@
 <meta charset="utf-8">
 <meta name="viewport" content="width=device-width, initial-scale=1">
 <title>Design System v3 — Himalayan Trust × Everest Growth</title>
-<link rel="stylesheet" href="styles.css?v=12">
+<link rel="stylesheet" href="styles.css?v=13">
 <link rel="stylesheet" href="brand-tokens.css?v=1">
   <link rel="preload" href="fonts/inter-latin-wght-normal.woff2" as="font" type="font/woff2" crossorigin>
   <link rel="stylesheet" href="fonts.css?v=1">
@@ -25,13 +25,14 @@
 </style>
 </head>
 <body>
+<a class="skip-link" href="#main">Skip to main content</a>
 <header class="header"><div class="header-inner"><nav class="nav container">
 <a class="logo" href="index.html"><span class="logo-text"><span class="logo-title">nepal_admin_api</span><span class="logo-sub">Design System v3</span></span></a>
 <div class="nav-links"><a class="nav-link" href="index.html">Home</a><a class="nav-link active" href="brand.html">Brand</a><a class="nav-link" href="api.html">API</a><a class="nav-link" href="explorer.html">Explorer</a></div>
-<div class="nav-actions"><button class="theme-toggle" id="themeToggle" aria-label="Toggle theme">◐</button></div>
+<div class="nav-actions"><button class="theme-toggle" id="themeToggle" aria-label="Toggle theme" aria-pressed="false">◐</button></div>
 </nav></div></header>
 
-<main class="container">
+<main id="main" class="container">
 <section class="hero-demo brand-hero">
 <h1>Himalayan Trust × Everest Growth</h1>
 <p>Brand blue <code>#3B82F6</code> + brand green <code>#4FD166</code> are accents; accessible blue <code>#1D4ED8</code> (6.70:1) and accessible green <code>#15803D</code> (5.02:1) carry actions and text. Material 3 seed + override, three-layer tokens.</p>
@@ -105,9 +106,10 @@ t:[["amber800","#92400E","#FFFFFF"],["amber600","#D97706","#FFFFFF"],["amber300"
 function row(id,arr){const el=document.getElementById(id);el.innerHTML=arr.map(([t,c,fg])=>`<div class="tone" style="background:${c};color:${fg}"><b>${t}</b>${c}</div>`).join('');}
 row('pRow',T.p);row('gRow',T.g);row('nRow',T.n);row('tRow',T.t);
 const b=document.getElementById('themeToggle');
-b.addEventListener('click',()=>{const h=document.documentElement;const d=h.classList.toggle('dark');h.dataset.theme=d?'dark':'light';try{localStorage.setItem('theme',d?'dark':'light')}catch(e){}});
-try{if(localStorage.getItem('theme')==='dark'){document.documentElement.classList.add('dark');document.documentElement.dataset.theme='dark'}}catch(e){}
+b.addEventListener('click',()=>{const h=document.documentElement;const d=h.classList.toggle('dark');h.dataset.theme=d?'dark':'light';try{localStorage.setItem('theme',d?'dark':'light')}catch(e){}b.setAttribute('aria-pressed',String(d))});
+try{if(localStorage.getItem('theme')==='dark'){document.documentElement.classList.add('dark');document.documentElement.dataset.theme='dark';b.setAttribute('aria-pressed','true')}}catch(e){}
 </script>
 </body>
 </html>
+
 

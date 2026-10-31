@@ -26,6 +26,9 @@ function applyTheme(isDark) {
   localStorage.setItem('theme', isDark ? 'dark' : 'light');
   document.documentElement.setAttribute('data-theme', isDark ? 'dark' : 'light');
   syncThemeColorMeta(isDark);
+  // WCAG 2.2 AA (Wave 1.4): the pressed state is announced, not just styled.
+  const themeBtn = document.getElementById('theme-toggle');
+  if (themeBtn) themeBtn.setAttribute('aria-pressed', String(isDark));
   // Swap theme-sensitive brand imagery (SVG <img> can't read page classes).
   document.querySelectorAll('img[data-logo-light]').forEach((img) => {
     const next = isDark ? img.dataset.logoDark : img.dataset.logoLight;
@@ -82,6 +85,9 @@ function showToast(message) {
 
   const toast = document.createElement('div');
   toast.className = 'toast';
+  // WCAG 2.2 AA (Wave 1.4): clipboard/feedback messages are announced,
+  // not just shown — role=status is an implicit polite live region.
+  toast.setAttribute('role', 'status');
   toast.textContent = message;
   document.body.appendChild(toast);
 
@@ -134,7 +140,10 @@ document.querySelectorAll('a[href^="#"]').forEach(anchor => {
     const target = document.querySelector(this.getAttribute('href'));
     if (target) {
       e.preventDefault();
-      target.scrollIntoView({ behavior: 'smooth', block: 'start' });
+      // WCAG 2.2 AA (Wave 1.4): reduced-motion users get instant jumps,
+      // consistent with focusMarker() and initHeaderScroll().
+      const reduced = window.matchMedia('(prefers-reduced-motion: reduce)').matches;
+      target.scrollIntoView({ behavior: reduced ? 'auto' : 'smooth', block: 'start' });
     }
   });
 });
@@ -160,7 +169,7 @@ function typeBadge(type) {
 function bilingualName(item) {
   const en = escapeHtml(item.name);
   const ne = item.nameNe ? escapeHtml(item.nameNe) : '';
-  return ne ? `${en}<span class="name-ne">${ne}</span>` : en;
+  return ne ? `${en}<span class="name-ne" lang="ne">${ne}</span>` : en;
 }
 
 // CBS code confidence, as three distinct states rather than two.
@@ -381,7 +390,7 @@ function initExplorer() {
         <tr data-cbs="${item.cbsCode ?? ''}" data-lat="${item.lat ?? ''}" data-lng="${item.lng ?? ''}" data-name="${escapeHtml(item.name)}" tabindex="0" title="${item.lat != null ? 'Click to locate on map' : 'No coordinates available'}">
           <td>${bilingualName(item)}</td>
           <td>${typeBadge(item.type)}</td>
-          <td>${item.districtNe ? `${escapeHtml(item.district)}<span class="name-ne">${escapeHtml(item.districtNe)}</span>` : escapeHtml(item.district)}</td>
+          <td>${item.districtNe ? `${escapeHtml(item.district)}<span class="name-ne" lang="ne">${escapeHtml(item.districtNe)}</span>` : escapeHtml(item.district)}</td>
           <td>${escapeHtml(item.province)}</td>
           <td>${item.cbsCode !== null ? `<code>${item.cbsCode}</code>` : '<span class="unverified">—</span>'}</td>
           <td>${tierBadge(item)}</td>
@@ -426,7 +435,7 @@ function initExplorer() {
     }
 
     for (let i = startPage; i <= endPage; i++) {
-      paginationHtml += `<button data-page="${i}" class="${i === currentPage ? 'active' : ''}">${i}</button>`;
+      paginationHtml += `<button data-page="${i}" class="${i === currentPage ? 'active' : ''}"${i === currentPage ? ' aria-current="page"' : ''}>${i}</button>`;
     }
 
     if (endPage < totalPages) {
@@ -1323,3 +1332,4 @@ if (document.querySelector('.api-nav')) {
 
   sections.forEach(section => observer.observe(section));
 }
+
