@@ -360,6 +360,28 @@ vm.createContext(sandbox);
     'the reveal is opt-in: hidden cells exist only in the no-preference media block');
   assert.ok(indexHtml.includes('brand-tokens.css?v=2'),
     'brand-tokens cache-bust v2 (regenerated artifact)');
+  // GEO quick-win: the dataset is meant to be found, cited, and used by
+  // people AND answer engines. robots.txt welcomes the AI crawlers by
+  // name, the sitemap lists every public page, and the index JSON-LD
+  // carries a freshness date. The exact date is pinned to meta.json's
+  // dataAsOf by tool/check_site_truth.dart; here we only assert the
+  // signal exists, so this gate never drifts with a release.
+  const robotsTxt = fs.readFileSync(path.join(ROOT, 'robots.txt'), 'utf8');
+  assert.ok(robotsTxt.includes('User-agent: GPTBot'),
+    'GPTBot is explicitly welcomed');
+  assert.ok(robotsTxt.includes('User-agent: ClaudeBot'),
+    'ClaudeBot is explicitly welcomed');
+  assert.ok(robotsTxt.includes('User-agent: PerplexityBot'),
+    'PerplexityBot is explicitly welcomed');
+  assert.ok(robotsTxt.includes('User-agent: Google-Extended'),
+    'Google-Extended is explicitly welcomed');
+  assert.ok(robotsTxt.includes('Sitemap: https://namunaone.github.io/nGeo/sitemap.xml'),
+    'robots.txt declares the sitemap');
+  const sitemapXml = fs.readFileSync(path.join(ROOT, 'sitemap.xml'), 'utf8');
+  assert.ok((sitemapXml.match(/<url>/g) || []).length === 4,
+    'the sitemap lists all 4 public pages');
+  assert.ok(/"dateModified": "\d{4}-\d{2}-\d{2}"/.test(indexHtml),
+    'the index JSON-LD carries a dateModified freshness date');
     const rows = (tableBody.innerHTML.match(/<tr/g) || []).length;
   console.log(`SMOKE OK: ${data.length} records, ${rows} rows rendered, no errors`);
 })().catch((err) => {
