@@ -78,6 +78,18 @@ jobs:
         run: dart run tool/generate_explorer_data.dart
       - name: Verify no website data drift (docs must match the package)
         run: git diff --exit-code -- docs/data.json
+      - name: Verify site URL hygiene
+        run: |
+          hits=$(grep -rn "Nepal-Local-Government-Data" docs README.md SECURITY.md CONTRIBUTING.md PUBLISHING.md pubspec.yaml bindings packages tool 2>/dev/null || true)
+          if [ -n "$hits" ]; then
+            echo "$hits"
+            while IFS= read -r line; do
+              echo "::error::${line%%:*} still references the old repository name"
+            done <<< "$hits"
+            exit 1
+          fi
+      - name: Verify site truth (versions and stats)
+        run: dart run tool/check_site_truth.dart
       - name: Regenerate CSV / GeoJSON / JS / Python bindings
         run: dart run tool/generate_bindings.dart
       - name: Verify no bindings drift
