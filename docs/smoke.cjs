@@ -437,6 +437,21 @@ vm.createContext(sandbox);
   assert.ok(overlayDistricts.size === 77 &&
     [...overlayDistricts].every((d) => dataDistricts.has(d)),
     'overlay district names join 77/77 with data.json');
+  // Wave 4 (budgets as features): the performance + accessibility law
+  // lives in ONE place (tool/check_budgets.mjs) and CI enforces it via
+  // .github/workflows/lighthouse.yml on every PR. Here we only assert
+  // the law is declared and wired — thresholds themselves are the
+  // budget gate's business, never re-pinned in smoke.
+  const budgetsSrc = fs.readFileSync(
+    path.join(ROOT, '..', 'tool', 'check_budgets.mjs'), 'utf8');
+  assert.ok(budgetsSrc.includes('lcp: 2500') &&
+    budgetsSrc.includes('tbt: 200') && budgetsSrc.includes('cls: 0.1') &&
+    budgetsSrc.includes('accessibility: 100'),
+    'the budget law declares the CWV ceilings in check_budgets.mjs');
+  const lighthouseYml = fs.readFileSync(
+    path.join(ROOT, '..', '.github', 'workflows', 'lighthouse.yml'), 'utf8');
+  assert.ok(lighthouseYml.includes('check_budgets.mjs'),
+    'the Lighthouse budget workflow runs the budget gate');
     const rows = (tableBody.innerHTML.match(/<tr/g) || []).length;
   console.log(`SMOKE OK: ${data.length} records, ${rows} rows rendered, no errors`);
 })().catch((err) => {
