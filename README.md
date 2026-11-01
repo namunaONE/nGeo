@@ -32,7 +32,7 @@ Pure Dart package. Zero runtime dependencies. Data ships in the box.
 | **Ward counts** | 745/753 palikas with verified ward counts; declared vs substantiated totals reported side by side; 8 documented roster-defect gaps |
 | **Administrative attributes** | District HQ, area and website (77/77); province capital, area and website (7/7); palika website/email/phone and postal codes |
 | **Map coordinates** | All 753 palikas with approximate centroids (`lat`/`lng` + `geoSource`: open-admin-data, plus boundary-polygon centroids for the last 27); `hasCoordinates`, `whereMapped` |
-| **Boundary polygons** | All 753 palika boundaries as pure-Dart data (~91 KB, zero assets/downloads); all 753 joined to the roster; lossless ~11 m quantisation |
+| **Boundary polygons** | All 753 palika boundaries as pure-Dart data (~91 KB, zero assets/downloads); all 753 joined to the roster; lossless ~11 m quantisation. Source: Survey Department of Nepal (CC BY-IGO) via HDX COD-AB (official, edge-matched via COD-EM). |
 | **High-res boundaries (optional)** | [`nepal_admin_boundaries_highres`](packages/nepal_admin_boundaries_highres) — ~75k vertices (~300 KB), ~4x the detail, same codec and roster; opt-in for print maps / spatial analysis |
 | **Elevation stats** | Per-district min/mean/max elevation in integer metres, from Copernicus GLO-30 (2021) zonal stats over the official district polygons — 77/77 districts, zero assets |
 | **Type-safe models** | `Province`, `District`, `LocalBody`, `LocalBodyType`, `CbsCodeConfidence` enums |

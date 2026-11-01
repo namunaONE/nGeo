@@ -17,6 +17,9 @@ environment:
   sdk: ^3.0.0
 
 # Pure Dart package: no runtime dependencies needed — the data ships in the box.
+# Data license: boundary geometry is CC BY-IGO (Survey Department of Nepal
+# via HDX COD-AB/COD-EM); other data fields are CC-BY-4.0 / MIT as documented
+# in NOTICE and data/SOURCES.md. Package code is MIT (see LICENSE).
 dev_dependencies:
   crypto: ^3.0.7 # tool/merge only (SHA-256 provenance verification); never imported by lib/
   lints: ^6.0.0

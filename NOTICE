@@ -55,4 +55,22 @@ data/SOURCES.md.
    Adaptation: only zonal statistics computed against the official district
             polygons are redistributed; no DEM pixels, tiles or derived
             meshes ship in the package.
+4. Nepal Subnational Administrative Boundaries (HDX COD-AB / COD-EM)
+   Source:  https://data.humdata.org/dataset/cod-ab-npl
+            https://data.humdata.org/dataset/cod-em-npl
+   Provider: Survey Department of Nepal (http://ngiip.gov.np/index.php),
+             UN Resident Coordinators Office in Nepal (https://un.org.np/),
+             OCHA Field Information Services Section (FISS)
+   License: Creative Commons Attribution for Intergovernmental Organisations
+            (CC BY-IGO), https://creativecommons.org/licenses/by/3.0/igo/
+   Used for: palika (local body), district, and province boundary geometry
+            (geometry only — quantised to 1e-4 degrees and simplified).
+            Official area_sqkm and center_lat/lon per unit.
+   Adaptation: boundaries are quantised to 1e-4 degrees (~11 m), simplified
+            (Douglas-Peucker), and encoded as pure-Dart data. Protected areas
+            (22 ADM3 units) are excluded from the palika layer and published
+            as a separate overlay (K2). English names, CBS codes, attributes,
+            and Devanagari names come from our own roster, not from HDX.
+   Retrieved: 2026-10-30 (COD-AB v02, reviewed 2025-10-30; COD-EM 2024-04-03)
+
 No other CC-BY-4.0 material is currently shipped.

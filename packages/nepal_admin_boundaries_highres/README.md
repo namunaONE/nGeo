@@ -11,8 +11,7 @@ palikas at ~4x the vertex count (~75k vertices, ~300 KB) for callers that need
 smoother polygons (choropleth rendering, print maps, spatial analysis) and can
 afford the larger download.
 
-Both come from the same source (`sthaniya.gov.np` via Acesmndr/nepal-geojson,
-MIT) and use the identical codec, so the two are interchangeable drop-ins.
+Both come from the same source (HDX COD-AB, Survey Department of Nepal, CC BY-IGO) and use the identical codec, so the two are interchangeable drop-ins.
 
 ## Install
 
@@ -46,8 +45,7 @@ print(lb.boundaryHighRes?.coordinateCount);
 
 ## Honesty notes
 
-- Same provenance as the core package: source is `sthaniya.gov.np` via
-  Acesmndr/nepal-geojson (MIT). No geometry is invented.
+- Same provenance as the core package: source is HDX COD-AB (Survey Department of Nepal, CC BY-IGO). No geometry is invented.
 - Simplified with Douglas-Peucker (eps 0.001 deg) from the 39 MB high-resolution
   source; the round trip is bit-exact.
 - Coverage is 753/753 roster palikas, identical to the core package.
