@@ -301,8 +301,34 @@ vm.createContext(sandbox);
     'explorer table is a plain table (role="grid" retired)');
   assert.ok(!explorerHtml.includes('role="application"'),
     'map container does not capture screen-reader keys');
-  assert.ok(explorerHtml.includes('app.js?v=17'),
-    'explorer bumps the app cache (v17)');
+  assert.ok(explorerHtml.includes('app.js?v=18'),
+    'explorer bumps the app cache (v18)');
+  // Wave 3 (terrain figure): the explorer gains a district elevation
+  // choropleth — GLO-30 bands in a lazy-loaded artifact, elevation-aware
+  // popups, and a deep-linkable hero button. The gate interpolates the
+  // district count from the artifact itself; no figure is hand-pinned.
+  assert.ok(explorerHtml.includes('value="elevation"'),
+    'explorer offers the elevation metric');
+  assert.ok(explorerHtml.includes('District elevation: Copernicus GLO-30'),
+    'explorer attributes the elevation source (GLO-30)');
+  assert.ok(appSrc.includes('elevation: {'),
+    'app.js defines the elevation metric');
+  assert.ok(appSrc.includes("label: 'District mean elevation (GLO-30)'"),
+    'the elevation legend names GLO-30');
+  assert.ok(appSrc.includes('ensureDistrictElevation'),
+    'app.js lazy-loads district-elevation.json (degrades, never errors)');
+  assert.ok(appSrc.includes('Copernicus GLO-30)'),
+    'popups carry the elevation sentence with attribution');
+  const districtElev = JSON.parse(
+    fs.readFileSync(path.join(ROOT, 'district-elevation.json'), 'utf8'));
+  assert.ok(Array.isArray(districtElev) && districtElev.length === 77,
+    'district-elevation.json carries all 77 districts');
+  assert.ok(districtElev.every((d) => typeof d.elevMean === 'number' &&
+    d.elevMin <= d.elevMean && d.elevMean <= d.elevMax),
+    'min <= mean <= max for every district');
+  assert.ok(fs.readFileSync(path.join(ROOT, 'index.html'), 'utf8')
+    .includes('explorer.html?metric=elevation'),
+    'the hero deep-links the elevation view');
   const stylesCss = fs.readFileSync(path.join(ROOT, 'styles.css'), 'utf8');
   assert.ok(stylesCss.includes('[tabindex]:focus-visible'),
     'interactive table rows get a visible focus ring');

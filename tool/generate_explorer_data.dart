@@ -70,6 +70,31 @@ void main() {
   const encoder = JsonEncoder.withIndent('  ');
   File('docs/data.json').writeAsStringSync(encoder.convert(explorerData));
 
+  // Wave 3: district elevation bands (Copernicus GLO-30-derived) ship as
+  // a separate lazy-loaded artifact — the explorer fetches it only when
+  // the terrain metric is requested. Geometry stays in bindings/; the
+  // site only needs the numbers. Sorted by district so the artifact (and
+  // the drift gate that regenerates it) is fully deterministic.
+  final elevFile = File('bindings/geojson/districts.elevation.geojson');
+  final elevSource = elevFile.readAsStringSync();
+  final elevGeo = jsonDecode(elevSource) as Map<String, dynamic>;
+  final elevFeatures = (elevGeo['features'] as List)
+      .cast<Map<String, dynamic>>();
+  final elevRows = <Map<String, dynamic>>[];
+  for (final feature in elevFeatures) {
+    final props = feature['properties'] as Map<String, dynamic>;
+    elevRows.add({
+      'district': props['nameEn'] as String,
+      'elevMin': props['elevMin'] as int,
+      'elevMean': props['elevMean'] as int,
+      'elevMax': props['elevMax'] as int,
+    });
+  }
+  String districtOf(Map<String, dynamic> row) => row['district'] as String;
+  elevRows.sort((a, b) => districtOf(a).compareTo(districtOf(b)));
+  File('docs/district-elevation.json')
+      .writeAsStringSync(encoder.convert(elevRows));
+
   // Stats
   final coded = explorerData.where((d) => d['cbsCode'] != null).length;
   final doubled =
@@ -77,6 +102,8 @@ void main() {
   final mapped = explorerData.where((d) => d['lat'] != null).length;
   final warded = explorerData.where((d) => d['wards'] != null).length;
   print('Generated docs/data.json');
+  print('Generated docs/district-elevation.json');
+  print('Elevation rows: ${elevRows.length}');
   print('Total records: ${explorerData.length}');
   print('With CBS code: $coded ($doubled doubly-attested, '
       '${coded - doubled} single-source)');

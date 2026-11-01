@@ -216,6 +216,11 @@ function initExplorer() {
   // Bump when data.json shape changes.
   const DATA_URL = 'data.json?v=4';
 
+  // The elevation metric and its popups ride a separate lazy artifact;
+  // kick the fetch off early so bands are usually ready before a
+  // visitor ever switches the figure.
+  ensureDistrictElevation();
+
   // Load data
   fetch(DATA_URL)
     .then(res => {
@@ -687,6 +692,19 @@ var MAP_METRICS = {
       { label: '— No code', color: '#D97706' },
     ],
   },
+  elevation: {
+    // Terrain band ramp (amber 100 → 800): Terai yellow to high-Himalaya
+    // brown, one district-wide figure per palika (its district's mean).
+    label: 'District mean elevation (GLO-30)',
+    entries: [
+      { label: '< 500 m', color: '#FDE68A' },
+      { label: '500–1,500 m', color: '#FCD34D' },
+      { label: '1,500–2,500 m', color: '#F59E0B' },
+      { label: '2,500–3,500 m', color: '#B45309' },
+      { label: '3,500+ m', color: '#7C2D12' },
+      { label: 'n/a', color: '#E7E5E4' },
+    ],
+  },
 };
 var DOTS_LEGEND_HTML =
   '<span class="legend-chip"><i class="dot dot-metro"></i>Metro</span>' +
@@ -703,6 +721,30 @@ var _boundaryByKey = null;     // districtId|normName -> feature
 var _boundaryLayer = null;     // L.geoJSON layer
 var _boundaryDataAdded = false;
 var _activeRows = new Set();
+var _districtElev = null;      // district -> {elevMin, elevMean, elevMax}
+var _districtElevReady = null; // in-flight load promise
+
+// District elevation bands (Copernicus GLO-30-derived, 77 districts):
+// a lazy-loaded artifact, fetched only when the terrain metric (or a
+// popup that quotes it) is first needed. A failed or malformed fetch
+// resolves null and the map degrades to the n/a grey — never an error.
+function ensureDistrictElevation() {
+  if (_districtElevReady) return _districtElevReady;
+  _districtElevReady = fetch('district-elevation.json?v=1')
+    .then(function (res) { return res.ok ? res.json() : null; })
+    .then(function (data) {
+      if (!Array.isArray(data) || !data.length ||
+          typeof data[0].elevMean !== 'number') return null;
+      var map = {};
+      for (var i = 0; i < data.length; i++) {
+        map[data[i].district] = data[i];
+      }
+      _districtElev = map;
+      return map;
+    })
+    .catch(function () { return null; });
+  return _districtElevReady;
+}
 
 var MAP_OVERLAYS = [
   // K2 — protected areas. The 20 core units on the official DNPWC roster
@@ -803,6 +845,14 @@ function setMapMetric(metric) {
   if (metric !== 'dots' && !MAP_METRICS[metric]) return;
   _mapMetric = metric;
   renderMapLegend();
+  if (metric === 'elevation') {
+    // The bands arrive async; once they land, restyle whatever is on
+    // screen so switching metrics never shows a stale n/a grey map.
+    ensureDistrictElevation().then(function () {
+      if (_mapMetric !== 'elevation') return;
+      if (_boundaryLayer) restyleBoundaryLayer();
+    });
+  }
   if (_boundaryLayer) restyleBoundaryLayer();
 }
 
@@ -965,6 +1015,15 @@ function itemPopupHtml(item) {
   else html += '<br>';
   html += escapeHtmlAttr(item.district) + ', ' + escapeHtmlAttr(item.province) + '<br>';
   html += 'CBS: ' + cbs + ' (' + tierShort + ') · ' + wards;
+  const elev = _districtElev && _districtElev[item.district];
+  if (elev) {
+    html += '<br><span style="color:#64748b;font-size:12px">Rises from ' +
+      elev.elevMin.toLocaleString('en-US') + ' m to ' +
+      elev.elevMax.toLocaleString('en-US') +
+      ' m above sea level (mean ~' +
+      elev.elevMean.toLocaleString('en-US') +
+      ' m · Copernicus GLO-30)</span>';
+  }
   if (item.lat != null && item.lng != null) {
     html += '<br><span style="color:#64748b;font-size:12px">' +
       item.lat.toFixed(3) + ', ' + item.lng.toFixed(3) + ' · ' +
@@ -980,6 +1039,16 @@ function metricColorFor(item) {
   if (_mapMetric === 'cbs') {
     const tier = confidenceMeta(item);
     return tier.cls === 'verified' ? '#1D4ED8' : tier.cls === 'singleSource' ? '#A8A29E' : '#D97706';
+  }
+  if (_mapMetric === 'elevation') {
+    const e = _districtElev && _districtElev[item.district];
+    if (!e) return '#E7E5E4';
+    const m = e.elevMean;
+    if (m >= 3500) return '#7C2D12';
+    if (m >= 2500) return '#B45309';
+    if (m >= 1500) return '#F59E0B';
+    if (m >= 500) return '#FCD34D';
+    return '#FDE68A';
   }
   var w = item.wards;
   if (w == null) return '#E7E5E4';
@@ -1029,7 +1098,9 @@ function wireBoundaryFeature(feature, layer) {
     direction: 'top',
   });
   if (feature.__row) {
-    layer.bindPopup(itemPopupHtml(feature.__row));
+    // Function content: the popup builds at open time, so the elevation
+    // sentence appears even when its fetch resolves after bind.
+    layer.bindPopup(function () { return itemPopupHtml(feature.__row); });
   } else {
     const p = feature.properties || {};
     layer.bindPopup('<strong>' + escapeHtmlAttr(p.nameEn || 'Palika') + '</strong>' +
@@ -1245,7 +1316,7 @@ function syncDotsMap(items) {
         fillColor: color,
         fillOpacity: item.cbsCode != null ? 0.85 : 0.2,
       });
-      m.bindPopup(itemPopupHtml(item));
+      m.bindPopup(function () { return itemPopupHtml(item); });
       return m;
     });
     _cluster.addLayers(markers);
