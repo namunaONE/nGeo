@@ -45,9 +45,6 @@ jobs:
           # next to the live values so drift is visible at a glance.
           pinned_cod_ab_modified='2026-08-14'
           pinned_cod_ab_license='cc-by-igo'
-          : > hdx-snapshot-manifest.json
-          echo '[' > manifest.tmp.json
-          first=1
           while IFS= read -r ds; do
             [ -n "$ds" ] || continue
             echo "=== $ds ==="
@@ -74,22 +71,9 @@ jobs:
               echo "downloading $rid ($rfmt) -> $out"
               curl -fSL --retry 3 --retry-delay 5 "$rurl" -o "$out"
             done
-            # Manifest entry: dataset + licence + freshness + every
-            # downloaded file with its size and sha256, so the review
-            # can cite exact bytes without re-downloading anything.
-            jq -n \
-              --arg ds "$ds" \
-              --arg license "$license" \
-              --arg modified "$modified" \
-              --argjson resources "$(jq '[.result.resources[] | {id, name, format, url, size, last_modified}]' "meta-$ds.json")" \
-              --argjson files "$(jq -Rn '[inputs]' <<< "" 2>/dev/null || echo '[]')" \
-              '{dataset: $ds, license: $license, metadata_modified: $modified, resources: $resources}' \
-              > "entry-$ds.json"
-            jq --slurpfile e "entry-$ds.json" '. + $e[0]' manifest.tmp.json > manifest.tmp2.json 2>/dev/null || true
-            if [ "$first" = "1" ]; then
-              cp "entry-$ds.json" manifest.first.json
-              first=0
-            fi
+            # (manifest assembly happens once, below, in node —
+            # sha256 is computed from the bytes we actually downloaded,
+            # trust the bytes not the transport)
           done < datasets.txt
           # Assemble the final manifest (dataset entries + sha256 of
           # every downloaded file, computed locally — trust the bytes
