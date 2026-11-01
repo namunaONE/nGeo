@@ -53,10 +53,16 @@ const AIMS = { lcp: 1800, tbt: 150, cls: 0.04, accessibility: 100 };
 // 4776ms — flat vs 4789, because the engine fetch itself still lands
 // inside the LCP window once the idle boot fires. 5500 stands (worst
 // verdict family 4789/4784/4776 + ~15%). The law (BUDGETS.lcp = 2500,
-// in AIMS) is never lowered — only approached: the next lever is
-// taking the engine fetch off the network critical path entirely
-// (self-hosting the pinned engine beside the other first-party
-// assets), then identifying the post-split LCP element.
+// in AIMS) is never lowered — only approached. R3 (PR #41,
+// self-host-engine) pulled that lever: the pinned engine now ships
+// same-origin at docs/vendor/ (maplibre-gl@5.6.0 dist, 939,269
+// bytes, sha256-pinned in dart.yml) — and the two R3 verdicts read
+// LCP 4784/4779ms: FLAT again. Removing the unpkg hop removed no
+// cost the LCP window ever saw, so the verdict family now reads
+// 4789/4784/4776/4779 and 5500 stands (worst + ~15%). The next
+// lever is identifying the post-split LCP element itself (the
+// largest-contentful-paint-element audit) and shrinking what IT
+// waits for.
 const LCP_CEILINGS = {
   '/': 2500,
   '/explorer.html': 5500,
@@ -71,7 +77,9 @@ const LCP_CEILINGS = {
 // — bust-passes correlate with a loaded runner, so the re-measure
 // verdict is the number of record, but it carries noise too). The
 // Leaflet-era baseline was 63ms — the swap traded a 147KB 2D-canvas
-// engine for a 758KB WebGL engine, and the lab (headless Chromium,
+// engine for a 939KB WebGL engine (the official maplibre-gl@5.6.0
+// dist, 939,269 bytes — sized truthfully at the R3 vendoring; the
+// old 758KB figure was an estimate), and the lab (headless Chromium,
 // SwiftShader CPU rasterization) pays the full context-init + parse
 // cost inside the FCP-to-TTI window.
 // R2 (PR #40, this repo's perf(explorer)/arm-chain-split) cut the
@@ -90,7 +98,10 @@ const LCP_CEILINGS = {
 // would not tame it. 1900ms = clean verdict 1615 + ~18% LH-noise
 // headroom, the same policy as the LCP ratchet (clean verdicts are
 // the numbers of record; loaded-runner busts are documented noise,
-// not the build). The aim (150ms) and the law (200ms) are never
+// not the build). R3's two CI heads (engine vendored same-origin)
+// rode the loaded lottery again: 3814/3980 then 4139/2494 — the
+// signature holds; no clean host landed in either re-measure. The
+// aim (150ms) and the law (200ms) are never
 // lowered — only approached: the remaining clean-run cost is the
 // pinned engine's own parse + WebGL context init (the honest price of
 // the WebGL engine); the open follow-up is taming the MEASUREMENT
