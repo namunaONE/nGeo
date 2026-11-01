@@ -11,7 +11,8 @@
 // no hand scan could see: the 40 MB high-resolution palika boundary
 // file ships its converter's legacy "crs" member. That is the point:
 // the gate scans every artifact on every run, including the ones too
-// big to open by hand.
+// big to open by hand. The sanitize-crs auto-heal then removed that
+// member in place on this branch: one line, zero reformatting.
 //
 // Checks, per file (every docs/*.geojson and bindings/geojson/*.geojson):
 //   - parses as JSON and is a FeatureCollection
