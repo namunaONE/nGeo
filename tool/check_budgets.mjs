@@ -78,13 +78,22 @@ const LCP_CEILINGS = {
 // stacking: the engine half boots in the first idle slot, the boundary
 // data half idles once more after the basemap paints, and the five
 // off-by-default overlay fetches (~2.5 MB) no longer preload at boot.
-// Fresh verdict: 1615ms (PR #40 first pass, green — no re-measure
-// fired). 1900ms = 1615 + ~18% LH-noise headroom, the same policy as
-// the LCP ratchet. The aim (150ms) and the law (200ms) are never
-// lowered — only approached: the remaining cost is the pinned engine's
-// own parse + WebGL context init (the honest price of the WebGL
-// engine), so the next levers are a slimmer boot path or accepting the
-// pinned-engine floor.
+// Fresh clean verdict: 1615ms (PR #40 first head, green under the R1
+// ceiling — no re-measure fired). The ratchet-walk commit (same
+// runtime payload, comment+ceiling only) then measured a LOADED shared
+// runner: first pass 3579ms, re-measure 3467ms — the R1 bust-pass
+// signature (2733/3416 over verdicts 2373/2509), amplified: host-level
+// CPU noise swings this page's TBT ~2.2x while its LCP stays pinned
+// (4776/4803/4789 across the same passes). 1900ms = clean verdict
+// 1615 + ~18% LH-noise headroom, the same policy as the LCP ratchet
+// (clean verdicts are the numbers of record; loaded-runner busts are
+// documented noise, not the build). The aim (150ms) and the law
+// (200ms) are never lowered — only approached: the remaining clean-run
+// cost is the pinned engine's own parse + WebGL context init (the
+// honest price of the WebGL engine); the open follow-up is taming the
+// MEASUREMENT (serializing the budgets job against the flutter jobs,
+// or a quieter-runner policy for Explorer TBT) — never relaxing the
+// law.
 const TBT_CEILINGS = {
   '/explorer.html': 1900,
 };
