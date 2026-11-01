@@ -46,6 +46,7 @@ device-support spike; 8 can land any time after 4; 9 is independent.
   motion communicates state? Devanagari respected? subtract-first?).
 - **Every cache-bust bumps its smoke pins** — audit all `v=` asserts in
   `docs/smoke.cjs` on every wave.
+- **Smoke pins structure, not values** — thresholds live in exactly one gate tool; string-asserts in tests may pin wiring, never numbers, so a ratchet walk is a one-file change (learned in PR #42).
 - **Generated files are never hand-edited** — `brand-tokens.css`,
   `data.json`, `district-elevation.json`, bindings, emitted Dart.
 - **New platform features land behind `@supports`** with a tested fallback
