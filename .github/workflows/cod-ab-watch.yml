@@ -1,0 +1,101 @@
+name: COD-AB upstream watch
+
+# Watches the pinned HDX COD-AB dataset (data/SOURCES.md source #9) for
+# upstream movement. The repo pins v02 (reviewed 2025-10-30, licence
+# CC BY-IGO); at the 2026-10-30 review the live dataset's
+# metadata_modified already read 2026-08-14 — upstream can re-publish
+# at any time, and a silent refresh would desynchronise the committed
+# boundary artifacts from their pinned source. On any licence or
+# metadata change this job files an issue; the refresh itself stays a
+# human decision (re-download, re-review, regenerate, re-pin) — never
+# auto-accepted.
+
+on:
+  schedule:
+    # Weekly, Mondays 04:23 UTC (off-peak).
+    - cron: '23 4 * * 1'
+  workflow_dispatch:
+
+permissions:
+  contents: read
+  issues: write
+
+concurrency:
+  group: cod-ab-watch
+  cancel-in-progress: false
+
+jobs:
+  watch:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Poll the HDX dataset metadata
+        run: |
+          set -euo pipefail
+          curl -fsSL --retry 3 --retry-delay 5 \
+            'https://data.humdata.org/api/3/action/package_show?id=cod-ab-npl' \
+            -o cod-ab-meta.json
+          jq -e '.success == true' cod-ab-meta.json > /dev/null
+          echo "license_id: $(jq -r '.result.license_id' cod-ab-meta.json)"
+          echo "metadata_modified: $(jq -r '.result.metadata_modified' cod-ab-meta.json)"
+          echo "num_resources: $(jq -r '.result.num_resources' cod-ab-meta.json)"
+
+      - name: Compare against the pinned review
+        id: compare
+        run: |
+          set -euo pipefail
+          # Pins recorded at the 2026-10-30 review (data/SOURCES.md
+          # source #9): licence CC BY-IGO, and the live
+          # metadata_modified observed that day was 2026-08-14. A
+          # mismatch means upstream moved again — a human re-reviews;
+          # nothing is ever auto-accepted.
+          pinned_license='cc-by-igo'
+          pinned_modified='2026-08-14'
+          license="$(jq -r '.result.license_id' cod-ab-meta.json)"
+          modified="$(jq -r '.result.metadata_modified' cod-ab-meta.json)"
+          echo "license=$license" >> "$GITHUB_OUTPUT"
+          echo "modified=$modified" >> "$GITHUB_OUTPUT"
+          if [ "$license" = "$pinned_license" ] && [ "$modified" = "$pinned_modified" ]; then
+            echo "drift=false" >> "$GITHUB_OUTPUT"
+            echo "No drift: licence $license, metadata_modified $modified."
+          else
+            echo "drift=true" >> "$GITHUB_OUTPUT"
+            echo "DRIFT: licence $license (pinned $pinned_license), \
+                 metadata_modified $modified (pinned $pinned_modified)."
+          fi
+
+      - name: File an issue when upstream moved
+        if: steps.compare.outputs.drift == 'true'
+        env:
+          LIVE_LICENSE: ${{ steps.compare.outputs.license }}
+          LIVE_MODIFIED: ${{ steps.compare.outputs.modified }}
+        uses: actions/github-script@v7
+        with:
+          script: |
+            const title = '[cod-ab] HDX COD-AB upstream changed - re-review needed';
+            // One open drift issue at a time, not one per run.
+            const existing = await github.rest.issues.listForRepo({
+              owner: context.repo.owner,
+              repo: context.repo.repo,
+              state: 'open',
+              per_page: 100,
+            });
+            if (existing.data.some((i) => i.title === title)) {
+              core.info('An open drift issue already exists; not filing another.');
+              return;
+            }
+            await github.rest.issues.create({
+              owner: context.repo.owner,
+              repo: context.repo.repo,
+              title,
+              body: [
+                'The weekly COD-AB watch detected upstream movement.',
+                '',
+                '- live licence_id: ' + process.env.LIVE_LICENSE + ' (pinned: cc-by-igo)',
+                '- live metadata_modified: ' + process.env.LIVE_MODIFIED + ' (pinned: 2026-08-14)',
+                '',
+                'The pinned source is data/SOURCES.md source #9 (HDX COD-AB,',
+                'v02, reviewed 2025-10-30). A refresh is a human decision:',
+                're-download, re-review the licence, regenerate the boundary',
+                'artifacts, and update the pins. Nothing is auto-accepted.',
+              ].join('\n'),
+            });
