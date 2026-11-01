@@ -456,8 +456,10 @@ vm.createContext(sandbox);
     budgetsSrc.includes("'/explorer.html': 4800") &&
     budgetsSrc.includes("'/': 2500"),
     'the LCP ratchet declares per-page evidence-based ceilings');
-  assert.ok(budgetsSrc.includes('lcpOk: lcp <= (LCP_CEILINGS[page.path]'),
+  assert.ok(budgetsSrc.includes('lcpOk: m.lcp <= (LCP_CEILINGS[page.path]'),
     'the LCP gate asserts against the ratchet ceiling');
+  assert.ok(budgetsSrc.includes('re-measuring once'),
+    'a budget bust earns exactly one fresh full-page re-measure (runner noise), never a relaxed law');
   // Wave 4 PR B (payload diet): the ~40 MB full-resolution palika boundary
   // source stays in the repo (source-of-truth for the boundaries package
   // and its generators) but never reaches the Pages artifact: the deploy

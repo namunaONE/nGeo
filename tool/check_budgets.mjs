@@ -11,6 +11,12 @@
 // Thresholds live HERE and nowhere else — one file to tune on
 // evidence, never hand-waved per page.
 //
+// Noise policy: a single LH pass on shared ubuntu runners measured TBT
+// varying 117 -> 317ms on an IDENTICAL payload (PR #30, consecutive
+// runs), so a page that busts any budget is re-measured exactly once —
+// the re-run's full-page verdict replaces the first, no per-metric
+// best-of cherry-picking. The law is never relaxed.
+//
 // Usage (from the repository root, site already served):
 //   node tool/check_budgets.mjs [baseUrl]
 // Exit 0 = pass, 1 = fail.
@@ -99,7 +105,9 @@ function lcpElement(report) {
 
 const failures = [];
 const rows = [];
-for (const page of PAGES) {
+const reMeasured = [];
+
+function measure(page) {
   const url = baseUrl + page.path;
   const raw = execFileSync('lighthouse', [
     url,
@@ -110,25 +118,43 @@ for (const page of PAGES) {
     '--chrome-flags=--headless=new --no-sandbox',
   ], { encoding: 'utf8', maxBuffer: 64 * 1024 * 1024 });
   const report = JSON.parse(raw);
-
   const lcp = metric(report, 'largest-contentful-paint', Infinity);
   const tbt = metric(report, 'total-blocking-time', Infinity);
   const cls = metric(report, 'cumulative-layout-shift', Infinity);
   const a11y = report.categories && report.categories.accessibility
     ? Math.round(report.categories.accessibility.score * 100)
     : 0;
+  return { report, lcp, tbt, cls, a11y };
+}
 
-  const row = {
+function rowFor(page, m) {
+  return {
     page: page.label,
-    lcp: Math.round(lcp),
-    tbt: Math.round(tbt),
-    cls: Number(cls.toFixed(3)),
-    a11y,
-    lcpOk: lcp <= (LCP_CEILINGS[page.path] ?? BUDGETS.lcp),
-    tbtOk: tbt <= BUDGETS.tbt,
-    clsOk: cls <= BUDGETS.cls,
-    a11yOk: a11y >= BUDGETS.accessibility,
+    lcp: Math.round(m.lcp),
+    tbt: Math.round(m.tbt),
+    cls: Number(m.cls.toFixed(3)),
+    a11y: m.a11y,
+    lcpOk: m.lcp <= (LCP_CEILINGS[page.path] ?? BUDGETS.lcp),
+    tbtOk: m.tbt <= BUDGETS.tbt,
+    clsOk: m.cls <= BUDGETS.cls,
+    a11yOk: m.a11y >= BUDGETS.accessibility,
   };
+}
+
+for (const page of PAGES) {
+  let m = measure(page);
+  let row = rowFor(page, m);
+  // Runner-noise policy: a single LH pass on shared ubuntu runners
+  // measured TBT varying 117 -> 317ms on an identical payload (PR #30,
+  // two consecutive runs). A page that busts ANY budget gets exactly
+  // ONE re-measure, and the re-run's FULL verdict replaces the first —
+  // all four budgets together, never the best metric of two runs.
+  if (!(row.lcpOk && row.tbtOk && row.clsOk && row.a11yOk)) {
+    console.log(`::notice::${page.label} first pass exceeded a budget (LCP ${row.lcp}ms TBT ${row.tbt}ms CLS ${row.cls} a11y ${row.a11y}/100) — re-measuring once for a fresh full-page verdict.`);
+    m = measure(page);
+    row = rowFor(page, m);
+    reMeasured.push(page.label);
+  }
   rows.push(row);
 
   for (const [key, ok, unit] of [
@@ -152,14 +178,14 @@ for (const page of PAGES) {
   // Evidence per failure: the axe audits that failed, and the element
   // Lighthouse blames for LCP. Annotations carry it to the PR.
   if (!row.a11yOk) {
-    for (const a of failingAudits(report)) {
+    for (const a of failingAudits(m.report)) {
       console.error(
         `::error::${page.label} a11y audit failed: ${a.id} — ${a.title}${a.detail ? ' (' + a.detail + ')' : ''}${a.nodes ? ' → ' + a.nodes : ''}`,
       );
     }
   }
   if (!row.lcpOk) {
-    console.error(`::error::${page.label} LCP element: ${lcpElement(report)}`);
+    console.error(`::error::${page.label} LCP element: ${lcpElement(m.report)}`);
   }
 }
 
@@ -176,7 +202,8 @@ for (const r of rows) {
 // always tuned from fresh evidence, never guessed.
 console.log('::notice::measured: ' + rows.map((r) =>
   r.page + ' LCP ' + r.lcp + 'ms TBT ' + r.tbt + 'ms CLS ' + r.cls +
-  ' a11y ' + r.a11y + '/100').join(' | '));
+  ' a11y ' + r.a11y + '/100').join(' | ') +
+  (reMeasured.length ? ` (re-measured: ${reMeasured.join(', ')})` : ''));
 
 console.log(`budgets: LCP <= ${BUDGETS.lcp}ms (aim ${AIMS.lcp}; interim ratchet ceilings per page — see LCP_CEILINGS), TBT <= ${BUDGETS.tbt}ms (aim ${AIMS.tbt}), CLS <= ${BUDGETS.cls} (aim ${AIMS.cls}), a11y = ${BUDGETS.accessibility}/100`);
 
