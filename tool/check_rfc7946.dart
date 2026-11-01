@@ -177,8 +177,7 @@ void checkLine(String file, dynamic line, String where, Extent extent) {
 }
 
 /// MultiPoint and validated LineString position lists.
-void checkEachPosition(
-    String file, dynamic list, String where, Extent extent) {
+void checkEachPosition(String file, dynamic list, String where, Extent extent) {
   if (list is! List) {
     fail(file, '$where: coordinates is not a list.');
     return;
