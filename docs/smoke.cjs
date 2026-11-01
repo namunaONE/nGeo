@@ -85,7 +85,7 @@ const sandbox = {
       if (sel === '.pagination') return paginationEl;
       if (sel === '.header') return null;
       if (sel === '.toast') return null;
-      if (sel === '#map') return null; // map short-circuits (no Leaflet here)
+      if (sel === '#map') return null; // map short-circuits (no map engine here)
       if (sel === '.nav-toggle') return null;
       if (sel === '#nav-menu') return null;
       return null;
@@ -293,16 +293,16 @@ vm.createContext(sandbox);
     assert.ok(pageHtml.includes('skip-link'), page + ' ships a skip link');
     assert.ok(/theme-toggle[^>]*aria-pressed/.test(pageHtml),
       page + ' theme toggle declares aria-pressed');
-    assert.ok(pageHtml.includes('styles.css?v=18'),
-      page + ' bumps the styles cache (v18)');
+    assert.ok(pageHtml.includes('styles.css?v=19'),
+      page + ' bumps the styles cache (v19)');
   }
   const explorerHtml = fs.readFileSync(path.join(ROOT, 'explorer.html'), 'utf8');
   assert.ok(!explorerHtml.includes('role="grid"'),
     'explorer table is a plain table (role="grid" retired)');
   assert.ok(!explorerHtml.includes('role="application"'),
     'map container does not capture screen-reader keys');
-  assert.ok(explorerHtml.includes('app.js?v=20'),
-    'explorer bumps the app cache (v20)');
+  assert.ok(explorerHtml.includes('app.js?v=21'),
+    'explorer bumps the app cache (v21)');
   // Wave 3 (terrain figure): the explorer gains a district elevation
   // choropleth — GLO-30 bands in a lazy-loaded artifact, elevation-aware
   // popups, and a deep-linkable hero button. The gate interpolates the
@@ -477,7 +477,7 @@ vm.createContext(sandbox);
     releaseYml.includes('docs/palika-boundaries-highres.geojson'),
     'the release workflow publishes the full-resolution source as an asset');
   // Wave 4 PR C (adaptive & fast): the explorer figure arms at viewport
-  // proximity (deep links arm immediately) instead of booting Leaflet +
+  // proximity (deep links arm immediately) instead of booting the map engine +
   // boundaries inside the LCP window; Save-Data skips optional prefetch
   // and the count-up; cards adapt via container queries and the page
   // prints like a document.
@@ -496,6 +496,21 @@ vm.createContext(sandbox);
   assert.ok(stylesCssC.includes('break-inside: avoid') &&
     stylesCssC.includes('@page { margin: 1.5cm; }'),
     'print styles keep rows and cards unbroken');
+  // Wave R1 (the MapLibre leap): the engine swap is pinned and total —
+  // MapLibre GL v5.6.0 (the last UMD build; v6 ships ESM-only), native
+  // GeoJSON clustering, data-driven choropleth paint. The old engine and
+  // its cluster plugin are fully retired from app.js and styles.css.
+  assert.ok(appSrc.includes('maplibre-gl@5.6.0/dist/maplibre-gl.js') &&
+    appSrc.includes('new maplibregl.Map('),
+    'the explorer map runs on pinned MapLibre GL v5.6.0');
+  assert.ok(!appSrc.includes('unpkg.com/leaflet') &&
+    !appSrc.includes('markerClusterGroup'),
+    'the old map engine + cluster plugin CDN era is fully retired');
+  assert.ok(appSrc.includes('tile.openstreetmap.org'),
+    'the OSM raster basemap stays');
+  assert.ok(stylesCssC.includes('.maplibregl-popup-content') &&
+    !stylesCssC.includes('.leaflet-'),
+    'styles theme MapLibre chrome; old map-engine rules are retired');
   const lighthouseYml = fs.readFileSync(
     path.join(ROOT, '..', '.github', 'workflows', 'lighthouse.yml'), 'utf8');
   assert.ok(lighthouseYml.includes('check_budgets.mjs'),
