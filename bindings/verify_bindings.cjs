@@ -270,7 +270,7 @@ function parseCsv(text) {
 }
 
 for (const [file, expectedRows, expectedCols] of [
-  ['provinces.csv', srcProvinces.length, 16],
+  ['provinces.csv', srcProvinces.length, 19],
   ['districts.csv', srcDistricts.length, 15],
   ['local_bodies.csv', srcBodies.length, 23],
 ]) {

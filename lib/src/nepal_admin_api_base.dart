@@ -679,6 +679,67 @@ class Province {
   /// palika's count reconciles.
   int get unreconciledWards => declaredWards - verifiedWards;
 
+  /// Minimum elevation across this province's districts, in metres
+  /// (Copernicus GLO-30). Derived from [DistrictElevations]; null when no
+  /// district in the province has elevation stats.
+  int? get elevMin {
+    final vals = <int>[];
+    for (final d in districts) {
+      final s = DistrictElevations.byName(d.name);
+      if (s != null) vals.add(s.elevMin);
+    }
+    if (vals.isEmpty) return null;
+    return vals.reduce((a, b) => a < b ? a : b);
+  }
+
+  /// Maximum elevation across this province's districts, in metres
+  /// (Copernicus GLO-30). Derived from [DistrictElevations].
+  int? get elevMax {
+    final vals = <int>[];
+    for (final d in districts) {
+      final s = DistrictElevations.byName(d.name);
+      if (s != null) vals.add(s.elevMax);
+    }
+    if (vals.isEmpty) return null;
+    return vals.reduce((a, b) => a > b ? a : b);
+  }
+
+  /// Area-weighted mean elevation across this province's districts, in
+  /// metres (Copernicus GLO-30). Districts without elevation stats are
+  /// skipped; districts without an area fall back to equal weighting.
+  /// Derived (not measured) — label as such in any UI.
+  int? get elevMean {
+    var weightedSum = 0.0;
+    var weightTotal = 0.0;
+    var simpleSum = 0;
+    var simpleCount = 0;
+    for (final d in districts) {
+      final s = DistrictElevations.byName(d.name);
+      if (s == null) continue;
+      final area = d.areaSqKmOfficial ?? d.areaSqKm;
+      if (area != null && area > 0) {
+        weightedSum += area * s.elevMean;
+        weightTotal += area;
+      } else {
+        simpleSum += s.elevMean;
+        simpleCount++;
+      }
+    }
+    if (weightTotal > 0 && simpleCount == 0) {
+      return (weightedSum / weightTotal).round();
+    }
+    if (weightTotal > 0 && simpleCount > 0) {
+      // Mix: weighted part + simple part (equal 1 km² weight for unweighted).
+      weightedSum += simpleSum.toDouble();
+      weightTotal += simpleCount;
+      return (weightedSum / weightTotal).round();
+    }
+    if (simpleCount > 0) {
+      return (simpleSum / simpleCount).round();
+    }
+    return null;
+  }
+
   /// Whether this province's declared total reconciles against its rows.
   bool get wardsReconcile => unreconciledWards == 0;
 

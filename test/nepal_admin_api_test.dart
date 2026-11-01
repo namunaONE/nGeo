@@ -386,6 +386,23 @@ void main() {
     });
   });
 
+  group('v2.10 province elevation (derived, Copernicus GLO-30)', () {
+    test('every province has elevation stats', () {
+      for (final p in NepalAdminApi.getAllProvinces()) {
+        expect(p.elevMin, isNotNull, reason: '${p.name} elevMin');
+        expect(p.elevMean, isNotNull, reason: '${p.name} elevMean');
+        expect(p.elevMax, isNotNull, reason: '${p.name} elevMax');
+      }
+    });
+
+    test('elevation ordering holds (min <= mean <= max)', () {
+      for (final p in NepalAdminApi.getAllProvinces()) {
+        expect(p.elevMin!, lessThanOrEqualTo(p.elevMean!), reason: p.name);
+        expect(p.elevMean!, lessThanOrEqualTo(p.elevMax!), reason: p.name);
+      }
+    });
+  });
+
   group('v2.3 ward counts', () {
     test('wards are sane positive integers when present', () {
       for (final b in NepalAdminApi.getAllLocalBodies()) {

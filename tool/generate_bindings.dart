@@ -133,6 +133,24 @@ void main(List<String> args) {
   final dataAsOf = meta['dataAsOf'] as String;
   final totals = meta['totals'] as Map<String, dynamic>;
 
+  // Province elevation is derived from the district elevation table
+  // (Copernicus GLO-30), mirroring the Dart Province getters.
+  final elevFile = File('bindings/geojson/districts.elevation.geojson');
+  final elevByName = <String, Map<String, int>>{};
+  if (elevFile.existsSync()) {
+    final elevJson =
+        jsonDecode(elevFile.readAsStringSync()) as Map<String, dynamic>;
+    for (final f in (elevJson['features'] as List)) {
+      final props =
+          (f as Map<String, dynamic>)['properties'] as Map<String, dynamic>;
+      elevByName[(props['nameEn'] as String).toLowerCase()] = <String, int>{
+        'min': props['elevMin'] as int,
+        'mean': props['elevMean'] as int,
+        'max': props['elevMax'] as int,
+      };
+    }
+  }
+
   // ---- Build the one projection every emitter reads ----------------------
   final provinces = <Map<String, dynamic>>[];
   final districts = <Map<String, dynamic>>[];
@@ -219,6 +237,43 @@ void main(List<String> args) {
       localBodies.addAll(bodies);
     }
 
+    // Province elevation aggregate (derived from district elevation).
+    int? provElevMin, provElevMax, provElevMean;
+    {
+      final mins = <int>[];
+      final maxs = <int>[];
+      var wSum = 0.0;
+      var wTot = 0.0;
+      var sSum = 0;
+      var sCnt = 0;
+      for (final d in dists) {
+        final e = elevByName[(d['name'] as String).toLowerCase()];
+        if (e == null) continue;
+        mins.add(e['min']!);
+        maxs.add(e['max']!);
+        final area = (d['areaSqKmOfficial'] as num?)?.toDouble() ??
+            (d['areaSqKm'] as num?)?.toDouble();
+        if (area != null && area > 0) {
+          wSum += area * e['mean']!;
+          wTot += area;
+        } else {
+          sSum += e['mean']!;
+          sCnt++;
+        }
+      }
+      if (mins.isNotEmpty) {
+        provElevMin = mins.reduce((a, b) => a < b ? a : b);
+        provElevMax = maxs.reduce((a, b) => a > b ? a : b);
+        if (wTot > 0 && sCnt == 0) {
+          provElevMean = (wSum / wTot).round();
+        } else if (wTot > 0 && sCnt > 0) {
+          provElevMean = ((wSum + sSum) / (wTot + sCnt)).round();
+        } else if (sCnt > 0) {
+          provElevMean = (sSum / sCnt).round();
+        }
+      }
+    }
+
     provinces.add(<String, dynamic>{
       'id': pm['id'],
       'name': provName,
@@ -233,6 +288,9 @@ void main(List<String> args) {
         'areaSqKmOfficial': pm['areaSqKmOfficial'],
       if (pm['latHdx'] != null) 'latHdx': pm['latHdx'],
       if (pm['lngHdx'] != null) 'lngHdx': pm['lngHdx'],
+      if (provElevMin != null) 'elevMin': provElevMin,
+      if (provElevMean != null) 'elevMean': provElevMean,
+      if (provElevMax != null) 'elevMax': provElevMax,
       if (pm['website'] != null) 'website': pm['website'],
       'districtCount': dists.length,
       'localBodyCount': mCount + sCount + munCount + rmCount,
@@ -341,6 +399,9 @@ void main(List<String> args) {
         'areaSqKmOfficial',
         'latHdx',
         'lngHdx',
+        'elevMin',
+        'elevMean',
+        'elevMax',
         'website',
         'districtCount',
         'localBodyCount',
