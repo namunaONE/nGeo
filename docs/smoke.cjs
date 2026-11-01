@@ -293,16 +293,16 @@ vm.createContext(sandbox);
     assert.ok(pageHtml.includes('skip-link'), page + ' ships a skip link');
     assert.ok(/theme-toggle[^>]*aria-pressed/.test(pageHtml),
       page + ' theme toggle declares aria-pressed');
-    assert.ok(pageHtml.includes('styles.css?v=17'),
-      page + ' bumps the styles cache (v17)');
+    assert.ok(pageHtml.includes('styles.css?v=18'),
+      page + ' bumps the styles cache (v18)');
   }
   const explorerHtml = fs.readFileSync(path.join(ROOT, 'explorer.html'), 'utf8');
   assert.ok(!explorerHtml.includes('role="grid"'),
     'explorer table is a plain table (role="grid" retired)');
   assert.ok(!explorerHtml.includes('role="application"'),
     'map container does not capture screen-reader keys');
-  assert.ok(explorerHtml.includes('app.js?v=19'),
-    'explorer bumps the app cache (v19)');
+  assert.ok(explorerHtml.includes('app.js?v=20'),
+    'explorer bumps the app cache (v20)');
   // Wave 3 (terrain figure): the explorer gains a district elevation
   // choropleth — GLO-30 bands in a lazy-loaded artifact, elevation-aware
   // popups, and a deep-linkable hero button. The gate interpolates the
@@ -449,13 +449,17 @@ vm.createContext(sandbox);
     budgetsSrc.includes('accessibility: 100'),
     'the budget law declares the CWV ceilings in check_budgets.mjs');
   // The law is never lowered: LCP pages not yet at 2500ms are gated by
-  // explicit interim ratchet ceilings instead, tightened by Wave 4-C.
+  // explicit interim ratchet ceilings instead — Home now sits AT the law
+  // (measured 2317ms), Explorer stays on an evidence-based interim
+  // (measured 4207ms + ~15% LH noise headroom).
   assert.ok(budgetsSrc.includes('const LCP_CEILINGS = {') &&
-    budgetsSrc.includes("'/explorer.html': 5000") &&
-    budgetsSrc.includes("'/': 3000"),
-    'the LCP ratchet declares per-page interim ceilings');
-  assert.ok(budgetsSrc.includes('lcpOk: lcp <= (LCP_CEILINGS[page.path]'),
+    budgetsSrc.includes("'/explorer.html': 4800") &&
+    budgetsSrc.includes("'/': 2500"),
+    'the LCP ratchet declares per-page evidence-based ceilings');
+  assert.ok(budgetsSrc.includes('lcpOk: m.lcp <= (LCP_CEILINGS[page.path]'),
     'the LCP gate asserts against the ratchet ceiling');
+  assert.ok(budgetsSrc.includes('re-measuring once'),
+    'a budget bust earns exactly one fresh full-page re-measure (runner noise), never a relaxed law');
   // Wave 4 PR B (payload diet): the ~40 MB full-resolution palika boundary
   // source stays in the repo (source-of-truth for the boundaries package
   // and its generators) but never reaches the Pages artifact: the deploy
@@ -472,6 +476,26 @@ vm.createContext(sandbox);
   assert.ok(releaseYml.includes('gh release upload') &&
     releaseYml.includes('docs/palika-boundaries-highres.geojson'),
     'the release workflow publishes the full-resolution source as an asset');
+  // Wave 4 PR C (adaptive & fast): the explorer figure arms at viewport
+  // proximity (deep links arm immediately) instead of booting Leaflet +
+  // boundaries inside the LCP window; Save-Data skips optional prefetch
+  // and the count-up; cards adapt via container queries and the page
+  // prints like a document.
+  assert.ok(appSrc.includes('var _mapArmed = false;') &&
+    appSrc.includes("params.get('cbs') || params.get('metric')") &&
+    appSrc.includes('renderArmedMap'),
+    'the figure arms lazily; deep links arm immediately');
+  assert.ok(appSrc.includes('var SAVE_DATA') &&
+    appSrc.includes('if (!SAVE_DATA) ensureDistrictElevation();') &&
+    appSrc.includes('if (SAVE_DATA) return;'),
+    'Save-Data gates the eager elevation prefetch and the count-up');
+  const stylesCssC = fs.readFileSync(path.join(ROOT, 'styles.css'), 'utf8');
+  assert.ok(stylesCssC.includes('container-type: inline-size') &&
+    stylesCssC.includes('@container'),
+    'cards adapt via container queries');
+  assert.ok(stylesCssC.includes('break-inside: avoid') &&
+    stylesCssC.includes('@page { margin: 1.5cm; }'),
+    'print styles keep rows and cards unbroken');
   const lighthouseYml = fs.readFileSync(
     path.join(ROOT, '..', '.github', 'workflows', 'lighthouse.yml'), 'utf8');
   assert.ok(lighthouseYml.includes('check_budgets.mjs'),
@@ -482,4 +506,5 @@ vm.createContext(sandbox);
   console.error('SMOKE FAILED:', err && err.message ? err.message : err);
   process.exit(1);
 });
+
 

@@ -239,8 +239,11 @@ function initExplorer() {
 
   // The elevation metric and its popups ride a separate lazy artifact;
   // kick the fetch off early so bands are usually ready before a
-  // visitor ever switches the figure.
-  ensureDistrictElevation();
+  // visitor ever switches the figure. Wave 4-C: under Save-Data the
+  // prefetch waits until the figure is actually picked (setMapMetric
+  // awaits the same memoized promise — nothing is lost, only the
+  // eager copy is skipped).
+  if (!SAVE_DATA) ensureDistrictElevation();
 
   // Load data
   fetch(DATA_URL)
@@ -571,6 +574,17 @@ const TYPE_COLORS = {
 let _map = null;
 let _cluster = null;
 let _leafletReady = null;
+// Save-Data (Wave 4-C): honor the OS/browser data-saver switch. Checked
+// once, honored where a fetch or animation is optional polish — never for
+// the data the page exists to show.
+var SAVE_DATA = (function () {
+  try {
+    var c = navigator.connection;
+    return !!(c && c.saveData);
+  } catch (e) {
+    return false;
+  }
+})();
 
 function loadLeaflet() {
   if (_leafletReady) return _leafletReady;
@@ -1374,13 +1388,43 @@ function syncChoropleth(items) {
 }
 
 
+// Wave 4-C (lazy figure): booting Leaflet + boundary geometry at
+// DOMContentLoaded put CDN scripts, a 476 KB fetch and long main-thread
+// tasks inside the LCP window (Explorer measured 4573ms mobile). The
+// figure sits below the fold; it now arms when its section approaches
+// the viewport — immediately for deep links (?cbs= / ?metric=), which
+// target the map by definition. Until armed, syncMap just keeps the
+// latest rows; filtering stays free.
+var _mapArmed = false;
+var _mapArmIo = null;
+
+function renderArmedMap() {
+  if (!_lastMapItems) return;
+  if (_mapMetric === 'dots') { syncDotsMap(_lastMapItems); return; }
+  syncChoropleth(_lastMapItems);
+}
+
 function syncMap(items) {
-  // Dispatcher: render the map per the selected figure metric — the
-  // palika-boundary choropleth (wards / type / cbs) or the classic dots.
   if (!document.getElementById('map')) return;
   _lastMapItems = items;
-  if (_mapMetric === 'dots') { syncDotsMap(items); return; }
-  syncChoropleth(items);
+  if (_mapArmed) { renderArmedMap(); return; }
+  const params = new URLSearchParams(window.location.search);
+  if (params.get('cbs') || params.get('metric')) {
+    _mapArmed = true;
+    renderArmedMap();
+    return;
+  }
+  if (_mapArmIo) return;
+  _mapArmIo = new IntersectionObserver(function (entries) {
+    for (let i = 0; i < entries.length; i++) {
+      if (!entries[i].isIntersecting) continue;
+      _mapArmIo.disconnect();
+      _mapArmIo = null;
+      _mapArmed = true;
+      renderArmedMap();
+    }
+  }, { rootMargin: '300px 0px' });
+  _mapArmIo.observe(document.getElementById('map'));
 }
 
 function syncDotsMap(items) {
@@ -1474,6 +1518,9 @@ function initCountUp() {
   const targets = stats.querySelectorAll('.stat-value');
   if (!targets.length) return;
   const reduced = window.matchMedia('(prefers-reduced-motion: reduce)').matches;
+  // Wave 4-C: Save-Data visitors keep the authored numbers — no frames
+  // spent on counting.
+  if (SAVE_DATA) return;
   const animate = (el) => {
     if (reduced) return;
     const finalText = el.textContent || '';
@@ -1541,4 +1588,5 @@ if (document.querySelector('.api-nav')) {
 
   sections.forEach(section => observer.observe(section));
 }
+
 

@@ -538,6 +538,16 @@ section { padding: var(--space-16) 0; }
 }
 .download-card strong { font-family: var(--font-mono); font-size: var(--text-sm); word-break: break-all; }
 .download-card span { color: var(--color-text-muted); font-size: var(--text-sm); }
+
+/* Wave 4-C: container queries — a card adapts to the space it actually
+   occupies (its grid cell), not the viewport. Progressive enhancement:
+   engines without @container keep the base rules untouched. */
+.feature-card, .download-card { container-type: inline-size; }
+@container (max-width: 300px) {
+  .download-card strong { font-size: 0.8rem; }
+  .download-card span { font-size: 0.72rem; }
+  .feature-card h3 { font-size: var(--text-base); }
+}
 .download-note { margin-top: var(--space-6); color: var(--color-text-muted); font-size: var(--text-sm); }
 .pagination { display: flex; justify-content: center; gap: var(--space-2); margin-top: var(--space-6); flex-wrap: wrap; }
 .pagination button { min-height: 44px; padding: var(--space-2) var(--space-4); border: 1px solid var(--color-border); background: var(--color-bg); color: var(--color-text); border-radius: var(--radius-full); cursor: pointer; transition: all var(--transition); font-size: var(--text-sm); }
@@ -579,7 +589,26 @@ html.dark .leaflet-popup-content code, html[data-theme="dark"] .leaflet-popup-co
 .leaflet-popup-content strong { display: block; font-size: var(--text-base); margin-bottom: 2px; }
 .leaflet-popup-content code { font-size: var(--text-xs); background: var(--color-bg-tertiary); padding: 1px 6px; border-radius: var(--radius-sm); }
 .map-attrib-note { font-size: var(--text-xs); color: var(--color-text-muted); margin: var(--space-2) 0 0; }
-@media print { .map-card { display: none; } }
+@media print {
+  .map-card { display: none; }
+}
+
+/* Wave 4-C: print — the page prints like a document, not a screenshot.
+   Interactive figure, controls and chrome step aside; the table, stats
+   and copy carry the page. */
+@media print {
+  @page { margin: 1.5cm; }
+  .header, .footer, .map-card, .hero-visual, .toast, .explorer-toolbar,
+  .pagination, .nav-toggle, .theme-toggle, .copy-btn,
+  button { display: none !important; }
+  body { background: #fff !important; color: #000 !important; }
+  main h1, main h2, main h3, main p, .stat-label, .download-card span { color: #000 !important; }
+  .explorer-table { font-size: 10pt; }
+  .explorer-table th, .explorer-table td { border: 1px solid #999 !important; }
+  tr, .feature-card, .download-card, .download-grid { break-inside: avoid; }
+  a { color: #000 !important; text-decoration: underline; }
+  * { box-shadow: none !important; text-shadow: none !important; animation: none !important; }
+}
 
 /* ---- Scrollbars (subtle, theme-aware) ---- */
 .api-nav::-webkit-scrollbar, .code-block pre::-webkit-scrollbar { height: 8px; width: 8px; }
@@ -661,6 +690,7 @@ html.dark .leaflet-popup-content code, html[data-theme="dark"] .leaflet-popup-co
 .empty-state-cell { text-align: center; padding: 48px 24px; }
 .empty-state-title { color: var(--color-text); font-weight: 600; margin-bottom: 8px; }
 .empty-state-hint { color: var(--color-text-muted); font-size: 0.875rem; margin-bottom: 16px; }
+
 
 
 
