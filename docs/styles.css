@@ -508,7 +508,7 @@ section { padding: var(--space-16) 0; }
   color: var(--color-text-muted);
   font-weight: var(--weight-normal);
 }
-.leaflet-popup-content .popup-ne { color: var(--color-text-muted); font-size: 12px; }
+.maplibregl-popup-content .popup-ne { color: var(--color-text-muted); font-size: 12px; }
 
 /* Download cards on the home page. */
 .downloads { padding: var(--space-16) 0; }
@@ -560,7 +560,7 @@ section { padding: var(--space-16) 0; }
 html.dark .toast, html[data-theme="dark"] .toast { background: var(--slate-100); color: var(--slate-900); }
 .toast.show { transform: translateY(0); opacity: 1; }
 
-/* ---- Map (explorer centroid dots — Leaflet + OSM, no API key) ---- */
+/* ---- Map (explorer figure — MapLibre GL + OSM, no API key) ---- */
 .map-card { background: var(--color-surface); border: 1px solid var(--color-border); border-radius: var(--radius-lg); padding: var(--space-4); margin-bottom: var(--space-6); box-shadow: var(--shadow-sm); }
 .map-head { display: flex; align-items: flex-end; justify-content: space-between; gap: var(--space-4); flex-wrap: wrap; margin-bottom: var(--space-3); }
 .map-title { font-size: var(--text-lg); margin: 0; }
@@ -576,18 +576,27 @@ html.dark .toast, html[data-theme="dark"] .toast { background: var(--slate-100);
 .dot-unverified { background: transparent; border-color: var(--color-text-muted); }
 .map { height: clamp(300px, 52vh, 460px); border-radius: var(--radius-md); border: 1px solid var(--color-border); background: var(--color-bg-secondary); z-index: 0; }
 .map:focus-visible { box-shadow: var(--focus-ring); }
-/* Dark-mode tiles: same OSM raster, CSS-filtered (no second tile set / key) */
-html.dark .leaflet-tile-pane, html[data-theme="dark"] .leaflet-tile-pane { filter: invert(100%) hue-rotate(180deg) saturate(0.7) brightness(0.95); }
-.leaflet-container { font-family: var(--font-sans); background: var(--color-bg-secondary); }
-html.dark .leaflet-bar a, html[data-theme="dark"] .leaflet-bar a { background: var(--slate-800); color: var(--slate-100); border-color: var(--slate-700); }
-html.dark .leaflet-control-attribution, html[data-theme="dark"] .leaflet-control-attribution { background: rgb(15 23 42 / 0.8); color: var(--slate-400); }
-html.dark .leaflet-control-attribution a, html[data-theme="dark"] .leaflet-control-attribution a { color: #93c5fd; }
-html.dark .leaflet-popup-content-wrapper, html[data-theme="dark"] .leaflet-popup-content-wrapper { background: var(--slate-800); color: var(--slate-100); }
-html.dark .leaflet-popup-tip, html[data-theme="dark"] .leaflet-popup-tip { background: var(--slate-800); }
-html.dark .leaflet-popup-content code, html[data-theme="dark"] .leaflet-popup-content code { background: var(--slate-700); }
-.leaflet-popup-content { font-size: var(--text-sm); line-height: 1.5; margin: 12px 16px; }
-.leaflet-popup-content strong { display: block; font-size: var(--text-base); margin-bottom: 2px; }
-.leaflet-popup-content code { font-size: var(--text-xs); background: var(--color-bg-tertiary); padding: 1px 6px; border-radius: var(--radius-sm); }
+/* MapLibre GL: the engine owns its chrome; the page themes the furniture.
+   WebGL draws tiles to a canvas, so the dark-mode tile invert is
+   impossible here — the light OSM basemap stays in dark theme;
+   a dark basemap is a parked follow-up, never a law relaxed. */
+.map .maplibregl-map { font-family: var(--font-sans); background: var(--color-bg-secondary); }
+.map .maplibregl-canvas:focus { outline: 2px solid var(--color-border-focus); outline-offset: 2px; }
+.maplibregl-popup-content { font-size: var(--text-sm); line-height: 1.5; padding: 12px 16px; }
+.maplibregl-popup-content strong { display: block; font-size: var(--text-base); margin-bottom: 2px; }
+.maplibregl-popup-content code { font-size: var(--text-xs); background: var(--color-bg-tertiary); padding: 1px 6px; border-radius: var(--radius-sm); }
+html.dark .maplibregl-popup-content, html[data-theme="dark"] .maplibregl-popup-content { background: var(--slate-800); color: var(--slate-100); }
+html.dark .maplibregl-popup-tip, html[data-theme="dark"] .maplibregl-popup-tip { border-top-color: var(--slate-800); }
+html.dark .maplibregl-popup-content code, html[data-theme="dark"] .maplibregl-popup-content code { background: var(--slate-700); }
+html.dark .maplibregl-ctrl-attrib, html[data-theme="dark"] .maplibregl-ctrl-attrib { background: rgb(15 23 42 / 0.8); color: var(--slate-400); }
+html.dark .maplibregl-ctrl-attrib a, html[data-theme="dark"] .maplibregl-ctrl-attrib a { color: #93c5fd; }
+/* axe link-in-text-block (WCAG 1.4.1): the engine sheet loads at RUNTIME
+   (appended after this sheet) and ships `.maplibregl-ctrl-attrib a { text-
+   decoration: none; }` — an equal-specificity tie loses to whichever sheet
+   loads LAST. Scoping under .map (0,2,1) beats the engine (0,1,1) in any
+   load order: the attribution link is distinguishable by underline, never
+   color alone. */
+.map .maplibregl-ctrl-attrib a { text-decoration: underline; text-underline-offset: 2px; }
 .map-attrib-note { font-size: var(--text-xs); color: var(--color-text-muted); margin: var(--space-2) 0 0; }
 @media print {
   .map-card { display: none; }
@@ -660,8 +669,11 @@ html.dark .leaflet-popup-content code, html[data-theme="dark"] .leaflet-popup-co
 .map-figure select:focus { outline: none; border-color: var(--color-border-focus); box-shadow: var(--focus-ring); }
 .legend-title { font-size: var(--text-xs); font-weight: var(--weight-semibold); text-transform: uppercase; letter-spacing: var(--tracking-wide); color: var(--color-text-muted); align-self: center; }
 .legend-swatch { width: 12px; height: 12px; border-radius: 3px; display: inline-block; border: 1px solid var(--color-border-strong); flex: none; }
-.leaflet-tooltip.palika-tip { font-size: var(--text-xs); padding: 4px 8px; border-radius: var(--radius-sm); box-shadow: var(--shadow-md); }
-.leaflet-tooltip.palika-tip .popup-ne { margin-left: 6px; }
+/* Wave R1: the hover tip is a plain positioned div now (the old engine's
+   tooltip wrapper is gone) — same look, hand-placed at the pointer. */
+.palika-tip { position: absolute; z-index: 4; display: none; pointer-events: none; max-width: 240px; padding: 4px 8px; font-size: var(--text-xs); background: var(--color-surface); border: 1px solid var(--color-border); border-radius: var(--radius-sm); box-shadow: var(--shadow-md); }
+.palika-tip .popup-ne { margin-left: 6px; }
+html.dark .palika-tip, html[data-theme="dark"] .palika-tip { background: var(--slate-800); color: var(--slate-100); border-color: var(--slate-700); }
 
 /* ---- Map overlay toggles (context layers above the figure) ---- */
 .map-overlays { display: flex; align-items: center; gap: var(--space-2); flex-wrap: wrap; }
