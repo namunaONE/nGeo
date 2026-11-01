@@ -168,6 +168,13 @@ for (const r of rows) {
     `${String(r.cls).padEnd(7)} ${r.a11y}/100`,
   );
 }
+// Evidence channel (Wave 4-C): the measured numbers ride out as a notice
+// annotation on EVERY run — green included — so ratchet ceilings are
+// always tuned from fresh evidence, never guessed.
+console.log('::notice::measured: ' + rows.map((r) =>
+  r.page + ' LCP ' + r.lcp + 'ms TBT ' + r.tbt + 'ms CLS ' + r.cls +
+  ' a11y ' + r.a11y + '/100').join(' | '));
+
 console.log(`budgets: LCP <= ${BUDGETS.lcp}ms (aim ${AIMS.lcp}; interim ratchet ceilings per page — see LCP_CEILINGS), TBT <= ${BUDGETS.tbt}ms (aim ${AIMS.tbt}), CLS <= ${BUDGETS.cls} (aim ${AIMS.cls}), a11y = ${BUDGETS.accessibility}/100`);
 
 if (failures.length > 0) {
@@ -178,3 +185,4 @@ if (failures.length > 0) {
   process.exit(1);
 }
 console.log('BUDGETS OK: all pages within the law.');
+

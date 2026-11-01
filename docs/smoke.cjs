@@ -293,16 +293,16 @@ vm.createContext(sandbox);
     assert.ok(pageHtml.includes('skip-link'), page + ' ships a skip link');
     assert.ok(/theme-toggle[^>]*aria-pressed/.test(pageHtml),
       page + ' theme toggle declares aria-pressed');
-    assert.ok(pageHtml.includes('styles.css?v=17'),
-      page + ' bumps the styles cache (v17)');
+    assert.ok(pageHtml.includes('styles.css?v=18'),
+      page + ' bumps the styles cache (v18)');
   }
   const explorerHtml = fs.readFileSync(path.join(ROOT, 'explorer.html'), 'utf8');
   assert.ok(!explorerHtml.includes('role="grid"'),
     'explorer table is a plain table (role="grid" retired)');
   assert.ok(!explorerHtml.includes('role="application"'),
     'map container does not capture screen-reader keys');
-  assert.ok(explorerHtml.includes('app.js?v=19'),
-    'explorer bumps the app cache (v19)');
+  assert.ok(explorerHtml.includes('app.js?v=20'),
+    'explorer bumps the app cache (v20)');
   // Wave 3 (terrain figure): the explorer gains a district elevation
   // choropleth — GLO-30 bands in a lazy-loaded artifact, elevation-aware
   // popups, and a deep-linkable hero button. The gate interpolates the
@@ -472,6 +472,26 @@ vm.createContext(sandbox);
   assert.ok(releaseYml.includes('gh release upload') &&
     releaseYml.includes('docs/palika-boundaries-highres.geojson'),
     'the release workflow publishes the full-resolution source as an asset');
+  // Wave 4 PR C (adaptive & fast): the explorer figure arms at viewport
+  // proximity (deep links arm immediately) instead of booting Leaflet +
+  // boundaries inside the LCP window; Save-Data skips optional prefetch
+  // and the count-up; cards adapt via container queries and the page
+  // prints like a document.
+  assert.ok(appSrc.includes('var _mapArmed = false;') &&
+    appSrc.includes("params.get('cbs') || params.get('metric')") &&
+    appSrc.includes('renderArmedMap'),
+    'the figure arms lazily; deep links arm immediately');
+  assert.ok(appSrc.includes('var SAVE_DATA') &&
+    appSrc.includes('if (!SAVE_DATA) ensureDistrictElevation();') &&
+    appSrc.includes('if (SAVE_DATA) return;'),
+    'Save-Data gates the eager elevation prefetch and the count-up');
+  const stylesCssC = fs.readFileSync(path.join(ROOT, 'styles.css'), 'utf8');
+  assert.ok(stylesCssC.includes('container-type: inline-size') &&
+    stylesCssC.includes('@container'),
+    'cards adapt via container queries');
+  assert.ok(stylesCssC.includes('break-inside: avoid') &&
+    stylesCssC.includes('@page { margin: 1.5cm; }'),
+    'print styles keep rows and cards unbroken');
   const lighthouseYml = fs.readFileSync(
     path.join(ROOT, '..', '.github', 'workflows', 'lighthouse.yml'), 'utf8');
   assert.ok(lighthouseYml.includes('check_budgets.mjs'),
@@ -482,4 +502,5 @@ vm.createContext(sandbox);
   console.error('SMOKE FAILED:', err && err.message ? err.message : err);
   process.exit(1);
 });
+
 
