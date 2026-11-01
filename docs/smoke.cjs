@@ -301,8 +301,8 @@ vm.createContext(sandbox);
     'explorer table is a plain table (role="grid" retired)');
   assert.ok(!explorerHtml.includes('role="application"'),
     'map container does not capture screen-reader keys');
-  assert.ok(explorerHtml.includes('app.js?v=21'),
-    'explorer bumps the app cache (v21)');
+  assert.ok(explorerHtml.includes('app.js?v=22'),
+    'explorer bumps the app cache (v22)');
   // Wave 3 (terrain figure): the explorer gains a district elevation
   // choropleth — GLO-30 bands in a lazy-loaded artifact, elevation-aware
   // popups, and a deep-linkable hero button. The gate interpolates the
@@ -457,9 +457,9 @@ vm.createContext(sandbox);
     budgetsSrc.includes("'/': 2500"),
     'the LCP ratchet declares per-page evidence-based ceilings');
   assert.ok(budgetsSrc.includes('const TBT_CEILINGS = {') &&
-    budgetsSrc.includes("'/explorer.html': 2900") &&
+    budgetsSrc.includes("'/explorer.html': 1900") &&
     budgetsSrc.includes('tbtOk: m.tbt <= (TBT_CEILINGS[page.path]'),
-    'the TBT ratchet declares the MapLibre-era Explorer interim (law unchanged elsewhere)');
+    'the TBT ratchet declares the R2 post-split Explorer interim (law unchanged elsewhere)');
   assert.ok(budgetsSrc.includes('lcpOk: m.lcp <= (LCP_CEILINGS[page.path]'),
     'the LCP gate asserts against the ratchet ceiling');
   assert.ok(budgetsSrc.includes('re-measuring once'),
@@ -572,6 +572,27 @@ vm.createContext(sandbox);
     'styles theme MapLibre chrome; old map-engine rules are retired');
   assert.ok(stylesCssC.includes('.map .maplibregl-ctrl-attrib a { text-decoration: underline'),
     'the engine attribution link is underlined (.map scope beats the runtime-loaded engine sheet) — axe link-in-text-block');
+  // R2 (arm-chain split, walking the budgets toward the law): the
+  // engine half and the data half of the map arm schedule separately —
+  // scroll-arms boot the engine in the first idle slot (deep links stay
+  // immediate), the boundary half idles once more after the basemap
+  // paints, and overlays fetch on first ask instead of preloading
+  // ~2.5 MB of off-by-default GeoJSON at engine boot.
+  assert.ok(appSrc.includes('function scheduleIdle(') &&
+    appSrc.includes('requestIdleCallback'),
+    'the idle scheduler exists and is capability-checked (rIC + timeout, setTimeout fallback)');
+  assert.ok(appSrc.includes('var _mapArmIdle = false;') &&
+    appSrc.includes('function mapEngineReady('),
+    'the arm tracks deep-link (immediate) vs scroll (idle) engine boots');
+  assert.ok(appSrc.includes('scheduleIdle(() => { ensureMap().then(resolve, resolve); })'),
+    'the engine half boots in the first idle slot on a scroll-arm');
+  assert.ok(appSrc.includes('scheduleIdle(() => resolve());'),
+    'the boundary data half idles once more after the basemap paints');
+  assert.ok(appSrc.includes('if (def.enabledByDefault) loadOverlay(def);') &&
+    !appSrc.includes('for (const def of MAP_OVERLAYS) loadOverlay(def)'),
+    'overlays wire eagerly but load only their enabledByDefault set at boot');
+  assert.ok(appSrc.includes('loadOverlay(def, { visible: true })'),
+    'the overlay toggle is the loader — the fetch starts on first ask');
   const lighthouseYml = fs.readFileSync(
     path.join(ROOT, '..', '.github', 'workflows', 'lighthouse.yml'), 'utf8');
   assert.ok(lighthouseYml.includes('check_budgets.mjs'),

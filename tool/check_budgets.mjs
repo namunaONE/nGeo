@@ -48,9 +48,15 @@ const AIMS = { lcp: 1800, tbt: 150, cls: 0.04, accessibility: 100 };
 // the re-measure channel). 5500ms = worst verdict 4789 + ~15% LH-noise
 // headroom, the same policy that set 4800 from 4207 in Wave 4-A.
 // Explorer's LCP is the on-screen map arm chain (engine fetch +
-// boundaries). The law (BUDGETS.lcp = 2500, in AIMS) is never lowered —
-// only approached: the follow-up is cutting the arm chain itself
-// (splitting engine init from boundary setData).
+// boundaries). Re-measured after the R2 arm-chain split (PR #40): the
+// split cut the STACKING (TBT 2509 -> 1615ms) but the verdict LCP read
+// 4776ms — flat vs 4789, because the engine fetch itself still lands
+// inside the LCP window once the idle boot fires. 5500 stands (worst
+// verdict family 4789/4784/4776 + ~15%). The law (BUDGETS.lcp = 2500,
+// in AIMS) is never lowered — only approached: the next lever is
+// taking the engine fetch off the network critical path entirely
+// (self-hosting the pinned engine beside the other first-party
+// assets), then identifying the post-split LCP element.
 const LCP_CEILINGS = {
   '/': 2500,
   '/explorer.html': 5500,
@@ -58,22 +64,40 @@ const LCP_CEILINGS = {
   '/brand.html': 2500,
 };
 
-// Interim TBT ratchet (Wave R1, the MapLibre leap): the law (200ms)
-// stands for every page. Explorer's arm chain measured TBT verdicts
-// 2373ms and 2509ms on PR #33's two CI runs (re-measure channel; the
-// first passes those verdicts replaced read 2733/3416ms — bust-passes
-// correlate with a loaded runner, so the re-measure verdict is the
-// number of record, but it carries noise too). The Leaflet-era
-// baseline was 63ms — the swap traded a 147KB 2D-canvas engine for a
-// 758KB WebGL engine, and the lab (headless Chromium, SwiftShader
-// CPU rasterization) pays the full context-init + parse cost inside
-// the FCP-to-TTI window. 2900ms = worst verdict 2509 + ~15% LH-noise
-// headroom, the same policy as the LCP ratchet. The aim (150ms) and
-// the law (200ms) are never lowered — only approached: the follow-up
-// work is cutting the arm-chain CPU cost (splitting engine init from
-// boundary setData, idle-scheduling the heavy half).
+// Interim TBT ratchet (Wave R1 -> R2, the arm-chain split): the law
+// (200ms) stands for every page. Explorer's arm chain measured TBT
+// verdicts 2373ms and 2509ms on PR #33's two CI runs (re-measure
+// channel; the first passes those verdicts replaced read 2733/3416ms
+// — bust-passes correlate with a loaded runner, so the re-measure
+// verdict is the number of record, but it carries noise too). The
+// Leaflet-era baseline was 63ms — the swap traded a 147KB 2D-canvas
+// engine for a 758KB WebGL engine, and the lab (headless Chromium,
+// SwiftShader CPU rasterization) pays the full context-init + parse
+// cost inside the FCP-to-TTI window.
+// R2 (PR #40, this repo's perf(explorer)/arm-chain-split) cut the
+// stacking: the engine half boots in the first idle slot, the boundary
+// data half idles once more after the basemap paints, and the five
+// off-by-default overlay fetches (~2.5 MB) no longer preload at boot.
+// Fresh clean verdict: 1615ms (PR #40 first head, green under the R1
+// ceiling — no re-measure fired). Two more rides of the SAME runtime
+// payload then measured LOADED shared hosts: first pass 3579ms,
+// re-measure 3467ms, then 3490/2737ms — the R1 bust-pass signature
+// (2733/3416 over verdicts 2373/2509), amplified: the host-level CPU
+// noise swings this page's TBT ~2.2x while its LCP stays pinned
+// (4684-4817 across all five passes). The noise is the shared host
+// itself, not this repo's own jobs: run 1 measured clean WHILE its
+// flutter jobs overlapped the LH passes, so serializing against dart
+// would not tame it. 1900ms = clean verdict 1615 + ~18% LH-noise
+// headroom, the same policy as the LCP ratchet (clean verdicts are
+// the numbers of record; loaded-runner busts are documented noise,
+// not the build). The aim (150ms) and the law (200ms) are never
+// lowered — only approached: the remaining clean-run cost is the
+// pinned engine's own parse + WebGL context init (the honest price of
+// the WebGL engine); the open follow-up is taming the MEASUREMENT
+// (re-riding the host lottery per Hya's 2026-11-01 call, a quieter
+// runner, or a loaded-runner retry policy) — never relaxing the law.
 const TBT_CEILINGS = {
-  '/explorer.html': 2900,
+  '/explorer.html': 1900,
 };
 
 const PAGES = [
