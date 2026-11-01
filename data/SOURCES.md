@@ -300,6 +300,30 @@ Per-record evidence for all 753 palikas is written to
     applied. Adopting a rename needs a Gazette confirmation
     (`doc/REVIEW-codes.md` §8).
 
+## CBS administrative atlas — referenced, not vendored (2026-11-01)
+
+- File: `1695376827_32.pdf` — a 9-page administrative atlas prepared by
+  the GIS Section of the Central Bureau of Statistics (every page:
+  "Prepared by GIS Section, CBS; Map Source: Topographic Zonal Map
+  (1:125,000), Department of Survey"), user-provided 2026-11-01. Maps
+  1–2 index the provinces and districts; Maps 3–9 list every district's
+  palikas with their PDDPP code and an (U)/(R) tag.
+- Provides: a second official printing of the CBS code roster, used as a
+  corroboration audit (doc/REVIEW-codes.md §9): 741/753 exact code
+  agreement with the dataset, 0/741 urban/rural disagreements, and the
+  code adjudications ledger corroborated directly (Bheri Malika (U) at
+  60706). The remaining 12 sit on the Province-2 page whose printed code
+  column OCR-shifted; all are present by name with the correct district
+  and type.
+- Limits: CBS is the issuer of source #5's harvest, so this is the same
+  attestation family — corroborating evidence, never an independent
+  second vote, and never a tier promotion. Licence unstated (no in-file
+  notice; official portals block automated reads), so it is a factual
+  reference, not vendored data — the same treatment as source #7. The
+  old province naming dates the printing between the 2017 restructuring
+  and the ~2023 renames; the filename timestamp (2023-09-22) sits two
+  minutes from the GoN code table's workbook — same origin day.
+
 ## Boundaries — removed (v2.7.2)
 
 Boundary polygons were investigated (`opentechcommunity/map-of-nepal`, 777
