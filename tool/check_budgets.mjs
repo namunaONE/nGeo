@@ -56,11 +56,20 @@ function failingAudits(report) {
     .map((ref) => ref.id)
     .filter((id) => report.audits[id] && report.audits[id].score !== null &&
       report.audits[id].score < 1)
-    .map((id) => ({
-      id,
-      title: report.audits[id].title,
-      detail: report.audits[id].displayValue || '',
-    }));
+    .map((id) => {
+      const items = (report.audits[id].details && report.audits[id].details.items) || [];
+      const nodes = items
+        .slice(0, 3)
+        .map((it) => (it.node && (it.node.snippet || it.node.selector)) || '')
+        .filter(Boolean)
+        .join(' | ');
+      return {
+        id,
+        title: report.audits[id].title,
+        detail: report.audits[id].displayValue || '',
+        nodes,
+      };
+    });
 }
 
 function lcpElement(report) {
@@ -128,7 +137,7 @@ for (const page of PAGES) {
   if (!row.a11yOk) {
     for (const a of failingAudits(report)) {
       console.error(
-        `::error::${page.label} a11y audit failed: ${a.id} — ${a.title}${a.detail ? ' (' + a.detail + ')' : ''}`,
+        `::error::${page.label} a11y audit failed: ${a.id} — ${a.title}${a.detail ? ' (' + a.detail + ')' : ''}${a.nodes ? ' → ' + a.nodes : ''}`,
       );
     }
   }
