@@ -416,6 +416,25 @@ jobs:
           cp bindings/csv/*.csv docs/downloads/
           cp bindings/geojson/*.geojson docs/downloads/
           cp bindings/meta.json docs/downloads/
+      # Wave 4 PR B (payload diet): docs/palika-boundaries-highres.geojson is
+      # the ~40 MB full-resolution source-of-truth for the boundaries package
+      # and its generators — NOT a website asset. The explorer serves the
+      # 476 KB working set plus the 3.2 MB high-detail variant; the full file
+      # ships as a GitHub Release asset (release-geojson.yml) instead.
+      - name: Keep the full-resolution source out of the site artifact
+        run: rm -f docs/palika-boundaries-highres.geojson
+      # The size budget is a feature: nothing heavier than this may leak
+      # into docs/ unnoticed. Baseline after the diet: ~7.3 MB; the 9 MB
+      # ceiling carries headroom for the data files staged above.
+      - name: Enforce the site artifact size budget
+        run: |
+          max=$((9*1024*1024))
+          bytes=$(du -sb docs/ | cut -f1)
+          echo "site artifact: $((bytes/1024/1024)) MB ($bytes bytes); budget: 9 MB"
+          if [ "$bytes" -gt "$max" ]; then
+            echo "::error::site artifact $((bytes/1024/1024)) MB exceeds the 9 MB budget — something heavy leaked into docs/"
+            exit 1
+          fi
       - uses: actions/upload-pages-artifact@v3
         with:
           path: docs/

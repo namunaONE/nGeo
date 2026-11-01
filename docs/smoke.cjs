@@ -456,6 +456,22 @@ vm.createContext(sandbox);
     'the LCP ratchet declares per-page interim ceilings');
   assert.ok(budgetsSrc.includes('lcpOk: lcp <= (LCP_CEILINGS[page.path]'),
     'the LCP gate asserts against the ratchet ceiling');
+  // Wave 4 PR B (payload diet): the ~40 MB full-resolution palika boundary
+  // source stays in the repo (source-of-truth for the boundaries package
+  // and its generators) but never reaches the Pages artifact: the deploy
+  // job drops it, a size budget guards the artifact, and a Release
+  // workflow publishes it as a one-click download instead.
+  const dartYml = fs.readFileSync(
+    path.join(ROOT, '..', '.github', 'workflows', 'dart.yml'), 'utf8');
+  assert.ok(dartYml.includes('rm -f docs/palika-boundaries-highres.geojson'),
+    'deploy-pages keeps the full-resolution source out of the site artifact');
+  assert.ok(dartYml.includes('max=$((9*1024*1024))'),
+    'deploy-pages enforces the 9 MB site artifact size budget');
+  const releaseYml = fs.readFileSync(
+    path.join(ROOT, '..', '.github', 'workflows', 'release-geojson.yml'), 'utf8');
+  assert.ok(releaseYml.includes('gh release upload') &&
+    releaseYml.includes('docs/palika-boundaries-highres.geojson'),
+    'the release workflow publishes the full-resolution source as an asset');
   const lighthouseYml = fs.readFileSync(
     path.join(ROOT, '..', '.github', 'workflows', 'lighthouse.yml'), 'utf8');
   assert.ok(lighthouseYml.includes('check_budgets.mjs'),
