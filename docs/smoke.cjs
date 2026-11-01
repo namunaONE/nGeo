@@ -449,11 +449,13 @@ vm.createContext(sandbox);
     budgetsSrc.includes('accessibility: 100'),
     'the budget law declares the CWV ceilings in check_budgets.mjs');
   // The law is never lowered: LCP pages not yet at 2500ms are gated by
-  // explicit interim ratchet ceilings instead, tightened by Wave 4-C.
+  // explicit interim ratchet ceilings instead — Home now sits AT the law
+  // (measured 2317ms), Explorer stays on an evidence-based interim
+  // (measured 4207ms + ~15% LH noise headroom).
   assert.ok(budgetsSrc.includes('const LCP_CEILINGS = {') &&
-    budgetsSrc.includes("'/explorer.html': 5000") &&
-    budgetsSrc.includes("'/': 3000"),
-    'the LCP ratchet declares per-page interim ceilings');
+    budgetsSrc.includes("'/explorer.html': 4800") &&
+    budgetsSrc.includes("'/': 2500"),
+    'the LCP ratchet declares per-page evidence-based ceilings');
   assert.ok(budgetsSrc.includes('lcpOk: lcp <= (LCP_CEILINGS[page.path]'),
     'the LCP gate asserts against the ratchet ceiling');
   // Wave 4 PR B (payload diet): the ~40 MB full-resolution palika boundary

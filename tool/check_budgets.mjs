@@ -33,14 +33,17 @@ const BUDGETS = {
 const AIMS = { lcp: 1800, tbt: 150, cls: 0.04, accessibility: 100 };
 
 // Interim LCP ratchet (Wave 4-A): measured baseline on the CI runner —
-// Explorer 4573ms (hero subtitle, app.js was render-blocking at end of
-// body; now deferred), Home 2728ms. Per-page ceilings carry ~10-15%
-// LH noise headroom over the baseline; pages already at the law stay
-// at the law. Wave 4-C ships the real LCP work and ratchets these to
-// BUDGETS.lcp — the law is never lowered, only approached.
+// Evidence-based ratchet, updated from PR #30's first measured run
+// (check_budgets `::notice::measured:` channel, 2026-11-01):
+//   Home 2317ms · Explorer 4207ms · API 2196ms · Brand 1503ms.
+// Home, API and Brand sit under the 2500ms law, so they sit AT the law.
+// Explorer's LCP is the on-screen Leaflet arm chain (jsDelivr fetch +
+// 476 KB boundaries); 4800ms = measured 4207 + ~15% LH-noise headroom.
+// The law (BUDGETS.lcp = 2500, in AIMS) is never lowered — only approached:
+// the follow-up LCP work is cutting the arm chain itself.
 const LCP_CEILINGS = {
-  '/': 3000,
-  '/explorer.html': 5000,
+  '/': 2500,
+  '/explorer.html': 4800,
   '/api.html': 2500,
   '/brand.html': 2500,
 };
