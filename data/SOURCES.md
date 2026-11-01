@@ -494,7 +494,11 @@ source) and quality-assured by OCHA FISS.
 - **Previous source (superseded):** sthaniya.gov.np via Acesmndr/nepal-geojson
   (MIT). Used through v2.9.x; replaced by HDX in v2.10.0. The old generator
   (`tool/generate_palika_boundaries.dart`) is retained for reference but no
-  longer used in CI.
+  longer used in CI; the live generator is
+  `tool/generate_palika_boundaries_hdx.dart`. The sthaniya-lineage highres
+  tools (`tool/convert_highres_palikas.js`, the
+  `tool/generate_palika_boundaries_highres*.dart` pair) are retained for
+  reference only, each carrying a superseded banner (2026-11-01).
 
 ## Palika boundary geometry (explorer choropleth)
 

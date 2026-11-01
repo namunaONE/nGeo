@@ -1,5 +1,9 @@
 // tool/convert_highres_palikas.js
 //
+// SUPERSEDED (v2.10.0) — kept for reference. docs/palika-boundaries-highres
+// is COD-AB-derived now (see data/SOURCES.md); this sthaniya.gov.np
+// converter is the pre-v2.10.0 lineage.
+//
 // Converts highres-geojson (Acesmndr/nepal-geojson, scraped from sthaniya.gov.np)
 // into a cleaned GeoJSON FeatureCollection of 753 palika MultiPolygons.
 //

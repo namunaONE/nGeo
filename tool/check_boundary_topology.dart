@@ -31,7 +31,7 @@ const int expectedRows = 753;
 // own boundary has the wrong geometry.
 // Area roll-up tolerance: sum of palika areas in a district vs the district
 // official areaSqKm. The two come from different sources (boundaries from
-// sthaniya.gov.np, areaSqKm from sagautam5) and legitimately differ where
+// HDX COD-AB (Survey Dept), areaSqKm from sagautam5) and differ
 // the district contains protected areas not in palika boundaries (e.g.
 // Chitwan NP, Bardiya NP). A > 50% gap is almost certainly corrupt data
 // rather than a source difference, so that is the fail threshold; everything

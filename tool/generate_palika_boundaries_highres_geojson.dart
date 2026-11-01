@@ -1,17 +1,21 @@
-// tool/generate_palika_boundaries_highres.dart
+// tool/generate_palika_boundaries_highres_geojson.dart
 //
-// Regenerates lib/src/geo/palika_boundaries.dart from the high-resolution
-// palika boundary GeoJSON (docs/palika-boundaries-highres.geojson, scraped
-// from sthaniya.gov.np via Acesmndr/nepal-geojson, MIT license).
+// SUPERSEDED (v2.10.0) — kept for reference. The high-resolution explorer
+// layer is COD-AB-derived now (see data/SOURCES.md); the sthaniya.gov.np
+// lineage narrated by the old header ended with v2.9.x.
+//
+// Re-emits docs/palika-boundaries-highres.geojson as the roster-joined
+// mid-detail FeatureCollection docs/palika-boundaries-highres-mid.geojson
+// (Douglas-Peucker eps = 0.001), with districtId, provinceId, type and
+// nameNe properties taken from the roster.
 //
 // Matching: each roster palika centroid (lat/lng) is tested against every
 // highres palika boundary using point-in-polygon (ray casting). Name
 // matching (Levenshtein <= 3) is used as fallback.
 //
-// Output: lib/src/geo/palika_boundaries.dart ÃƒÆ’Ã†â€™Ãƒâ€šÃ‚Â¢ÃƒÆ’Ã‚Â¢ÃƒÂ¢Ã¢â€šÂ¬Ã…Â¡Ãƒâ€šÃ‚Â¬ÃƒÆ’Ã‚Â¢ÃƒÂ¢Ã¢â‚¬Å¡Ã‚Â¬Ãƒâ€šÃ‚Â palika boundaries encoded
-// as compact strings (format version 1, see palika_boundary_codec.dart).
-// Size gate: refuses to emit if >= 100 KB.
-
+// Output: docs/palika-boundaries-highres-mid.geojson. (The previous
+// header misnamed this file and its output — a copy-paste from the
+// sibling tool.)
 import 'dart:convert';
 import 'dart:io';
 
