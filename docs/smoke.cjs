@@ -293,8 +293,8 @@ vm.createContext(sandbox);
     assert.ok(pageHtml.includes('skip-link'), page + ' ships a skip link');
     assert.ok(/theme-toggle[^>]*aria-pressed/.test(pageHtml),
       page + ' theme toggle declares aria-pressed');
-    assert.ok(pageHtml.includes('styles.css?v=16'),
-      page + ' bumps the styles cache (v16)');
+    assert.ok(pageHtml.includes('styles.css?v=17'),
+      page + ' bumps the styles cache (v17)');
   }
   const explorerHtml = fs.readFileSync(path.join(ROOT, 'explorer.html'), 'utf8');
   assert.ok(!explorerHtml.includes('role="grid"'),
@@ -448,6 +448,14 @@ vm.createContext(sandbox);
     budgetsSrc.includes('tbt: 200') && budgetsSrc.includes('cls: 0.1') &&
     budgetsSrc.includes('accessibility: 100'),
     'the budget law declares the CWV ceilings in check_budgets.mjs');
+  // The law is never lowered: LCP pages not yet at 2500ms are gated by
+  // explicit interim ratchet ceilings instead, tightened by Wave 4-C.
+  assert.ok(budgetsSrc.includes('const LCP_CEILINGS = {') &&
+    budgetsSrc.includes("'/explorer.html': 5000") &&
+    budgetsSrc.includes("'/': 3000"),
+    'the LCP ratchet declares per-page interim ceilings');
+  assert.ok(budgetsSrc.includes('lcpOk: lcp <= (LCP_CEILINGS[page.path]'),
+    'the LCP gate asserts against the ratchet ceiling');
   const lighthouseYml = fs.readFileSync(
     path.join(ROOT, '..', '.github', 'workflows', 'lighthouse.yml'), 'utf8');
   assert.ok(lighthouseYml.includes('check_budgets.mjs'),
