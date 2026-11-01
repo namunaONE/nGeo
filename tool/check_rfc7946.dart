@@ -101,8 +101,7 @@ bool samePosition(dynamic a, dynamic b) {
 
 /// Validates one position - [lon, lat] or [lon, lat, elevation] - and
 /// folds it into the extent.
-void checkPosition(
-    String file, dynamic position, String where, Extent extent) {
+void checkPosition(String file, dynamic position, String where, Extent extent) {
   if (position is! List || position.length < 2) {
     fail(file, '$where: position is not a [lon, lat] pair.');
     return;
@@ -128,7 +127,9 @@ void checkPosition(
     fail(file, '$where: [$lon, $lat] is outside the WGS84 ranges.');
     return;
   }
-  if (lon < nepalMinLon || lon > nepalMaxLon || lat < nepalMinLat ||
+  if (lon < nepalMinLon ||
+      lon > nepalMaxLon ||
+      lat < nepalMinLat ||
       lat > nepalMaxLat) {
     fail(file, '$where: [$lon, $lat] is outside the Nepal band.');
     return;
@@ -176,7 +177,8 @@ void checkLine(String file, dynamic line, String where, Extent extent) {
 }
 
 /// MultiPoint and validated LineString position lists.
-void checkEachPosition(String file, dynamic list, String where, Extent extent) {
+void checkEachPosition(
+    String file, dynamic list, String where, Extent extent) {
   if (list is! List) {
     fail(file, '$where: coordinates is not a list.');
     return;
