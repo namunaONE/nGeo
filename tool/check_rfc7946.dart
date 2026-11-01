@@ -415,8 +415,7 @@ int findRootCrsKey(String text) {
       while (j < text.length && isWhitespace(text[j])) {
         j++;
       }
-      if (depth == 1 && j < text.length && text[j] == ':' &&
-          key == '"crs"') {
+      if (depth == 1 && j < text.length && text[j] == ':' && key == '"crs"') {
         return start;
       }
     }
