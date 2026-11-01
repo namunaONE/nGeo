@@ -375,30 +375,83 @@ void checkFile(String path) {
   filesChecked++;
 }
 
+/// The whitespace the strip walks over (never a regex: the exact
+/// bytes matter, and so does staying parser-free).
+bool isWhitespace(String char) {
+  return char == ' ' || char == '\n' || char == '\r' || char == '\t';
+}
+
+/// Finds the offset of the collection-level "crs" key: the member
+/// the gate bans. The scan is string-aware (escaped quotes are
+/// skipped) and depth-aware, so a "crs" note inside metadata or a
+/// feature - prose at object depth 2 or deeper, perfectly legal -
+/// can never masquerade as the root member.
+/// bindings/geojson/districts.elevation.geojson documents its CRS
+/// exactly that way, and the first strip run aborted on it because a
+/// naive first-occurrence search cannot tell the two apart. Returns
+/// -1 when the file carries no root-level member.
+int findRootCrsKey(String text) {
+  var depth = 0;
+  var i = 0;
+  while (i < text.length) {
+    final char = text[i];
+    if (char == '{') {
+      depth++;
+    } else if (char == '}') {
+      depth--;
+    } else if (char == '"') {
+      final start = i;
+      i++;
+      while (i < text.length && text[i] != '"') {
+        if (text[i] == '\\') {
+          i++;
+        }
+        i++;
+      }
+      final key = text.substring(start, i + 1);
+      i++;
+      var j = i;
+      while (j < text.length && isWhitespace(text[j])) {
+        j++;
+      }
+      if (depth == 1 && j < text.length && text[j] == ':' &&
+          key == '"crs"') {
+        return start;
+      }
+    }
+    i++;
+  }
+  return -1;
+}
+
 /// Removes the collection-level legacy "crs" member, keeping every
-/// other byte untouched: the member sits before "features", so the
-/// walk never enters a feature payload, and a 40 MB artifact keeps a
-/// one-line diff. Only the converter shape ever seen here - member
-/// followed by a comma - is handled; anything else aborts rather
-/// than guess. Returns the healed text, or null when there is
+/// other byte untouched: a 40 MB artifact keeps a one-line diff, and
+/// prose "crs" notes inside foreign members stay where they are.
+/// Only the converter shape ever seen here is handled - an object
+/// value, separated like a proper member - anything else aborts
+/// rather than guess. Returns the healed text, or null when there is
 /// nothing to strip.
 String? stripRootCrs(String path, String text) {
-  final key = text.indexOf('"crs"');
+  final key = findRootCrsKey(text);
   if (key < 0) {
     return null;
   }
-  final features = text.indexOf('"features"');
-  if (features >= 0 && key > features) {
-    return null; // Not the collection-level member.
-  }
   var start = key;
-  while (start > 0 && (text[start - 1] == ' ' || text[start - 1] == '\t')) {
+  while (start > 0 && isWhitespace(text[start - 1])) {
     start--;
   }
-  final open = text.indexOf('{', key);
-  if (open < 0) {
-    _abort('$path: "crs" member has no object value.');
+  var value = key;
+  while (value < text.length && text[value] != ':') {
+    value++;
   }
+  value++;
+  while (value < text.length && isWhitespace(text[value])) {
+    value++;
+  }
+  if (value >= text.length || text[value] != '{') {
+    _abort('$path: "crs" member is not an object value - fix by hand.');
+  }
+  final open = value;
   var depth = 0;
   var close = -1;
   for (var i = open; i < text.length; i++) {
@@ -416,17 +469,23 @@ String? stripRootCrs(String path, String text) {
     _abort('$path: "crs" member value is not closed.');
   }
   var end = close + 1;
-  while (end < text.length && (text[end] == ' ' || text[end] == '\t')) {
+  while (end < text.length && isWhitespace(text[end])) {
     end++;
   }
-  if (end >= text.length || text[end] != ',') {
-    _abort('$path: "crs" member not followed by a comma - fix by hand.');
-  }
-  while (end < text.length && text[end] != '\n') {
-    end++;
-  }
-  if (end < text.length) {
-    end++; // Swallow the newline so no blank line remains.
+  if (end < text.length && text[end] == ',') {
+    // The member is followed by a comma: cut through the end of its
+    // line so no blank line remains.
+    while (end < text.length && text[end] != '\n') {
+      end++;
+    }
+    if (end < text.length) {
+      end++;
+    }
+  } else if (start > 0 && text[start - 1] == ',') {
+    // Last member: the separator comma sits in front of it.
+    start--;
+  } else {
+    _abort('$path: "crs" member shape is unexpected - fix by hand.');
   }
   final healed = text.replaceRange(start, end, '');
   dynamic root;
