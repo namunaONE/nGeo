@@ -1,0 +1,131 @@
+name: COD-AB snapshot fetch
+
+# The one-click "get the latest upstream bytes" job (workflow_dispatch
+# only). cod-ab-watch.yml DETECTS upstream movement and files an issue;
+# THIS workflow goes one step further: it downloads the live HDX
+# resources on a GitHub runner — which can reach data.humdata.org even
+# when local/sandboxed networks are blocked — and publishes them as
+# run artifacts with a sha256 manifest, so the human refresh decision
+# (re-download -> re-review -> regenerate -> re-pin) starts from
+# verified fresh bytes instead of a flaky hotel network.
+#
+# Law, unchanged: nothing is committed, nothing is auto-accepted. The
+# artifacts are INPUT to the human data PR, never a substitute for it.
+# Artifacts expire after 30 days — re-run the workflow to refresh them.
+
+on:
+  workflow_dispatch:
+    inputs:
+      datasets:
+        description: 'HDX dataset ids to snapshot (one per line)'
+        required: false
+        default: |
+          cod-ab-npl
+          cod-em-npl
+
+permissions:
+  contents: read
+
+concurrency:
+  group: cod-ab-fetch
+  cancel-in-progress: false
+
+jobs:
+  fetch:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Snapshot the live HDX datasets
+        run: |
+          set -euo pipefail
+          mkdir -p snapshot
+          echo "${{ inputs.datasets }}" > datasets.txt
+          # The pinned review state (data/SOURCES.md sources #9/#10):
+          # COD-AB v02 licence CC BY-IGO, live metadata_modified
+          # 2026-08-14 as observed at the 2026-10-30 review. Printed
+          # next to the live values so drift is visible at a glance.
+          pinned_cod_ab_modified='2026-08-14'
+          pinned_cod_ab_license='cc-by-igo'
+          : > hdx-snapshot-manifest.json
+          echo '[' > manifest.tmp.json
+          first=1
+          while IFS= read -r ds; do
+            [ -n "$ds" ] || continue
+            echo "=== $ds ==="
+            curl -fsSL --retry 3 --retry-delay 5 \
+              "https://data.humdata.org/api/3/action/package_show?id=$ds" \
+              -o "meta-$ds.json"
+            jq -e '.success == true' "meta-$ds.json" > /dev/null
+            license="$(jq -r '.result.license_id // "none"' "meta-$ds.json")"
+            modified="$(jq -r '.result.metadata_modified // "none"' "meta-$ds.json")"
+            echo "license_id: $license"
+            echo "metadata_modified: $modified"
+            if [ "$ds" = "cod-ab-npl" ]; then
+              if [ "$license" = "$pinned_cod_ab_license" ] && [ "$modified" = "$pinned_cod_ab_modified" ]; then
+                echo "vs pinned: NO drift (licence + metadata_modified match the pinned review)."
+              else
+                echo "vs pinned: DRIFT — live licence '$license' (pinned $pinned_cod_ab_license), live metadata_modified '$modified' (pinned $pinned_cod_ab_modified). This snapshot is the fresh upstream."
+              fi
+            fi
+            jq -r '.result.resources[] | [.id, (.format // "bin"), .url] | @tsv' "meta-$ds.json" \
+            | while IFS=$'\t' read -r rid rfmt rurl; do
+              slug="$(printf '%s' "$rid" | tr ' ' '_' | tr -cd 'A-Za-z0-9._-')"
+              ext="$(printf '%s' "$rfmt" | tr '[:upper:]' '[:lower:]')"
+              out="snapshot/${ds}__${slug}.${ext}"
+              echo "downloading $rid ($rfmt) -> $out"
+              curl -fSL --retry 3 --retry-delay 5 "$rurl" -o "$out"
+            done
+            # Manifest entry: dataset + licence + freshness + every
+            # downloaded file with its size and sha256, so the review
+            # can cite exact bytes without re-downloading anything.
+            jq -n \
+              --arg ds "$ds" \
+              --arg license "$license" \
+              --arg modified "$modified" \
+              --argjson resources "$(jq '[.result.resources[] | {id, name, format, url, size, last_modified}]' "meta-$ds.json")" \
+              --argjson files "$(jq -Rn '[inputs]' <<< "" 2>/dev/null || echo '[]')" \
+              '{dataset: $ds, license: $license, metadata_modified: $modified, resources: $resources}' \
+              > "entry-$ds.json"
+            jq --slurpfile e "entry-$ds.json" '. + $e[0]' manifest.tmp.json > manifest.tmp2.json 2>/dev/null || true
+            if [ "$first" = "1" ]; then
+              cp "entry-$ds.json" manifest.first.json
+              first=0
+            fi
+          done < datasets.txt
+          # Assemble the final manifest (dataset entries + sha256 of
+          # every downloaded file, computed locally — trust the bytes
+          # we have, not the transport).
+          node - <<'EOF'
+          const fs = require('fs');
+          const crypto = require('crypto');
+          const ids = fs.readFileSync('datasets.txt', 'utf8').split('\n').filter(Boolean);
+          const manifest = { fetched_at_utc: new Date().toISOString(), datasets: [] };
+          for (const ds of ids) {
+            const meta = JSON.parse(fs.readFileSync('meta-' + ds + '.json', 'utf8')).result;
+            manifest.datasets.push({
+              dataset: ds,
+              license_id: meta.license_id,
+              metadata_modified: meta.metadata_modified,
+              dataset_source: meta.dataset_source || null,
+              resources: (meta.resources || []).map(r => ({ id: r.id, name: r.name, format: r.format, url: r.url, size: r.size, last_modified: r.last_modified || r.revision_last_updated || null })),
+            });
+          }
+          manifest.files = [];
+          for (const f of fs.readdirSync('snapshot').sort()) {
+            const buf = fs.readFileSync('snapshot/' + f);
+            manifest.files.push({ file: 'snapshot/' + f, bytes: buf.length, sha256: crypto.createHash('sha256').update(buf).digest('hex') });
+          }
+          fs.writeFileSync('hdx-snapshot-manifest.json', JSON.stringify(manifest, null, 2));
+          console.log('manifest: ' + manifest.files.length + ' files, ' + manifest.files.reduce((a, f) => a + f.bytes, 0) + ' bytes total');
+          EOF
+          cat hdx-snapshot-manifest.json
+
+      - name: Upload the snapshot artifacts
+        uses: actions/upload-artifact@v4
+        with:
+          name: hdx-cod-snapshot
+          path: |
+            snapshot/
+            hdx-snapshot-manifest.json
+            meta-*.json
+          retention-days: 30
+          if-no-files-found: error
