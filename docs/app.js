@@ -216,6 +216,27 @@ function initExplorer() {
   // Bump when data.json shape changes.
   const DATA_URL = 'data.json?v=4';
 
+  // Loading skeleton (Wave 3 PR B): the table is born empty while
+  // data.json loads; give waiting eyes the final shape (8 columns,
+  // page-sized rows, muted pulse) instead of a blank panel. Replaced
+  // whole by the first renderTable/error; rows are aria-hidden so
+  // screen readers never hear "loading"; the stats strip stays empty
+  // (it is a live region — announcing a skeleton would be noise).
+  renderTableSkeleton();
+
+  function renderTableSkeleton() {
+    const widths = ['62', '34', '48', '44', '58', '44', '48', '32'];
+    let html = '';
+    for (let r = 0; r < 10; r++) {
+      html += '<tr class="skeleton-row" aria-hidden="true">';
+      for (const w of widths) {
+        html += '<td><span class="skeleton" style="width:' + w + '%"></span></td>';
+      }
+      html += '</tr>';
+    }
+    tableBody.innerHTML = html;
+  }
+
   // The elevation metric and its popups ride a separate lazy artifact;
   // kick the fetch off early so bands are usually ready before a
   // visitor ever switches the figure.
@@ -389,7 +410,24 @@ function initExplorer() {
     }
   function renderTable(pageData) {
     if (pageData.length === 0) {
-      tableBody.innerHTML = '<tr><td colspan="8" style="text-align:center; padding: 48px; color: var(--color-text-muted);">No matching records</td></tr>';
+      // Empty state (Wave 3 PR B): say it, explain it, offer the way
+      // out — a plain "No matching records" cell leaves the visitor
+      // stuck with the filters that caused it.
+      tableBody.innerHTML = `<tr><td colspan="8" class="empty-state-cell">
+        <div class="empty-state-title">No matching records</div>
+        <div class="empty-state-hint">Search matches English and देवनागरी names — try fewer letters, or loosen a filter.</div>
+        <button class="btn btn-secondary btn-sm" id="reset-filters" type="button">Reset filters</button>
+      </td></tr>`;
+      const reset = document.getElementById('reset-filters');
+      if (reset) {
+        reset.addEventListener('click', () => {
+          searchInput.value = '';
+          provinceFilter.value = '';
+          districtFilter.value = '';
+          typeFilter.value = '';
+          applyFilters();
+        });
+      }
     } else {
       tableBody.innerHTML = pageData.map(item => `
         <tr data-cbs="${item.cbsCode ?? ''}" data-lat="${item.lat ?? ''}" data-lng="${item.lng ?? ''}" data-name="${escapeHtml(item.name)}" tabindex="0" title="${item.lat != null ? 'Click to locate on map' : 'No coordinates available'}">
@@ -824,6 +862,24 @@ var MAP_OVERLAYS = [
       '<br>Kakarbhitta (Jhapa) — Bhim Datta (Kanchanpur) · ~1,047 km' +
       '<br><span style="color:#64748b;font-size:12px">Geometry: OpenStreetMap (ODbL 1.0) — © OpenStreetMap contributors</span>',
   },
+  // Wave 3 PR B — district boundaries. All 77 districts from the official
+  // portal district boundary export (Survey Department of Nepal /
+  // National Geoportal lineage, WGS 84), vendored same-origin as
+  // docs/district-boundaries.geojson — the same geometry the Dart
+  // package tests against (tool/generate_district_boundaries.dart
+  // re-derives lib/src/geo/district_boundaries.dart from it). Off by
+  // default: dashed stone lines — administrative context above the
+  // figure, never a competitor to it. Tooltips and popups quote the
+  // GLO-30 elevation bands when the elevation artifact has landed.
+  {
+    id: 'district-boundaries',
+    label: 'District boundaries (77)',
+    urls: ['district-boundaries.geojson?v=1'],
+    enabledByDefault: false,
+    style: { color: '#57534E', weight: 1.2, opacity: 0.85, fill: false, dashArray: '4 3' },
+    tooltip: (feature) => districtBoundaryTip(feature),
+    popup: (feature) => districtBoundaryPopup(feature),
+  },
 ];
 var _overlayLayers = {};  // id -> { def, layer, loaded, visible, ready }
 var _overlaysInited = false;
@@ -1002,6 +1058,35 @@ function setBoundaryDetail(high) {
   resetBoundaryState();
   const items = _lastMapItems || (window.__explorerAll && window.__explorerAll()) || [];
   syncMap(items);
+}
+
+// District overlay (Wave 3 PR B): quiet stone lines with bilingual
+// tooltips and a popup that quotes the roster (HQ, province) plus the
+// GLO-30 elevation bands when they have landed.
+function districtBoundaryTip(feature) {
+  const p = feature.properties || {};
+  let html = '<strong>' + escapeHtmlAttr(p.nameEn || '') + '</strong>';
+  if (p.nameNe) html += '<span class="popup-ne" lang="ne">' + escapeHtmlAttr(p.nameNe) + '</span>';
+  return html;
+}
+
+function districtBoundaryPopup(feature) {
+  const p = feature.properties || {};
+  let html = '<strong>' + escapeHtmlAttr(p.nameEn || 'District') + '</strong>';
+  if (p.nameNe) html += '<span class="popup-ne" lang="ne">' + escapeHtmlAttr(p.nameNe) + '</span>';
+  if (p.hq) html += '<br>HQ: ' + escapeHtmlAttr(p.hq);
+  if (p.provinceCode) html += ' · Province ' + escapeHtmlAttr(String(p.provinceCode));
+  const elev = _districtElev && _districtElev[p.nameEn];
+  if (elev) {
+    html += '<br><span style="color:#64748b;font-size:12px">Rises from ' +
+      elev.elevMin.toLocaleString('en-US') + ' m to ' +
+      elev.elevMax.toLocaleString('en-US') +
+      ' m above sea level (mean ~' +
+      elev.elevMean.toLocaleString('en-US') +
+      ' m · Copernicus GLO-30)</span>';
+  }
+  html += '<br><span style="color:#64748b;font-size:12px">Boundary: Survey Department of Nepal / National Geoportal</span>';
+  return html;
 }
 
 // Shared popup for boundaries and dots, so both views tell the same story.

@@ -639,4 +639,18 @@ html.dark .leaflet-popup-content code, html[data-theme="dark"] .leaflet-popup-co
   .hero-actions .btn { flex: 1 1 100%; }
 }
 
+/* ---- Loading skeleton + empty state (Wave 3 PR B) ---- */
+/* The skeleton is honest structure (it matches the table's 8 columns),
+   muted ink, one slow pulse; reduced-motion gets a static grey.
+   Rows are aria-hidden in JS — a skeleton must never be announced. */
+.skeleton { display: inline-block; height: 14px; border-radius: var(--radius-sm); background: var(--color-border); animation: skeleton-pulse 1.6s ease-in-out infinite; }
+.skeleton-row td { padding: 14px 12px; }
+@keyframes skeleton-pulse { 0%, 100% { opacity: 1; } 50% { opacity: 0.45; } }
+@media (prefers-reduced-motion: reduce) { .skeleton { animation: none; } }
+
+.empty-state-cell { text-align: center; padding: 48px 24px; }
+.empty-state-title { color: var(--color-text); font-weight: 600; margin-bottom: 8px; }
+.empty-state-hint { color: var(--color-text-muted); font-size: 0.875rem; margin-bottom: 16px; }
+
+
 

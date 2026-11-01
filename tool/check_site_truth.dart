@@ -136,6 +136,10 @@ void main() {
     need('docs/sitemap.xml', '<loc>$page</loc>', 'the sitemap to list $page');
   }
   need('docs/explorer.html', 'v$version', 'the footer to say v$version');
+  need(
+      'docs/explorer.html',
+      'District boundaries: Survey Department of Nepal / National Geoportal',
+      'the district overlay attribution to name its source');
   need('docs/api.html', 'v$version', 'the footer to say v$version');
   need('docs/llms.txt', 'v$version', 'the version to be v$version');
   need('docs/llms.txt', 'nepal_admin_api: ^$version',
