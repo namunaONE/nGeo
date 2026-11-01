@@ -1075,7 +1075,8 @@ var _overlaysInited = false;
 //     tooltip: fn(feature) -> html (pre-escaped), popup: fn(feature) -> html }
 // The loader below uses the same fallback-chain pattern as
 // PALIKA_BOUNDARIES_URLS; an unfetchable overlay never breaks the map —
-// it degrades to a disabled "(unavailable)" toggle.
+// R2 lazy overlays: an unloaded overlay is a checked-away, retryable
+// toggle (its fetch re-arms on the next ask), never a boot-time cost.
 
 function setMapMetric(metric) {
   if (metric !== 'dots' && !MAP_METRICS[metric]) return;
