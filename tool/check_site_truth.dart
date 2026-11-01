@@ -180,7 +180,8 @@ void main() {
       'expected $districts districts, found ${elevation.length}.');
   for (final row in elevation) {
     final e = row as Map<String, dynamic>;
-    check(e['elevMin'] is int && e['elevMean'] is int && e['elevMax'] is int,
+    check(
+        e['elevMin'] is int && e['elevMean'] is int && e['elevMax'] is int,
         'docs/district-elevation.json',
         '${e['district']} is missing integer elevation values.');
     final lo = e['elevMin'] as int;

@@ -78,8 +78,8 @@ void main() {
   final elevFile = File('bindings/geojson/districts.elevation.geojson');
   final elevSource = elevFile.readAsStringSync();
   final elevGeo = jsonDecode(elevSource) as Map<String, dynamic>;
-  final elevFeatures = (elevGeo['features'] as List)
-      .cast<Map<String, dynamic>>();
+  final elevFeatures =
+      (elevGeo['features'] as List).cast<Map<String, dynamic>>();
   final elevRows = <Map<String, dynamic>>[];
   for (final feature in elevFeatures) {
     final props = feature['properties'] as Map<String, dynamic>;
