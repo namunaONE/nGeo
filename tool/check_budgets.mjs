@@ -98,10 +98,11 @@ const LCP_CEILINGS = {
 // would not tame it. 1900ms = clean verdict 1615 + ~18% LH-noise
 // headroom, the same policy as the LCP ratchet (clean verdicts are
 // the numbers of record; loaded-runner busts are documented noise,
-// not the build). R3's two CI heads (engine vendored same-origin)
-// rode the loaded lottery again: 3814/3980 then 4139/2494 — the
-// signature holds; no clean host landed in either re-measure. The
-// aim (150ms) and the law (200ms) are never
+// not the build). R3's CI rides (engine vendored same-origin)
+// drew loaded hosts three times running: 3814/3980, 4139/2494,
+// then 3401/2774 — the signature holds; no clean host landed in any
+// re-measure (Hya's standing call: re-ride the lottery, never relax).
+// The aim (150ms) and the law (200ms) are never
 // lowered — only approached: the remaining clean-run cost is the
 // pinned engine's own parse + WebGL context init (the honest price of
 // the WebGL engine); the open follow-up is taming the MEASUREMENT
