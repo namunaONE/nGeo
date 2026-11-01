@@ -1,0 +1,89 @@
+name: Vendor the pinned MapLibre engine
+
+# R3 (self-host the engine): the explorer boots the pinned maplibre-gl
+# UMD (v5.6.0 -- the last UMD dist; v6+ ships ESM-only, unusable from a
+# plain script tag) at map-arm time, and until now it fetched the 758 KB
+# engine + its stylesheet from unpkg.com. Third-party hosting puts DNS +
+# TLS + the download on the arm's critical path and couples the site to
+# unpkg's availability. This workflow vendors the pinned dist into
+# docs/vendor/ so the site is first-party end to end. Binaries are born
+# in CI (the fetch-fonts pattern): the bytes never pass through an
+# agent's hands.
+#
+# The chain of trust, in order:
+#   1. the npm tarball for the EXACT pinned version is fetched from
+#      registry.npmjs.org and verified against the sha512 integrity
+#      recorded there at pin time (2026-11-01);
+#   2. dist/maplibre-gl.js + dist/maplibre-gl.css are extracted from
+#      that verified tarball byte-identical;
+#   3. the bot commit message records their sha256 + sizes so the
+#      follow-up commit can pin them in dart.yml (the vendored-engine
+#      integrity gate), where every CI run re-asserts them forever.
+#
+# Vendoring a NEW engine pin is a human decision, the same law as the
+# COD-AB watch: bump the version + the integrity pin here, let this run
+# commit the fresh dist, then update the dart.yml sha256 pins during
+# review. Upstream movement is never auto-accepted.
+
+on:
+  workflow_dispatch:
+  push:
+    branches-ignore: [main]
+    paths: ['.github/workflows/vendor-maplibre.yml']
+
+permissions:
+  contents: write
+
+concurrency:
+  group: vendor-maplibre
+  cancel-in-progress: true
+
+jobs:
+  vendor:
+    runs-on: ubuntu-24.04
+    steps:
+      - uses: actions/checkout@v5
+      - name: Fetch the pinned tarball and verify its npm integrity
+        run: |
+          set -euo pipefail
+          curl -fsSL -o /tmp/maplibre-gl-5.6.0.tgz \
+            https://registry.npmjs.org/maplibre-gl/-/maplibre-gl-5.6.0.tgz
+          expected='7TuHMozUC4rlIp08bSsxCixFn18P24otrlZU/7UGCO5RufFTJadFzauTrvBHr9FB67MbJ6nvFXEftGd0bUl4Iw=='
+          got=$(openssl dgst -sha512 -binary < /tmp/maplibre-gl-5.6.0.tgz | openssl base64 -A)
+          if [ "$got" != "$expected" ]; then
+            echo "::error::npm tarball integrity mismatch for maplibre-gl@5.6.0 (got sha512-$got)"
+            exit 1
+          fi
+          echo "tarball integrity verified: sha512-$got"
+      - name: Extract the pinned dist into docs/vendor/
+        run: |
+          set -euo pipefail
+          mkdir -p docs/vendor /tmp/pkg
+          tar -xzf /tmp/maplibre-gl-5.6.0.tgz -C /tmp/pkg
+          cp /tmp/pkg/package/dist/maplibre-gl.js  docs/vendor/maplibre-gl-5.6.0.js
+          cp /tmp/pkg/package/dist/maplibre-gl.css docs/vendor/maplibre-gl-5.6.0.css
+          js_sha=$(sha256sum docs/vendor/maplibre-gl-5.6.0.js  | cut -d' ' -f1)
+          css_sha=$(sha256sum docs/vendor/maplibre-gl-5.6.0.css | cut -d' ' -f1)
+          js_size=$(stat -c%s docs/vendor/maplibre-gl-5.6.0.js)
+          css_size=$(stat -c%s docs/vendor/maplibre-gl-5.6.0.css)
+          echo "js  sha256 $js_sha ($js_size bytes)"
+          echo "css sha256 $css_sha ($css_size bytes)"
+          echo "VENDOR_JS_SHA256=$js_sha" >> "$GITHUB_ENV"
+          echo "VENDOR_JS_SIZE=$js_size" >> "$GITHUB_ENV"
+          echo "VENDOR_CSS_SHA256=$css_sha" >> "$GITHUB_ENV"
+          echo "VENDOR_CSS_SIZE=$css_size" >> "$GITHUB_ENV"
+      - name: Commit the vendored engine (bot, [skip ci])
+        run: |
+          set -euo pipefail
+          git add docs/vendor/
+          if git diff --cached --quiet; then
+            echo "vendored engine already up to date"
+            exit 0
+          fi
+          git config user.name 'github-actions[bot]'
+          git config user.email '41898282+github-actions[bot]@users.noreply.github.com'
+          git commit -m 'chore(site): vendor the pinned maplibre-gl@5.6.0 dist into docs/vendor/ [skip ci]' \
+            -m 'tarball integrity verified: sha512-7TuHMozUC4rlIp08bSsxCixFn18P24otrlZU/7UGCO5RufFTJadFzauTrvBHr9FB67MbJ6nvFXEftGd0bUl4Iw==' \
+            -m "docs/vendor/maplibre-gl-5.6.0.js  sha256 $VENDOR_JS_SHA256 ($VENDOR_JS_SIZE bytes)" \
+            -m "docs/vendor/maplibre-gl-5.6.0.css sha256 $VENDOR_CSS_SHA256 ($VENDOR_CSS_SIZE bytes)"
+          git push
