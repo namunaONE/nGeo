@@ -494,6 +494,24 @@ vm.createContext(sandbox);
   assert.ok(releaseYml.includes('protomaps/go-pmtiles') &&
     releaseYml.includes('palika-boundaries.pmtiles'),
     'the release workflow archives the boundaries as PMTiles');
+  // Track 3 (COD-AB upstream watch): the pinned HDX COD-AB dataset
+  // (data/SOURCES.md source #9, v02 reviewed 2025-10-30, licence
+  // CC BY-IGO) can be re-published upstream without notice - the live
+  // metadata_modified already read 2026-08-14 at the 2026-10-30
+  // review. The watch polls HDX weekly and files an issue on any
+  // licence or metadata change; a refresh stays a human decision,
+  // never auto. Structural pins only.
+  const codAbWatchYml = fs.readFileSync(
+    path.join(ROOT, '..', '.github', 'workflows', 'cod-ab-watch.yml'), 'utf8');
+  assert.ok(codAbWatchYml.includes('cod-ab-npl') &&
+    codAbWatchYml.includes('package_show'),
+    'the watch polls the pinned HDX COD-AB dataset');
+  assert.ok(codAbWatchYml.includes('cc-by-igo') &&
+    codAbWatchYml.includes('2026-08-14'),
+    'the watch pins the reviewed licence and the observed metadata state');
+  assert.ok(codAbWatchYml.includes('github-script') &&
+    codAbWatchYml.includes('issues: write'),
+    'drift files an issue, never a silent refresh');
   // RFC 7946 gate: every GeoJSON artifact - the docs/ overlays AND the
   // bindings/geojson public downloads - must speak WGS84 lon/lat with
   // closed rings and no legacy "crs" member. Structural pins only;
