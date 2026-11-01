@@ -79,21 +79,23 @@ const LCP_CEILINGS = {
 // data half idles once more after the basemap paints, and the five
 // off-by-default overlay fetches (~2.5 MB) no longer preload at boot.
 // Fresh clean verdict: 1615ms (PR #40 first head, green under the R1
-// ceiling — no re-measure fired). The ratchet-walk commit (same
-// runtime payload, comment+ceiling only) then measured a LOADED shared
-// runner: first pass 3579ms, re-measure 3467ms — the R1 bust-pass
-// signature (2733/3416 over verdicts 2373/2509), amplified: host-level
-// CPU noise swings this page's TBT ~2.2x while its LCP stays pinned
-// (4776/4803/4789 across the same passes). 1900ms = clean verdict
-// 1615 + ~18% LH-noise headroom, the same policy as the LCP ratchet
-// (clean verdicts are the numbers of record; loaded-runner busts are
-// documented noise, not the build). The aim (150ms) and the law
-// (200ms) are never lowered — only approached: the remaining clean-run
-// cost is the pinned engine's own parse + WebGL context init (the
-// honest price of the WebGL engine); the open follow-up is taming the
-// MEASUREMENT (serializing the budgets job against the flutter jobs,
-// or a quieter-runner policy for Explorer TBT) — never relaxing the
-// law.
+// ceiling — no re-measure fired). Two more rides of the SAME runtime
+// payload then measured LOADED shared hosts: first pass 3579ms,
+// re-measure 3467ms, then 3490/2737ms — the R1 bust-pass signature
+// (2733/3416 over verdicts 2373/2509), amplified: the host-level CPU
+// noise swings this page's TBT ~2.2x while its LCP stays pinned
+// (4684-4817 across all five passes). The noise is the shared host
+// itself, not this repo's own jobs: run 1 measured clean WHILE its
+// flutter jobs overlapped the LH passes, so serializing against dart
+// would not tame it. 1900ms = clean verdict 1615 + ~18% LH-noise
+// headroom, the same policy as the LCP ratchet (clean verdicts are
+// the numbers of record; loaded-runner busts are documented noise,
+// not the build). The aim (150ms) and the law (200ms) are never
+// lowered — only approached: the remaining clean-run cost is the
+// pinned engine's own parse + WebGL context init (the honest price of
+// the WebGL engine); the open follow-up is taming the MEASUREMENT
+// (re-riding the host lottery per Hya's 2026-11-01 call, a quieter
+// runner, or a loaded-runner retry policy) — never relaxing the law.
 const TBT_CEILINGS = {
   '/explorer.html': 1900,
 };
