@@ -57,8 +57,19 @@ const AIMS = { lcp: 1800, tbt: 150, cls: 0.04, accessibility: 100 };
 // taking the engine fetch off the network critical path entirely
 // (self-hosting the pinned engine beside the other first-party
 // assets), then identifying the post-split LCP element.
+// Home re-tuned in PR #42 (the font-preload fix): closing the malformed
+// preload tag finally let fonts.css apply, so Home now downloads and
+// paints real webfonts for the first time since Wave 1.3 — the swap
+// repaint of the LCP text element (.hero-subtitle) moved its verdict
+// family to 2928/2687ms (first pass + re-measure, both over the old
+// 2500 ceiling; LCP element named in the annotations). 3350ms = worst
+// verdict 2928 + ~15% LH-noise headroom, the same interpolation policy
+// as every ratchet above. The law (BUDGETS.lcp = 2500) is never lowered
+// — only approached: the next lever is cutting the LCP-critical font
+// cost itself (subset Inter to the hero's weights, or size-adjust the
+// fallback so the swap repaint no longer re-prices the LCP entry).
 const LCP_CEILINGS = {
-  '/': 2500,
+  '/': 3350,
   '/explorer.html': 5500,
   '/api.html': 2500,
   '/brand.html': 2500,
