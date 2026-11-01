@@ -293,16 +293,16 @@ vm.createContext(sandbox);
     assert.ok(pageHtml.includes('skip-link'), page + ' ships a skip link');
     assert.ok(/theme-toggle[^>]*aria-pressed/.test(pageHtml),
       page + ' theme toggle declares aria-pressed');
-    assert.ok(pageHtml.includes('styles.css?v=15'),
-      page + ' bumps the styles cache (v15)');
+    assert.ok(pageHtml.includes('styles.css?v=16'),
+      page + ' bumps the styles cache (v16)');
   }
   const explorerHtml = fs.readFileSync(path.join(ROOT, 'explorer.html'), 'utf8');
   assert.ok(!explorerHtml.includes('role="grid"'),
     'explorer table is a plain table (role="grid" retired)');
   assert.ok(!explorerHtml.includes('role="application"'),
     'map container does not capture screen-reader keys');
-  assert.ok(explorerHtml.includes('app.js?v=18'),
-    'explorer bumps the app cache (v18)');
+  assert.ok(explorerHtml.includes('app.js?v=19'),
+    'explorer bumps the app cache (v19)');
   // Wave 3 (terrain figure): the explorer gains a district elevation
   // choropleth — GLO-30 bands in a lazy-loaded artifact, elevation-aware
   // popups, and a deep-linkable hero button. The gate interpolates the
@@ -338,8 +338,8 @@ vm.createContext(sandbox);
     'focus ring rides the border-focus token (>= 3:1 in both themes)');
   assert.ok(appSrc.includes('aria-pressed'),
     'applyTheme syncs the toggle pressed state');
-  assert.ok((appSrc.match(/lang="ne"/g) || []).length === 4,
-    'bilingual spans carry lang="ne" (2 popups + 2 table paths)');
+  assert.ok((appSrc.match(/lang="ne"/g) || []).length === 6,
+    'bilingual spans carry lang="ne" (palika popup, district tip + popup, 2 table paths)');
   assert.ok(appSrc.includes("toast.setAttribute('role', 'status')"),
     'toast feedback is announced (role=status)');
   assert.ok(appSrc.includes('aria-current'),
@@ -408,6 +408,35 @@ vm.createContext(sandbox);
     'the sitemap lists all 4 public pages');
   assert.ok(/"dateModified": "\d{4}-\d{2}-\d{2}"/.test(indexHtml),
     'the index JSON-LD carries a dateModified freshness date');
+  // Wave 3 PR B (context + honesty): the 77-district layer ships as a
+  // same-origin overlay (dashed stone lines, off by default, roster
+  // popup + GLO-30 sentence), the table gets a loading skeleton
+  // (aria-hidden rows, CSS-only pulse, reduced-motion static) and an
+  // empty state that offers a reset. Counts interpolate from the
+  // vendored artifact and data.json — nothing is hand-pinned.
+  assert.ok(appSrc.includes("id: 'district-boundaries'"),
+    'the district boundaries overlay is registered');
+  assert.ok(appSrc.includes('district-boundaries.geojson'),
+    'the overlay fetches the vendored district geometry');
+  assert.ok(appSrc.includes('renderTableSkeleton'),
+    'the table renders a loading skeleton while data.json loads');
+  assert.ok(appSrc.includes('reset-filters'),
+    'the empty state offers a one-click reset');
+  const stylesCssB = fs.readFileSync(path.join(ROOT, 'styles.css'), 'utf8');
+  assert.ok(stylesCssB.includes('skeleton-pulse'),
+    'skeletons pulse via CSS, not JS');
+  assert.ok(/prefers-reduced-motion: reduce[\s\S]{0,80}\.skeleton \{ animation: none/.test(stylesCssB),
+    'skeletons collapse under reduced motion');
+  const districtsFc = JSON.parse(
+    fs.readFileSync(path.join(ROOT, 'district-boundaries.geojson'), 'utf8'));
+  assert.ok(districtsFc.features.length === 77,
+    'district-boundaries.geojson carries all 77 districts');
+  const dataDistricts = new Set(data.map((d) => d.district));
+  const overlayDistricts =
+    new Set(districtsFc.features.map((f) => f.properties && f.properties.nameEn));
+  assert.ok(overlayDistricts.size === 77 &&
+    [...overlayDistricts].every((d) => dataDistricts.has(d)),
+    'overlay district names join 77/77 with data.json');
     const rows = (tableBody.innerHTML.match(/<tr/g) || []).length;
   console.log(`SMOKE OK: ${data.length} records, ${rows} rows rendered, no errors`);
 })().catch((err) => {
