@@ -456,6 +456,10 @@ vm.createContext(sandbox);
     budgetsSrc.includes("'/explorer.html': 4800") &&
     budgetsSrc.includes("'/': 2500"),
     'the LCP ratchet declares per-page evidence-based ceilings');
+  assert.ok(budgetsSrc.includes('const TBT_CEILINGS = {') &&
+    budgetsSrc.includes("'/explorer.html': 2700") &&
+    budgetsSrc.includes('tbtOk: m.tbt <= (TBT_CEILINGS[page.path]'),
+    'the TBT ratchet declares the MapLibre-era Explorer interim (law unchanged elsewhere)');
   assert.ok(budgetsSrc.includes('lcpOk: m.lcp <= (LCP_CEILINGS[page.path]'),
     'the LCP gate asserts against the ratchet ceiling');
   assert.ok(budgetsSrc.includes('re-measuring once'),
