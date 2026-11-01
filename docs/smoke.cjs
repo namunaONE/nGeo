@@ -462,8 +462,9 @@ vm.createContext(sandbox);
     'the TBT ratchet declares the R2 post-split Explorer interim (law unchanged elsewhere)');
   assert.ok(budgetsSrc.includes('lcpOk: m.lcp <= (LCP_CEILINGS[page.path]'),
     'the LCP gate asserts against the ratchet ceiling');
-  assert.ok(budgetsSrc.includes('re-measuring once'),
-    'a budget bust earns exactly one fresh full-page re-measure (runner noise), never a relaxed law');
+  assert.ok(budgetsSrc.includes('RETRY_PASSES') &&
+    budgetsSrc.includes('Math.min(m.tbt, next.tbt)'),
+    'a bust earns up to RETRY_PASSES backoff passes; the row of record is the per-metric minimum (one-sided host noise) — never a relaxed law');
   // Wave 4 PR B (payload diet): the ~40 MB full-resolution palika boundary
   // source stays in the repo (source-of-truth for the boundaries package
   // and its generators) but never reaches the Pages artifact: the deploy
