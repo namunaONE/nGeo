@@ -46,6 +46,32 @@ function metric(report, auditId, fallback) {
     : fallback;
 }
 
+// Evidence, not mystery: when a page busts a budget, the annotations
+// must name the failing audits and the LCP element, so the fix starts
+// from the report instead of a re-run guessing game.
+function failingAudits(report) {
+  const cat = report.categories && report.categories.accessibility;
+  if (!cat || !cat.auditRefs) return [];
+  return cat.auditRefs
+    .map((ref) => ref.id)
+    .filter((id) => report.audits[id] && report.audits[id].score !== null &&
+      report.audits[id].score < 1)
+    .map((id) => ({
+      id,
+      title: report.audits[id].title,
+      detail: report.audits[id].displayValue || '',
+    }));
+}
+
+function lcpElement(report) {
+  const audit = report.audits && report.audits['largest-contentful-paint-element'];
+  const items = audit && audit.details && audit.details.items;
+  const first = items && items[0];
+  return first && first.items && first.items[0]
+    ? first.items[0].node && (first.items[0].node.snippet || first.items[0].node.selector)
+    : 'unknown';
+}
+
 const failures = [];
 const rows = [];
 for (const page of PAGES) {
@@ -95,6 +121,19 @@ for (const page of PAGES) {
         `${page.label}: ${key} ${value}${unit} exceeds the budget ${ceiling}${unit} (aim ${key === 'CLS' ? AIMS.cls : key === 'a11y' ? AIMS.accessibility : key === 'LCP' ? AIMS.lcp : AIMS.tbt}${unit}).`,
       );
     }
+  }
+
+  // Evidence per failure: the axe audits that failed, and the element
+  // Lighthouse blames for LCP. Annotations carry it to the PR.
+  if (!row.a11yOk) {
+    for (const a of failingAudits(report)) {
+      console.error(
+        `::error::${page.label} a11y audit failed: ${a.id} — ${a.title}${a.detail ? ' (' + a.detail + ')' : ''}`,
+      );
+    }
+  }
+  if (!row.lcpOk) {
+    console.error(`::error::${page.label} LCP element: ${lcpElement(report)}`);
   }
 }
 
