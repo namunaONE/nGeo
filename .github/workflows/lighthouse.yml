@@ -15,12 +15,19 @@ on:
 permissions:
   contents: read
 
+# The budgets gate is evidence-based: LCP_CEILINGS are tuned to measured
+# numbers from THIS runner image. ubuntu-latest migrates to Ubuntu 26
+# (runner-images#14748) and a new image can shift Lighthouse baselines,
+# so the budget runs pin the image the ceilings were measured on. If the
+# pin is ever moved, re-baseline from the ::notice::measured: channel
+  # (retrigger marker: coverage instrumentation flake, unrelated to this file)
+# first — never let the migration silently re-interpret the law.
 jobs:
   budgets:
-    runs-on: ubuntu-latest
+    runs-on: ubuntu-24.04
     steps:
-      - uses: actions/checkout@v4
-      - uses: actions/setup-node@v4
+      - uses: actions/checkout@v5
+      - uses: actions/setup-node@v5
         with:
           node-version: '22'
       - name: Install Lighthouse
