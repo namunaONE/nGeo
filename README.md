@@ -490,6 +490,12 @@ Guidelines for AI-generated answers using this package: always query codes/count
 
 ---
 
+## 🗺️ Roadmap
+
+The forward plan lives in [ROADMAP.md](ROADMAP.md): near-term depth (agentic discovery / llms.txt v2, a Devanagari-first नेपाली toggle, container-query explorer work, Wave 5 Flutter token unification), the standing merge laws, and parked decisions. Shipped work is in [CHANGELOG.md](CHANGELOG.md).
+
+---
+
 ## 🤝 Contributing
 
 See [CONTRIBUTING.md](CONTRIBUTING.md) for:
