@@ -1,0 +1,464 @@
+[
+  {
+    "district": "Achham",
+    "elevMin": 326,
+    "elevMean": 1393,
+    "elevMax": 3817
+  },
+  {
+    "district": "Arghakhanchi",
+    "elevMin": 242,
+    "elevMean": 1035,
+    "elevMax": 2274
+  },
+  {
+    "district": "Baglung",
+    "elevMin": 575,
+    "elevMean": 2311,
+    "elevMax": 4652
+  },
+  {
+    "district": "Baitadi",
+    "elevMin": 380,
+    "elevMean": 1572,
+    "elevMax": 3068
+  },
+  {
+    "district": "Bajhang",
+    "elevMin": 812,
+    "elevMean": 3363,
+    "elevMax": 7000
+  },
+  {
+    "district": "Bajura",
+    "elevMin": 704,
+    "elevMean": 2938,
+    "elevMax": 6747
+  },
+  {
+    "district": "Banke",
+    "elevMin": 128,
+    "elevMean": 271,
+    "elevMax": 1239
+  },
+  {
+    "district": "Bara",
+    "elevMin": 68,
+    "elevMean": 180,
+    "elevMax": 923
+  },
+  {
+    "district": "Bardiya",
+    "elevMin": 133,
+    "elevMean": 282,
+    "elevMax": 1584
+  },
+  {
+    "district": "Bhaktapur",
+    "elevMin": 1289,
+    "elevMean": 1457,
+    "elevMax": 2161
+  },
+  {
+    "district": "Bhojpur",
+    "elevMin": 120,
+    "elevMean": 1339,
+    "elevMax": 3965
+  },
+  {
+    "district": "Chitwan",
+    "elevMin": 110,
+    "elevMean": 389,
+    "elevMax": 1930
+  },
+  {
+    "district": "Dadeldhura",
+    "elevMin": 261,
+    "elevMean": 1281,
+    "elevMax": 2656
+  },
+  {
+    "district": "Dailekh",
+    "elevMin": 564,
+    "elevMean": 1535,
+    "elevMax": 4072
+  },
+  {
+    "district": "Dang",
+    "elevMin": 181,
+    "elevMean": 625,
+    "elevMax": 2072
+  },
+  {
+    "district": "Darchula",
+    "elevMin": 523,
+    "elevMean": 3406,
+    "elevMax": 7082
+  },
+  {
+    "district": "Dhading",
+    "elevMin": 276,
+    "elevMean": 1597,
+    "elevMax": 6942
+  },
+  {
+    "district": "Dhankuta",
+    "elevMin": 106,
+    "elevMean": 1080,
+    "elevMax": 2701
+  },
+  {
+    "district": "Dhanusha",
+    "elevMin": 56,
+    "elevMean": 143,
+    "elevMax": 562
+  },
+  {
+    "district": "Dolakha",
+    "elevMin": 624,
+    "elevMean": 3020,
+    "elevMax": 6909
+  },
+  {
+    "district": "Dolpa",
+    "elevMin": 1465,
+    "elevMean": 4631,
+    "elevMax": 7738
+  },
+  {
+    "district": "Doti",
+    "elevMin": 304,
+    "elevMean": 1494,
+    "elevMax": 3284
+  },
+  {
+    "district": "Gorkha",
+    "elevMin": 228,
+    "elevMean": 3061,
+    "elevMax": 7932
+  },
+  {
+    "district": "Gulmi",
+    "elevMin": 460,
+    "elevMean": 1314,
+    "elevMax": 2692
+  },
+  {
+    "district": "Humla",
+    "elevMin": 1172,
+    "elevMean": 4401,
+    "elevMax": 7018
+  },
+  {
+    "district": "Ilam",
+    "elevMin": 114,
+    "elevMean": 1090,
+    "elevMax": 3626
+  },
+  {
+    "district": "Jajarkot",
+    "elevMin": 606,
+    "elevMean": 2293,
+    "elevMax": 5410
+  },
+  {
+    "district": "Jhapa",
+    "elevMin": 55,
+    "elevMean": 115,
+    "elevMax": 843
+  },
+  {
+    "district": "Jumla",
+    "elevMin": 2030,
+    "elevMean": 3538,
+    "elevMax": 6552
+  },
+  {
+    "district": "Kailali",
+    "elevMin": 138,
+    "elevMean": 461,
+    "elevMax": 1969
+  },
+  {
+    "district": "Kalikot",
+    "elevMin": 721,
+    "elevMean": 2666,
+    "elevMax": 4468
+  },
+  {
+    "district": "Kanchanpur",
+    "elevMin": 158,
+    "elevMean": 273,
+    "elevMax": 1514
+  },
+  {
+    "district": "Kapilvastu",
+    "elevMin": 83,
+    "elevMean": 192,
+    "elevMax": 1495
+  },
+  {
+    "district": "Kaski",
+    "elevMin": 384,
+    "elevMean": 2606,
+    "elevMax": 7961
+  },
+  {
+    "district": "Kathmandu",
+    "elevMin": 1169,
+    "elevMean": 1575,
+    "elevMax": 2705
+  },
+  {
+    "district": "Kavrepalanchok",
+    "elevMin": 278,
+    "elevMean": 1378,
+    "elevMax": 2933
+  },
+  {
+    "district": "Khotang",
+    "elevMin": 162,
+    "elevMean": 1405,
+    "elevMax": 3642
+  },
+  {
+    "district": "Lalitpur",
+    "elevMin": 410,
+    "elevMean": 1540,
+    "elevMax": 2820
+  },
+  {
+    "district": "Lamjung",
+    "elevMin": 376,
+    "elevMean": 2305,
+    "elevMax": 7861
+  },
+  {
+    "district": "Mahottari",
+    "elevMin": 57,
+    "elevMean": 172,
+    "elevMax": 801
+  },
+  {
+    "district": "Makwanpur",
+    "elevMin": 136,
+    "elevMean": 888,
+    "elevMax": 2590
+  },
+  {
+    "district": "Manang",
+    "elevMin": 1646,
+    "elevMean": 4850,
+    "elevMax": 8044
+  },
+  {
+    "district": "Morang",
+    "elevMin": 56,
+    "elevMean": 266,
+    "elevMax": 2407
+  },
+  {
+    "district": "Mugu",
+    "elevMin": 1118,
+    "elevMean": 3881,
+    "elevMax": 6797
+  },
+  {
+    "district": "Mustang",
+    "elevMin": 1802,
+    "elevMean": 4679,
+    "elevMax": 6995
+  },
+  {
+    "district": "Myagdi",
+    "elevMin": 775,
+    "elevMean": 3461,
+    "elevMax": 8136
+  },
+  {
+    "district": "Nawalpur",
+    "elevMin": 114,
+    "elevMean": 474,
+    "elevMax": 1915
+  },
+  {
+    "district": "Nuwakot",
+    "elevMin": 408,
+    "elevMean": 1498,
+    "elevMax": 5108
+  },
+  {
+    "district": "Okhaldhunga",
+    "elevMin": 331,
+    "elevMean": 1613,
+    "elevMax": 3574
+  },
+  {
+    "district": "Palpa",
+    "elevMin": 241,
+    "elevMean": 987,
+    "elevMax": 1894
+  },
+  {
+    "district": "Panchthar",
+    "elevMin": 345,
+    "elevMean": 1700,
+    "elevMax": 4601
+  },
+  {
+    "district": "Parasi (Nawalparasi West)",
+    "elevMin": 97,
+    "elevMean": 220,
+    "elevMax": 1175
+  },
+  {
+    "district": "Parbat",
+    "elevMin": 538,
+    "elevMean": 1501,
+    "elevMax": 3309
+  },
+  {
+    "district": "Parsa",
+    "elevMin": 73,
+    "elevMean": 227,
+    "elevMax": 838
+  },
+  {
+    "district": "Pyuthan",
+    "elevMin": 314,
+    "elevMean": 1330,
+    "elevMax": 3625
+  },
+  {
+    "district": "Ramechhap",
+    "elevMin": 406,
+    "elevMean": 2050,
+    "elevMax": 6845
+  },
+  {
+    "district": "Rasuwa",
+    "elevMin": 606,
+    "elevMean": 3735,
+    "elevMax": 7216
+  },
+  {
+    "district": "Rautahat",
+    "elevMin": 68,
+    "elevMean": 127,
+    "elevMax": 923
+  },
+  {
+    "district": "Rolpa",
+    "elevMin": 654,
+    "elevMean": 1861,
+    "elevMax": 3661
+  },
+  {
+    "district": "Rukum East",
+    "elevMin": 868,
+    "elevMean": 3151,
+    "elevMax": 6523
+  },
+  {
+    "district": "Rukum West",
+    "elevMin": 672,
+    "elevMean": 2191,
+    "elevMax": 5870
+  },
+  {
+    "district": "Rupandehi",
+    "elevMin": 86,
+    "elevMean": 171,
+    "elevMax": 1486
+  },
+  {
+    "district": "Salyan",
+    "elevMin": 324,
+    "elevMean": 1254,
+    "elevMax": 2819
+  },
+  {
+    "district": "Sankhuwasabha",
+    "elevMin": 254,
+    "elevMean": 2839,
+    "elevMax": 8054
+  },
+  {
+    "district": "Saptari",
+    "elevMin": 60,
+    "elevMean": 124,
+    "elevMax": 949
+  },
+  {
+    "district": "Sarlahi",
+    "elevMin": 68,
+    "elevMean": 153,
+    "elevMax": 702
+  },
+  {
+    "district": "Sindhuli",
+    "elevMin": 132,
+    "elevMean": 748,
+    "elevMax": 2373
+  },
+  {
+    "district": "Sindhupalchok",
+    "elevMin": 617,
+    "elevMean": 2547,
+    "elevMax": 6905
+  },
+  {
+    "district": "Siraha",
+    "elevMin": 62,
+    "elevMean": 153,
+    "elevMax": 973
+  },
+  {
+    "district": "Solukhumbu",
+    "elevMin": 579,
+    "elevMean": 4006,
+    "elevMax": 8738
+  },
+  {
+    "district": "Sunsari",
+    "elevMin": 62,
+    "elevMean": 162,
+    "elevMax": 1792
+  },
+  {
+    "district": "Surkhet",
+    "elevMin": 195,
+    "elevMean": 896,
+    "elevMax": 2611
+  },
+  {
+    "district": "Syangja",
+    "elevMin": 307,
+    "elevMean": 1005,
+    "elevMax": 2301
+  },
+  {
+    "district": "Tanahun",
+    "elevMin": 182,
+    "elevMean": 679,
+    "elevMax": 2127
+  },
+  {
+    "district": "Taplejung",
+    "elevMin": 490,
+    "elevMean": 3704,
+    "elevMax": 8564
+  },
+  {
+    "district": "Terhathum",
+    "elevMin": 314,
+    "elevMean": 1439,
+    "elevMax": 3021
+  },
+  {
+    "district": "Udayapur",
+    "elevMin": 67,
+    "elevMean": 603,
+    "elevMax": 2342
+  }
+]

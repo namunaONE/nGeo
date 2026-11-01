@@ -171,6 +171,26 @@ void main() {
   need('docs/llms-full.txt', '**CBS codes:** $withCode/$bodies palikas carry',
       'the CBS coverage line to be $withCode/$bodies');
 
+  // Wave 3: the district elevation artifact must parse and agree with
+  // the dataset's district count, and every row must satisfy
+  // min <= mean <= max. The count interpolates from meta.json — nothing
+  // is hand-pinned, so this gate never drifts with a release.
+  final elevation = jsonDecode(_read('docs/district-elevation.json')) as List;
+  check(elevation.length == districts, 'docs/district-elevation.json',
+      'expected $districts districts, found ${elevation.length}.');
+  for (final row in elevation) {
+    final e = row as Map<String, dynamic>;
+    check(
+        e['elevMin'] is int && e['elevMean'] is int && e['elevMax'] is int,
+        'docs/district-elevation.json',
+        '${e['district']} is missing integer elevation values.');
+    final lo = e['elevMin'] as int;
+    final mid = e['elevMean'] as int;
+    final hi = e['elevMax'] as int;
+    check(lo <= mid && mid <= hi, 'docs/district-elevation.json',
+        '${e['district']} violates min <= mean <= max.');
+  }
+
   // Tripwire: figures retired by the truth sweep stay retired.
   const retired = ['752/753', '744/753', '731/753', '733/753', '98.8'];
   for (final entry in surfaces.entries) {

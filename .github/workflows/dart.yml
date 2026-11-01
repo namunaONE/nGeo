@@ -77,7 +77,7 @@ jobs:
       - name: Regenerate website payload
         run: dart run tool/generate_explorer_data.dart
       - name: Verify no website data drift (docs must match the package)
-        run: git diff --exit-code -- docs/data.json
+        run: git diff --exit-code -- docs/data.json docs/district-elevation.json
       - name: Verify site URL hygiene
         run: |
           hits=$(grep -rn "Nepal-Local-Government-Data" docs README.md SECURITY.md CONTRIBUTING.md PUBLISHING.md pubspec.yaml bindings packages tool 2>/dev/null || true)
