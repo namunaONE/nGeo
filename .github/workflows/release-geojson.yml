@@ -27,7 +27,8 @@ jobs:
       # migration the notes kept describing the superseded lineage — a
       # misdescription of a publicly redistributed CC BY-IGO asset. gh
       # release edit with the current sha keeps the description and the
-      # bytes always in agreement.
+      # bytes always in agreement. Idempotent under --clobber re-runs;
+      # the sha256 in the notes always matches the uploaded asset.
       - name: Upload the full-resolution palika boundaries as a Release asset
         env:
           GH_TOKEN: ${{ github.token }}
