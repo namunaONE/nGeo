@@ -496,6 +496,13 @@ vm.createContext(sandbox);
     'the gate pins the Nepal band (a lon/lat swap cannot pass)');
   assert.ok(rfcTool.includes('degenerateRings'),
     'the gate reports degenerate rings without failing them');
+  assert.ok(rfcTool.includes('--strip-crs'),
+    'the gate doubles as the auto-heal: --strip-crs excises the member');
+  const sanitizeYml = fs.readFileSync(
+    path.join(ROOT, '..', '.github', 'workflows', 'sanitize-crs.yml'), 'utf8');
+  assert.ok(sanitizeYml.includes('branches-ignore: [main]') &&
+    sanitizeYml.includes('--strip-crs'),
+    'the sanitize workflow auto-heals non-main branches, never main');
   // Wave 4 PR C (adaptive & fast): the explorer figure arms at viewport
   // proximity (deep links arm immediately) instead of booting the map engine +
   // boundaries inside the LCP window; Save-Data skips optional prefetch

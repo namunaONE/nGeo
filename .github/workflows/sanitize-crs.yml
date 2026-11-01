@@ -1,0 +1,61 @@
+name: sanitize-crs
+
+# Standing auto-heal for the RFC 7946 "crs" ban (.github/workflows/
+# dart.yml gates every vendored GeoJSON on every push). The gate's
+# first full run proved the law earns its keep: the 40 MB
+# docs/palika-boundaries-highres.geojson - a file too big for any
+# hand pre-scan to load - ships its converter's legacy "crs" member.
+# Healing a 40 MB blob is runner work, so this workflow fires on
+# non-main branch pushes that touch a vendored GeoJSON (or the tool
+# itself), runs the same tool's --strip-crs mode - a surgical,
+# byte-precise excise, never a reformat - re-runs the gate to prove
+# the healed tree conforms, and pushes the fix commit back to the
+# branch. A GITHUB_TOKEN push does not re-trigger workflows (GitHub
+# design), so the branch needs one later push - or a marker commit -
+# for its gate run to go green on the healed head. main is never
+# auto-committed: the gate protects main, and a dirty main is a loud
+# alarm rather than a silent history rewrite.
+
+on:
+  push:
+    branches-ignore: [main]
+    paths:
+      - 'docs/**/*.geojson'
+      - 'bindings/geojson/*.geojson'
+      - 'tool/check_rfc7946.dart'
+      - '.github/workflows/sanitize-crs.yml'
+  workflow_dispatch:
+
+permissions:
+  contents: write
+
+concurrency:
+  group: "sanitize-crs-${{ github.ref }}"
+  cancel-in-progress: true
+
+jobs:
+  strip:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v5
+      - uses: dart-lang/setup-dart@v1
+        with:
+          sdk: stable
+      - name: Install dependencies
+        run: dart pub get
+      - name: Strip legacy "crs" members in place (surgical, verified)
+        run: dart run tool/check_rfc7946.dart --strip-crs
+      - name: Prove the healed tree conforms
+        run: dart run tool/check_rfc7946.dart
+      - name: Push the healed files back to the branch
+        run: |
+          set -euo pipefail
+          git config user.name "github-actions[bot]"
+          git config user.email "41898282+github-actions[bot]@users.noreply.github.com"
+          if git diff --quiet; then
+            echo "nothing to heal: the tree carries no legacy crs member"
+            exit 0
+          fi
+          git add -u docs bindings/geojson
+          git commit -m "fix(data): strip the legacy crs member (RFC 7946, sanitize-crs)"
+          git push

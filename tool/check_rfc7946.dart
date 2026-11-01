@@ -7,11 +7,11 @@
 // in its lineage. That is exactly the class of pipeline that silently
 // emits a legacy "crs" member, axis-flipped coordinates or unclosed
 // rings. A one-off pre-scan of the fetchable artifacts (2026-11-01)
-// came back clean: no crs member on any GeoJSON object, every measured
-// position inside Nepal, every ring with four or more positions
-// closed, every line with two or more. This gate makes that verdict
-// permanent and extends it to the large boundary files, which no ad
-// hoc pass ever wants to load by hand.
+// came back clean - and the gate's first full CI run then caught what
+// no hand scan could see: the 40 MB high-resolution palika boundary
+// file ships its converter's legacy "crs" member. That is the point:
+// the gate scans every artifact on every run, including the ones too
+// big to open by hand.
 //
 // Checks, per file (every docs/*.geojson and bindings/geojson/*.geojson):
 //   - parses as JSON and is a FeatureCollection
@@ -35,9 +35,15 @@
 //     coordinates it claims to bound.
 //
 // Usage (from the repository root):
-//   dart run tool/check_rfc7946.dart
+//   dart run tool/check_rfc7946.dart              the gate (exit 0 = pass)
+//   dart run tool/check_rfc7946.dart --strip-crs  the matching auto-heal
 //
-// Exit 0 = pass, 1 = fail. Wired into .github/workflows/dart.yml.
+// --strip-crs removes the collection-level legacy "crs" member from
+// every file it walks, surgically and in place; the sanitize-crs
+// workflow runs it and then re-runs the gate to prove the healed tree
+// conforms. Exit 0 = pass, 1 = fail. Wired into
+// .github/workflows/dart.yml (gate) and .github/workflows/
+// sanitize-crs.yml (heal).
 
 import 'dart:convert';
 import 'dart:io';
@@ -369,11 +375,109 @@ void checkFile(String path) {
   filesChecked++;
 }
 
+/// Removes the collection-level legacy "crs" member, keeping every
+/// other byte untouched: the member sits before "features", so the
+/// walk never enters a feature payload, and a 40 MB artifact keeps a
+/// one-line diff. Only the converter shape ever seen here - member
+/// followed by a comma - is handled; anything else aborts rather
+/// than guess. Returns the healed text, or null when there is
+/// nothing to strip.
+String? stripRootCrs(String path, String text) {
+  final key = text.indexOf('"crs"');
+  if (key < 0) {
+    return null;
+  }
+  final features = text.indexOf('"features"');
+  if (features >= 0 && key > features) {
+    return null; // Not the collection-level member.
+  }
+  var start = key;
+  while (start > 0 && (text[start - 1] == ' ' || text[start - 1] == '\t')) {
+    start--;
+  }
+  final open = text.indexOf('{', key);
+  if (open < 0) {
+    _abort('$path: "crs" member has no object value.');
+  }
+  var depth = 0;
+  var close = -1;
+  for (var i = open; i < text.length; i++) {
+    if (text[i] == '{') {
+      depth++;
+    } else if (text[i] == '}') {
+      depth--;
+      if (depth == 0) {
+        close = i;
+        break;
+      }
+    }
+  }
+  if (close < 0) {
+    _abort('$path: "crs" member value is not closed.');
+  }
+  var end = close + 1;
+  while (end < text.length && (text[end] == ' ' || text[end] == '\t')) {
+    end++;
+  }
+  if (end >= text.length || text[end] != ',') {
+    _abort('$path: "crs" member not followed by a comma - fix by hand.');
+  }
+  while (end < text.length && text[end] != '\n') {
+    end++;
+  }
+  if (end < text.length) {
+    end++; // Swallow the newline so no blank line remains.
+  }
+  final healed = text.replaceRange(start, end, '');
+  dynamic root;
+  try {
+    root = jsonDecode(healed);
+  } on FormatException catch (error) {
+    _abort('$path: strip produced invalid JSON: ' + error.message);
+  }
+  if (root is! Map<String, dynamic> || root.containsKey('crs')) {
+    _abort('$path: strip did not remove the collection-level member.');
+  }
+  return healed;
+}
+
+/// The auto-heal walk: strip the legacy "crs" member in place when a
+/// file carries one. The workflow re-runs the gate right after, so a
+/// strip that broke anything fails before a commit exists.
+void stripFile(String path) {
+  final file = File(path);
+  if (!file.existsSync()) {
+    _abort('$path not found - run from the repository root.');
+  }
+  final text = file.readAsStringSync();
+  final healed = stripRootCrs(path, text);
+  if (healed == null) {
+    return;
+  }
+  final removed = text.length - healed.length;
+  file.writeAsStringSync(healed, flush: true);
+  stdout.writeln('rfc7946 strip: removed the legacy "crs" member from '
+      '$path ($removed bytes).');
+}
+
 void main(List<String> arguments) {
   // Every vendored artifact lives in one of two directories: docs/
   // (website overlays and boundary payloads) and bindings/geojson/
   // (the public downloads, staged into the site artifact at deploy).
-  final dirs = arguments.isNotEmpty ? arguments : ['docs', 'bindings/geojson'];
+  // --strip-crs switches this same walk from gate to auto-heal: the
+  // collection-level legacy "crs" member is surgically removed in
+  // place instead of reported.
+  final stripCrs = arguments.contains('--strip-crs');
+  final dirs = <String>[];
+  for (final argument in arguments) {
+    if (!argument.startsWith('-')) {
+      dirs.add(argument);
+    }
+  }
+  if (dirs.isEmpty) {
+    dirs.add('docs');
+    dirs.add('bindings/geojson');
+  }
   for (final dir in dirs) {
     final directory = Directory(dir);
     if (!directory.existsSync()) {
@@ -390,8 +494,15 @@ void main(List<String> arguments) {
     }
     paths.sort();
     for (final path in paths) {
-      checkFile(path);
+      if (stripCrs) {
+        stripFile(path);
+      } else {
+        checkFile(path);
+      }
     }
+  }
+  if (stripCrs) {
+    return; // The gate re-run afterwards is the proof, not this pass.
   }
   if (degenerateRings > 0) {
     stdout.writeln('INFO: $degenerateRings degenerate ring(s) - source '
