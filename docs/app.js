@@ -1383,14 +1383,23 @@ function initBoundaryDetailToggle() {
 function initMapOverlays() {
   if (_overlaysInited) return;
   _overlaysInited = true;
-  for (const def of MAP_OVERLAYS) loadOverlay(def);
+  // R2 (arm-chain diet): overlays no longer preload at engine boot —
+  // five off-by-default GeoJSONs (~2.5 MB: outline, parks, NH01,
+  // districts, provinces) used to ride the arm chain, fetching and
+  // parsing on the main thread while the figure itself was still
+  // loading. The toggles wire now; each overlay fetches on its first
+  // ask (see updateOverlayToggles). enabledByDefault entries excepted.
   updateOverlayToggles();
+  for (const def of MAP_OVERLAYS) {
+    if (def.enabledByDefault) loadOverlay(def);
+  }
 }
 
-function loadOverlay(def) {
+function loadOverlay(def, opts) {
   const state = _overlayLayers[def.id];
   if (state) return state.ready;
-  const s = { def: def, layer: null, loaded: false, visible: !!def.enabledByDefault, ready: null };
+  const visible = (opts && opts.visible) || !!def.enabledByDefault;
+  const s = { def: def, layer: null, loaded: false, visible: visible, ready: null };
   _overlayLayers[def.id] = s;
   s.ready = (async () => {
     let lastErr = null;
@@ -1505,8 +1514,10 @@ function setOverlayVisible(id, visible) {
 
 function overlayToggleLabel(def) {
   const s = _overlayLayers[def.id];
-  if (!s) return def.label + ' (unavailable)';
-  if (!s.loaded) return def.label + ' (loading\u2026)';
+  // R2 (lazy overlays): an unloaded overlay is TOGGLEABLE, not
+  // unavailable — asking for it starts its fetch. "Loading…" shows only
+  // while an ask is in flight.
+  if (s && !s.loaded) return def.label + ' (loading\u2026)';
   return def.label;
 }
 
@@ -1523,15 +1534,26 @@ function updateOverlayToggles() {
   for (const def of MAP_OVERLAYS) {
     const s = _overlayLayers[def.id];
     const label = document.createElement('label');
-    label.className = 'overlay-toggle' + (s ? (s.loaded ? '' : ' overlay-loading') : ' overlay-unavailable');
+    label.className = 'overlay-toggle' + (s && !s.loaded ? ' overlay-loading' : '');
     const box = document.createElement('input');
     box.type = 'checkbox';
     box.id = 'overlay-' + def.id;
     if (s && s.loaded) {
       box.checked = s.visible;
       box.addEventListener('change', () => setOverlayVisible(def.id, box.checked));
-    } else {
+    } else if (s) {
+      // First ask in flight: checked per its intent, inert until it lands.
+      box.checked = s.visible;
       box.disabled = true;
+    } else {
+      // R2 (lazy overlays): the toggle IS the loader — the fetch starts
+      // on the first ask, never at engine boot.
+      box.addEventListener('change', () => {
+        if (!box.checked) return;
+        box.disabled = true;
+        loadOverlay(def, { visible: true });
+        updateOverlayToggles();
+      });
     }
     const text = document.createElement('span');
     text.textContent = overlayToggleLabel(def);
@@ -1574,10 +1596,14 @@ function syncChoropleth(items) {
   _activeRows = new Set(items);
   const status = document.getElementById('map-status');
   if (status && !_boundaryDataAdded) status.textContent = 'Loading palika boundaries…';
-  ensureMap()
+  mapEngineReady()
     .then(() => {
       if (!_map) return null;
-      return loadBoundaries();
+      // Data half (R2): the basemap is up; the boundary fetch + parse +
+      // name join + setData run in the first idle slot after it, so
+      // their long tasks never stack on the engine boot.
+      return new Promise((resolve) => { scheduleIdle(() => resolve()); })
+        .then(() => (_map ? loadBoundaries() : null));
     })
     .then((fc) => {
       if (!fc || !_map || !_map.getSource('palika')) return;
@@ -1618,6 +1644,41 @@ function syncChoropleth(items) {
 // latest rows; filtering stays free.
 var _mapArmed = false;
 var _mapArmIo = null;
+var _mapArmIdle = false; // R2: a scroll-arm defers the engine half to the first idle slot
+
+// R2 (arm-chain split, walking the budgets toward the law): the arm
+// chain is now two halves, scheduled separately.
+//   engine half: the maplibre-gl stylesheet (render-blocking while it
+//     loads), the 758 KB UMD script, its parse and the WebGL context
+//     init — the R1 TBT whale;
+//   data half: the 476 KB boundary fetch, the parse, the name join and
+//     setData.
+// A scroll-arm boots the engine in the FIRST idle slot after the arm,
+// so the render-blocking stylesheet link and the long parse land after
+// the initial paint — the hero subtitle is the LCP element and it must
+// win that race (R1 verdicts: LCP 4789/4784ms, TBT 2373/2509ms). The
+// rIC timeout keeps the boot bounded on a busy main thread; setTimeout
+// is the fallback where rIC is missing. Deep links (?cbs= / ?metric=)
+// target the map by definition (the W4-C contract): they boot the
+// engine immediately. The data half always idles once more AFTER the
+// basemap is up: the raster basemap paints first, the choropleth fills
+// in a beat later, and neither half ever stacks on the boot.
+function scheduleIdle(fn) {
+  if (typeof requestIdleCallback === 'function') {
+    requestIdleCallback(fn, { timeout: 1500 });
+    return;
+  }
+  setTimeout(fn, 0);
+}
+
+function mapEngineReady() {
+  if (_mapArmIdle && !_mapReady) {
+    return new Promise((resolve) => {
+      scheduleIdle(() => { ensureMap().then(resolve, resolve); });
+    });
+  }
+  return ensureMap();
+}
 
 function renderArmedMap() {
   if (!_lastMapItems) return;
@@ -1632,6 +1693,7 @@ function syncMap(items) {
   const params = new URLSearchParams(window.location.search);
   if (params.get('cbs') || params.get('metric')) {
     _mapArmed = true;
+    _mapArmIdle = false; // deep link: the map IS the destination — engine now (W4-C)
     renderArmedMap();
     return;
   }
@@ -1642,6 +1704,7 @@ function syncMap(items) {
       _mapArmIo.disconnect();
       _mapArmIo = null;
       _mapArmed = true;
+      _mapArmIdle = true; // scroll-arm: engine half defers to the first idle slot (R2)
       renderArmedMap();
     }
   }, { rootMargin: '300px 0px' });
@@ -1650,7 +1713,7 @@ function syncMap(items) {
 
 function syncDotsMap(items) {
   if (!document.getElementById('map')) return;
-  ensureMap().then(() => {
+  mapEngineReady().then(() => {
     if (!_map || !_map.getSource('dots')) return;
     _map.setLayoutProperty('palika-fill', 'visibility', 'none');
     _map.setLayoutProperty('palika-line', 'visibility', 'none');
