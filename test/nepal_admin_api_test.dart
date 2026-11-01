@@ -403,6 +403,54 @@ void main() {
     });
   });
 
+  group('v2.10 CBS 2021 population', () {
+    test('all 7 provinces carry census population', () {
+      final ps = NepalAdminApi.getAllProvinces();
+      expect(ps.where((p) => p.population != null).length, 7);
+    });
+
+    test('all 77 districts carry census population', () {
+      final ds = NepalAdminApi.getAllDistricts();
+      expect(ds.where((d) => d.population != null).length, 77);
+    });
+
+    test('district population sums match province population', () {
+      for (final p in NepalAdminApi.getAllProvinces()) {
+        final districtSum =
+            p.districts.fold<int>(0, (sum, d) => sum + (d.population ?? 0));
+        expect(districtSum, p.population,
+            reason: '${p.name} district sum != province pop');
+      }
+    });
+
+    test('population is positive for all provinces and districts', () {
+      for (final p in NepalAdminApi.getAllProvinces()) {
+        if (p.population != null) {
+          expect(p.population!, greaterThan(0), reason: '${p.name} population');
+        }
+      }
+      for (final d in NepalAdminApi.getAllDistricts()) {
+        if (d.population != null) {
+          expect(d.population!, greaterThan(0), reason: '${d.name} population');
+        }
+      }
+    });
+
+    test('json round-trip preserves population (province)', () {
+      final p = NepalAdminApi.getAllProvinces()
+          .firstWhere((x) => x.population != null);
+      final restored = Province.fromJson(p.toJson());
+      expect(restored.population, p.population);
+    });
+
+    test('json round-trip preserves population (district)', () {
+      final d = NepalAdminApi.getAllDistricts()
+          .firstWhere((x) => x.population != null);
+      final restored = District.fromJson(d.toJson());
+      expect(restored.population, d.population);
+    });
+  });
+
   group('v2.3 ward counts', () {
     test('wards are sane positive integers when present', () {
       for (final b in NepalAdminApi.getAllLocalBodies()) {

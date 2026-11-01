@@ -424,6 +424,10 @@ class District {
   /// center_lon). Null when not yet joined.
   final double? lngHdx;
 
+  /// Population from the CBS National Population and Housing Census 2021.
+  /// **Single-source** (CBS 2021, transcribed); null until sourced.
+  final int? population;
+
   /// The district's official website. **Single-source** (sagautam5).
   final String? website;
 
@@ -443,6 +447,7 @@ class District {
     this.areaSqKmOfficial,
     this.latHdx,
     this.lngHdx,
+    this.population,
     this.website,
     required List<LocalBody> units,
     String provinceName = '',
@@ -528,6 +533,7 @@ class District {
         if (areaSqKmOfficial != null) 'areaSqKmOfficial': areaSqKmOfficial,
         if (latHdx != null) 'latHdx': latHdx,
         if (lngHdx != null) 'lngHdx': lngHdx,
+        if (population != null) 'population': population,
         if (website != null) 'website': website,
         'localBodies': [for (final b in _units) b.toJson()],
       };
@@ -548,6 +554,7 @@ class District {
         areaSqKmOfficial: (json['areaSqKmOfficial'] as num?)?.toDouble(),
         latHdx: (json['latHdx'] as num?)?.toDouble(),
         lngHdx: (json['lngHdx'] as num?)?.toDouble(),
+        population: json['population'] as int?,
         website: json['website'] as String?,
         provinceName: json['province'] as String? ?? '',
         units: [
@@ -608,6 +615,10 @@ class Province {
   /// center_lon). Null when not yet joined.
   final double? lngHdx;
 
+  /// Population from the CBS National Population and Housing Census 2021.
+  /// **Single-source** (CBS 2021, transcribed); null until sourced.
+  final int? population;
+
   /// The province's official website. **Single-source** (sagautam5).
   final String? website;
 
@@ -632,6 +643,7 @@ class Province {
     this.areaSqKmOfficial,
     this.latHdx,
     this.lngHdx,
+    this.population,
     this.website,
     required this.isoCode,
     required this.stats,
@@ -755,6 +767,7 @@ class Province {
         if (areaSqKmOfficial != null) 'areaSqKmOfficial': areaSqKmOfficial,
         if (latHdx != null) 'latHdx': latHdx,
         if (lngHdx != null) 'lngHdx': lngHdx,
+        if (population != null) 'population': population,
         if (website != null) 'website': website,
         'isoCode': isoCode,
         'stats': stats.toJson(),
@@ -778,6 +791,7 @@ class Province {
         areaSqKmOfficial: (json['areaSqKmOfficial'] as num?)?.toDouble(),
         latHdx: (json['latHdx'] as num?)?.toDouble(),
         lngHdx: (json['lngHdx'] as num?)?.toDouble(),
+        population: json['population'] as int?,
         website: json['website'] as String?,
         isoCode: json['isoCode'] as String,
         stats: const ProvinceStats(

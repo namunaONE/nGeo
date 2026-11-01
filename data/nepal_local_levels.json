@@ -238,7 +238,8 @@
           "hdxPcode": "NP0110",
           "areaSqKmOfficial": 1523.58864372,
           "latHdx": 27.17506647,
-          "lngHdx": 87.09378897
+          "lngHdx": 87.09378897,
+          "population": 157923
         },
         {
           "name": "Dhankuta",
@@ -398,7 +399,8 @@
           "hdxPcode": "NP0107",
           "areaSqKmOfficial": 898.71012994,
           "latHdx": 27.01803587,
-          "lngHdx": 87.31306666
+          "lngHdx": 87.31306666,
+          "population": 150599
         },
         {
           "name": "Ilam",
@@ -635,7 +637,8 @@
           "hdxPcode": "NP0103",
           "areaSqKmOfficial": 1685.28288314,
           "latHdx": 26.88539591,
-          "lngHdx": 87.92023976
+          "lngHdx": 87.92023976,
+          "population": 279534
         },
         {
           "name": "Jhapa",
@@ -980,7 +983,8 @@
           "hdxPcode": "NP0104",
           "areaSqKmOfficial": 1603.81095109,
           "latHdx": 26.58356833,
-          "lngHdx": 87.88550096
+          "lngHdx": 87.88550096,
+          "population": 998054
         },
         {
           "name": "Khotang",
@@ -1205,7 +1209,8 @@
           "hdxPcode": "NP0112",
           "areaSqKmOfficial": 1589.19505702,
           "latHdx": 27.15626693,
-          "lngHdx": 86.68065001
+          "lngHdx": 86.68065001,
+          "population": 175298
         },
         {
           "name": "Morang",
@@ -1591,7 +1596,8 @@
           "hdxPcode": "NP0105",
           "areaSqKmOfficial": 1822.3403614,
           "latHdx": 26.61061444,
-          "lngHdx": 87.47311589
+          "lngHdx": 87.47311589,
+          "population": 1148156
         },
         {
           "name": "Okhaldhunga",
@@ -1780,7 +1786,8 @@
           "hdxPcode": "NP0113",
           "areaSqKmOfficial": 1076.07920143,
           "latHdx": 27.33644653,
-          "lngHdx": 86.44832651
+          "lngHdx": 86.44832651,
+          "population": 139552
         },
         {
           "name": "Panchthar",
@@ -1967,7 +1974,8 @@
           "hdxPcode": "NP0102",
           "areaSqKmOfficial": 1247.72251232,
           "latHdx": 27.14887122,
-          "lngHdx": 87.85507165
+          "lngHdx": 87.85507165,
+          "population": 172400
         },
         {
           "name": "Sankhuwasabha",
@@ -2198,7 +2206,8 @@
           "hdxPcode": "NP0109",
           "areaSqKmOfficial": 3469.61388214,
           "latHdx": 27.54767574,
-          "lngHdx": 87.22650149
+          "lngHdx": 87.22650149,
+          "population": 158041
         },
         {
           "name": "Solukhumbu",
@@ -2375,7 +2384,8 @@
           "hdxPcode": "NP0111",
           "areaSqKmOfficial": 3354.14215115,
           "latHdx": 27.72563175,
-          "lngHdx": 86.7815385
+          "lngHdx": 86.7815385,
+          "population": 104851
         },
         {
           "name": "Sunsari",
@@ -2648,7 +2658,8 @@
           "hdxPcode": "NP0106",
           "areaSqKmOfficial": 1191.88652736,
           "latHdx": 26.64088623,
-          "lngHdx": 87.14087554
+          "lngHdx": 87.14087554,
+          "population": 926962
         },
         {
           "name": "Taplejung",
@@ -2843,7 +2854,8 @@
           "hdxPcode": "NP0101",
           "areaSqKmOfficial": 3631.8133091,
           "latHdx": 27.6104625,
-          "lngHdx": 87.8215419
+          "lngHdx": 87.8215419,
+          "population": 120590
         },
         {
           "name": "Terhathum",
@@ -2993,7 +3005,8 @@
           "hdxPcode": "NP0108",
           "areaSqKmOfficial": 670.49210401,
           "latHdx": 27.13246943,
-          "lngHdx": 87.5242843
+          "lngHdx": 87.5242843,
+          "population": 88731
         },
         {
           "name": "Udayapur",
@@ -3174,7 +3187,8 @@
           "hdxPcode": "NP0114",
           "areaSqKmOfficial": 2296.77064563,
           "latHdx": 26.93300029,
-          "lngHdx": 86.51982047
+          "lngHdx": 86.51982047,
+          "population": 340721
         }
       ],
       "cbsCode": 1,
@@ -3187,7 +3201,8 @@
       "hdxPcode": "NP01",
       "areaSqKmOfficial": 26061.44835944,
       "latHdx": 27.23039681,
-      "lngHdx": 87.17734642
+      "lngHdx": 87.17734642,
+      "population": 4961412
     },
     {
       "id": "madhesh",
@@ -3546,7 +3561,8 @@
           "hdxPcode": "NP0233",
           "areaSqKmOfficial": 1272.52708555,
           "latHdx": 27.10738514,
-          "lngHdx": 85.06923246
+          "lngHdx": 85.06923246,
+          "population": 763137
         },
         {
           "name": "Dhanusha",
@@ -3942,7 +3958,8 @@
           "hdxPcode": "NP0217",
           "areaSqKmOfficial": 1188.70295575,
           "latHdx": 26.85108325,
-          "lngHdx": 86.03579976
+          "lngHdx": 86.03579976,
+          "population": 867747
         },
         {
           "name": "Mahottari",
@@ -4268,7 +4285,8 @@
           "hdxPcode": "NP0218",
           "areaSqKmOfficial": 1000.7595921,
           "latHdx": 26.88485916,
-          "lngHdx": 85.79738704
+          "lngHdx": 85.79738704,
+          "population": 706994
         },
         {
           "name": "Parsa",
@@ -4577,7 +4595,8 @@
           "hdxPcode": "NP0234",
           "areaSqKmOfficial": 1406.56421558,
           "latHdx": 27.22337695,
-          "lngHdx": 84.82694198
+          "lngHdx": 84.82694198,
+          "population": 654471
         },
         {
           "name": "Rautahat",
@@ -4971,7 +4990,8 @@
           "hdxPcode": "NP0232",
           "areaSqKmOfficial": 1038.2189733,
           "latHdx": 26.98872387,
-          "lngHdx": 85.28300834
+          "lngHdx": 85.28300834,
+          "population": 813573
         },
         {
           "name": "Saptari",
@@ -5357,7 +5377,8 @@
           "hdxPcode": "NP0215",
           "areaSqKmOfficial": 1281.32414121,
           "latHdx": 26.60673829,
-          "lngHdx": 86.74929829
+          "lngHdx": 86.74929829,
+          "population": 706255
         },
         {
           "name": "Sarlahi",
@@ -5803,7 +5824,8 @@
           "hdxPcode": "NP0219",
           "areaSqKmOfficial": 1263.4338645,
           "latHdx": 26.96826656,
-          "lngHdx": 85.56373316
+          "lngHdx": 85.56373316,
+          "population": 862470
         },
         {
           "name": "Siraha",
@@ -6196,7 +6218,8 @@
           "hdxPcode": "NP0216",
           "areaSqKmOfficial": 1139.28374465,
           "latHdx": 26.74245818,
-          "lngHdx": 86.34972204
+          "lngHdx": 86.34972204,
+          "population": 739953
         }
       ],
       "cbsCode": 2,
@@ -6209,7 +6232,8 @@
       "hdxPcode": "NP02",
       "areaSqKmOfficial": 9590.81457265,
       "latHdx": 26.94270712,
-      "lngHdx": 85.60758419
+      "lngHdx": 85.60758419,
+      "population": 6114600
     },
     {
       "id": "bagmati",
@@ -6319,7 +6343,8 @@
           "hdxPcode": "NP0326",
           "areaSqKmOfficial": 123.07150536,
           "latHdx": 27.67421236,
-          "lngHdx": 85.42637953
+          "lngHdx": 85.42637953,
+          "population": 432132
         },
         {
           "name": "Chitwan",
@@ -6493,7 +6518,8 @@
           "hdxPcode": "NP0335",
           "areaSqKmOfficial": 2240.03253472,
           "latHdx": 27.61788779,
-          "lngHdx": 84.4530622
+          "lngHdx": 84.4530622,
+          "population": 719859
         },
         {
           "name": "Dhading",
@@ -6771,7 +6797,8 @@
           "hdxPcode": "NP0330",
           "areaSqKmOfficial": 1906.70686297,
           "latHdx": 28.00776753,
-          "lngHdx": 84.90648267
+          "lngHdx": 84.90648267,
+          "population": 325710
         },
         {
           "name": "Dolakha",
@@ -6960,7 +6987,8 @@
           "hdxPcode": "NP0322",
           "areaSqKmOfficial": 2146.65536353,
           "latHdx": 27.82405229,
-          "lngHdx": 86.2215437
+          "lngHdx": 86.2215437,
+          "population": 172767
         },
         {
           "name": "Kathmandu",
@@ -7210,7 +7238,8 @@
           "hdxPcode": "NP0327",
           "areaSqKmOfficial": 413.51345306,
           "latHdx": 27.69395091,
-          "lngHdx": 85.28485018
+          "lngHdx": 85.28485018,
+          "population": 2041587
         },
         {
           "name": "Kavrepalanchok",
@@ -7519,7 +7548,8 @@
           "hdxPcode": "NP0324",
           "areaSqKmOfficial": 1393.82909514,
           "latHdx": 27.54517876,
-          "lngHdx": 85.62384007
+          "lngHdx": 85.62384007,
+          "population": 364039
         },
         {
           "name": "Lalitpur",
@@ -7667,7 +7697,8 @@
           "hdxPcode": "NP0325",
           "areaSqKmOfficial": 396.74388208,
           "latHdx": 27.54820448,
-          "lngHdx": 85.32301163
+          "lngHdx": 85.32301163,
+          "population": 551667
         },
         {
           "name": "Makwanpur",
@@ -7903,7 +7934,8 @@
           "hdxPcode": "NP0331",
           "areaSqKmOfficial": 2443.44979571,
           "latHdx": 27.43698525,
-          "lngHdx": 85.05346394
+          "lngHdx": 85.05346394,
+          "population": 466073
         },
         {
           "name": "Nuwakot",
@@ -8182,7 +8214,8 @@
           "hdxPcode": "NP0328",
           "areaSqKmOfficial": 1192.97548759,
           "latHdx": 27.92578852,
-          "lngHdx": 85.24848688
+          "lngHdx": 85.24848688,
+          "population": 263391
         },
         {
           "name": "Ramechhap",
@@ -8365,7 +8398,8 @@
           "hdxPcode": "NP0321",
           "areaSqKmOfficial": 1564.05299002,
           "latHdx": 27.53740976,
-          "lngHdx": 86.25692124
+          "lngHdx": 86.25692124,
+          "population": 170302
         },
         {
           "name": "Rasuwa",
@@ -8488,7 +8522,8 @@
           "hdxPcode": "NP0329",
           "areaSqKmOfficial": 1500.81681924,
           "latHdx": 28.17560192,
-          "lngHdx": 85.47905394
+          "lngHdx": 85.47905394,
+          "population": 46689
         },
         {
           "name": "Sindhuli",
@@ -8703,7 +8738,8 @@
           "hdxPcode": "NP0320",
           "areaSqKmOfficial": 2484.23619665,
           "latHdx": 27.18505301,
-          "lngHdx": 86.07014782
+          "lngHdx": 86.07014782,
+          "population": 300026
         },
         {
           "name": "Sindhupalchok",
@@ -8986,7 +9022,8 @@
           "hdxPcode": "NP0323",
           "areaSqKmOfficial": 2490.83730973,
           "latHdx": 27.90696,
-          "lngHdx": 85.7556089
+          "lngHdx": 85.7556089,
+          "population": 262624
         }
       ],
       "cbsCode": 3,
@@ -8999,7 +9036,8 @@
       "hdxPcode": "NP03",
       "areaSqKmOfficial": 20296.92129581,
       "latHdx": 27.65265864,
-      "lngHdx": 85.39297431
+      "lngHdx": 85.39297431,
+      "population": 6116866
     },
     {
       "id": "gandaki",
@@ -9216,7 +9254,8 @@
           "hdxPcode": "NP0443",
           "areaSqKmOfficial": 1835.86937735,
           "latHdx": 28.35629495,
-          "lngHdx": 83.14255482
+          "lngHdx": 83.14255482,
+          "population": 249211
         },
         {
           "name": "Gorkha",
@@ -9456,7 +9495,8 @@
           "hdxPcode": "NP0436",
           "areaSqKmOfficial": 3646.07574366,
           "latHdx": 28.27357757,
-          "lngHdx": 84.84068187
+          "lngHdx": 84.84068187,
+          "population": 251027
         },
         {
           "name": "Kaski",
@@ -9570,7 +9610,8 @@
           "hdxPcode": "NP0439",
           "areaSqKmOfficial": 2084.81079438,
           "latHdx": 28.34548387,
-          "lngHdx": 83.97090334
+          "lngHdx": 83.97090334,
+          "population": 600051
         },
         {
           "name": "Lamjung",
@@ -9750,7 +9791,8 @@
           "hdxPcode": "NP0437",
           "areaSqKmOfficial": 1662.66991816,
           "latHdx": 28.28280571,
-          "lngHdx": 84.42011019
+          "lngHdx": 84.42011019,
+          "population": 155852
         },
         {
           "name": "Manang",
@@ -9839,7 +9881,8 @@
           "hdxPcode": "NP0438",
           "areaSqKmOfficial": 2321.05334089,
           "latHdx": 28.67269978,
-          "lngHdx": 84.16893719
+          "lngHdx": 84.16893719,
+          "population": 5658
         },
         {
           "name": "Mustang",
@@ -9950,7 +9993,8 @@
           "hdxPcode": "NP0445",
           "areaSqKmOfficial": 3564.13326615,
           "latHdx": 28.94799808,
-          "lngHdx": 83.90058279
+          "lngHdx": 83.90058279,
+          "population": 14452
         },
         {
           "name": "Myagdi",
@@ -10088,7 +10132,8 @@
           "hdxPcode": "NP0444",
           "areaSqKmOfficial": 2285.10052659,
           "latHdx": 28.54595692,
-          "lngHdx": 83.46324761
+          "lngHdx": 83.46324761,
+          "population": 107033
         },
         {
           "name": "Nawalpur",
@@ -10283,7 +10328,8 @@
           "hdxPcode": "NP0447",
           "areaSqKmOfficial": 1426.11811196,
           "latHdx": 27.65375301,
-          "lngHdx": 84.03070396
+          "lngHdx": 84.03070396,
+          "population": 378079
         },
         {
           "name": "Parbat",
@@ -10448,7 +10494,8 @@
           "hdxPcode": "NP0442",
           "areaSqKmOfficial": 541.65594257,
           "latHdx": 28.20255796,
-          "lngHdx": 83.72848724
+          "lngHdx": 83.72848724,
+          "population": 130887
         },
         {
           "name": "Syangja",
@@ -10700,7 +10747,8 @@
           "hdxPcode": "NP0441",
           "areaSqKmOfficial": 1037.68556039,
           "latHdx": 28.04488065,
-          "lngHdx": 83.82705895
+          "lngHdx": 83.82705895,
+          "population": 253024
         },
         {
           "name": "Tanahun",
@@ -10925,7 +10973,8 @@
           "hdxPcode": "NP0440",
           "areaSqKmOfficial": 1572.14449339,
           "latHdx": 27.93540708,
-          "lngHdx": 84.22312639
+          "lngHdx": 84.22312639,
+          "population": 321153
         }
       ],
       "cbsCode": 4,
@@ -10938,7 +10987,8 @@
       "hdxPcode": "NP04",
       "areaSqKmOfficial": 21977.3170755,
       "latHdx": 28.38438554,
-      "lngHdx": 84.03585487
+      "lngHdx": 84.03585487,
+      "population": 2466427
     },
     {
       "id": "lumbini",
@@ -11084,7 +11134,8 @@
           "hdxPcode": "NP0550",
           "areaSqKmOfficial": 1239.08214273,
           "latHdx": 27.93204608,
-          "lngHdx": 83.14572054
+          "lngHdx": 83.14572054,
+          "population": 177086
         },
         {
           "name": "Banke",
@@ -11283,7 +11334,8 @@
           "hdxPcode": "NP0557",
           "areaSqKmOfficial": 1880.54113257,
           "latHdx": 28.09571577,
-          "lngHdx": 81.77312448
+          "lngHdx": 81.77312448,
+          "population": 603194
         },
         {
           "name": "Bardiya",
@@ -11487,7 +11539,8 @@
           "hdxPcode": "NP0558",
           "areaSqKmOfficial": 2000.73793597,
           "latHdx": 28.37173984,
-          "lngHdx": 81.45015843
+          "lngHdx": 81.45015843,
+          "population": 459900
         },
         {
           "name": "Dang",
@@ -11720,7 +11773,8 @@
           "hdxPcode": "NP0556",
           "areaSqKmOfficial": 3058.53850742,
           "latHdx": 27.9796492,
-          "lngHdx": 82.46856179
+          "lngHdx": 82.46856179,
+          "population": 674993
         },
         {
           "name": "Gulmi",
@@ -11991,7 +12045,8 @@
           "hdxPcode": "NP0551",
           "areaSqKmOfficial": 1107.86200109,
           "latHdx": 28.09573731,
-          "lngHdx": 83.32919836
+          "lngHdx": 83.32919836,
+          "population": 246494
         },
         {
           "name": "Kapilvastu",
@@ -12223,7 +12278,8 @@
           "hdxPcode": "NP0549",
           "areaSqKmOfficial": 1651.09640982,
           "latHdx": 27.61908696,
-          "lngHdx": 82.98162175
+          "lngHdx": 82.98162175,
+          "population": 682961
         },
         {
           "name": "Palpa",
@@ -12466,7 +12522,8 @@
           "hdxPcode": "NP0546",
           "areaSqKmOfficial": 1462.14342345,
           "latHdx": 27.8104921,
-          "lngHdx": 83.63039532
+          "lngHdx": 83.63039532,
+          "population": 245027
         },
         {
           "name": "Parasi (Nawalparasi West)",
@@ -12640,7 +12697,8 @@
           "hdxPcode": "NP0547",
           "areaSqKmOfficial": 726.25178648,
           "latHdx": 27.51989249,
-          "lngHdx": 83.73679712
+          "lngHdx": 83.73679712,
+          "population": 386868
         },
         {
           "name": "Pyuthan",
@@ -12853,7 +12911,8 @@
           "hdxPcode": "NP0555",
           "areaSqKmOfficial": 1320.77347844,
           "latHdx": 28.1201009,
-          "lngHdx": 82.82993019
+          "lngHdx": 82.82993019,
+          "population": 232019
         },
         {
           "name": "Rolpa",
@@ -13084,7 +13143,8 @@
           "hdxPcode": "NP0554",
           "areaSqKmOfficial": 1885.00965996,
           "latHdx": 28.32533807,
-          "lngHdx": 82.64430298
+          "lngHdx": 82.64430298,
+          "population": 234793
         },
         {
           "name": "Rukum East",
@@ -13165,7 +13225,8 @@
           "hdxPcode": "NP0552",
           "areaSqKmOfficial": 1682.02264305,
           "latHdx": 28.67236486,
-          "lngHdx": 82.85894961
+          "lngHdx": 82.85894961,
+          "population": 56786
         },
         {
           "name": "Rupandehi",
@@ -13520,7 +13581,8 @@
           "hdxPcode": "NP0548",
           "areaSqKmOfficial": 1304.6323645,
           "latHdx": 27.54914663,
-          "lngHdx": 83.40323071
+          "lngHdx": 83.40323071,
+          "population": 1121957
         }
       ],
       "cbsCode": 5,
@@ -13533,7 +13595,8 @@
       "hdxPcode": "NP05",
       "areaSqKmOfficial": 19318.69148547,
       "latHdx": 28.09954735,
-      "lngHdx": 82.52199568
+      "lngHdx": 82.52199568,
+      "population": 5122078
     },
     {
       "id": "karnali",
@@ -13790,7 +13853,8 @@
           "hdxPcode": "NP0661",
           "areaSqKmOfficial": 1483.99936271,
           "latHdx": 28.88457061,
-          "lngHdx": 81.69989545
+          "lngHdx": 81.69989545,
+          "population": 252313
         },
         {
           "name": "Dolpa",
@@ -13975,7 +14039,8 @@
           "hdxPcode": "NP0662",
           "areaSqKmOfficial": 7944.65893556,
           "latHdx": 29.21412855,
-          "lngHdx": 83.03671178
+          "lngHdx": 83.03671178,
+          "population": 42774
         },
         {
           "name": "Humla",
@@ -14128,7 +14193,8 @@
           "hdxPcode": "NP0666",
           "areaSqKmOfficial": 6007.32008311,
           "latHdx": 30.02603853,
-          "lngHdx": 81.83318057
+          "lngHdx": 81.83318057,
+          "population": 55394
         },
         {
           "name": "Jajarkot",
@@ -14290,7 +14356,8 @@
           "hdxPcode": "NP0660",
           "areaSqKmOfficial": 2222.06385926,
           "latHdx": 28.86935787,
-          "lngHdx": 82.16819145
+          "lngHdx": 82.16819145,
+          "population": 189360
         },
         {
           "name": "Jumla",
@@ -14473,7 +14540,8 @@
           "hdxPcode": "NP0663",
           "areaSqKmOfficial": 2553.79322616,
           "latHdx": 29.23862085,
-          "lngHdx": 82.19859551
+          "lngHdx": 82.19859551,
+          "population": 118349
         },
         {
           "name": "Kalikot",
@@ -14674,7 +14742,8 @@
           "hdxPcode": "NP0664",
           "areaSqKmOfficial": 1639.71354015,
           "latHdx": 29.21622534,
-          "lngHdx": 81.68885584
+          "lngHdx": 81.68885584,
+          "population": 145292
         },
         {
           "name": "Mugu",
@@ -14773,7 +14842,8 @@
           "hdxPcode": "NP0665",
           "areaSqKmOfficial": 3233.13262037,
           "latHdx": 29.67830385,
-          "lngHdx": 82.53069821
+          "lngHdx": 82.53069821,
+          "population": 64549
         },
         {
           "name": "Rukum West",
@@ -14918,7 +14988,8 @@
           "hdxPcode": "NP0652",
           "areaSqKmOfficial": 1213.06320377,
           "latHdx": 28.75631701,
-          "lngHdx": 82.42828458
+          "lngHdx": 82.42828458,
+          "population": 166740
         },
         {
           "name": "Salyan",
@@ -15147,7 +15218,8 @@
           "hdxPcode": "NP0653",
           "areaSqKmOfficial": 1879.96157723,
           "latHdx": 28.40682322,
-          "lngHdx": 82.16757784
+          "lngHdx": 82.16757784,
+          "population": 238515
         },
         {
           "name": "Surkhet",
@@ -15363,7 +15435,8 @@
           "hdxPcode": "NP0659",
           "areaSqKmOfficial": 2485.60536694,
           "latHdx": 28.65790891,
-          "lngHdx": 81.51382806
+          "lngHdx": 81.51382806,
+          "population": 415126
         }
       ],
       "cbsCode": 6,
@@ -15376,7 +15449,8 @@
       "hdxPcode": "NP06",
       "areaSqKmOfficial": 30663.31177525,
       "latHdx": 29.30804212,
-      "lngHdx": 82.47213297
+      "lngHdx": 82.47213297,
+      "population": 1688412
     },
     {
       "id": "sudurpashchim",
@@ -15609,7 +15683,8 @@
           "hdxPcode": "NP0769",
           "areaSqKmOfficial": 1700.12945757,
           "latHdx": 29.06780128,
-          "lngHdx": 81.29406579
+          "lngHdx": 81.29406579,
+          "population": 228852
         },
         {
           "name": "Baitadi",
@@ -15846,7 +15921,8 @@
           "hdxPcode": "NP0774",
           "areaSqKmOfficial": 1492.54812776,
           "latHdx": 29.5081087,
-          "lngHdx": 80.55843036
+          "lngHdx": 80.55843036,
+          "population": 242157
         },
         {
           "name": "Bajhang",
@@ -16099,7 +16175,8 @@
           "hdxPcode": "NP0767",
           "areaSqKmOfficial": 3458.64162931,
           "latHdx": 29.72252996,
-          "lngHdx": 81.246038
+          "lngHdx": 81.246038,
+          "population": 189085
         },
         {
           "name": "Bajura",
@@ -16313,7 +16390,8 @@
           "hdxPcode": "NP0768",
           "areaSqKmOfficial": 2297.66440848,
           "latHdx": 29.61058416,
-          "lngHdx": 81.57656749
+          "lngHdx": 81.57656749,
+          "population": 138523
         },
         {
           "name": "Dadeldhura",
@@ -16484,7 +16562,8 @@
           "hdxPcode": "NP0773",
           "areaSqKmOfficial": 1502.08945644,
           "latHdx": 29.20907463,
-          "lngHdx": 80.50090934
+          "lngHdx": 80.50090934,
+          "population": 139602
         },
         {
           "name": "Darchula",
@@ -16688,7 +16767,8 @@
           "hdxPcode": "NP0775",
           "areaSqKmOfficial": 2339.60543398,
           "latHdx": 29.92581392,
-          "lngHdx": 80.78907222
+          "lngHdx": 80.78907222,
+          "population": 133310
         },
         {
           "name": "Doti",
@@ -16901,7 +16981,8 @@
           "hdxPcode": "NP0770",
           "areaSqKmOfficial": 2050.40364742,
           "latHdx": 29.18816784,
-          "lngHdx": 80.86231315
+          "lngHdx": 80.86231315,
+          "population": 204831
         },
         {
           "name": "Kailali",
@@ -17212,7 +17293,8 @@
           "hdxPcode": "NP0771",
           "areaSqKmOfficial": 3285.49238754,
           "latHdx": 28.73133178,
-          "lngHdx": 80.90417961
+          "lngHdx": 80.90417961,
+          "population": 904666
         },
         {
           "name": "Kanchanpur",
@@ -17425,7 +17507,8 @@
           "hdxPcode": "NP0772",
           "areaSqKmOfficial": 1617.64471672,
           "latHdx": 28.84467092,
-          "lngHdx": 80.28316254
+          "lngHdx": 80.28316254,
+          "population": 513757
         }
       ],
       "cbsCode": 7,
@@ -17438,7 +17521,8 @@
       "hdxPcode": "NP07",
       "areaSqKmOfficial": 19744.21926521,
       "latHdx": 29.32077149,
-      "lngHdx": 80.91877778
+      "lngHdx": 80.91877778,
+      "population": 2694783
     }
   ]
 }
