@@ -590,8 +590,13 @@ html.dark .maplibregl-popup-tip, html[data-theme="dark"] .maplibregl-popup-tip {
 html.dark .maplibregl-popup-content code, html[data-theme="dark"] .maplibregl-popup-content code { background: var(--slate-700); }
 html.dark .maplibregl-ctrl-attrib, html[data-theme="dark"] .maplibregl-ctrl-attrib { background: rgb(15 23 42 / 0.8); color: var(--slate-400); }
 html.dark .maplibregl-ctrl-attrib a, html[data-theme="dark"] .maplibregl-ctrl-attrib a { color: #93c5fd; }
-/* axe link-in-text-block: the attribution link is distinguishable by underline, not color alone (WCAG 1.4.1). */
-.maplibregl-ctrl-attrib a { text-decoration: underline; text-underline-offset: 2px; }
+/* axe link-in-text-block (WCAG 1.4.1): the engine sheet loads at RUNTIME
+   (appended after this sheet) and ships `.maplibregl-ctrl-attrib a { text-
+   decoration: none; }` — an equal-specificity tie loses to whichever sheet
+   loads LAST. Scoping under .map (0,2,1) beats the engine (0,1,1) in any
+   load order: the attribution link is distinguishable by underline, never
+   color alone. */
+.map .maplibregl-ctrl-attrib a { text-decoration: underline; text-underline-offset: 2px; }
 .map-attrib-note { font-size: var(--text-xs); color: var(--color-text-muted); margin: var(--space-2) 0 0; }
 @media print {
   .map-card { display: none; }
