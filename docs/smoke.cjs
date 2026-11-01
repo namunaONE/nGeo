@@ -480,6 +480,18 @@ vm.createContext(sandbox);
   assert.ok(releaseYml.includes('gh release upload') &&
     releaseYml.includes('docs/palika-boundaries-highres.geojson'),
     'the release workflow publishes the full-resolution source as an asset');
+  // Track T1 (PMTiles archive): the same boundaries archived as one
+  // single-file PMTiles so map renderers can stream tiles without a
+  // tile server. Built inside the SAME release job - one notes edit,
+  // no racing workflows; the archive uploads to the Release, NEVER to
+  // Pages (the payload-diet law stands). Structural pins; the tiler
+  // and converter invocations are pinned, thresholds are not.
+  assert.ok(releaseYml.includes('tippecanoe=2.79.0') &&
+    releaseYml.includes('setup-micromamba@v3'),
+    'the release workflow pins the conda-forge tippecanoe via micromamba');
+  assert.ok(releaseYml.includes('protomaps/go-pmtiles') &&
+    releaseYml.includes('palika-boundaries.pmtiles'),
+    'the release workflow archives the boundaries as PMTiles');
   // RFC 7946 gate: every GeoJSON artifact - the docs/ overlays AND the
   // bindings/geojson public downloads - must speak WGS84 lon/lat with
   // closed rings and no legacy "crs" member. Structural pins only;
