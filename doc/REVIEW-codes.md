@@ -261,3 +261,53 @@ preserved in `data/_stage/npl_codes.json` and `doc/_apply-npl-codes-raw.txt`.
    (§7.4 list + §8.3 pairs).
 3. Wards remain on hold pending CBS Census 2021 ward-level data (per the
    standing decision).
+
+---
+
+## 9. Addendum (2026-11-01) — CBS administrative atlas: the corroboration audit
+
+**Status:** audit only — no canonical data modified, no tier promotion. The
+atlas is the CBS family (same issuer as source #5's harvest), so it is
+corroborating evidence, not an independent second attestation. The
+doubly-attested rule (`verified` = postal-2025 + CBS) is unchanged.
+
+**Source:** a 9-page CBS administrative atlas (`1695376827_32.pdf`,
+user-provided 2026-11-01; not vendored — no stated licence, same treatment
+as source #7). Maps 1–2 index the provinces and districts; Maps 3–9 list
+every district's palikas with their PDDPP code and an (U)/(R) tag. Every
+page credits "Prepared by GIS Section, CBS" and "Map Source: Topographic
+Zonal Map (1:125,000), Department of Survey". The old province naming
+(no Koshi / Madhesh / Bagmati / Lumbini on the index pages) dates the
+printing between the 2017 restructuring and the ~2023 renames; the
+filename timestamp (2023-09-22) sits two minutes from the §8 code
+table's `1695378470_83.xls` — same origin day, likely the same portal.
+
+**Audit (OCR cross-check against `data/nepal_local_levels.json`):**
+
+- **741/753 exact PDDPP code matches.** The remaining 12 all sit on the
+  atlas's Province-2 page, whose printed code column OCR-shifted (Bara
+  20701–20707 appears inside a 206xx run); all 12 are present by name
+  with the correct district and type.
+- **0/741 urban-vs-rural disagreements** — every exact code match agrees
+  with the dataset's type.
+- **The ledger is corroborated directly:** the atlas prints "Bheri Malika
+  (U)" at 60706 — a second government printing of the §8.1 flagship
+  adjudication.
+- **The §8.3 rename set is corroborated:** the atlas prints the expanded
+  names at the same codes we hold (Barpak Sulikot 40103, Narpa Bhumi
+  40201, Netrawati Dabajong 30405, Likhu Tamakoshi 31003, Bhimsen Thapa
+  40106, Lo-Ghekar Damodarkunda 40301), and older spellings elsewhere
+  ("Janakpur" at 20315, where we ship Janakpurdham). Printings differ in
+  vintage in both directions; the audit joins on codes.
+- **79 name variants** across the matches: transliteration plus the
+  rename phenomena above. None affects identity, which the audit keyed
+  on code + district + type.
+
+**Verdict:** zero detected mis-assignments in the singleSource tier — an
+official printing of the same roster family agrees with every assignment
+it legibly attests. The tier label is unchanged (one attestation family,
+honestly labelled; see the Honesty note in data/SOURCES.md).
+
+**Follow-up (optional):** a human read of the atlas's Province-2 page
+would confirm the 7 OCR-shifted Bara codes at code level. Nothing in the
+dataset waits on it.
