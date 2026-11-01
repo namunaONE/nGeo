@@ -157,8 +157,23 @@ jobs:
       # without it, `// coverage:ignore-line` markers are silently not honored
       # and the single unexecutable line (an uninstantiable private constructor)
       # counts as a miss.
-      - name: Enforce the coverage floor
-        run: dart run tool/check_coverage.dart
+      # Coverage re-measure policy (2026-11-01): dart test --coverage can
+      # drop tail-isolate hit maps when the runner is under load — observed
+      # twice on workflow-only PRs (identical "uncovered" line sets that a
+      # green main run had covered). Same law as the budgets gate: a missed
+      # floor earns exactly ONE fresh full re-measure; the second verdict is
+      # final and the floor itself is never relaxed.
+      - name: Enforce the coverage floor (one re-measure on a miss)
+        run: |
+          set -euo pipefail
+          if dart run tool/check_coverage.dart; then
+            exit 0
+          fi
+          echo "::notice::coverage floor missed on the first measurement — re-measuring once (dart test --coverage can drop tail-isolate hits under load; the floor is never relaxed, only re-measured)."
+          rm -rf coverage
+          dart test --coverage=coverage
+          dart pub global run coverage:format_coverage --lcov --in=coverage --out=coverage/lcov.info --report-on=lib --check-ignore
+          dart run tool/check_coverage.dart
       - name: Explorer smoke test (no browser, no npm deps)
         run: node docs/smoke.cjs
       - name: Bindings smoke test (executes the JS, parses CSV + GeoJSON)
