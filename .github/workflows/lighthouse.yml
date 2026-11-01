@@ -1,0 +1,36 @@
+name: Lighthouse budgets
+
+# Wave 4: budgets are features, not dashboards. Every PR that touches
+# the site gets measured against the performance + accessibility law
+# (CWV p75 targets from design-flagship-plan.md) BEFORE merge, the
+# same way dart format and the drift gates already do. The site is
+# static, so the budget run needs no deploy: it serves docs/ from a
+# local HTTP server and runs Lighthouse against it.
+on:
+  pull_request:
+  push:
+    branches: [main]
+  workflow_dispatch:
+
+permissions:
+  contents: read
+
+jobs:
+  budgets:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-node@v4
+        with:
+          node-version: '22'
+      - name: Install Lighthouse
+        run: npm install -g lighthouse@12
+      # docs/ is fully static (no build step), so a plain HTTP server is
+      # the whole production stack for budget purposes.
+      - name: Serve the site
+        run: |
+          cd docs
+          python3 -m http.server 4173 &
+          sleep 2
+      - name: Run budget assertions
+        run: node tool/check_budgets.mjs http://localhost:4173

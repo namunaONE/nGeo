@@ -4,7 +4,7 @@
 <meta charset="utf-8">
 <meta name="viewport" content="width=device-width, initial-scale=1">
 <title>Design System v3 — Himalayan Trust × Everest Growth</title>
-<link rel="stylesheet" href="styles.css?v=16">
+<link rel="stylesheet" href="styles.css?v=17">
 <link rel="stylesheet" href="brand-tokens.css?v=2">
   <link rel="preload" href="fonts/inter-latin-wght-normal.woff2" as="font" type="font/woff2" crossorigin>
   <link rel="stylesheet" href="fonts.css?v=1">
@@ -102,7 +102,7 @@ const T={
 p:[["50","#EFF6FF","#1E3A8A"],["100","#DBEAFE","#1E3A8A"],["200","#BFDBFE","#1E3A8A"],["300","#93C5FD","#0B1220"],["400","#60A5FA","#0B1220"],["500","#3B82F6","#0B1220"],["600","#2563EB","#FFFFFF"],["700","#1D4ED8","#FFFFFF"],["800","#1E40AF","#FFFFFF"],["900","#1E3A8A","#FFFFFF"],["950","#172554","#FFFFFF"]],
 g:[["50","#F0FDF4","#14532D"],["100","#DCFCE7","#14532D"],["200","#BBF7D0","#14532D"],["300","#86EFAC","#052E16"],["400","#4ADE80","#052E16"],["500","#4FD166","#052E16"],["600","#16A34A","#052E16"],["700","#15803D","#FFFFFF"],["800","#166534","#FFFFFF"],["900","#14532D","#FFFFFF"],["950","#052E16","#FFFFFF"]],
 n:[["0","#FFFFFF","#1C1917"],["50","#FAFAF9","#1C1917"],["100","#F5F5F4","#1C1917"],["200","#E7E5E4","#1C1917"],["300","#D6D3D1","#1C1917"],["400","#A8A29E","#1C1917"],["600","#57534E","#FFFFFF"],["800","#292524","#FFFFFF"],["900","#1C1917","#FFFFFF"],["950","#0C0A09","#FFFFFF"]],
-t:[["amber800","#92400E","#FFFFFF"],["amber600","#D97706","#FFFFFF"],["amber300","#FCD34D","#1C1917"],["red700","#B91C1C","#FFFFFF"],["red600","#DC2626","#FFFFFF"],["red300","#FCA5A5","#1C1917"]]};
+t:[["amber800","#92400E","#FFFFFF"],["amber600","#D97706","#1C1917"],["amber300","#FCD34D","#1C1917"],["red700","#B91C1C","#FFFFFF"],["red600","#DC2626","#FFFFFF"],["red300","#FCA5A5","#1C1917"]]};
 function row(id,arr){const el=document.getElementById(id);el.innerHTML=arr.map(([t,c,fg])=>`<div class="tone" style="background:${c};color:${fg}"><b>${t}</b>${c}</div>`).join('');}
 row('pRow',T.p);row('gRow',T.g);row('nRow',T.n);row('tRow',T.t);
 const b=document.getElementById('themeToggle');
