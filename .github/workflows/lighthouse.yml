@@ -20,6 +20,7 @@ permissions:
 # (runner-images#14748) and a new image can shift Lighthouse baselines,
 # so the budget runs pin the image the ceilings were measured on. If the
 # pin is ever moved, re-baseline from the ::notice::measured: channel
+  # (retrigger marker: coverage instrumentation flake, unrelated to this file)
 # first — never let the migration silently re-interpret the law.
 jobs:
   budgets:
