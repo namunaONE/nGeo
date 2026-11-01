@@ -291,6 +291,101 @@ void main() {
     });
   });
 
+  group('v2.10 HDX official data (province & district)', () {
+    test('all 7 provinces carry HDX pcode', () {
+      final ps = NepalAdminApi.getAllProvinces();
+      expect(ps.where((p) => p.hasHdxData).length, 7);
+    });
+
+    test('all 77 districts carry HDX pcode', () {
+      final ds = NepalAdminApi.getAllDistricts();
+      expect(ds.where((d) => d.hasHdxData).length, 77);
+    });
+
+    test('province pcode format is NP + 2 digits', () {
+      for (final p in NepalAdminApi.getAllProvinces()) {
+        if (p.hdxPcode != null) {
+          expect(p.hdxPcode!, matches(RegExp(r'^NP\d{2}$')),
+              reason: '${p.name} hdxPcode');
+        }
+      }
+    });
+
+    test('district pcode format is NP + 4 digits', () {
+      for (final d in NepalAdminApi.getAllDistricts()) {
+        if (d.hdxPcode != null) {
+          expect(d.hdxPcode!, matches(RegExp(r'^NP\d{4}$')),
+              reason: '${d.name} hdxPcode');
+        }
+      }
+    });
+
+    test('HDX centroid inside Nepal bounding box (province)', () {
+      for (final p in NepalAdminApi.getAllProvinces()) {
+        if (p.latHdx != null && p.lngHdx != null) {
+          expect(p.latHdx!, greaterThanOrEqualTo(26.0),
+              reason: '${p.name} latHdx');
+          expect(p.latHdx!, lessThanOrEqualTo(31.0),
+              reason: '${p.name} latHdx');
+          expect(p.lngHdx!, greaterThanOrEqualTo(80.0),
+              reason: '${p.name} lngHdx');
+          expect(p.lngHdx!, lessThanOrEqualTo(89.0),
+              reason: '${p.name} lngHdx');
+        }
+      }
+    });
+
+    test('HDX centroid inside Nepal bounding box (district)', () {
+      for (final d in NepalAdminApi.getAllDistricts()) {
+        if (d.latHdx != null && d.lngHdx != null) {
+          expect(d.latHdx!, greaterThanOrEqualTo(26.0),
+              reason: '${d.name} latHdx');
+          expect(d.latHdx!, lessThanOrEqualTo(31.0),
+              reason: '${d.name} latHdx');
+          expect(d.lngHdx!, greaterThanOrEqualTo(80.0),
+              reason: '${d.name} lngHdx');
+          expect(d.lngHdx!, lessThanOrEqualTo(89.0),
+              reason: '${d.name} lngHdx');
+        }
+      }
+    });
+
+    test('HDX official area is positive (province & district)', () {
+      for (final p in NepalAdminApi.getAllProvinces()) {
+        if (p.areaSqKmOfficial != null) {
+          expect(p.areaSqKmOfficial!, greaterThan(0),
+              reason: '${p.name} areaSqKmOfficial');
+        }
+      }
+      for (final d in NepalAdminApi.getAllDistricts()) {
+        if (d.areaSqKmOfficial != null) {
+          expect(d.areaSqKmOfficial!, greaterThan(0),
+              reason: '${d.name} areaSqKmOfficial');
+        }
+      }
+    });
+
+    test('json round-trip preserves HDX fields (province)', () {
+      final p = NepalAdminApi.getAllProvinces().firstWhere((x) => x.hasHdxData);
+      final restored = Province.fromJson(p.toJson());
+      expect(restored.hdxPcode, p.hdxPcode);
+      expect(restored.areaSqKmOfficial, p.areaSqKmOfficial);
+      expect(restored.latHdx, p.latHdx);
+      expect(restored.lngHdx, p.lngHdx);
+      expect(restored.hasHdxData, isTrue);
+    });
+
+    test('json round-trip preserves HDX fields (district)', () {
+      final d = NepalAdminApi.getAllDistricts().firstWhere((x) => x.hasHdxData);
+      final restored = District.fromJson(d.toJson());
+      expect(restored.hdxPcode, d.hdxPcode);
+      expect(restored.areaSqKmOfficial, d.areaSqKmOfficial);
+      expect(restored.latHdx, d.latHdx);
+      expect(restored.lngHdx, d.lngHdx);
+      expect(restored.hasHdxData, isTrue);
+    });
+  });
+
   group('v2.3 ward counts', () {
     test('wards are sane positive integers when present', () {
       for (final b in NepalAdminApi.getAllLocalBodies()) {

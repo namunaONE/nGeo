@@ -36,8 +36,8 @@ class RosterCodec {
     final decoded = <Province>[];
     for (final row in provinces) {
       final pf = _fields(row);
-      _arity(pf, 11, 'province row');
-      final districtCount = int.parse(pf[10]);
+      _arity(pf, 15, 'province row');
+      final districtCount = int.parse(pf[14]);
       final provinceDistricts = <District>[];
       var metro = 0;
       var subMetro = 0;
@@ -46,8 +46,8 @@ class RosterCodec {
       var total = 0;
       for (var i = 0; i < districtCount; i++) {
         final df = _fields(districts[nextDistrict++]);
-        _arity(df, 8, 'district row');
-        final unitCount = int.parse(df[7]);
+        _arity(df, 12, 'district row');
+        final unitCount = int.parse(df[11]);
         final units = <LocalBody>[];
         for (var j = 0; j < unitCount; j++) {
           final lf = _fields(localBodies[nextBody++]);
@@ -99,7 +99,11 @@ class RosterCodec {
             cbsCode: _intOpt(df[3]),
             headquarter: _opt(df[4]),
             areaSqKm: _doubleOpt(df[5]),
-            website: _opt(df[6]),
+            hdxPcode: _opt(df[6]),
+            areaSqKmOfficial: _doubleOpt(df[7]),
+            latHdx: _doubleOpt(df[8]),
+            lngHdx: _doubleOpt(df[9]),
+            website: _opt(df[10]),
             units: units,
           ),
         );
@@ -110,11 +114,15 @@ class RosterCodec {
           name: pf[1],
           nameNe: _opt(pf[2]),
           nameNeVerified: _flag(pf[3]),
-          cbsCode: int.parse(pf[7]),
+          cbsCode: int.parse(pf[11]),
           capital: _opt(pf[4]),
           areaSqKm: _doubleOpt(pf[5]),
-          website: _opt(pf[6]),
-          isoCode: pf[8],
+          hdxPcode: _opt(pf[6]),
+          areaSqKmOfficial: _doubleOpt(pf[7]),
+          latHdx: _doubleOpt(pf[8]),
+          lngHdx: _doubleOpt(pf[9]),
+          website: _opt(pf[10]),
+          isoCode: pf[12],
           stats: ProvinceStats(
             districts: districtCount,
             metro: metro,
@@ -122,7 +130,7 @@ class RosterCodec {
             mun: mun,
             ruralMun: ruralMun,
             total: total,
-            wards: int.parse(pf[9]),
+            wards: int.parse(pf[13]),
           ),
           districts: provinceDistricts,
         ),

@@ -219,6 +219,10 @@ String _generate(List<Map<String, dynamic>> provinces) {
       _flag(pNameNe != null && province['nameNeVerified'] == true),
       _s(province['capital'], 'province capital'),
       _dbl(province['areaSqKm']),
+      _s(province['hdxPcode'], 'province hdxPcode'),
+      _dbl(province['areaSqKmOfficial']),
+      _dbl(province['latHdx']),
+      _dbl(province['lngHdx']),
       _s(province['website'], 'province website'),
       _int(province['cbsCode'], 'province cbsCode'),
       _s(province['isoCode'], 'province isoCode'),
@@ -238,6 +242,10 @@ String _generate(List<Map<String, dynamic>> provinces) {
         _int(district['cbsCode'], 'district cbsCode'),
         _s(district['headquarter'], 'district headquarter'),
         _dbl(district['areaSqKm']),
+        _s(district['hdxPcode'], 'district hdxPcode'),
+        _dbl(district['areaSqKmOfficial']),
+        _dbl(district['latHdx']),
+        _dbl(district['lngHdx']),
         _s(district['website'], 'district website'),
         '${units.length}',
       ]);
@@ -308,8 +316,9 @@ String _generate(List<Map<String, dynamic>> provinces) {
   b.writeln('];');
   b.writeln();
   b.writeln('/// Province rows, one per province, in dataset order:');
-  b.writeln('/// id|name|nameNe|nameNeVerified|capital|areaSqKm|website|');
-  b.writeln('/// cbsCode|isoCode|declaredWards|districtCount');
+  b.writeln('/// id|name|nameNe|nameNeVerified|capital|areaSqKm|hdxPcode|');
+  b.writeln('/// areaSqKmOfficial|latHdx|lngHdx|website|cbsCode|isoCode|');
+  b.writeln('/// declaredWards|districtCount');
   b.writeln('const List<String> kRosterProvinces = [');
   for (final provRow in provRows) {
     b.writeln("  '$provRow',");
@@ -318,7 +327,7 @@ String _generate(List<Map<String, dynamic>> provinces) {
   b.writeln();
   b.writeln('/// District rows, one per district, in dataset order:');
   b.writeln('/// name|nameNe|nameNeVerified|cbsCode|headquarter|areaSqKm|');
-  b.writeln('/// website|unitCount');
+  b.writeln('/// hdxPcode|areaSqKmOfficial|latHdx|lngHdx|website|unitCount');
   b.writeln('const List<String> kRosterDistricts = [');
   for (final distRow in distRows) {
     b.writeln("  '$distRow',");

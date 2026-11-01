@@ -408,6 +408,22 @@ class District {
   /// approximate figure for anything load-bearing.
   final double? areaSqKm;
 
+  /// HDX COD-AB p-code for this district (e.g. 'NP0101'). Null when not
+  /// yet joined. From the Survey Department of Nepal via HDX (CC BY-IGO).
+  final String? hdxPcode;
+
+  /// Official area in square kilometres from the Survey Department (HDX
+  /// COD-AB area_sqkm). Null when not yet joined.
+  final double? areaSqKmOfficial;
+
+  /// Official centroid latitude from the Survey Department (HDX COD-AB
+  /// center_lat). Null when not yet joined.
+  final double? latHdx;
+
+  /// Official centroid longitude from the Survey Department (HDX COD-AB
+  /// center_lon). Null when not yet joined.
+  final double? lngHdx;
+
   /// The district's official website. **Single-source** (sagautam5).
   final String? website;
 
@@ -423,6 +439,10 @@ class District {
     this.cbsCode,
     this.headquarter,
     this.areaSqKm,
+    this.hdxPcode,
+    this.areaSqKmOfficial,
+    this.latHdx,
+    this.lngHdx,
     this.website,
     required List<LocalBody> units,
     String provinceName = '',
@@ -492,6 +512,9 @@ class District {
           if (b.cbsCodeVerified) b
       ];
 
+  /// Whether HDX official data (pcode, area, centroid) is available.
+  bool get hasHdxData => hdxPcode != null;
+
   /// Serializes this district, including its local bodies.
   Map<String, dynamic> toJson() => <String, dynamic>{
         'name': name,
@@ -501,6 +524,10 @@ class District {
         if (cbsCode != null) 'cbsCode': cbsCode,
         if (headquarter != null) 'headquarter': headquarter,
         if (areaSqKm != null) 'areaSqKm': areaSqKm,
+        if (hdxPcode != null) 'hdxPcode': hdxPcode,
+        if (areaSqKmOfficial != null) 'areaSqKmOfficial': areaSqKmOfficial,
+        if (latHdx != null) 'latHdx': latHdx,
+        if (lngHdx != null) 'lngHdx': lngHdx,
         if (website != null) 'website': website,
         'localBodies': [for (final b in _units) b.toJson()],
       };
@@ -517,6 +544,10 @@ class District {
         cbsCode: json['cbsCode'] as int?,
         headquarter: json['headquarter'] as String?,
         areaSqKm: (json['areaSqKm'] as num?)?.toDouble(),
+        hdxPcode: json['hdxPcode'] as String?,
+        areaSqKmOfficial: (json['areaSqKmOfficial'] as num?)?.toDouble(),
+        latHdx: (json['latHdx'] as num?)?.toDouble(),
+        lngHdx: (json['lngHdx'] as num?)?.toDouble(),
         website: json['website'] as String?,
         provinceName: json['province'] as String? ?? '',
         units: [
@@ -561,6 +592,22 @@ class Province {
   /// Area in square kilometres. **Single-source** (sagautam5).
   final double? areaSqKm;
 
+  /// HDX COD-AB p-code for this province (e.g. 'NP01'). Null when not
+  /// yet joined. From the Survey Department of Nepal via HDX (CC BY-IGO).
+  final String? hdxPcode;
+
+  /// Official area in square kilometres from the Survey Department (HDX
+  /// COD-AB area_sqkm). Null when not yet joined.
+  final double? areaSqKmOfficial;
+
+  /// Official centroid latitude from the Survey Department (HDX COD-AB
+  /// center_lat). Null when not yet joined.
+  final double? latHdx;
+
+  /// Official centroid longitude from the Survey Department (HDX COD-AB
+  /// center_lon). Null when not yet joined.
+  final double? lngHdx;
+
   /// The province's official website. **Single-source** (sagautam5).
   final String? website;
 
@@ -581,6 +628,10 @@ class Province {
     required this.cbsCode,
     this.capital,
     this.areaSqKm,
+    this.hdxPcode,
+    this.areaSqKmOfficial,
+    this.latHdx,
+    this.lngHdx,
     this.website,
     required this.isoCode,
     required this.stats,
@@ -639,11 +690,18 @@ class Province {
         'cbsCode': cbsCode,
         if (capital != null) 'capital': capital,
         if (areaSqKm != null) 'areaSqKm': areaSqKm,
+        if (hdxPcode != null) 'hdxPcode': hdxPcode,
+        if (areaSqKmOfficial != null) 'areaSqKmOfficial': areaSqKmOfficial,
+        if (latHdx != null) 'latHdx': latHdx,
+        if (lngHdx != null) 'lngHdx': lngHdx,
         if (website != null) 'website': website,
         'isoCode': isoCode,
         'stats': stats.toJson(),
         'districts': [for (final d in districts) d.toJson()],
       };
+
+  /// Whether HDX official data (pcode, area, centroid) is available.
+  bool get hasHdxData => hdxPcode != null;
 
   /// Rebuilds a [Province] from [toJson] output. The constructor re-attaches
   /// each district's province context, so the result is fully wired.
@@ -655,6 +713,10 @@ class Province {
         cbsCode: json['cbsCode'] as int,
         capital: json['capital'] as String?,
         areaSqKm: (json['areaSqKm'] as num?)?.toDouble(),
+        hdxPcode: json['hdxPcode'] as String?,
+        areaSqKmOfficial: (json['areaSqKmOfficial'] as num?)?.toDouble(),
+        latHdx: (json['latHdx'] as num?)?.toDouble(),
+        lngHdx: (json['lngHdx'] as num?)?.toDouble(),
         website: json['website'] as String?,
         isoCode: json['isoCode'] as String,
         stats: const ProvinceStats(

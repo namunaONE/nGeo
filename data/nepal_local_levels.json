@@ -234,7 +234,11 @@
           "nameNeVerified": true,
           "areaSqKm": 1507.0,
           "headquarter": "Bhojpur",
-          "website": "https://www.ddcbhojpur.gov.np"
+          "website": "https://www.ddcbhojpur.gov.np",
+          "hdxPcode": "NP0110",
+          "areaSqKmOfficial": 1523.58864372,
+          "latHdx": 27.17506647,
+          "lngHdx": 87.09378897
         },
         {
           "name": "Dhankuta",
@@ -390,7 +394,11 @@
           "nameNeVerified": true,
           "areaSqKm": 892.0,
           "headquarter": "Dhankuta",
-          "website": "https://www.ddcdhankuta.gov.np"
+          "website": "https://www.ddcdhankuta.gov.np",
+          "hdxPcode": "NP0107",
+          "areaSqKmOfficial": 898.71012994,
+          "latHdx": 27.01803587,
+          "lngHdx": 87.31306666
         },
         {
           "name": "Ilam",
@@ -623,7 +631,11 @@
           "nameNeVerified": true,
           "areaSqKm": 1703.0,
           "headquarter": "Ilam",
-          "website": "https://www.ddcilam.gov.np"
+          "website": "https://www.ddcilam.gov.np",
+          "hdxPcode": "NP0103",
+          "areaSqKmOfficial": 1685.28288314,
+          "latHdx": 26.88539591,
+          "lngHdx": 87.92023976
         },
         {
           "name": "Jhapa",
@@ -964,7 +976,11 @@
           "nameNeVerified": true,
           "areaSqKm": 1606.0,
           "headquarter": "Bhadrapur",
-          "website": "https://www.ddcjhapa.gov.np"
+          "website": "https://www.ddcjhapa.gov.np",
+          "hdxPcode": "NP0104",
+          "areaSqKmOfficial": 1603.81095109,
+          "latHdx": 26.58356833,
+          "lngHdx": 87.88550096
         },
         {
           "name": "Khotang",
@@ -1185,7 +1201,11 @@
           "nameNeVerified": true,
           "areaSqKm": 1591.0,
           "headquarter": "Diktel",
-          "website": "https://www.dcckhotang.gov.np"
+          "website": "https://www.dcckhotang.gov.np",
+          "hdxPcode": "NP0112",
+          "areaSqKmOfficial": 1589.19505702,
+          "latHdx": 27.15626693,
+          "lngHdx": 86.68065001
         },
         {
           "name": "Morang",
@@ -1567,7 +1587,11 @@
           "nameNeVerified": true,
           "areaSqKm": 1855.0,
           "headquarter": "Biratnagar",
-          "website": "https://www.ddcmorang.gov.np"
+          "website": "https://www.ddcmorang.gov.np",
+          "hdxPcode": "NP0105",
+          "areaSqKmOfficial": 1822.3403614,
+          "latHdx": 26.61061444,
+          "lngHdx": 87.47311589
         },
         {
           "name": "Okhaldhunga",
@@ -1752,7 +1776,11 @@
           "nameNeVerified": true,
           "areaSqKm": 1074.0,
           "headquarter": "Siddhicharan",
-          "website": "https://www.dccokhaldhunga.gov.np/en"
+          "website": "https://www.dccokhaldhunga.gov.np/en",
+          "hdxPcode": "NP0113",
+          "areaSqKmOfficial": 1076.07920143,
+          "latHdx": 27.33644653,
+          "lngHdx": 86.44832651
         },
         {
           "name": "Panchthar",
@@ -1935,7 +1963,11 @@
           "nameNeVerified": true,
           "areaSqKm": 1241.0,
           "headquarter": "Phidim",
-          "website": "https://www.ddcpanchthar.gov.np"
+          "website": "https://www.ddcpanchthar.gov.np",
+          "hdxPcode": "NP0102",
+          "areaSqKmOfficial": 1247.72251232,
+          "latHdx": 27.14887122,
+          "lngHdx": 87.85507165
         },
         {
           "name": "Sankhuwasabha",
@@ -2162,7 +2194,11 @@
           "nameNeVerified": false,
           "areaSqKm": 3480.0,
           "headquarter": "Khandbari",
-          "website": "https://www.ddcsankhuwasabha.gov.np"
+          "website": "https://www.ddcsankhuwasabha.gov.np",
+          "hdxPcode": "NP0109",
+          "areaSqKmOfficial": 3469.61388214,
+          "latHdx": 27.54767574,
+          "lngHdx": 87.22650149
         },
         {
           "name": "Solukhumbu",
@@ -2335,7 +2371,11 @@
           "nameNeVerified": true,
           "areaSqKm": 3312.0,
           "headquarter": "Salleri",
-          "website": "https://www.ddcsolukhumbu.gov.np"
+          "website": "https://www.ddcsolukhumbu.gov.np",
+          "hdxPcode": "NP0111",
+          "areaSqKmOfficial": 3354.14215115,
+          "latHdx": 27.72563175,
+          "lngHdx": 86.7815385
         },
         {
           "name": "Sunsari",
@@ -2604,7 +2644,11 @@
           "nameNeVerified": true,
           "areaSqKm": 1257.0,
           "headquarter": "Inaruwa",
-          "website": "https://www.ddcsunsari.gov.np"
+          "website": "https://www.ddcsunsari.gov.np",
+          "hdxPcode": "NP0106",
+          "areaSqKmOfficial": 1191.88652736,
+          "latHdx": 26.64088623,
+          "lngHdx": 87.14087554
         },
         {
           "name": "Taplejung",
@@ -2795,7 +2839,11 @@
           "nameNeVerified": true,
           "areaSqKm": 3646.0,
           "headquarter": "Taplejung",
-          "website": "https://www.ddctaplejung.gov.np"
+          "website": "https://www.ddctaplejung.gov.np",
+          "hdxPcode": "NP0101",
+          "areaSqKmOfficial": 3631.8133091,
+          "latHdx": 27.6104625,
+          "lngHdx": 87.8215419
         },
         {
           "name": "Terhathum",
@@ -2941,7 +2989,11 @@
           "nameNeVerified": true,
           "areaSqKm": 679.0,
           "headquarter": "Myanglung",
-          "website": "https://www.ddctehrathum.gov.np"
+          "website": "https://www.ddctehrathum.gov.np",
+          "hdxPcode": "NP0108",
+          "areaSqKmOfficial": 670.49210401,
+          "latHdx": 27.13246943,
+          "lngHdx": 87.5242843
         },
         {
           "name": "Udayapur",
@@ -3118,7 +3170,11 @@
           "nameNeVerified": true,
           "areaSqKm": 2063.0,
           "headquarter": "Gaighat",
-          "website": "https://www.ddcudayapur.gov.np"
+          "website": "https://www.ddcudayapur.gov.np",
+          "hdxPcode": "NP0114",
+          "areaSqKmOfficial": 2296.77064563,
+          "latHdx": 26.93300029,
+          "lngHdx": 86.51982047
         }
       ],
       "cbsCode": 1,
@@ -3127,7 +3183,11 @@
       "nameNeVerified": true,
       "areaSqKm": 25906.0,
       "capital": "Biratnagar",
-      "website": "https://koshi.gov.np/"
+      "website": "https://koshi.gov.np/",
+      "hdxPcode": "NP01",
+      "areaSqKmOfficial": 26061.44835944,
+      "latHdx": 27.23039681,
+      "lngHdx": 87.17734642
     },
     {
       "id": "madhesh",
@@ -3482,7 +3542,11 @@
           "nameNeVerified": true,
           "areaSqKm": 1190.0,
           "headquarter": "Kalaiya",
-          "website": "https://dccbara.gov.np/"
+          "website": "https://dccbara.gov.np/",
+          "hdxPcode": "NP0233",
+          "areaSqKmOfficial": 1272.52708555,
+          "latHdx": 27.10738514,
+          "lngHdx": 85.06923246
         },
         {
           "name": "Dhanusha",
@@ -3874,7 +3938,11 @@
           "nameNeVerified": true,
           "areaSqKm": 1180.0,
           "headquarter": "Janakpur",
-          "website": "https://dccdhanusha.gov.np/"
+          "website": "https://dccdhanusha.gov.np/",
+          "hdxPcode": "NP0217",
+          "areaSqKmOfficial": 1188.70295575,
+          "latHdx": 26.85108325,
+          "lngHdx": 86.03579976
         },
         {
           "name": "Mahottari",
@@ -4196,7 +4264,11 @@
           "nameNeVerified": true,
           "areaSqKm": 1002.0,
           "headquarter": "Jaleshwar",
-          "website": "https://dccmahottari.gov.np/"
+          "website": "https://dccmahottari.gov.np/",
+          "hdxPcode": "NP0218",
+          "areaSqKmOfficial": 1000.7595921,
+          "latHdx": 26.88485916,
+          "lngHdx": 85.79738704
         },
         {
           "name": "Parsa",
@@ -4501,7 +4573,11 @@
           "nameNeVerified": true,
           "areaSqKm": 1353.0,
           "headquarter": "Birgunj",
-          "website": "https://dccparsa.gov.np/"
+          "website": "https://dccparsa.gov.np/",
+          "hdxPcode": "NP0234",
+          "areaSqKmOfficial": 1406.56421558,
+          "latHdx": 27.22337695,
+          "lngHdx": 84.82694198
         },
         {
           "name": "Rautahat",
@@ -4891,7 +4967,11 @@
           "nameNeVerified": true,
           "areaSqKm": 1126.0,
           "headquarter": "Gaur",
-          "website": "https://dccrautahat.gov.np/"
+          "website": "https://dccrautahat.gov.np/",
+          "hdxPcode": "NP0232",
+          "areaSqKmOfficial": 1038.2189733,
+          "latHdx": 26.98872387,
+          "lngHdx": 85.28300834
         },
         {
           "name": "Saptari",
@@ -5273,7 +5353,11 @@
           "nameNeVerified": true,
           "areaSqKm": 1363.0,
           "headquarter": "Rajbiraj",
-          "website": "https://dccsaptari.gov.np/"
+          "website": "https://dccsaptari.gov.np/",
+          "hdxPcode": "NP0215",
+          "areaSqKmOfficial": 1281.32414121,
+          "latHdx": 26.60673829,
+          "lngHdx": 86.74929829
         },
         {
           "name": "Sarlahi",
@@ -5715,7 +5799,11 @@
           "nameNeVerified": true,
           "areaSqKm": 1259.0,
           "headquarter": "Malangawa",
-          "website": "https://dccsarlahi.gov.np/"
+          "website": "https://dccsarlahi.gov.np/",
+          "hdxPcode": "NP0219",
+          "areaSqKmOfficial": 1263.4338645,
+          "latHdx": 26.96826656,
+          "lngHdx": 85.56373316
         },
         {
           "name": "Siraha",
@@ -6104,7 +6192,11 @@
           "nameNeVerified": true,
           "areaSqKm": 1188.0,
           "headquarter": "Siraha",
-          "website": "https://dccsiraha.gov.np/"
+          "website": "https://dccsiraha.gov.np/",
+          "hdxPcode": "NP0216",
+          "areaSqKmOfficial": 1139.28374465,
+          "latHdx": 26.74245818,
+          "lngHdx": 86.34972204
         }
       ],
       "cbsCode": 2,
@@ -6113,7 +6205,11 @@
       "nameNeVerified": true,
       "areaSqKm": 9661.0,
       "capital": "Janakpur",
-      "website": "https://madhesh.gov.np/"
+      "website": "https://madhesh.gov.np/",
+      "hdxPcode": "NP02",
+      "areaSqKmOfficial": 9590.81457265,
+      "latHdx": 26.94270712,
+      "lngHdx": 85.60758419
     },
     {
       "id": "bagmati",
@@ -6219,7 +6315,11 @@
           "nameNeVerified": true,
           "areaSqKm": 119.0,
           "headquarter": "Bhaktapur",
-          "website": "https://dccbhaktapur.gov.np/"
+          "website": "https://dccbhaktapur.gov.np/",
+          "hdxPcode": "NP0326",
+          "areaSqKmOfficial": 123.07150536,
+          "latHdx": 27.67421236,
+          "lngHdx": 85.42637953
         },
         {
           "name": "Chitwan",
@@ -6389,7 +6489,11 @@
           "nameNeVerified": true,
           "areaSqKm": 2218.0,
           "headquarter": "Bharatpur",
-          "website": "https://dccchitwan.gov.np/"
+          "website": "https://dccchitwan.gov.np/",
+          "hdxPcode": "NP0335",
+          "areaSqKmOfficial": 2240.03253472,
+          "latHdx": 27.61788779,
+          "lngHdx": 84.4530622
         },
         {
           "name": "Dhading",
@@ -6663,7 +6767,11 @@
           "nameNeVerified": true,
           "areaSqKm": 1926.0,
           "headquarter": "Nilkantha",
-          "website": "https://dccdhading.gov.np/"
+          "website": "https://dccdhading.gov.np/",
+          "hdxPcode": "NP0330",
+          "areaSqKmOfficial": 1906.70686297,
+          "latHdx": 28.00776753,
+          "lngHdx": 84.90648267
         },
         {
           "name": "Dolakha",
@@ -6848,7 +6956,11 @@
           "nameNeVerified": true,
           "areaSqKm": 2191.0,
           "headquarter": "Bhimeshwar",
-          "website": "https://dccdolakha.gov.np/"
+          "website": "https://dccdolakha.gov.np/",
+          "hdxPcode": "NP0322",
+          "areaSqKmOfficial": 2146.65536353,
+          "latHdx": 27.82405229,
+          "lngHdx": 86.2215437
         },
         {
           "name": "Kathmandu",
@@ -7094,7 +7206,11 @@
           "nameNeVerified": false,
           "areaSqKm": 395.0,
           "headquarter": "Kathmandu",
-          "website": "https://dccktm.gov.np/"
+          "website": "https://dccktm.gov.np/",
+          "hdxPcode": "NP0327",
+          "areaSqKmOfficial": 413.51345306,
+          "latHdx": 27.69395091,
+          "lngHdx": 85.28485018
         },
         {
           "name": "Kavrepalanchok",
@@ -7399,7 +7515,11 @@
           "nameNeVerified": true,
           "areaSqKm": 1396.0,
           "headquarter": "Dhulikhel",
-          "website": "https://dcckavre.gov.np/"
+          "website": "https://dcckavre.gov.np/",
+          "hdxPcode": "NP0324",
+          "areaSqKmOfficial": 1393.82909514,
+          "latHdx": 27.54517876,
+          "lngHdx": 85.62384007
         },
         {
           "name": "Lalitpur",
@@ -7543,7 +7663,11 @@
           "nameNeVerified": true,
           "areaSqKm": 385.0,
           "headquarter": "Lalitpur",
-          "website": "https://dcclalitpur.gov.np/"
+          "website": "https://dcclalitpur.gov.np/",
+          "hdxPcode": "NP0325",
+          "areaSqKmOfficial": 396.74388208,
+          "latHdx": 27.54820448,
+          "lngHdx": 85.32301163
         },
         {
           "name": "Makwanpur",
@@ -7775,7 +7899,11 @@
           "nameNeVerified": true,
           "areaSqKm": 2426.0,
           "headquarter": "Hetauda",
-          "website": "https://dccmakwanpur.gov.np/"
+          "website": "https://dccmakwanpur.gov.np/",
+          "hdxPcode": "NP0331",
+          "areaSqKmOfficial": 2443.44979571,
+          "latHdx": 27.43698525,
+          "lngHdx": 85.05346394
         },
         {
           "name": "Nuwakot",
@@ -8050,7 +8178,11 @@
           "nameNeVerified": true,
           "areaSqKm": 1121.0,
           "headquarter": "Bidur",
-          "website": "https://dccnuwakot.gov.np/"
+          "website": "https://dccnuwakot.gov.np/",
+          "hdxPcode": "NP0328",
+          "areaSqKmOfficial": 1192.97548759,
+          "latHdx": 27.92578852,
+          "lngHdx": 85.24848688
         },
         {
           "name": "Ramechhap",
@@ -8229,7 +8361,11 @@
           "nameNeVerified": true,
           "areaSqKm": 1546.0,
           "headquarter": "Manthali",
-          "website": "https://dccramechhap.gov.np/"
+          "website": "https://dccramechhap.gov.np/",
+          "hdxPcode": "NP0321",
+          "areaSqKmOfficial": 1564.05299002,
+          "latHdx": 27.53740976,
+          "lngHdx": 86.25692124
         },
         {
           "name": "Rasuwa",
@@ -8348,7 +8484,11 @@
           "nameNeVerified": true,
           "areaSqKm": 1544.0,
           "headquarter": "Dhunche",
-          "website": "https://dccrasuwa.gov.np/"
+          "website": "https://dccrasuwa.gov.np/",
+          "hdxPcode": "NP0329",
+          "areaSqKmOfficial": 1500.81681924,
+          "latHdx": 28.17560192,
+          "lngHdx": 85.47905394
         },
         {
           "name": "Sindhuli",
@@ -8559,7 +8699,11 @@
           "nameNeVerified": true,
           "areaSqKm": 2491.0,
           "headquarter": "Kamalamai",
-          "website": "https://dccsindhuli.gov.np/"
+          "website": "https://dccsindhuli.gov.np/",
+          "hdxPcode": "NP0320",
+          "areaSqKmOfficial": 2484.23619665,
+          "latHdx": 27.18505301,
+          "lngHdx": 86.07014782
         },
         {
           "name": "Sindhupalchok",
@@ -8838,7 +8982,11 @@
           "nameNeVerified": true,
           "areaSqKm": 2542.0,
           "headquarter": "Chautara",
-          "website": "https://dccsindhupalchowk.gov.np/"
+          "website": "https://dccsindhupalchowk.gov.np/",
+          "hdxPcode": "NP0323",
+          "areaSqKmOfficial": 2490.83730973,
+          "latHdx": 27.90696,
+          "lngHdx": 85.7556089
         }
       ],
       "cbsCode": 3,
@@ -8847,7 +8995,11 @@
       "nameNeVerified": true,
       "areaSqKm": 20300.0,
       "capital": "Hetauda",
-      "website": "https://ocmcm.bagamati.gov.np/"
+      "website": "https://ocmcm.bagamati.gov.np/",
+      "hdxPcode": "NP03",
+      "areaSqKmOfficial": 20296.92129581,
+      "latHdx": 27.65265864,
+      "lngHdx": 85.39297431
     },
     {
       "id": "gandaki",
@@ -9060,7 +9212,11 @@
           "nameNeVerified": false,
           "areaSqKm": 1784.0,
           "headquarter": "Baglung",
-          "website": "https://dccbaglung.gov.np/"
+          "website": "https://dccbaglung.gov.np/",
+          "hdxPcode": "NP0443",
+          "areaSqKmOfficial": 1835.86937735,
+          "latHdx": 28.35629495,
+          "lngHdx": 83.14255482
         },
         {
           "name": "Gorkha",
@@ -9296,7 +9452,11 @@
           "nameNeVerified": false,
           "areaSqKm": 3610.0,
           "headquarter": "Gorkha",
-          "website": "https://dccgorkha.gov.np/"
+          "website": "https://dccgorkha.gov.np/",
+          "hdxPcode": "NP0436",
+          "areaSqKmOfficial": 3646.07574366,
+          "latHdx": 28.27357757,
+          "lngHdx": 84.84068187
         },
         {
           "name": "Kaski",
@@ -9406,7 +9566,11 @@
           "nameNeVerified": true,
           "areaSqKm": 2017.0,
           "headquarter": "Pokhara",
-          "website": "https://dcckaski.gov.np/"
+          "website": "https://dcckaski.gov.np/",
+          "hdxPcode": "NP0439",
+          "areaSqKmOfficial": 2084.81079438,
+          "latHdx": 28.34548387,
+          "lngHdx": 83.97090334
         },
         {
           "name": "Lamjung",
@@ -9582,7 +9746,11 @@
           "nameNeVerified": false,
           "areaSqKm": 1692.0,
           "headquarter": "Besisahar",
-          "website": "https://dcclamjung.gov.np/"
+          "website": "https://dcclamjung.gov.np/",
+          "hdxPcode": "NP0437",
+          "areaSqKmOfficial": 1662.66991816,
+          "latHdx": 28.28280571,
+          "lngHdx": 84.42011019
         },
         {
           "name": "Manang",
@@ -9667,7 +9835,11 @@
           "nameNeVerified": true,
           "areaSqKm": 2246.0,
           "headquarter": "Chame",
-          "website": "https://dccmanang.gov.np/"
+          "website": "https://dccmanang.gov.np/",
+          "hdxPcode": "NP0438",
+          "areaSqKmOfficial": 2321.05334089,
+          "latHdx": 28.67269978,
+          "lngHdx": 84.16893719
         },
         {
           "name": "Mustang",
@@ -9774,7 +9946,11 @@
           "nameNeVerified": true,
           "areaSqKm": 3573.0,
           "headquarter": "Jomsom",
-          "website": "https://dccmustang.gov.np/"
+          "website": "https://dccmustang.gov.np/",
+          "hdxPcode": "NP0445",
+          "areaSqKmOfficial": 3564.13326615,
+          "latHdx": 28.94799808,
+          "lngHdx": 83.90058279
         },
         {
           "name": "Myagdi",
@@ -9908,7 +10084,11 @@
           "nameNeVerified": true,
           "areaSqKm": 2297.0,
           "headquarter": "Beni",
-          "website": "https://dccmyagdi.gov.np/"
+          "website": "https://dccmyagdi.gov.np/",
+          "hdxPcode": "NP0444",
+          "areaSqKmOfficial": 2285.10052659,
+          "latHdx": 28.54595692,
+          "lngHdx": 83.46324761
         },
         {
           "name": "Nawalpur",
@@ -10099,7 +10279,11 @@
           "nameNeVerified": false,
           "areaSqKm": 1043.1,
           "headquarter": "Kawasoti",
-          "website": "https://dccnawalparasi.gov.np/"
+          "website": "https://dccnawalparasi.gov.np/",
+          "hdxPcode": "NP0447",
+          "areaSqKmOfficial": 1426.11811196,
+          "latHdx": 27.65375301,
+          "lngHdx": 84.03070396
         },
         {
           "name": "Parbat",
@@ -10260,7 +10444,11 @@
           "nameNeVerified": true,
           "areaSqKm": 494.0,
           "headquarter": "Kusma",
-          "website": "https://dccparbat.gov.np/"
+          "website": "https://dccparbat.gov.np/",
+          "hdxPcode": "NP0442",
+          "areaSqKmOfficial": 541.65594257,
+          "latHdx": 28.20255796,
+          "lngHdx": 83.72848724
         },
         {
           "name": "Syangja",
@@ -10508,7 +10696,11 @@
           "nameNeVerified": true,
           "areaSqKm": 1164.0,
           "headquarter": "Putalibazar",
-          "website": "https://dccsyangja.gov.np/"
+          "website": "https://dccsyangja.gov.np/",
+          "hdxPcode": "NP0441",
+          "areaSqKmOfficial": 1037.68556039,
+          "latHdx": 28.04488065,
+          "lngHdx": 83.82705895
         },
         {
           "name": "Tanahun",
@@ -10729,7 +10921,11 @@
           "nameNeVerified": true,
           "areaSqKm": 1546.0,
           "headquarter": "Damauli",
-          "website": "https://dcctanahun.gov.np/"
+          "website": "https://dcctanahun.gov.np/",
+          "hdxPcode": "NP0440",
+          "areaSqKmOfficial": 1572.14449339,
+          "latHdx": 27.93540708,
+          "lngHdx": 84.22312639
         }
       ],
       "cbsCode": 4,
@@ -10738,7 +10934,11 @@
       "nameNeVerified": true,
       "areaSqKm": 21856.0,
       "capital": "Pokhara",
-      "website": "https://gandaki.gov.np/"
+      "website": "https://gandaki.gov.np/",
+      "hdxPcode": "NP04",
+      "areaSqKmOfficial": 21977.3170755,
+      "latHdx": 28.38438554,
+      "lngHdx": 84.03585487
     },
     {
       "id": "lumbini",
@@ -10880,7 +11080,11 @@
           "nameNeVerified": true,
           "areaSqKm": 1193.0,
           "headquarter": "Sandhikharka",
-          "website": "https://dccargakhanchi.gov.np/"
+          "website": "https://dccargakhanchi.gov.np/",
+          "hdxPcode": "NP0550",
+          "areaSqKmOfficial": 1239.08214273,
+          "latHdx": 27.93204608,
+          "lngHdx": 83.14572054
         },
         {
           "name": "Banke",
@@ -11075,7 +11279,11 @@
           "nameNeVerified": true,
           "areaSqKm": 2337.0,
           "headquarter": "Nepalganj",
-          "website": "https://dccbanke.gov.np/"
+          "website": "https://dccbanke.gov.np/",
+          "hdxPcode": "NP0557",
+          "areaSqKmOfficial": 1880.54113257,
+          "latHdx": 28.09571577,
+          "lngHdx": 81.77312448
         },
         {
           "name": "Bardiya",
@@ -11275,7 +11483,11 @@
           "nameNeVerified": true,
           "areaSqKm": 2025.0,
           "headquarter": "Gulariya",
-          "website": "https://dccbardiya.gov.np/"
+          "website": "https://dccbardiya.gov.np/",
+          "hdxPcode": "NP0558",
+          "areaSqKmOfficial": 2000.73793597,
+          "latHdx": 28.37173984,
+          "lngHdx": 81.45015843
         },
         {
           "name": "Dang",
@@ -11504,7 +11716,11 @@
           "nameNeVerified": true,
           "areaSqKm": 2955.0,
           "headquarter": "Ghorahi",
-          "website": "https://dccdang.gov.np/"
+          "website": "https://dccdang.gov.np/",
+          "hdxPcode": "NP0556",
+          "areaSqKmOfficial": 3058.53850742,
+          "latHdx": 27.9796492,
+          "lngHdx": 82.46856179
         },
         {
           "name": "Gulmi",
@@ -11771,7 +11987,11 @@
           "nameNeVerified": true,
           "areaSqKm": 1149.0,
           "headquarter": "Tamghas",
-          "website": "https://dccgulmi.gov.np/"
+          "website": "https://dccgulmi.gov.np/",
+          "hdxPcode": "NP0551",
+          "areaSqKmOfficial": 1107.86200109,
+          "latHdx": 28.09573731,
+          "lngHdx": 83.32919836
         },
         {
           "name": "Kapilvastu",
@@ -11999,7 +12219,11 @@
           "nameNeVerified": true,
           "areaSqKm": 1738.0,
           "headquarter": "Taulihawa",
-          "website": "https://dcckapilvastu.gov.np/"
+          "website": "https://dcckapilvastu.gov.np/",
+          "hdxPcode": "NP0549",
+          "areaSqKmOfficial": 1651.09640982,
+          "latHdx": 27.61908696,
+          "lngHdx": 82.98162175
         },
         {
           "name": "Palpa",
@@ -12238,7 +12462,11 @@
           "nameNeVerified": true,
           "areaSqKm": 1373.0,
           "headquarter": "Tansen",
-          "website": "https://dccpalpa.gov.np/"
+          "website": "https://dccpalpa.gov.np/",
+          "hdxPcode": "NP0546",
+          "areaSqKmOfficial": 1462.14342345,
+          "latHdx": 27.8104921,
+          "lngHdx": 83.63039532
         },
         {
           "name": "Parasi (Nawalparasi West)",
@@ -12408,7 +12636,11 @@
           "nameNeVerified": false,
           "areaSqKm": 634.88,
           "headquarter": "Ramgram",
-          "website": "https://dccnawalparasi.gov.np/"
+          "website": "https://dccnawalparasi.gov.np/",
+          "hdxPcode": "NP0547",
+          "areaSqKmOfficial": 726.25178648,
+          "latHdx": 27.51989249,
+          "lngHdx": 83.73679712
         },
         {
           "name": "Pyuthan",
@@ -12617,7 +12849,11 @@
           "nameNeVerified": false,
           "areaSqKm": 1309.0,
           "headquarter": "Pyuthan",
-          "website": "https://dccpyuthan.gov.np/"
+          "website": "https://dccpyuthan.gov.np/",
+          "hdxPcode": "NP0555",
+          "areaSqKmOfficial": 1320.77347844,
+          "latHdx": 28.1201009,
+          "lngHdx": 82.82993019
         },
         {
           "name": "Rolpa",
@@ -12844,7 +13080,11 @@
           "nameNeVerified": true,
           "areaSqKm": 1879.0,
           "headquarter": "Liwang",
-          "website": "https://dccrolpa.gov.np/"
+          "website": "https://dccrolpa.gov.np/",
+          "hdxPcode": "NP0554",
+          "areaSqKmOfficial": 1885.00965996,
+          "latHdx": 28.32533807,
+          "lngHdx": 82.64430298
         },
         {
           "name": "Rukum East",
@@ -12921,7 +13161,11 @@
           "nameNeVerified": false,
           "areaSqKm": 1161.13,
           "headquarter": "Rukumkot",
-          "website": "https://dccrukum.gov.np/"
+          "website": "https://dccrukum.gov.np/",
+          "hdxPcode": "NP0552",
+          "areaSqKmOfficial": 1682.02264305,
+          "latHdx": 28.67236486,
+          "lngHdx": 82.85894961
         },
         {
           "name": "Rupandehi",
@@ -13272,7 +13516,11 @@
           "nameNeVerified": true,
           "areaSqKm": 1360.0,
           "headquarter": "Siddharthanagar",
-          "website": "https://dccrupandehi.gov.np/"
+          "website": "https://dccrupandehi.gov.np/",
+          "hdxPcode": "NP0548",
+          "areaSqKmOfficial": 1304.6323645,
+          "latHdx": 27.54914663,
+          "lngHdx": 83.40323071
         }
       ],
       "cbsCode": 5,
@@ -13281,7 +13529,11 @@
       "nameNeVerified": true,
       "areaSqKm": 19707.0,
       "capital": "Deukhuri",
-      "website": "https://ocmcm.lumbini.gov.np/"
+      "website": "https://ocmcm.lumbini.gov.np/",
+      "hdxPcode": "NP05",
+      "areaSqKmOfficial": 19318.69148547,
+      "latHdx": 28.09954735,
+      "lngHdx": 82.52199568
     },
     {
       "id": "karnali",
@@ -13534,7 +13786,11 @@
           "nameNeVerified": true,
           "areaSqKm": 1502.0,
           "headquarter": "Dailekh",
-          "website": "https://dccdailekh.gov.np/"
+          "website": "https://dccdailekh.gov.np/",
+          "hdxPcode": "NP0661",
+          "areaSqKmOfficial": 1483.99936271,
+          "latHdx": 28.88457061,
+          "lngHdx": 81.69989545
         },
         {
           "name": "Dolpa",
@@ -13715,7 +13971,11 @@
           "nameNeVerified": true,
           "areaSqKm": 7889.0,
           "headquarter": "Dunai",
-          "website": "https://dccdolpa.gov.np/"
+          "website": "https://dccdolpa.gov.np/",
+          "hdxPcode": "NP0662",
+          "areaSqKmOfficial": 7944.65893556,
+          "latHdx": 29.21412855,
+          "lngHdx": 83.03671178
         },
         {
           "name": "Humla",
@@ -13864,7 +14124,11 @@
           "nameNeVerified": true,
           "areaSqKm": 5655.0,
           "headquarter": "Simikot",
-          "website": "https://dcchumla.gov.np/"
+          "website": "https://dcchumla.gov.np/",
+          "hdxPcode": "NP0666",
+          "areaSqKmOfficial": 6007.32008311,
+          "latHdx": 30.02603853,
+          "lngHdx": 81.83318057
         },
         {
           "name": "Jajarkot",
@@ -14022,7 +14286,11 @@
           "nameNeVerified": true,
           "areaSqKm": 2230.0,
           "headquarter": "Khalanga",
-          "website": "https://dccjajarkot.gov.np/"
+          "website": "https://dccjajarkot.gov.np/",
+          "hdxPcode": "NP0660",
+          "areaSqKmOfficial": 2222.06385926,
+          "latHdx": 28.86935787,
+          "lngHdx": 82.16819145
         },
         {
           "name": "Jumla",
@@ -14201,7 +14469,11 @@
           "nameNeVerified": true,
           "areaSqKm": 2531.0,
           "headquarter": "Chandannath",
-          "website": "https://dccjumla.gov.np/"
+          "website": "https://dccjumla.gov.np/",
+          "hdxPcode": "NP0663",
+          "areaSqKmOfficial": 2553.79322616,
+          "latHdx": 29.23862085,
+          "lngHdx": 82.19859551
         },
         {
           "name": "Kalikot",
@@ -14398,7 +14670,11 @@
           "nameNeVerified": true,
           "areaSqKm": 1741.0,
           "headquarter": "Manma",
-          "website": "https://dcckalikot.gov.np/"
+          "website": "https://dcckalikot.gov.np/",
+          "hdxPcode": "NP0664",
+          "areaSqKmOfficial": 1639.71354015,
+          "latHdx": 29.21622534,
+          "lngHdx": 81.68885584
         },
         {
           "name": "Mugu",
@@ -14493,7 +14769,11 @@
           "nameNeVerified": true,
           "areaSqKm": 3535.0,
           "headquarter": "Gamgadhi",
-          "website": "https://dccmugu.gov.np/"
+          "website": "https://dccmugu.gov.np/",
+          "hdxPcode": "NP0665",
+          "areaSqKmOfficial": 3233.13262037,
+          "latHdx": 29.67830385,
+          "lngHdx": 82.53069821
         },
         {
           "name": "Rukum West",
@@ -14634,7 +14914,11 @@
           "nameNeVerified": false,
           "areaSqKm": 1213.49,
           "headquarter": "Musikot",
-          "website": "https://dccrukum.gov.np/"
+          "website": "https://dccrukum.gov.np/",
+          "hdxPcode": "NP0652",
+          "areaSqKmOfficial": 1213.06320377,
+          "latHdx": 28.75631701,
+          "lngHdx": 82.42828458
         },
         {
           "name": "Salyan",
@@ -14859,7 +15143,11 @@
           "nameNeVerified": true,
           "areaSqKm": 1462.0,
           "headquarter": "Salyan",
-          "website": "https://dccsalyan.gov.np/"
+          "website": "https://dccsalyan.gov.np/",
+          "hdxPcode": "NP0653",
+          "areaSqKmOfficial": 1879.96157723,
+          "latHdx": 28.40682322,
+          "lngHdx": 82.16757784
         },
         {
           "name": "Surkhet",
@@ -15071,7 +15359,11 @@
           "nameNeVerified": true,
           "areaSqKm": 2451.0,
           "headquarter": "Birendranagar",
-          "website": "https://dccsurkhet.gov.np/"
+          "website": "https://dccsurkhet.gov.np/",
+          "hdxPcode": "NP0659",
+          "areaSqKmOfficial": 2485.60536694,
+          "latHdx": 28.65790891,
+          "lngHdx": 81.51382806
         }
       ],
       "cbsCode": 6,
@@ -15080,7 +15372,11 @@
       "nameNeVerified": true,
       "areaSqKm": 30213.0,
       "capital": "Birendranagar",
-      "website": "https://karnali.gov.np/"
+      "website": "https://karnali.gov.np/",
+      "hdxPcode": "NP06",
+      "areaSqKmOfficial": 30663.31177525,
+      "latHdx": 29.30804212,
+      "lngHdx": 82.47213297
     },
     {
       "id": "sudurpashchim",
@@ -15309,7 +15605,11 @@
           "nameNeVerified": true,
           "areaSqKm": 1692.0,
           "headquarter": "Mangalsen",
-          "website": "https://dccacham.gov.np/"
+          "website": "https://dccacham.gov.np/",
+          "hdxPcode": "NP0769",
+          "areaSqKmOfficial": 1700.12945757,
+          "latHdx": 29.06780128,
+          "lngHdx": 81.29406579
         },
         {
           "name": "Baitadi",
@@ -15542,7 +15842,11 @@
           "nameNeVerified": true,
           "areaSqKm": 1496.04,
           "headquarter": "Dasharathchand",
-          "website": "https://dccbaitadi.gov.np/"
+          "website": "https://dccbaitadi.gov.np/",
+          "hdxPcode": "NP0774",
+          "areaSqKmOfficial": 1492.54812776,
+          "latHdx": 29.5081087,
+          "lngHdx": 80.55843036
         },
         {
           "name": "Bajhang",
@@ -15791,7 +16095,11 @@
           "nameNeVerified": true,
           "areaSqKm": 3394.21,
           "headquarter": "Jayaprithvi",
-          "website": "https://dccbajhang.gov.np/"
+          "website": "https://dccbajhang.gov.np/",
+          "hdxPcode": "NP0767",
+          "areaSqKmOfficial": 3458.64162931,
+          "latHdx": 29.72252996,
+          "lngHdx": 81.246038
         },
         {
           "name": "Bajura",
@@ -16001,7 +16309,11 @@
           "nameNeVerified": true,
           "areaSqKm": 2300.34,
           "headquarter": "Badimalika",
-          "website": "https://dccbajura.gov.np/"
+          "website": "https://dccbajura.gov.np/",
+          "hdxPcode": "NP0768",
+          "areaSqKmOfficial": 2297.66440848,
+          "latHdx": 29.61058416,
+          "lngHdx": 81.57656749
         },
         {
           "name": "Dadeldhura",
@@ -16168,7 +16480,11 @@
           "nameNeVerified": true,
           "areaSqKm": 1506.09,
           "headquarter": "Amargadhi",
-          "website": "https://dccdadeldhura.gov.np/"
+          "website": "https://dccdadeldhura.gov.np/",
+          "hdxPcode": "NP0773",
+          "areaSqKmOfficial": 1502.08945644,
+          "latHdx": 29.20907463,
+          "lngHdx": 80.50090934
         },
         {
           "name": "Darchula",
@@ -16368,7 +16684,11 @@
           "nameNeVerified": true,
           "areaSqKm": 2344.61,
           "headquarter": "Darchula",
-          "website": "https://ddcdarchula.gov.np/"
+          "website": "https://ddcdarchula.gov.np/",
+          "hdxPcode": "NP0775",
+          "areaSqKmOfficial": 2339.60543398,
+          "latHdx": 29.92581392,
+          "lngHdx": 80.78907222
         },
         {
           "name": "Doti",
@@ -16577,7 +16897,11 @@
           "nameNeVerified": true,
           "areaSqKm": 2295.71,
           "headquarter": "Dipayal Silgadhi",
-          "website": "https://dccdoti.gov.np/"
+          "website": "https://dccdoti.gov.np/",
+          "hdxPcode": "NP0770",
+          "areaSqKmOfficial": 2050.40364742,
+          "latHdx": 29.18816784,
+          "lngHdx": 80.86231315
         },
         {
           "name": "Kailali",
@@ -16884,7 +17208,11 @@
           "nameNeVerified": true,
           "areaSqKm": 3292.35,
           "headquarter": "Dhangadhi",
-          "website": "https://dcckailali.gov.np/"
+          "website": "https://dcckailali.gov.np/",
+          "hdxPcode": "NP0771",
+          "areaSqKmOfficial": 3285.49238754,
+          "latHdx": 28.73133178,
+          "lngHdx": 80.90417961
         },
         {
           "name": "Kanchanpur",
@@ -17093,7 +17421,11 @@
           "nameNeVerified": true,
           "areaSqKm": 1222.31,
           "headquarter": "Bheemdatta",
-          "website": "https://dcckanchanpur.gov.np/"
+          "website": "https://dcckanchanpur.gov.np/",
+          "hdxPcode": "NP0772",
+          "areaSqKmOfficial": 1617.64471672,
+          "latHdx": 28.84467092,
+          "lngHdx": 80.28316254
         }
       ],
       "cbsCode": 7,
@@ -17102,7 +17434,11 @@
       "nameNeVerified": false,
       "areaSqKm": 19539.0,
       "capital": "Godawari",
-      "website": "https://sudurpashchim.gov.np/"
+      "website": "https://sudurpashchim.gov.np/",
+      "hdxPcode": "NP07",
+      "areaSqKmOfficial": 19744.21926521,
+      "latHdx": 29.32077149,
+      "lngHdx": 80.91877778
     }
   ]
 }
