@@ -118,6 +118,8 @@ jobs:
         run: dart run tool/check_boundary_join.dart
       - name: Boundary topology validation gate
         run: dart run tool/check_boundary_topology.dart
+      - name: RFC 7946 conformance gate (WGS84 lon/lat, closed rings)
+        run: dart run tool/check_rfc7946.dart
       # Same principle as the formatting gate above: a bare "N issues found"
       # is useless when the log is out of reach, so on failure the full
       # analyzer output is attached to the run's step summary - file, line

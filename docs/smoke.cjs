@@ -480,6 +480,22 @@ vm.createContext(sandbox);
   assert.ok(releaseYml.includes('gh release upload') &&
     releaseYml.includes('docs/palika-boundaries-highres.geojson'),
     'the release workflow publishes the full-resolution source as an asset');
+  // RFC 7946 gate: every GeoJSON artifact - the docs/ overlays AND the
+  // bindings/geojson public downloads - must speak WGS84 lon/lat with
+  // closed rings and no legacy "crs" member. Structural pins only;
+  // thresholds are the gate tool's business, never re-pinned here.
+  assert.ok(dartYml.includes('dart run tool/check_rfc7946.dart'),
+    'dart.yml wires the RFC 7946 conformance gate');
+  const rfcTool = fs.readFileSync(
+    path.join(ROOT, '..', 'tool', 'check_rfc7946.dart'), 'utf8');
+  assert.ok(rfcTool.includes("containsKey('crs')"),
+    'the gate bans the legacy "crs" member on GeoJSON objects');
+  assert.ok(rfcTool.includes('ring is not closed'),
+    'the gate fails unclosed rings (four or more positions)');
+  assert.ok(rfcTool.includes('nepalMinLon') && rfcTool.includes('nepalMaxLat'),
+    'the gate pins the Nepal band (a lon/lat swap cannot pass)');
+  assert.ok(rfcTool.includes('degenerateRings'),
+    'the gate reports degenerate rings without failing them');
   // Wave 4 PR C (adaptive & fast): the explorer figure arms at viewport
   // proximity (deep links arm immediately) instead of booting the map engine +
   // boundaries inside the LCP window; Save-Data skips optional prefetch
