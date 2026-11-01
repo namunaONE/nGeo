@@ -365,7 +365,7 @@ void checkFile(String path) {
   try {
     root = jsonDecode(file.readAsStringSync());
   } on FormatException catch (error) {
-    fail(path, 'invalid JSON: ' + error.message);
+    fail(path, 'invalid JSON: ${error.message}');
     return;
   }
   if (root is! Map<String, dynamic>) {
@@ -492,7 +492,7 @@ String? stripRootCrs(String path, String text) {
   try {
     root = jsonDecode(healed);
   } on FormatException catch (error) {
-    _abort('$path: strip produced invalid JSON: ' + error.message);
+    _abort('$path: strip produced invalid JSON: ${error.message}');
   }
   if (root is! Map<String, dynamic> || root.containsKey('crs')) {
     _abort('$path: strip did not remove the collection-level member.');
