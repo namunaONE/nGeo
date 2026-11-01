@@ -46,6 +46,11 @@ void main() {
           if (body['lat'] != null) 'lat': body['lat'],
           if (body['lng'] != null) 'lng': body['lng'],
           if (body['geoSource'] != null) 'geoSource': body['geoSource'],
+          if (body['hdxPcode'] != null) 'hdxPcode': body['hdxPcode'],
+          if (body['areaSqKmOfficial'] != null)
+            'areaSqKmOfficial': body['areaSqKmOfficial'],
+          if (body['latHdx'] != null) 'latHdx': body['latHdx'],
+          if (body['lngHdx'] != null) 'lngHdx': body['lngHdx'],
           if (body['wards'] != null) 'wards': body['wards'],
           if (body['wardsVerified'] == true) 'wardsVerified': true,
           if (body['website'] != null) 'website': body['website'],

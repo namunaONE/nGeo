@@ -51,7 +51,7 @@ class RosterCodec {
         final units = <LocalBody>[];
         for (var j = 0; j < unitCount; j++) {
           final lf = _fields(localBodies[nextBody++]);
-          _arity(lf, 15, 'local-body row');
+          _arity(lf, 19, 'local-body row');
           final type = _typeOf(lf[3]);
           final code = _intOpt(lf[4]);
           final verified = _flag(lf[5]);
@@ -68,6 +68,10 @@ class RosterCodec {
             lat: _doubleOpt(lf[6]),
             lng: _doubleOpt(lf[7]),
             geoSource: _geo(lf[8], geoSources),
+            hdxPcode: _opt(lf[15]),
+            areaSqKmOfficial: _doubleOpt(lf[16]),
+            latHdx: _doubleOpt(lf[17]),
+            lngHdx: _doubleOpt(lf[18]),
             wards: _intOpt(lf[9]),
             wardsVerified: _flag(lf[10]),
             website: _opt(lf[11]),

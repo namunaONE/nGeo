@@ -240,6 +240,57 @@ void main() {
     });
   });
 
+  group('v2.10 HDX official data', () {
+    test('all 753 palikas carry HDX pcode', () {
+      final bodies = NepalAdminApi.getAllLocalBodies();
+      expect(bodies.where((b) => b.hasHdxData).length, 753);
+    });
+
+    test('HDX pcode format is NP + province + district + palika', () {
+      for (final b in NepalAdminApi.getAllLocalBodies()) {
+        if (b.hdxPcode != null) {
+          expect(b.hdxPcode!, matches(RegExp(r'^NP\d{7}$')),
+              reason: '${b.fullPath} hdxPcode');
+        }
+      }
+    });
+
+    test('HDX centroid inside Nepal bounding box', () {
+      for (final b in NepalAdminApi.getAllLocalBodies()) {
+        if (b.latHdx != null && b.lngHdx != null) {
+          expect(b.latHdx!, greaterThanOrEqualTo(26.0),
+              reason: '${b.fullPath} latHdx');
+          expect(b.latHdx!, lessThanOrEqualTo(31.0),
+              reason: '${b.fullPath} latHdx');
+          expect(b.lngHdx!, greaterThanOrEqualTo(80.0),
+              reason: '${b.fullPath} lngHdx');
+          expect(b.lngHdx!, lessThanOrEqualTo(89.0),
+              reason: '${b.fullPath} lngHdx');
+        }
+      }
+    });
+
+    test('HDX official area is positive', () {
+      for (final b in NepalAdminApi.getAllLocalBodies()) {
+        if (b.areaSqKmOfficial != null) {
+          expect(b.areaSqKmOfficial!, greaterThan(0),
+              reason: '${b.fullPath} areaSqKmOfficial');
+        }
+      }
+    });
+
+    test('json round-trip preserves HDX fields', () {
+      final mapped =
+          NepalAdminApi.getAllLocalBodies().firstWhere((b) => b.hasHdxData);
+      final restored = LocalBody.fromJson(mapped.toJson());
+      expect(restored.hdxPcode, mapped.hdxPcode);
+      expect(restored.areaSqKmOfficial, mapped.areaSqKmOfficial);
+      expect(restored.latHdx, mapped.latHdx);
+      expect(restored.lngHdx, mapped.lngHdx);
+      expect(restored.hasHdxData, isTrue);
+    });
+  });
+
   group('v2.3 ward counts', () {
     test('wards are sane positive integers when present', () {
       for (final b in NepalAdminApi.getAllLocalBodies()) {

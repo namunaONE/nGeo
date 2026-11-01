@@ -182,6 +182,11 @@ void main(List<String> args) {
           'lat': bm['lat'],
           'lng': bm['lng'],
           if (bm['geoSource'] != null) 'geoSource': bm['geoSource'],
+          if (bm['hdxPcode'] != null) 'hdxPcode': bm['hdxPcode'],
+          if (bm['areaSqKmOfficial'] != null)
+            'areaSqKmOfficial': bm['areaSqKmOfficial'],
+          if (bm['latHdx'] != null) 'latHdx': bm['latHdx'],
+          if (bm['lngHdx'] != null) 'lngHdx': bm['lngHdx'],
           'wards': w,
           'wardsVerified': bm['wardsVerified'] == true,
           if (bm['website'] != null) 'website': bm['website'],
@@ -364,6 +369,10 @@ void main(List<String> args) {
         'email',
         'phone',
         'zipCodes',
+        'hdxPcode',
+        'areaSqKmOfficial',
+        'latHdx',
+        'lngHdx',
       ]));
 
   // ---- GeoJSON (centroids; RFC 7946) -------------------------------------

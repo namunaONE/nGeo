@@ -85,6 +85,10 @@ void main() {
         expect(j['wardsVerified'], d.wardsVerified, reason: where);
         expect(j['lat'], d.lat, reason: where);
         expect(j['lng'], d.lng, reason: where);
+        expect(j['hdxPcode'], d.hdxPcode, reason: where);
+        expect(j['areaSqKmOfficial'], d.areaSqKmOfficial, reason: where);
+        expect(j['latHdx'], d.latHdx, reason: where);
+        expect(j['lngHdx'], d.lngHdx, reason: where);
         expect(j['website'], d.website, reason: where);
         expect(j['email'], d.email, reason: where);
         expect(j['phone'], d.phone, reason: where);

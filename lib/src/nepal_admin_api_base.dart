@@ -171,6 +171,24 @@ class LocalBody {
   /// Provenance of the coordinates, e.g. 'open-admin-data', 'osm-nominatim'.
   final String? geoSource;
 
+  /// HDX COD-AB p-code for this local body (e.g. 'NP0101301').
+  /// Null when not yet joined to the HDX dataset. From the Survey Department
+  /// of Nepal via HDX COD-AB (CC BY-IGO).
+  final String? hdxPcode;
+
+  /// Official area in square kilometres from the Survey Department (HDX
+  /// COD-AB area_sqkm). Null when not yet joined. More authoritative than
+  /// the district-level areaSqKm.
+  final double? areaSqKmOfficial;
+
+  /// Official centroid latitude from the Survey Department (HDX COD-AB
+  /// center_lat). Null when not yet joined.
+  final double? latHdx;
+
+  /// Official centroid longitude from the Survey Department (HDX COD-AB
+  /// center_lon). Null when not yet joined.
+  final double? lngHdx;
+
   /// Number of wards in this local body. Null when not verified against
   /// ward-count sources (see `wardsVerified`).
   final int? wards;
@@ -212,6 +230,10 @@ class LocalBody {
     this.lat,
     this.lng,
     this.geoSource,
+    this.hdxPcode,
+    this.areaSqKmOfficial,
+    this.latHdx,
+    this.lngHdx,
     this.wards,
     this.wardsVerified = false,
     this.website,
@@ -244,6 +266,9 @@ class LocalBody {
 
   /// Whether approximate map coordinates are available.
   bool get hasCoordinates => lat != null && lng != null;
+
+  /// Whether HDX official data (pcode, area, centroid) is available.
+  bool get hasHdxData => hdxPcode != null;
 
   /// Whether this local body carries a CBS code at all, of any confidence.
   ///
@@ -286,6 +311,10 @@ class LocalBody {
         if (lat != null) 'lat': lat,
         if (lng != null) 'lng': lng,
         if (geoSource != null) 'geoSource': geoSource,
+        if (hdxPcode != null) 'hdxPcode': hdxPcode,
+        if (areaSqKmOfficial != null) 'areaSqKmOfficial': areaSqKmOfficial,
+        if (latHdx != null) 'latHdx': latHdx,
+        if (lngHdx != null) 'lngHdx': lngHdx,
         if (wards != null) 'wards': wards,
         if (wardsVerified) 'wardsVerified': wardsVerified,
         if (website != null) 'website': website,
@@ -319,6 +348,10 @@ class LocalBody {
       lat: (json['lat'] as num?)?.toDouble(),
       lng: (json['lng'] as num?)?.toDouble(),
       geoSource: json['geoSource'] as String?,
+      hdxPcode: json['hdxPcode'] as String?,
+      areaSqKmOfficial: (json['areaSqKmOfficial'] as num?)?.toDouble(),
+      latHdx: (json['latHdx'] as num?)?.toDouble(),
+      lngHdx: (json['lngHdx'] as num?)?.toDouble(),
       wards: json['wards'] as int?,
       wardsVerified: json['wardsVerified'] as bool? ?? false,
       website: json['website'] as String?,

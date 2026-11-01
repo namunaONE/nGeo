@@ -272,7 +272,7 @@ function parseCsv(text) {
 for (const [file, expectedRows, expectedCols] of [
   ['provinces.csv', srcProvinces.length, 12],
   ['districts.csv', srcDistricts.length, 11],
-  ['local_bodies.csv', srcBodies.length, 19],
+  ['local_bodies.csv', srcBodies.length, 23],
 ]) {
   const text = fs.readFileSync(path.join(BINDINGS, 'csv', file), 'utf8');
   const rows = parseCsv(text);

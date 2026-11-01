@@ -266,6 +266,10 @@ String _generate(List<Map<String, dynamic>> provinces) {
           _s(unit['email'], 'local body email'),
           _s(unit['phone'], 'local body phone'),
           zipsCsv,
+          _s(unit['hdxPcode'], 'local body hdxPcode'),
+          _dbl(unit['areaSqKmOfficial']),
+          _dbl(unit['latHdx']),
+          _dbl(unit['lngHdx']),
         ]);
         bodyRows.add(bRow);
       }
@@ -324,7 +328,7 @@ String _generate(List<Map<String, dynamic>> provinces) {
   b.writeln('/// Local-body rows, one per palika, in dataset order:');
   b.writeln('/// name|nameNe|nameNeVerified|type|cbsCode|cbsVerified|');
   b.writeln('/// lat|lng|geoSourceIndex|wards|wardsVerified|website|email|');
-  b.writeln('/// phone|zipCodes');
+  b.writeln('/// phone|zipCodes|hdxPcode|areaSqKmOfficial|latHdx|lngHdx');
   b.writeln('const List<String> kRosterLocalBodies = [');
   for (final bodyRow in bodyRows) {
     b.writeln("  '$bodyRow',");
