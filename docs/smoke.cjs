@@ -487,8 +487,10 @@ vm.createContext(sandbox);
   // Pages (the payload-diet law stands). Structural pins; the tiler
   // and converter invocations are pinned, thresholds are not.
   assert.ok(releaseYml.includes('tippecanoe=2.79.0') &&
-    releaseYml.includes('setup-micromamba@v3'),
-    'the release workflow pins the conda-forge tippecanoe via micromamba');
+    releaseYml.includes('setup-micromamba@v3') &&
+    releaseYml.includes('generate-run-shell: true') &&
+    releaseYml.includes('micromamba-shell {0}'),
+    'the release workflow pins the tippecanoe AND runs it inside the env');
   assert.ok(releaseYml.includes('protomaps/go-pmtiles') &&
     releaseYml.includes('palika-boundaries.pmtiles'),
     'the release workflow archives the boundaries as PMTiles');
