@@ -43,7 +43,8 @@ const AIMS = { lcp: 1800, tbt: 150, cls: 0.04, accessibility: 100 };
 
 // Interim LCP ratchet (Wave 4-A): measured baseline on the CI runner —
 // Evidence-based ratchet, updated from PR #30's first measured run
-// (check_budgets `::notice::measured:` channel, 2026-11-01):
+// (check_budgets `::notice::measured:` channe
+l, 2026-11-01):
 //   Home 2317ms · Explorer 4207ms · API 2196ms · Brand 1503ms.
 // Home, API and Brand sit under the 2500ms law, so they sit AT the law.
 // Re-tuned in PR #33 (the MapLibre leap): the engine swap changed the
@@ -78,7 +79,8 @@ const LCP_CEILINGS = {
   '/brand.html': 2500,
 };
 
-// Interim TBT ratchet (Wave R1 -> R2, the arm-chain split): the law
+// Int
+erim TBT ratchet (Wave R1 -> R2, the arm-chain split): the law
 // (200ms) stands for every page. Explorer's arm chain measured TBT
 // verdicts 2373ms and 2509ms on PR #33's two CI runs (re-measure
 // channel; the first passes those verdicts replaced read 2733/3416ms
@@ -107,11 +109,31 @@ const LCP_CEILINGS = {
 // not the build). The aim (150ms) and the law (200ms) are never
 // lowered — only approached: the remaining clean-run cost is the
 // pinned engine's own parse + WebGL context init (the honest price of
-// the WebGL engine); the open follow-up is taming the MEASUREMENT
+// the WebGL engine); the open follow-up is taming the MEAS
+UREMENT
 // (re-riding the host lottery per Hya's 2026-11-01 call, a quieter
 // runner, or a loaded-runner retry policy) — never relaxing the law.
+// Re-baselined 2026-11-02 from the main-branch evidence (runs #72-#77,
+// the four-merge window + the PR #46 verification run): every budgets
+// run on main that day measured the loaded-host family — 2745/2717/
+// 3321/3270 (runs #72-#75, one per merge) and the full retry chain
+// 2570 -> 3053 -> 3083 (run #77, the loaded-runner retry policy firing
+// exactly as designed, all three Explorer passes busting TBT only) —
+// while the SAME trees measured 957-1838ms on PR-branch runners the
+// same day (runs #66-#71), a ~2.4x host-level spread with LCP pinned
+// throughout. The 1900 ceiling (clean verdict 1615 + ~18%) assumed the
+// clean host is the host of record; a full day of main runs proved the
+// shared-host pool can load ALL its passes for an hour at a time, so
+// 1900 gated the host, not the build. 3850ms = worst main verdict 3321
+// + ~15% LH-noise headroom, the same interpolation policy as every
+// ratchet above. Per Hya's 2026-11-02 "do both" call: re-run run #77
+// AND walk this ceiling. The law (BUDGETS.tbt = 200, aim 150) is never
+// lowered — only approached; the loaded-runner retry policy
+// (TBT_RETRY_RIDES) stands: a real TBT regression busts on every host
+// and still fails. The next lever is taming the MEASUREMENT itself (a
+// quieter runner), never relaxing the law.
 const TBT_CEILINGS = {
-  '/explorer.html': 1900,
+  '/explorer.html': 3850,
 };
 
 // Loaded-runner retry policy (2026-11-01, the four-merge window): the
@@ -126,7 +148,8 @@ const TBT_CEILINGS = {
 // call): a re-measured verdict that busts ONLY the TBT ceiling earns
 // up to TBT_RETRY_RIDES more full-page rides; the first all-green
 // verdict is the verdict of record, otherwise the LAST verdict fails
-// the run honestly. The 1900 ceiling itself does not move.
+// the run honestly. The 1900 ceiling stood in that PR; the 2026-11-02
+// re-baseline above later walked it from the same-day main evidence.
 const TBT_RETRY_RIDES = 2;
 
 const PAGES = [
@@ -152,7 +175,8 @@ function failingAudits(report) {
   return cat.auditRefs
     .map((ref) => ref.id)
     .filter((id) => report.audits[id] && report.audits[id].score !== null &&
-      report.audits[id].score < 1)
+      report.audits[id].score <
+ 1)
     .map((id) => {
       const items = (report.audits[id].details && report.audits[id].details.items) || [];
       const nodes = items
@@ -214,7 +238,8 @@ function rowFor(page, m) {
     cls: Number(m.cls.toFixed(3)),
     a11y: m.a11y,
     lcpOk: m.lcp <= (LCP_CEILINGS[page.path] ?? BUDGETS.lcp),
-    tbtOk: m.tbt <= (TBT_CEILINGS[page.path] ?? BUDGETS.tbt),
+    tbtOk: m.tbt <= (TBT_CEIL
+INGS[page.path] ?? BUDGETS.tbt),
     clsOk: m.cls <= BUDGETS.cls,
     a11yOk: m.a11y >= BUDGETS.accessibility,
   };
@@ -250,7 +275,8 @@ for (const page of PAGES) {
       console.log(`::notice::${page.label} re-measured verdict busts TBT only (TBT ${row.tbt}ms, every other budget green) — the loaded-host signature; riding the host lottery once more (${rides}/${TBT_RETRY_RIDES}).`);
       m = measure(page);
       row = rowFor(page, m);
-    }
+ 
+   }
     if (rides) reMeasured.push(`${page.label} TBT-rides ×${rides}`);
   }
   rows.push(row);
@@ -302,7 +328,8 @@ for (const r of rows) {
 console.log('::notice::measured: ' + rows.map((r) =>
   r.page + ' LCP ' + r.lcp + 'ms TBT ' + r.tbt + 'ms CLS ' + r.cls +
   ' a11y ' + r.a11y + '/100').join(' | ') +
-  (reMeasured.length ? ` (re-measured: ${reMeasured.join(', ')})` : ''));
+  (reMeasured.length ? ` (re-measur
+ed: ${reMeasured.join(', ')})` : ''));
 
 console.log(`budgets: LCP <= ${BUDGETS.lcp}ms (aim ${AIMS.lcp}; interim ratchet ceilings per page — see LCP_CEILINGS), TBT <= ${BUDGETS.tbt}ms (aim ${AIMS.tbt}), CLS <= ${BUDGETS.cls} (aim ${AIMS.cls}), a11y = ${BUDGETS.accessibility}/100`);
 
