@@ -15,7 +15,10 @@
 // varying 117 -> 317ms on an IDENTICAL payload (PR #30, consecutive
 // runs), so a page that busts any budget is re-measured exactly once —
 // the re-run's full-page verdict replaces the first, no per-metric
-// best-of cherry-picking. The law is never relaxed.
+// best-of cherry-picking. One evidence-based exception (2026-11-01): a
+// re-measured verdict that busts ONLY the TBT ceiling is the
+// loaded-host signature and rides the host lottery up to
+// TBT_RETRY_RIDES more times. The law is never relaxed.
 //
 // Usage (from the repository root, site already served):
 //   node tool/check_budgets.mjs [baseUrl]
@@ -110,6 +113,21 @@ const LCP_CEILINGS = {
 const TBT_CEILINGS = {
   '/explorer.html': 1900,
 };
+
+// Loaded-runner retry policy (2026-11-01, the four-merge window): the
+// squash-merges of PRs #42-#45 landed within one ~15-minute window and
+// all four budgets runs on main failed Explorer TBT on the re-measure
+// channel (2745/2717/3321/3270ms, runs #72-#75) while the SAME trees
+// measured 957-1838ms on the PR-branch runners the same day (runs
+// #66-#71) — the loaded-host signature documented in the ratchet
+// above, sampled four times in a row because every run of the window
+// landed on a loaded host. This is the "loaded-runner retry policy"
+// that ratchet comment named as the open lever (per Hya's 2026-11-01
+// call): a re-measured verdict that busts ONLY the TBT ceiling earns
+// up to TBT_RETRY_RIDES more full-page rides; the first all-green
+// verdict is the verdict of record, otherwise the LAST verdict fails
+// the run honestly. The 1900 ceiling itself does not move.
+const TBT_RETRY_RIDES = 2;
 
 const PAGES = [
   { path: '/', label: 'Home' },
@@ -215,6 +233,25 @@ for (const page of PAGES) {
     m = measure(page);
     row = rowFor(page, m);
     reMeasured.push(page.label);
+    // Loaded-runner retry policy (TBT_RETRY_RIDES above): a re-measured
+    // verdict that busts ONLY the TBT budget is the documented
+    // loaded-host signature (the host-level CPU noise swings this
+    // page's TBT ~2.2x while LCP stays pinned), and the re-measure-once
+    // policy cannot escape it because both passes land inside the same
+    // loaded window. Ride the host lottery up to TBT_RETRY_RIDES more
+    // times; the first all-green full verdict is the verdict of record,
+    // otherwise the LAST verdict fails the run honestly. No per-metric
+    // best-of, no ceiling changes: a real TBT regression busts on
+    // every host and still fails.
+    const tbtOnlyBust = (r) => r.lcpOk && !r.tbtOk && r.clsOk && r.a11yOk;
+    let rides = 0;
+    while (tbtOnlyBust(row) && rides < TBT_RETRY_RIDES) {
+      rides++;
+      console.log(`::notice::${page.label} re-measured verdict busts TBT only (TBT ${row.tbt}ms, every other budget green) — the loaded-host signature; riding the host lottery once more (${rides}/${TBT_RETRY_RIDES}).`);
+      m = measure(page);
+      row = rowFor(page, m);
+    }
+    if (rides) reMeasured.push(`${page.label} TBT-rides ×${rides}`);
   }
   rows.push(row);
 
