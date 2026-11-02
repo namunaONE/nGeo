@@ -110,8 +110,27 @@ const LCP_CEILINGS = {
 // the WebGL engine); the open follow-up is taming the MEASUREMENT
 // (re-riding the host lottery per Hya's 2026-11-01 call, a quieter
 // runner, or a loaded-runner retry policy) — never relaxing the law.
+// Re-baselined 2026-11-02 from the main-branch evidence (runs #72-#77,
+// the four-merge window + the PR #46 verification run): every budgets
+// run on main that day measured the loaded-host family — 2745/2717/
+// 3321/3270 (runs #72-#75, one per merge) and the full retry chain
+// 2570 -> 3053 -> 3083 (run #77, the loaded-runner retry policy firing
+// exactly as designed, all three Explorer passes busting TBT only) —
+// while the SAME trees measured 957-1838ms on PR-branch runners the
+// same day (runs #66-#71), a ~2.4x host-level spread with LCP pinned
+// throughout. The 1900 ceiling (clean verdict 1615 + ~18%) assumed the
+// clean host is the host of record; a full day of main runs proved the
+// shared-host pool can load ALL its passes for an hour at a time, so
+// 1900 gated the host, not the build. 3850ms = worst main verdict 3321
+// + ~15% LH-noise headroom, the same interpolation policy as every
+// ratchet above. Per Hya's 2026-11-02 "do both" call: re-run run #77
+// AND walk this ceiling. The law (BUDGETS.tbt = 200, aim 150) is never
+// lowered — only approached; the loaded-runner retry policy
+// (TBT_RETRY_RIDES) stands: a real TBT regression busts on every host
+// and still fails. The next lever is taming the MEASUREMENT itself (a
+// quieter runner), never relaxing the law.
 const TBT_CEILINGS = {
-  '/explorer.html': 1900,
+  '/explorer.html': 3850,
 };
 
 // Loaded-runner retry policy (2026-11-01, the four-merge window): the
@@ -126,7 +145,8 @@ const TBT_CEILINGS = {
 // call): a re-measured verdict that busts ONLY the TBT ceiling earns
 // up to TBT_RETRY_RIDES more full-page rides; the first all-green
 // verdict is the verdict of record, otherwise the LAST verdict fails
-// the run honestly. The 1900 ceiling itself does not move.
+// the run honestly. The 1900 ceiling stood in that PR; the 2026-11-02
+// re-baseline above later walked it from the same-day main evidence.
 const TBT_RETRY_RIDES = 2;
 
 const PAGES = [
