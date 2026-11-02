@@ -43,8 +43,7 @@ const AIMS = { lcp: 1800, tbt: 150, cls: 0.04, accessibility: 100 };
 
 // Interim LCP ratchet (Wave 4-A): measured baseline on the CI runner —
 // Evidence-based ratchet, updated from PR #30's first measured run
-// (check_budgets `::notice::measured:` channe
-l, 2026-11-01):
+// (check_budgets `::notice::measured:` channel, 2026-11-01):
 //   Home 2317ms · Explorer 4207ms · API 2196ms · Brand 1503ms.
 // Home, API and Brand sit under the 2500ms law, so they sit AT the law.
 // Re-tuned in PR #33 (the MapLibre leap): the engine swap changed the
@@ -79,8 +78,7 @@ const LCP_CEILINGS = {
   '/brand.html': 2500,
 };
 
-// Int
-erim TBT ratchet (Wave R1 -> R2, the arm-chain split): the law
+// Interim TBT ratchet (Wave R1 -> R2, the arm-chain split): the law
 // (200ms) stands for every page. Explorer's arm chain measured TBT
 // verdicts 2373ms and 2509ms on PR #33's two CI runs (re-measure
 // channel; the first passes those verdicts replaced read 2733/3416ms
@@ -109,8 +107,7 @@ erim TBT ratchet (Wave R1 -> R2, the arm-chain split): the law
 // not the build). The aim (150ms) and the law (200ms) are never
 // lowered — only approached: the remaining clean-run cost is the
 // pinned engine's own parse + WebGL context init (the honest price of
-// the WebGL engine); the open follow-up is taming the MEAS
-UREMENT
+// the WebGL engine); the open follow-up is taming the MEASUREMENT
 // (re-riding the host lottery per Hya's 2026-11-01 call, a quieter
 // runner, or a loaded-runner retry policy) — never relaxing the law.
 // Re-baselined 2026-11-02 from the main-branch evidence (runs #72-#77,
@@ -175,8 +172,7 @@ function failingAudits(report) {
   return cat.auditRefs
     .map((ref) => ref.id)
     .filter((id) => report.audits[id] && report.audits[id].score !== null &&
-      report.audits[id].score <
- 1)
+      report.audits[id].score < 1)
     .map((id) => {
       const items = (report.audits[id].details && report.audits[id].details.items) || [];
       const nodes = items
@@ -238,8 +234,7 @@ function rowFor(page, m) {
     cls: Number(m.cls.toFixed(3)),
     a11y: m.a11y,
     lcpOk: m.lcp <= (LCP_CEILINGS[page.path] ?? BUDGETS.lcp),
-    tbtOk: m.tbt <= (TBT_CEIL
-INGS[page.path] ?? BUDGETS.tbt),
+    tbtOk: m.tbt <= (TBT_CEILINGS[page.path] ?? BUDGETS.tbt),
     clsOk: m.cls <= BUDGETS.cls,
     a11yOk: m.a11y >= BUDGETS.accessibility,
   };
@@ -275,8 +270,7 @@ for (const page of PAGES) {
       console.log(`::notice::${page.label} re-measured verdict busts TBT only (TBT ${row.tbt}ms, every other budget green) — the loaded-host signature; riding the host lottery once more (${rides}/${TBT_RETRY_RIDES}).`);
       m = measure(page);
       row = rowFor(page, m);
- 
-   }
+    }
     if (rides) reMeasured.push(`${page.label} TBT-rides ×${rides}`);
   }
   rows.push(row);
@@ -328,8 +322,7 @@ for (const r of rows) {
 console.log('::notice::measured: ' + rows.map((r) =>
   r.page + ' LCP ' + r.lcp + 'ms TBT ' + r.tbt + 'ms CLS ' + r.cls +
   ' a11y ' + r.a11y + '/100').join(' | ') +
-  (reMeasured.length ? ` (re-measur
-ed: ${reMeasured.join(', ')})` : ''));
+  (reMeasured.length ? ` (re-measured: ${reMeasured.join(', ')})` : ''));
 
 console.log(`budgets: LCP <= ${BUDGETS.lcp}ms (aim ${AIMS.lcp}; interim ratchet ceilings per page — see LCP_CEILINGS), TBT <= ${BUDGETS.tbt}ms (aim ${AIMS.tbt}), CLS <= ${BUDGETS.cls} (aim ${AIMS.cls}), a11y = ${BUDGETS.accessibility}/100`);
 

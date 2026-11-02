@@ -60,8 +60,7 @@ function makeEl() {
 const elements = {
   'search-input': makeEl(),
   'province-filter': makeEl(),
-  'dist
-rict-filter': makeEl(),
+  'district-filter': makeEl(),
   'type-filter': makeEl(),
   'map-status': makeEl(),
   'theme-toggle': null,
@@ -124,8 +123,7 @@ sandbox.globalThis = sandbox;
 vm.createContext(sandbox);
 
 (async () => {
-  vm.runInContext(appSrc
-, sandbox, { filename: 'app.js' });
+  vm.runInContext(appSrc, sandbox, { filename: 'app.js' });
   await new Promise((r) => setTimeout(r, 100));
   const assert = require('assert');
   assert.ok(
@@ -169,8 +167,7 @@ vm.createContext(sandbox);
   }
   for (const f of pa.features) {
     assert.ok(
-      f.geome
-try && Array.isArray(f.geometry.coordinates) && f.geometry.coordinates.length,
+      f.geometry && Array.isArray(f.geometry.coordinates) && f.geometry.coordinates.length,
       'protected-area feature has geometry: ' + (f.properties && f.properties.id));
   }
   assert.ok(
@@ -213,7 +210,6 @@ try && Array.isArray(f.geometry.coordinates) && f.geometry.coordinates.length,
   assert.ok(
     nh01Meta.wayCount === nh01.features.length,
     'NH01 metadata.wayCount matches the feature count');
-
   for (const f of nh01.features) {
     assert.ok(
       f.geometry && f.geometry.type === 'LineString' &&
@@ -255,8 +251,7 @@ try && Array.isArray(f.geometry.coordinates) && f.geometry.coordinates.length,
     midVerts += c(f.geometry.coordinates);
   }
   assert.ok(midVerts >= 70000,
-    'high-detail variant carries >= 70k vertices, got: 
-' + midVerts);
+    'high-detail variant carries >= 70k vertices, got: ' + midVerts);
   for (const f of mid.features) {
     assert.ok(f.properties && f.properties.districtId,
       'high-detail feature has districtId for the explorer join');
@@ -292,8 +287,7 @@ try && Array.isArray(f.geometry.coordinates) && f.geometry.coordinates.length,
   // regress the skip link, the pressed-state theme toggle, the visible
   // focus ring or the anchor scroll offset. String asserts, because the
   // stub DOM cannot exercise runtime attributes.
-  const a11yPages = ['index.html', 'explorer.html', 'api.html', 'brand.htm
-l'];
+  const a11yPages = ['index.html', 'explorer.html', 'api.html', 'brand.html'];
   for (const page of a11yPages) {
     const pageHtml = fs.readFileSync(path.join(ROOT, page), 'utf8');
     assert.ok(pageHtml.includes('skip-link'), page + ' ships a skip link');
@@ -328,8 +322,7 @@ l'];
   const districtElev = JSON.parse(
     fs.readFileSync(path.join(ROOT, 'district-elevation.json'), 'utf8'));
   assert.ok(Array.isArray(districtElev) && districtElev.length === 77,
-    'district-elevation.json carries all 77
- districts');
+    'district-elevation.json carries all 77 districts');
   assert.ok(districtElev.every((d) => typeof d.elevMean === 'number' &&
     d.elevMin <= d.elevMean && d.elevMean <= d.elevMax),
     'min <= mean <= max for every district');
@@ -362,8 +355,7 @@ l'];
     'all 8 feature cards are bento cells');
   assert.ok(indexHtml.includes('cell-bilingual'),
     'the bilingual cell anchors the bento (dominant cell)');
-  assert
-.ok(indexHtml.includes('cell-wide'),
+  assert.ok(indexHtml.includes('cell-wide'),
     'the CBS claim rides the wide cell');
   assert.ok(indexHtml.includes('cell-full'),
     'the pub.dev score settles as the full-width cell');
@@ -391,8 +383,7 @@ l'];
     'reduced-motion guards (header, flyTo, anchors, count-up)');
   assert.ok(stylesCss.includes('bento-rise'), 'bento rise keyframes ship');
   assert.ok(stylesCss.includes('prefers-reduced-motion: no-preference'),
-    'the reveal is opt-in: 
-hidden cells exist only in the no-preference media block');
+    'the reveal is opt-in: hidden cells exist only in the no-preference media block');
   assert.ok(indexHtml.includes('brand-tokens.css?v=2'),
     'brand-tokens cache-bust v2 (regenerated artifact)');
   // GEO quick-win: the dataset is meant to be found, cited, and used by
@@ -424,8 +415,7 @@ hidden cells exist only in the no-preference media block');
   // empty state that offers a reset. Counts interpolate from the
   // vendored artifact and data.json — nothing is hand-pinned.
   assert.ok(appSrc.includes("id: 'district-boundaries'"),
-    'the district boun
-daries overlay is registered');
+    'the district boundaries overlay is registered');
   assert.ok(appSrc.includes('district-boundaries.geojson'),
     'the overlay fetches the vendored district geometry');
   assert.ok(appSrc.includes('renderTableSkeleton'),
@@ -459,8 +449,7 @@ daries overlay is registered');
     budgetsSrc.includes('accessibility: 100'),
     'the budget law declares the CWV ceilings in check_budgets.mjs');
   // The law is never lowered: LCP pages not yet at 2500ms are gated by
-  // expl
-icit interim ratchet ceilings instead — Explorer stays on an
+  // explicit interim ratchet ceilings instead — Explorer stays on an
   // evidence-based interim (re-measured 4789ms post-engine-swap + ~15%
   // LH noise headroom); Home rides its own walked interim (PR #42: 3350,
   // from the font-fix fresh verdicts). Threshold VALUES are the budget
@@ -489,8 +478,7 @@ icit interim ratchet ceilings instead — Explorer stays on an
   // job drops it, a size budget guards the artifact, and a Release
   // workflow publishes it as a one-click download instead.
   const dartYml = fs.readFileSync(
-    path.join(ROOT, '..', '.github', 'workflows', 'dart.yml'), 'u
-tf8');
+    path.join(ROOT, '..', '.github', 'workflows', 'dart.yml'), 'utf8');
   assert.ok(dartYml.includes('rm -f docs/palika-boundaries-highres.geojson'),
     'deploy-pages keeps the full-resolution source out of the site artifact');
   assert.ok(dartYml.includes('max=$((9*1024*1024))'),
@@ -522,8 +510,7 @@ tf8');
   // licence or metadata change; a refresh stays a human decision,
   // never auto. Structural pins only.
   const codAbWatchYml = fs.readFileSync(
-    path.join(ROOT, '..', '.github', '
-workflows', 'cod-ab-watch.yml'), 'utf8');
+    path.join(ROOT, '..', '.github', 'workflows', 'cod-ab-watch.yml'), 'utf8');
   assert.ok(codAbWatchYml.includes('cod-ab-npl') &&
     codAbWatchYml.includes('package_show'),
     'the watch polls the pinned HDX COD-AB dataset');
@@ -557,8 +544,7 @@ workflows', 'cod-ab-watch.yml'), 'utf8');
     sanitizeYml.includes('--strip-crs'),
     'the sanitize workflow auto-heals non-main branches, never main');
   // Wave 4 PR C (adaptive & fast): the explorer figure arms at viewport
-  // proxim
-ity (deep links arm immediately) instead of booting the map engine +
+  // proximity (deep links arm immediately) instead of booting the map engine +
   // boundaries inside the LCP window; Save-Data skips optional prefetch
   // and the count-up; cards adapt via container queries and the page
   // prints like a document.
@@ -592,8 +578,7 @@ ity (deep links arm immediately) instead of booting the map engine +
   assert.ok(stylesCssC.includes('.maplibregl-popup-content') &&
     !stylesCssC.includes('.leaflet-'),
     'styles theme MapLibre chrome; old map-engine rules are retired');
-  assert.ok(stylesCssC
-.includes('.map .maplibregl-ctrl-attrib a { text-decoration: underline'),
+  assert.ok(stylesCssC.includes('.map .maplibregl-ctrl-attrib a { text-decoration: underline'),
     'the engine attribution link is underlined (.map scope beats the runtime-loaded engine sheet) — axe link-in-text-block');
   // R2 (arm-chain split, walking the budgets toward the law): the
   // engine half and the data half of the map arm schedule separately —
@@ -621,8 +606,7 @@ ity (deep links arm immediately) instead of booting the map engine +
   assert.ok(lighthouseYml.includes('check_budgets.mjs'),
     'the Lighthouse budget workflow runs the budget gate');
     const rows = (tableBody.innerHTML.match(/<tr/g) || []).length;
-  console.log(`SMOKE OK: ${data.length} recor
-ds, ${rows} rows rendered, no errors`);
+  console.log(`SMOKE OK: ${data.length} records, ${rows} rows rendered, no errors`);
 })().catch((err) => {
   console.error('SMOKE FAILED:', err && err.message ? err.message : err);
   process.exit(1);
