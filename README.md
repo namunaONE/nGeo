@@ -8,6 +8,7 @@
 [![pub points](https://img.shields.io/pub/points/nepal_admin_api.svg)](https://pub.dev/packages/nepal_admin_api/score)
 [![License: MIT](https://img.shields.io/badge/License-MIT-blue.svg)](LICENSE)
 [![CI](https://github.com/namunaONE/nGeo/actions/workflows/dart.yml/badge.svg)](https://github.com/namunaONE/nGeo/actions/workflows/dart.yml)
+[![Coverage](https://img.shields.io/badge/coverage-100%25-brightgreen.svg)](https://github.com/namunaONE/nGeo/actions/workflows/dart.yml)
 [![Website](https://img.shields.io/badge/docs-GitHub%20Pages-DC143C)](https://namunaone.github.io/nGeo/)
 
 > **Offline administrative divisions of Nepal** — 7 provinces, 77 districts, 753 local bodies, 6,743 wards with **official CBS/NSO codes** (PDDPP format) and **ISO 3166-2 province codes** (NP-P1…NP-P7).

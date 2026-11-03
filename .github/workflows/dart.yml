@@ -145,6 +145,10 @@ jobs:
           exit $rc
       - name: Run tests
         run: dart test
+      - name: Flutter analyze (packages)
+        run: |
+          cd packages/nepal_admin_widgets && flutter pub get && flutter analyze --fatal-infos
+          cd ../nepal_admin_boundaries_highres && flutter pub get && flutter analyze --fatal-infos
       - name: Coverage report
         run: dart test --coverage=coverage && dart pub global activate coverage && dart pub global run coverage:format_coverage --lcov --in=coverage --out=coverage/lcov.info --report-on=lib --check-ignore
       # The step above has always produced a report that nothing acted on.

@@ -14,7 +14,7 @@ topics:
   - open-data
 
 environment:
-  sdk: ^3.0.0
+  sdk: ^3.5.0
 
 # Pure Dart package: no runtime dependencies needed — the data ships in the box.
 # Data license: boundary geometry is CC BY-IGO (Survey Department of Nepal
