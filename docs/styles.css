@@ -36,7 +36,7 @@
   --green-100: #dcfce7; --green-600: #059669; --green-700: #166534; --green-900: #064e3b;
   --amber-100: #fef3c7; --amber-600: #d97706; --amber-900: #78350f;
   --red-100: #fee2e2; --red-600: #dc2626; --red-900: #7f1d1d;
-  --sky-100: #e0f2fe; --sky-600: #0284c7;
+  --sky-100: #e0f2fe; --sky-600: #0284c7; --sky-700: #0369a1;
 
   /* ---- Semantic: brand / surface / text ---- */
   --color-primary: var(--nepal-blue-700);
@@ -52,7 +52,9 @@
   --color-surface: #ffffff;
   --color-text: var(--slate-900);
   --color-text-secondary: var(--slate-600);
-  --color-text-muted: var(--slate-500);
+  /* WCAG 1.4.3: slate-500 measured 4.55:1 on slate-50 and <4.5 over the
+     hero's tinted gradient; slate-600 clears 7:1 on every surface. */
+  --color-text-muted: var(--slate-600);
   --color-text-inverse: #ffffff;
   --color-border: var(--slate-200);
   --color-border-strong: var(--slate-300);
@@ -65,11 +67,12 @@
   --color-warning-bg: var(--amber-100);
   --color-danger: var(--red-600);
   --color-danger-bg: var(--red-100);
-  --color-info: var(--sky-600);
+  /* WCAG 1.4.3: sky-600 on sky-100 measured 3.57:1; sky-700 clears 5:1. */
+  --color-info: var(--sky-700);
   --color-info-bg: var(--sky-100);
 
   /* ---- Typography (fluid: rem anchors, vw interpolation) ---- */
-  --font-sans: 'Inter', system-ui, -apple-system, 'Segoe UI', sans-serif;
+  --font-sans: 'Inter', 'Noto Sans Devanagari', system-ui, -apple-system, 'Segoe UI', sans-serif;
   --font-mono: 'JetBrains Mono', 'Fira Code', ui-monospace, monospace;
   --text-xs: clamp(0.7rem, 0.7rem + 0.2vw, 0.75rem);
   --text-sm: clamp(0.8rem, 0.8rem + 0.25vw, 0.875rem);
@@ -185,8 +188,16 @@ p { color: var(--color-text-secondary); margin-bottom: var(--space-4); text-wrap
 ul, ol { text-wrap: pretty; }
 a { color: var(--color-primary); text-decoration: none; transition: color var(--transition); }
 a:hover { color: var(--color-primary-dark); }
-a:focus-visible, button:focus-visible, input:focus-visible, select:focus-visible {
-  outline: none; box-shadow: var(--focus-ring);
+/* WCAG 1.4.1: in-text links get an underline — color alone never marks
+   a link. Scoped to prose; nav, buttons and cards are exempt. */
+main p a { text-decoration: underline; text-underline-offset: 3px; text-decoration-color: color-mix(in srgb, var(--color-primary) 45%, transparent); }
+main p a:hover { text-decoration-color: var(--color-primary); }
+/* Wave 1.4 (WCAG 2.2 AA): the focus indicator is a >= 2px outline on the
+   --color-border-focus token (5.9:1 on white light / #93c5fd on #0f172a
+   dark — both >= 3:1, criterion 2.4.13) plus the legacy glow. [tabindex]
+   covers the interactive explorer table rows. */
+a:focus-visible, button:focus-visible, input:focus-visible, select:focus-visible, [tabindex]:focus-visible {
+  outline: 2px solid var(--color-border-focus); outline-offset: 2px; box-shadow: var(--focus-ring);
 }
 img, svg { max-width: 100%; height: auto; vertical-align: middle; }
 code, kbd, pre { font-family: var(--font-mono); }
@@ -196,6 +207,9 @@ code, kbd, pre { font-family: var(--font-mono); }
 .visually-hidden { position: absolute; width: 1px; height: 1px; overflow: hidden; clip: rect(0 0 0 0); white-space: nowrap; }
 .skip-link { position: absolute; left: var(--space-4); top: -100px; z-index: var(--z-toast); padding: var(--space-2) var(--space-4); background: var(--color-text); color: var(--color-bg); border-radius: var(--radius-md); transition: top var(--transition-fast); }
 .skip-link:focus { top: var(--space-2); }
+/* Wave 1.4 (WCAG 2.2 AA, 2.4.11): anchored targets scroll clear of the
+   sticky header instead of hiding under it (skip link, api sections). */
+:target, .api-section[id] { scroll-margin-top: calc(var(--header-height) + var(--space-4)); }
 
 /* ---- Header / brand ---- */
 .header { position: sticky; top: 0; z-index: var(--z-header); transition: background-color var(--transition), box-shadow var(--transition-slow); }
@@ -343,8 +357,57 @@ html.dark .pagination button.active, html[data-theme="dark"] .pagination button.
 
 /* ---- Sections ---- */
 section { padding: var(--space-16) 0; }
-.features-grid { display: grid; grid-template-columns: repeat(auto-fit, minmax(min(100%, 280px), 1fr)); gap: var(--space-6); container-type: inline-size; }
-@container (min-width: 640px) { .features-grid { gap: var(--space-8); } }
+/* ---- Wave 2: Bento 2.0 features grid ----
+   The layout mirrors the data model: one dominant bilingual cell anchors
+   the corner (identity), the flagship CBS claim takes the wide cell, and
+   the pub.dev score settles quietly as a full-width footer cell. Hierarchy
+   by size, zero extra chrome. Spans are layout truth, asserted by smoke. */
+.features-grid { display: grid; grid-template-columns: repeat(6, 1fr); gap: var(--space-4); }
+.bento-cell { border-radius: var(--radius-xl); }
+.cell-bilingual { grid-column: span 2; grid-row: span 2; }
+.cell-bilingual { display: flex; flex-direction: column; justify-content: center; }
+.cell-wide { grid-column: span 4; }
+.cell-full { grid-column: span 6; }
+/* Bento 2.0 tactility: the hover lift (inherited from .feature-card) is
+   decorative — collapse it entirely under reduced motion. */
+@media (prefers-reduced-motion: reduce) {
+  .feature-card { transition: none; }
+  .feature-card:hover { transform: none; }
+}
+/* Bento reflow: mobile keeps the narrative — the bilingual cell stays
+   dominant (full-width) and spans collapse to the 2-column rhythm. */
+@media (max-width: 768px) {
+  .features-grid { grid-template-columns: repeat(2, 1fr); }
+  .cell-bilingual { grid-column: span 2; grid-row: span 1; }
+  .cell-wide { grid-column: span 2; }
+  .cell-full { grid-column: span 2; }
+}
+@media (max-width: 480px) {
+  .features-grid { grid-template-columns: 1fr; }
+  .cell-bilingual, .cell-wide, .cell-full { grid-column: span 1; }
+}
+
+/* ---- Wave 2.5: motion law (Emil bands) + bento reveal + iconography ----
+   Motion law: micro 150-250ms, reveal 200-350ms, exits faster than
+   entrances (180ms), stagger 40ms per item, hard ceiling 1000ms. Only
+   transform and opacity ever animate. The durations and easings are
+   GENERATED tokens (--nb-motion-*, --nb-easing-* in brand-tokens.css,
+   born in brand/tokens.json) so web and Flutter share one rhythm.
+   Iconography charter: UI icons are inline SVG on a 24x24 grid,
+   stroke-width 2, currentColor, round caps; the Himalayan ridge motif
+   is decorative (aria-hidden) — abstract peaks, never a map claim. */
+@media (prefers-reduced-motion: no-preference) {
+  .features-grid.reveal-ready .bento-cell { opacity: 0; transform: translateY(12px); }
+  .features-grid.in-view .bento-cell { animation: bento-rise var(--nb-motion-emphasized) var(--nb-easing-out) forwards; }
+  .features-grid.in-view .bento-cell:nth-child(2) { animation-delay: var(--nb-motion-stagger); }
+  .features-grid.in-view .bento-cell:nth-child(3) { animation-delay: calc(var(--nb-motion-stagger) * 2); }
+  .features-grid.in-view .bento-cell:nth-child(4) { animation-delay: calc(var(--nb-motion-stagger) * 3); }
+  .features-grid.in-view .bento-cell:nth-child(5) { animation-delay: calc(var(--nb-motion-stagger) * 4); }
+  .features-grid.in-view .bento-cell:nth-child(6) { animation-delay: calc(var(--nb-motion-stagger) * 5); }
+  .features-grid.in-view .bento-cell:nth-child(7) { animation-delay: calc(var(--nb-motion-stagger) * 6); }
+  .features-grid.in-view .bento-cell:nth-child(8) { animation-delay: calc(var(--nb-motion-stagger) * 7); }
+  @keyframes bento-rise { to { opacity: 1; transform: translateY(0); } }
+}
 .feature-card { padding: var(--space-6); background: var(--color-bg-secondary); border: 1px solid var(--color-border); border-radius: var(--radius-lg); transition: all var(--transition); }
 .feature-card:hover { border-color: color-mix(in srgb, var(--color-primary) 45%, transparent); box-shadow: var(--shadow-lg); transform: translateY(-4px); }
 .feature-icon { width: 48px; height: 48px; border-radius: var(--radius-full); background: var(--color-primary-light); color: var(--color-primary); display: flex; align-items: center; justify-content: center; margin-bottom: var(--space-4); }
@@ -356,7 +419,10 @@ section { padding: var(--space-16) 0; }
 .install .code-block { max-width: 500px; }
 .quickstart .code-block { max-width: 800px; }
 .code-block { background: var(--color-code-bg); border-radius: var(--radius-lg); overflow: hidden; border: 1px solid var(--color-border); }
-.code-header { display: flex; align-items: center; justify-content: space-between; padding: 12px 16px; background: rgb(255 255 255 / 0.05); border-bottom: 1px solid var(--color-border); font-size: var(--text-xs); font-weight: var(--weight-medium); color: var(--color-text-muted); text-transform: uppercase; letter-spacing: var(--tracking-wide); }
+/* WCAG 1.4.3: the header sits on the dark code background in BOTH
+   themes — light-on-dark ink (slate-300 ≈ 9:1 on slate-800), never the
+   page's muted-text token. */
+.code-header { display: flex; align-items: center; justify-content: space-between; padding: 12px 16px; background: rgb(255 255 255 / 0.05); border-bottom: 1px solid var(--color-border); font-size: var(--text-xs); font-weight: var(--weight-medium); color: var(--slate-300); text-transform: uppercase; letter-spacing: var(--tracking-wide); }
 .copy-btn { min-height: 44px; padding: 6px 16px; font-size: var(--text-xs); font-weight: var(--weight-medium); background: var(--color-bg-tertiary); color: var(--color-text-secondary); border: 1px solid var(--color-border); border-radius: var(--radius-full); cursor: pointer; transition: all var(--transition); }
 .copy-btn:hover { background: var(--color-primary-light); color: var(--color-primary); border-color: var(--color-primary); }
 .code-block pre { margin: 0; padding: var(--space-6); overflow-x: auto; }
@@ -472,6 +538,16 @@ section { padding: var(--space-16) 0; }
 }
 .download-card strong { font-family: var(--font-mono); font-size: var(--text-sm); word-break: break-all; }
 .download-card span { color: var(--color-text-muted); font-size: var(--text-sm); }
+
+/* Wave 4-C: container queries — a card adapts to the space it actually
+   occupies (its grid cell), not the viewport. Progressive enhancement:
+   engines without @container keep the base rules untouched. */
+.feature-card, .download-card { container-type: inline-size; }
+@container (max-width: 300px) {
+  .download-card strong { font-size: 0.8rem; }
+  .download-card span { font-size: 0.72rem; }
+  .feature-card h3 { font-size: var(--text-base); }
+}
 .download-note { margin-top: var(--space-6); color: var(--color-text-muted); font-size: var(--text-sm); }
 .pagination { display: flex; justify-content: center; gap: var(--space-2); margin-top: var(--space-6); flex-wrap: wrap; }
 .pagination button { min-height: 44px; padding: var(--space-2) var(--space-4); border: 1px solid var(--color-border); background: var(--color-bg); color: var(--color-text); border-radius: var(--radius-full); cursor: pointer; transition: all var(--transition); font-size: var(--text-sm); }
@@ -513,7 +589,26 @@ html.dark .leaflet-popup-content code, html[data-theme="dark"] .leaflet-popup-co
 .leaflet-popup-content strong { display: block; font-size: var(--text-base); margin-bottom: 2px; }
 .leaflet-popup-content code { font-size: var(--text-xs); background: var(--color-bg-tertiary); padding: 1px 6px; border-radius: var(--radius-sm); }
 .map-attrib-note { font-size: var(--text-xs); color: var(--color-text-muted); margin: var(--space-2) 0 0; }
-@media print { .map-card { display: none; } }
+@media print {
+  .map-card { display: none; }
+}
+
+/* Wave 4-C: print — the page prints like a document, not a screenshot.
+   Interactive figure, controls and chrome step aside; the table, stats
+   and copy carry the page. */
+@media print {
+  @page { margin: 1.5cm; }
+  .header, .footer, .map-card, .hero-visual, .toast, .explorer-toolbar,
+  .pagination, .nav-toggle, .theme-toggle, .copy-btn,
+  button { display: none !important; }
+  body { background: #fff !important; color: #000 !important; }
+  main h1, main h2, main h3, main p, .stat-label, .download-card span { color: #000 !important; }
+  .explorer-table { font-size: 10pt; }
+  .explorer-table th, .explorer-table td { border: 1px solid #999 !important; }
+  tr, .feature-card, .download-card, .download-grid { break-inside: avoid; }
+  a { color: #000 !important; text-decoration: underline; }
+  * { box-shadow: none !important; text-shadow: none !important; animation: none !important; }
+}
 
 /* ---- Scrollbars (subtle, theme-aware) ---- */
 .api-nav::-webkit-scrollbar, .code-block pre::-webkit-scrollbar { height: 8px; width: 8px; }
@@ -582,4 +677,20 @@ html.dark .leaflet-popup-content code, html[data-theme="dark"] .leaflet-popup-co
   .hero-actions { gap: var(--space-3); }
   .hero-actions .btn { flex: 1 1 100%; }
 }
+
+/* ---- Loading skeleton + empty state (Wave 3 PR B) ---- */
+/* The skeleton is honest structure (it matches the table's 8 columns),
+   muted ink, one slow pulse; reduced-motion gets a static grey.
+   Rows are aria-hidden in JS — a skeleton must never be announced. */
+.skeleton { display: inline-block; height: 14px; border-radius: var(--radius-sm); background: var(--color-border); animation: skeleton-pulse 1.6s ease-in-out infinite; }
+.skeleton-row td { padding: 14px 12px; }
+@keyframes skeleton-pulse { 0%, 100% { opacity: 1; } 50% { opacity: 0.45; } }
+@media (prefers-reduced-motion: reduce) { .skeleton { animation: none; } }
+
+.empty-state-cell { text-align: center; padding: 48px 24px; }
+.empty-state-title { color: var(--color-text); font-weight: 600; margin-bottom: 8px; }
+.empty-state-hint { color: var(--color-text-muted); font-size: 0.875rem; margin-bottom: 16px; }
+
+
+
 
