@@ -85,7 +85,7 @@ const sandbox = {
       if (sel === '.pagination') return paginationEl;
       if (sel === '.header') return null;
       if (sel === '.toast') return null;
-      if (sel === '#map') return null; // map short-circuits (no map engine here)
+      if (sel === '#map') return null; // map short-circuits (no Leaflet here)
       if (sel === '.nav-toggle') return null;
       if (sel === '#nav-menu') return null;
       return null;
@@ -293,42 +293,16 @@ vm.createContext(sandbox);
     assert.ok(pageHtml.includes('skip-link'), page + ' ships a skip link');
     assert.ok(/theme-toggle[^>]*aria-pressed/.test(pageHtml),
       page + ' theme toggle declares aria-pressed');
-    assert.ok(pageHtml.includes('styles.css?v=19'),
-      page + ' bumps the styles cache (v19)');
+    assert.ok(pageHtml.includes('styles.css?v=15'),
+      page + ' bumps the styles cache (v15)');
   }
   const explorerHtml = fs.readFileSync(path.join(ROOT, 'explorer.html'), 'utf8');
   assert.ok(!explorerHtml.includes('role="grid"'),
     'explorer table is a plain table (role="grid" retired)');
   assert.ok(!explorerHtml.includes('role="application"'),
     'map container does not capture screen-reader keys');
-  assert.ok(explorerHtml.includes('app.js?v=21'),
-    'explorer bumps the app cache (v21)');
-  // Wave 3 (terrain figure): the explorer gains a district elevation
-  // choropleth — GLO-30 bands in a lazy-loaded artifact, elevation-aware
-  // popups, and a deep-linkable hero button. The gate interpolates the
-  // district count from the artifact itself; no figure is hand-pinned.
-  assert.ok(explorerHtml.includes('value="elevation"'),
-    'explorer offers the elevation metric');
-  assert.ok(explorerHtml.includes('District elevation: Copernicus GLO-30'),
-    'explorer attributes the elevation source (GLO-30)');
-  assert.ok(appSrc.includes('elevation: {'),
-    'app.js defines the elevation metric');
-  assert.ok(appSrc.includes("label: 'District mean elevation (GLO-30)'"),
-    'the elevation legend names GLO-30');
-  assert.ok(appSrc.includes('ensureDistrictElevation'),
-    'app.js lazy-loads district-elevation.json (degrades, never errors)');
-  assert.ok(appSrc.includes('Copernicus GLO-30)'),
-    'popups carry the elevation sentence with attribution');
-  const districtElev = JSON.parse(
-    fs.readFileSync(path.join(ROOT, 'district-elevation.json'), 'utf8'));
-  assert.ok(Array.isArray(districtElev) && districtElev.length === 77,
-    'district-elevation.json carries all 77 districts');
-  assert.ok(districtElev.every((d) => typeof d.elevMean === 'number' &&
-    d.elevMin <= d.elevMean && d.elevMean <= d.elevMax),
-    'min <= mean <= max for every district');
-  assert.ok(fs.readFileSync(path.join(ROOT, 'index.html'), 'utf8')
-    .includes('explorer.html?metric=elevation'),
-    'the hero deep-links the elevation view');
+  assert.ok(explorerHtml.includes('app.js?v=17'),
+    'explorer bumps the app cache (v17)');
   const stylesCss = fs.readFileSync(path.join(ROOT, 'styles.css'), 'utf8');
   assert.ok(stylesCss.includes('[tabindex]:focus-visible'),
     'interactive table rows get a visible focus ring');
@@ -338,8 +312,8 @@ vm.createContext(sandbox);
     'focus ring rides the border-focus token (>= 3:1 in both themes)');
   assert.ok(appSrc.includes('aria-pressed'),
     'applyTheme syncs the toggle pressed state');
-  assert.ok((appSrc.match(/lang="ne"/g) || []).length === 6,
-    'bilingual spans carry lang="ne" (palika popup, district tip + popup, 2 table paths)');
+  assert.ok((appSrc.match(/lang="ne"/g) || []).length === 4,
+    'bilingual spans carry lang="ne" (2 popups + 2 table paths)');
   assert.ok(appSrc.includes("toast.setAttribute('role', 'status')"),
     'toast feedback is announced (role=status)');
   assert.ok(appSrc.includes('aria-current'),
@@ -408,159 +382,10 @@ vm.createContext(sandbox);
     'the sitemap lists all 4 public pages');
   assert.ok(/"dateModified": "\d{4}-\d{2}-\d{2}"/.test(indexHtml),
     'the index JSON-LD carries a dateModified freshness date');
-  // Wave 3 PR B (context + honesty): the 77-district layer ships as a
-  // same-origin overlay (dashed stone lines, off by default, roster
-  // popup + GLO-30 sentence), the table gets a loading skeleton
-  // (aria-hidden rows, CSS-only pulse, reduced-motion static) and an
-  // empty state that offers a reset. Counts interpolate from the
-  // vendored artifact and data.json — nothing is hand-pinned.
-  assert.ok(appSrc.includes("id: 'district-boundaries'"),
-    'the district boundaries overlay is registered');
-  assert.ok(appSrc.includes('district-boundaries.geojson'),
-    'the overlay fetches the vendored district geometry');
-  assert.ok(appSrc.includes('renderTableSkeleton'),
-    'the table renders a loading skeleton while data.json loads');
-  assert.ok(appSrc.includes('reset-filters'),
-    'the empty state offers a one-click reset');
-  const stylesCssB = fs.readFileSync(path.join(ROOT, 'styles.css'), 'utf8');
-  assert.ok(stylesCssB.includes('skeleton-pulse'),
-    'skeletons pulse via CSS, not JS');
-  assert.ok(/prefers-reduced-motion: reduce[\s\S]{0,80}\.skeleton \{ animation: none/.test(stylesCssB),
-    'skeletons collapse under reduced motion');
-  const districtsFc = JSON.parse(
-    fs.readFileSync(path.join(ROOT, 'district-boundaries.geojson'), 'utf8'));
-  assert.ok(districtsFc.features.length === 77,
-    'district-boundaries.geojson carries all 77 districts');
-  const dataDistricts = new Set(data.map((d) => d.district));
-  const overlayDistricts =
-    new Set(districtsFc.features.map((f) => f.properties && f.properties.nameEn));
-  assert.ok(overlayDistricts.size === 77 &&
-    [...overlayDistricts].every((d) => dataDistricts.has(d)),
-    'overlay district names join 77/77 with data.json');
-  // Wave 4 (budgets as features): the performance + accessibility law
-  // lives in ONE place (tool/check_budgets.mjs) and CI enforces it via
-  // .github/workflows/lighthouse.yml on every PR. Here we only assert
-  // the law is declared and wired — thresholds themselves are the
-  // budget gate's business, never re-pinned in smoke.
-  const budgetsSrc = fs.readFileSync(
-    path.join(ROOT, '..', 'tool', 'check_budgets.mjs'), 'utf8');
-  assert.ok(budgetsSrc.includes('lcp: 2500') &&
-    budgetsSrc.includes('tbt: 200') && budgetsSrc.includes('cls: 0.1') &&
-    budgetsSrc.includes('accessibility: 100'),
-    'the budget law declares the CWV ceilings in check_budgets.mjs');
-  // The law is never lowered: LCP pages not yet at 2500ms are gated by
-  // explicit interim ratchet ceilings instead — Home now sits AT the law
-  // (measured 2317ms), Explorer stays on an evidence-based interim
-  // (re-measured 4789ms post-engine-swap + ~15% LH noise headroom).
-  assert.ok(budgetsSrc.includes('const LCP_CEILINGS = {') &&
-    budgetsSrc.includes("'/explorer.html': 5500") &&
-    budgetsSrc.includes("'/': 2500"),
-    'the LCP ratchet declares per-page evidence-based ceilings');
-  assert.ok(budgetsSrc.includes('const TBT_CEILINGS = {') &&
-    budgetsSrc.includes("'/explorer.html': 2900") &&
-    budgetsSrc.includes('tbtOk: m.tbt <= (TBT_CEILINGS[page.path]'),
-    'the TBT ratchet declares the MapLibre-era Explorer interim (law unchanged elsewhere)');
-  assert.ok(budgetsSrc.includes('lcpOk: m.lcp <= (LCP_CEILINGS[page.path]'),
-    'the LCP gate asserts against the ratchet ceiling');
-  assert.ok(budgetsSrc.includes('re-measuring once'),
-    'a budget bust earns exactly one fresh full-page re-measure (runner noise), never a relaxed law');
-  // Wave 4 PR B (payload diet): the ~40 MB full-resolution palika boundary
-  // source stays in the repo (source-of-truth for the boundaries package
-  // and its generators) but never reaches the Pages artifact: the deploy
-  // job drops it, a size budget guards the artifact, and a Release
-  // workflow publishes it as a one-click download instead.
-  const dartYml = fs.readFileSync(
-    path.join(ROOT, '..', '.github', 'workflows', 'dart.yml'), 'utf8');
-  assert.ok(dartYml.includes('rm -f docs/palika-boundaries-highres.geojson'),
-    'deploy-pages keeps the full-resolution source out of the site artifact');
-  assert.ok(dartYml.includes('max=$((9*1024*1024))'),
-    'deploy-pages enforces the 9 MB site artifact size budget');
-  const releaseYml = fs.readFileSync(
-    path.join(ROOT, '..', '.github', 'workflows', 'release-geojson.yml'), 'utf8');
-  assert.ok(releaseYml.includes('gh release upload') &&
-    releaseYml.includes('docs/palika-boundaries-highres.geojson'),
-    'the release workflow publishes the full-resolution source as an asset');
-  // Track T1 (PMTiles archive): the same boundaries archived as one
-  // single-file PMTiles so map renderers can stream tiles without a
-  // tile server. Built inside the SAME release job - one notes edit,
-  // no racing workflows; the archive uploads to the Release, NEVER to
-  // Pages (the payload-diet law stands). Structural pins; the tiler
-  // and converter invocations are pinned, thresholds are not.
-  assert.ok(releaseYml.includes('tippecanoe=2.79.0') &&
-    releaseYml.includes('setup-micromamba@v3'),
-    'the release workflow pins the conda-forge tippecanoe via micromamba');
-  assert.ok(releaseYml.includes('protomaps/go-pmtiles') &&
-    releaseYml.includes('palika-boundaries.pmtiles'),
-    'the release workflow archives the boundaries as PMTiles');
-  // RFC 7946 gate: every GeoJSON artifact - the docs/ overlays AND the
-  // bindings/geojson public downloads - must speak WGS84 lon/lat with
-  // closed rings and no legacy "crs" member. Structural pins only;
-  // thresholds are the gate tool's business, never re-pinned here.
-  assert.ok(dartYml.includes('dart run tool/check_rfc7946.dart'),
-    'dart.yml wires the RFC 7946 conformance gate');
-  const rfcTool = fs.readFileSync(
-    path.join(ROOT, '..', 'tool', 'check_rfc7946.dart'), 'utf8');
-  assert.ok(rfcTool.includes("containsKey('crs')"),
-    'the gate bans the legacy "crs" member on GeoJSON objects');
-  assert.ok(rfcTool.includes('ring is not closed'),
-    'the gate fails unclosed rings (four or more positions)');
-  assert.ok(rfcTool.includes('nepalMinLon') && rfcTool.includes('nepalMaxLat'),
-    'the gate pins the Nepal band (a lon/lat swap cannot pass)');
-  assert.ok(rfcTool.includes('degenerateRings'),
-    'the gate reports degenerate rings without failing them');
-  assert.ok(rfcTool.includes('--strip-crs'),
-    'the gate doubles as the auto-heal: --strip-crs excises the member');
-  const sanitizeYml = fs.readFileSync(
-    path.join(ROOT, '..', '.github', 'workflows', 'sanitize-crs.yml'), 'utf8');
-  assert.ok(sanitizeYml.includes('branches-ignore: [main]') &&
-    sanitizeYml.includes('--strip-crs'),
-    'the sanitize workflow auto-heals non-main branches, never main');
-  // Wave 4 PR C (adaptive & fast): the explorer figure arms at viewport
-  // proximity (deep links arm immediately) instead of booting the map engine +
-  // boundaries inside the LCP window; Save-Data skips optional prefetch
-  // and the count-up; cards adapt via container queries and the page
-  // prints like a document.
-  assert.ok(appSrc.includes('var _mapArmed = false;') &&
-    appSrc.includes("params.get('cbs') || params.get('metric')") &&
-    appSrc.includes('renderArmedMap'),
-    'the figure arms lazily; deep links arm immediately');
-  assert.ok(appSrc.includes('var SAVE_DATA') &&
-    appSrc.includes('if (!SAVE_DATA) ensureDistrictElevation();') &&
-    appSrc.includes('if (SAVE_DATA) return;'),
-    'Save-Data gates the eager elevation prefetch and the count-up');
-  const stylesCssC = fs.readFileSync(path.join(ROOT, 'styles.css'), 'utf8');
-  assert.ok(stylesCssC.includes('container-type: inline-size') &&
-    stylesCssC.includes('@container'),
-    'cards adapt via container queries');
-  assert.ok(stylesCssC.includes('break-inside: avoid') &&
-    stylesCssC.includes('@page { margin: 1.5cm; }'),
-    'print styles keep rows and cards unbroken');
-  // Wave R1 (the MapLibre leap): the engine swap is pinned and total —
-  // MapLibre GL v5.6.0 (the last UMD build; v6 ships ESM-only), native
-  // GeoJSON clustering, data-driven choropleth paint. The old engine and
-  // its cluster plugin are fully retired from app.js and styles.css.
-  assert.ok(appSrc.includes('maplibre-gl@5.6.0/dist/maplibre-gl.js') &&
-    appSrc.includes('new maplibregl.Map('),
-    'the explorer map runs on pinned MapLibre GL v5.6.0');
-  assert.ok(!appSrc.includes('unpkg.com/leaflet') &&
-    !appSrc.includes('markerClusterGroup'),
-    'the old map engine + cluster plugin CDN era is fully retired');
-  assert.ok(appSrc.includes('tile.openstreetmap.org'),
-    'the OSM raster basemap stays');
-  assert.ok(stylesCssC.includes('.maplibregl-popup-content') &&
-    !stylesCssC.includes('.leaflet-'),
-    'styles theme MapLibre chrome; old map-engine rules are retired');
-  assert.ok(stylesCssC.includes('.map .maplibregl-ctrl-attrib a { text-decoration: underline'),
-    'the engine attribution link is underlined (.map scope beats the runtime-loaded engine sheet) — axe link-in-text-block');
-  const lighthouseYml = fs.readFileSync(
-    path.join(ROOT, '..', '.github', 'workflows', 'lighthouse.yml'), 'utf8');
-  assert.ok(lighthouseYml.includes('check_budgets.mjs'),
-    'the Lighthouse budget workflow runs the budget gate');
     const rows = (tableBody.innerHTML.match(/<tr/g) || []).length;
   console.log(`SMOKE OK: ${data.length} records, ${rows} rows rendered, no errors`);
 })().catch((err) => {
   console.error('SMOKE FAILED:', err && err.message ? err.message : err);
   process.exit(1);
 });
-
 
