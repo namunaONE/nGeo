@@ -49,7 +49,7 @@ Pure Dart package. Zero runtime dependencies. Data ships in the box.
 
 ```yaml
 dependencies:
-  nepal_admin_api: ^2.10.0
+  nepal_admin_api: ^2.15.0
 ```
 
 ```bash

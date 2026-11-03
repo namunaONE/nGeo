@@ -4,6 +4,24 @@ All notable changes to this package are documented in this file.
 The format follows [Keep a Changelog](https://keepachangelog.com/) and the
 package adheres to [Semantic Versioning](https://semver.org/).
 
+## 2.15.0 — 2026-11-03
+
+Flagship system design refresh. Removed all transparent/glassmorphism effects
+from the website CSS for a solid, opaque, flagship-grade surface. Bumped
+package version to 2.15.0.
+
+### Changed
+- **docs/styles.css** — removed `backdrop-filter`, `transparent` backgrounds,
+  and opacity overlays; replaced with solid surfaces and borders.
+- **docs/index.html** — version references updated to v2.15.0; removed
+  opacity from hero map SVG path.
+- **pubspec.yaml** — version bumped to 2.15.0.
+
+### Fixed
+- All Lighthouse a11y audits now pass (color-contrast, link-in-text-block).
+- Smoke test preconditions fully satisfied (bento grid, MapLibre chrome,
+  skeleton pulse, print styles, cache bust).
+
 ## 2.10.0 — 2026-10-29
 
 The elevation release. Per-district min/mean/max elevation, computed from
