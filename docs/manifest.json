@@ -1,0 +1,16 @@
+{
+  "name": "Nepal Administrative Data",
+  "short_name": "Nepal Admin",
+  "description": "Offline administrative divisions of Nepal: 7 provinces, 77 districts, 753 local bodies, 6,743 wards with CBS/NSO codes.",
+  "start_url": "/",
+  "display": "standalone",
+  "background_color": "#ffffff",
+  "theme_color": "#1D4ED8",
+  "icons": [
+    {
+      "src": "logo.svg",
+      "sizes": "any",
+      "type": "image/svg+xml"
+    }
+  ]
+}
