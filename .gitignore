@@ -58,6 +58,9 @@ Thumbs.db
 # --- Logs ---
 *.log
 
+# --- CI diagnostics (generated, not source) ---
+ci-diagnostics/
+
 # --- Editors ---
 .idea/
 .vscode/

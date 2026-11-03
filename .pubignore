@@ -44,6 +44,9 @@ Nepal_Local_Level_Atlas.pdf
 # Ninth Bell media project (unrelated to this package)
 the_ninth_bell/
 
+# CI diagnostics (generated logs, not source)
+ci-diagnostics/
+
 # Selected data dumps / scratch
 selected.geojson
 selected.kml
