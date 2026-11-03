@@ -208,9 +208,7 @@ void main(List<String> args) {
     // Normalize to a list of polygons, each a list of rings. A Polygon has a
     // single polygon (coords is [ring][point][x,y]); a MultiPolygon has many
     // (coords is [polygon][ring][point][x,y]).
-    final polygons = geom['type'] == 'Polygon'
-        ? <dynamic>[coords]
-        : coords;
+    final polygons = geom['type'] == 'Polygon' ? <dynamic>[coords] : coords;
     final polys = List<List<List<List<double>>>>.empty(growable: true);
     for (final poly in polygons) {
       final rings = List<List<List<double>>>.empty(growable: true);
