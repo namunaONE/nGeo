@@ -602,6 +602,13 @@ function ensureMap() {
             maxzoom: MAP_TILES.maxZoom,
             attribution: MAP_TILES.attribution,
           },
+          terrain: {
+            type: 'raster-dem',
+            tiles: ['https://s3.amazonaws.com/elevation-tiles-prod/terrarium/{z}/{x}/{y}.png'],
+            tileSize: 256,
+            maxzoom: 14,
+            encoding: 'terrarium',
+          },
         },
         layers: [{
           id: 'osm-tiles',
@@ -613,7 +620,10 @@ function ensureMap() {
       },
       center: [84.12, 28.39],
       zoom: 7,
+      pitch: 45,
+      bearing: 0,
       attributionControl: { compact: true },
+      terrain: { source: 'terrain', exaggeration: 1.5 },
     });
     // Same UX law as the Leaflet era: the wheel only zooms once the map
     // canvas has focus — the page never hijacks scrolling on the way
