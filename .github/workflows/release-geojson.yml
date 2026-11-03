@@ -47,9 +47,14 @@ jobs:
               - conda-forge
           create-args: >-
             tippecanoe=2.79.0
+          generate-run-shell: true
       - name: Upload the full-resolution palika boundaries as a Release asset
         env:
           GH_TOKEN: ${{ github.token }}
+        # plain bash -e steps do NOT source rc files, so the micromamba
+        # env is never auto-activated (release run 41290044563 lesson):
+        # enter it with the generated micromamba-shell.
+        shell: micromamba-shell {0}
         run: |
           set -euo pipefail
           tag="palika-boundaries-highres"
