@@ -3,6 +3,7 @@
 // Core models and the query API for Nepal's administrative divisions.
 
 import 'geo/district_boundary_codec.dart';
+import 'geo/district_elevation_codec.dart';
 import 'geo/palika_boundary_codec.dart';
 import 'geo/province_boundary_codec.dart';
 import 'nepal_data.dart';
@@ -1113,6 +1114,37 @@ class NepalAdminApi {
   /// (RFC 7946, WGS84).
   static Map<String, Object?> districtBoundariesGeoJson() {
     return DistrictBoundaries.toGeoJsonFeatureCollection();
+  }
+
+  // --- District elevation stats (Copernicus GLO-30) ---
+
+  /// Elevation statistics for one district — min, mean and max in integer
+  /// metres, computed from Copernicus GLO-30 (30 m, frozen 2021 release)
+  /// zonal statistics over the official district polygons.
+  ///
+  /// Accepts either a geometry id (e.g. 'P3.D05') or a roster name
+  /// (e.g. 'Kathmandu'); both lookups are case-insensitive. Returns null
+  /// when the elevation table does not cover the district.
+  static DistrictElevationStats? getDistrictElevationStats(
+    String districtNameOrId,
+  ) {
+    return DistrictElevations.byDistrictId(districtNameOrId) ??
+        DistrictElevations.byName(districtNameOrId);
+  }
+
+  /// Elevation statistics for all 77 districts, in district-id order.
+  static List<DistrictElevationStats> getAllDistrictElevationStats() =>
+      DistrictElevations.all;
+
+  /// Whether the elevation table covers this district (id or name).
+  static bool hasDistrictElevationStats(String districtNameOrId) =>
+      DistrictElevations.hasStats(districtNameOrId);
+
+  /// Every district elevation stats record as one GeoJSON FeatureCollection
+  /// (RFC 7946, WGS84, geometry null) — mirrors
+  /// bindings/geojson/districts.elevation.geojson.
+  static Map<String, Object?> districtElevationStatsGeoJson() {
+    return DistrictElevations.toGeoJsonFeatureCollection();
   }
 }
 
