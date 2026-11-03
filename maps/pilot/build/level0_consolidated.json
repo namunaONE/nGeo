@@ -1,0 +1,105 @@
+{
+  "generated": "2026-10-29T05:02:06.542Z",
+  "edition": "v1.1 reference edition - Level 0 accuracy audit",
+  "checks": {
+    "0.1_area_reconciliation": {
+      "status": "PASS",
+      "summary": "Albers (published) vs Turf.js (independent) agree to 0.000% at province level, 0.001% max at district level. Area computation method is sound.",
+      "meta_total_km2": 148227.04,
+      "turf_total_km2": 148227.04,
+      "spherical_total_km2": 317621.89,
+      "albers_vs_turf_delta_pct": "0.000",
+      "official_nepal_area_km2": "147,516 - 147,641",
+      "gap_vs_official_km2": "586.04",
+      "gap_explanation": "0.4-0.5% gap vs official is consistent with 5% generalised geometry. Documented.",
+      "lhulier_note": "L'Huilier spherical triangle decomposition gave 317,622 km² (wrong) due to triangle decomposition issues with large non-convex polygons. Not a real problem - Turf and Albers agree.",
+      "districts_over_0_5pct": 0,
+      "districts_over_1pct": 0
+    },
+    "0.2_topology_audit": {
+      "status": "PASS (with 1 documented note)",
+      "self_intersections": {
+        "count": 0,
+        "verdict": "PASS"
+      },
+      "real_interior_overlaps": {
+        "count": 9,
+        "verdict": "PASS (9 false positives from sampling method; grid-based intersection area = 0.00 km² for all)"
+      },
+      "slivers": {
+        "count": 0,
+        "verdict": "PASS"
+      },
+      "gaps": {
+        "count": 4,
+        "verdict": "EXPECTED (4 protected areas with no local-level data)"
+      },
+      "code_uniqueness": {
+        "pass": true,
+        "verdict": "PASS (753/753)"
+      },
+      "null_checks": {
+        "missing_names": 0,
+        "missing_types": 0,
+        "verdict": "PASS"
+      },
+      "containment_note": {
+        "failures": 1,
+        "detail": "Darchula district centroid not in Sudurpashchim province polygon. 419/1034 vertices outside province. Label point IS inside. Root cause: simplified province boundary does not perfectly contain the simplified district boundary. Not a data error - generalisation artifact.",
+        "verdict": "DOCUMENTED (not a data error)"
+      }
+    },
+    "0.7_peak_coordinate_audit": {
+      "status": "WARN (single-source dominance)",
+      "total_peaks": 51,
+      "coord_source_distribution": {
+        "S04": 47,
+        "S02": 3,
+        "S18": 1
+      },
+      "peaks_inside_national": 48,
+      "peaks_outside_national": 3,
+      "peaks_outside_district": 4,
+      "peaks_with_accuracy_specified": 1,
+      "draft_coord_mismatches": 0,
+      "np_status": {
+        "attested": 43,
+        "transliterated": 7,
+        "pending": 1
+      },
+      "review_status": {
+        "approved": 50,
+        "draft": 1
+      },
+      "key_finding": "47/51 peaks from Wikidata (S04). Single-source dominance. Multi-source verification not possible with current data.",
+      "recommendation": "Obtain coordinates from at least 2 independent sources per peak for v1.2. Priority: peaks with review_flags (border summits outside simplified polygons).",
+      "border_summits": [
+        {
+          "name": "Cho Oyu",
+          "lon": 86.6608,
+          "lat": 28.0942,
+          "dist_km": "0.25"
+        },
+        {
+          "name": "Langtang Ri",
+          "lon": 85.6836,
+          "lat": 28.3814,
+          "dist_km": "0.25"
+        },
+        {
+          "name": "Ratna Chuli",
+          "lon": 84.3772,
+          "lat": 28.8644,
+          "dist_km": "0.01"
+        }
+      ]
+    }
+  },
+  "overall_verdict": "Level 0 audit: 0.1 PASS, 0.2 PASS (1 documented note), 0.7 WARN (single-source dominance for peaks). No blocking issues for v1.1 release. Peak coordinate multi-source verification deferred to v1.2.",
+  "next_steps": [
+    "0.1: Document the 0.4-0.5% area gap vs official in v1.1 release notes as expected for generalised geometry.",
+    "0.2: Document Darchula containment note in QA report. No action needed.",
+    "0.7: For v1.2, obtain 2nd independent coordinate source for all 51 peaks. Start with the 4 peaks outside their assigned district polygons (Cho Oyu, Manaslu, Langtang Ri, Ratna Chuli) and the 3 border summits outside national polygon.",
+    "0.7: Thulagi Chuli remains the only pending item (name + coordinate). User decision needed."
+  ]
+}

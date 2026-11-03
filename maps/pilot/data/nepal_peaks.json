@@ -1,0 +1,1572 @@
+{
+  "meta": {
+    "name": "Nepal peaks (reference)",
+    "description": "51 named peaks above 7,000 m in Nepal, with bilingual names, elevations, and coordinates",
+    "source": "Wikidata (S04), Wikipedia (S02/S15), Kathmandu Post (S03), Himalayan Database (S05)",
+    "dataAsOf": "2026-10-29",
+    "totals": {
+      "peaks": 51,
+      "eightThousanderMain": 8,
+      "eightThousanderOfficialAdditional": 6,
+      "sevenThousanders": 37,
+      "attestedNp": 43,
+      "transliteratedNp": 8,
+      "pendingNp": 0
+    }
+  },
+  "peaks": [
+    {
+      "id": "pk-everest",
+      "nameEn": "Mount Everest",
+      "nameNe": "सगरमाथा",
+      "nameStatus": "attested",
+      "nameNeSource": null,
+      "elevation": 8848.86,
+      "prominence": 8848.86,
+      "range": "Khumbu Mahalangur",
+      "massif": null,
+      "peakClass": "eight_thousander_main",
+      "nepalShare": "border",
+      "borderCountries": [
+        "China"
+      ],
+      "provinceCodes": [
+        1
+      ],
+      "districtCodes": [
+        103
+      ],
+      "lng": 86.925,
+      "lat": 27.9881,
+      "coordSource": "S04",
+      "coordAccuracyM": null,
+      "officialList": "nepal-2025-14",
+      "firstAscentYear": "1953",
+      "reviewStatus": "approved",
+      "aliasesEn": [
+        "Chomolungma",
+        " Sagarmatha"
+      ],
+      "notesEn": "Official Nepal height; border peak"
+    },
+    {
+      "id": "pk-kanchenjunga",
+      "nameEn": "Kanchenjunga",
+      "nameNe": "कञ्चनजङ्घा",
+      "nameStatus": "attested",
+      "nameNeSource": null,
+      "elevation": 8586,
+      "prominence": 3922,
+      "range": "Kangchenjunga Himal",
+      "massif": null,
+      "peakClass": "eight_thousander_main",
+      "nepalShare": "border",
+      "borderCountries": [
+        "India"
+      ],
+      "provinceCodes": [
+        1
+      ],
+      "districtCodes": [
+        101
+      ],
+      "lng": 88.1474,
+      "lat": 27.703,
+      "coordSource": "S04",
+      "coordAccuracyM": null,
+      "officialList": "nepal-2025-14",
+      "firstAscentYear": "1955",
+      "reviewStatus": "approved",
+      "aliasesEn": [
+        "Kangchenjunga"
+      ],
+      "notesEn": "Border peak"
+    },
+    {
+      "id": "pk-lhotse",
+      "nameEn": "Lhotse",
+      "nameNe": "ल्होत्से",
+      "nameStatus": "transliterated",
+      "nameNeSource": null,
+      "elevation": 8516,
+      "prominence": null,
+      "range": "Khumbu Mahalangur",
+      "massif": null,
+      "peakClass": "eight_thousander_main",
+      "nepalShare": "border",
+      "borderCountries": [
+        "China"
+      ],
+      "provinceCodes": [
+        1
+      ],
+      "districtCodes": [
+        103
+      ],
+      "lng": 86.9331,
+      "lat": 27.9617,
+      "coordSource": "S02",
+      "coordAccuracyM": null,
+      "officialList": "nepal-2025-14",
+      "firstAscentYear": "1956",
+      "reviewStatus": "approved",
+      "aliasesEn": null,
+      "notesEn": "Border peak; coordinate from Wikipedia DMS"
+    },
+    {
+      "id": "pk-makalu",
+      "nameEn": "Makalu",
+      "nameNe": "मकालु",
+      "nameStatus": "attested",
+      "nameNeSource": null,
+      "elevation": 8485,
+      "prominence": 2378,
+      "range": "Makalu Mahalangur",
+      "massif": null,
+      "peakClass": "eight_thousander_main",
+      "nepalShare": "border",
+      "borderCountries": [
+        "China"
+      ],
+      "provinceCodes": [
+        1
+      ],
+      "districtCodes": [
+        102
+      ],
+      "lng": 87.0886,
+      "lat": 27.8892,
+      "coordSource": "S04",
+      "coordAccuracyM": null,
+      "officialList": "nepal-2025-14",
+      "firstAscentYear": "1955",
+      "reviewStatus": "approved",
+      "aliasesEn": [
+        "Makalu Himal"
+      ],
+      "notesEn": "Border peak"
+    },
+    {
+      "id": "pk-cho-oyu",
+      "nameEn": "Cho Oyu",
+      "nameNe": "चोयु",
+      "nameStatus": "attested",
+      "nameNeSource": null,
+      "elevation": 8188,
+      "prominence": 2344,
+      "range": "Khumbu Mahalangur",
+      "massif": null,
+      "peakClass": "eight_thousander_main",
+      "nepalShare": "border",
+      "borderCountries": [
+        "China"
+      ],
+      "provinceCodes": [
+        1
+      ],
+      "districtCodes": [
+        103
+      ],
+      "lng": 86.6608,
+      "lat": 28.0942,
+      "coordSource": "S04",
+      "coordAccuracyM": null,
+      "officialList": "nepal-2025-14",
+      "firstAscentYear": "1954",
+      "reviewStatus": "approved",
+      "aliasesEn": null,
+      "notesEn": "Border peak"
+    },
+    {
+      "id": "pk-dhaulagiri-i",
+      "nameEn": "Dhaulagiri I",
+      "nameNe": "धौलागिरी",
+      "nameStatus": "attested",
+      "nameNeSource": null,
+      "elevation": 8167,
+      "prominence": 3357,
+      "range": "Dhaulagiri Himal",
+      "massif": null,
+      "peakClass": "eight_thousander_main",
+      "nepalShare": "inside",
+      "borderCountries": null,
+      "provinceCodes": [
+        4
+      ],
+      "districtCodes": [
+        404
+      ],
+      "lng": 83.49,
+      "lat": 28.6967,
+      "coordSource": "S04",
+      "coordAccuracyM": null,
+      "officialList": "nepal-2025-14",
+      "firstAscentYear": "1960",
+      "reviewStatus": "approved",
+      "aliasesEn": [
+        "Dhaulagiri"
+      ],
+      "notesEn": null
+    },
+    {
+      "id": "pk-manaslu",
+      "nameEn": "Manaslu",
+      "nameNe": "मनास्लु",
+      "nameStatus": "attested",
+      "nameNeSource": null,
+      "elevation": 8163,
+      "prominence": 3092,
+      "range": "Mansiri Himal",
+      "massif": null,
+      "peakClass": "eight_thousander_main",
+      "nepalShare": "inside",
+      "borderCountries": null,
+      "provinceCodes": [
+        4
+      ],
+      "districtCodes": [
+        401
+      ],
+      "lng": 84.5597,
+      "lat": 28.55,
+      "coordSource": "S04",
+      "coordAccuracyM": null,
+      "officialList": "nepal-2025-14",
+      "firstAscentYear": "1956",
+      "reviewStatus": "approved",
+      "aliasesEn": null,
+      "notesEn": "District corrected to Gorkha; simplified polygon assignment had a gap"
+    },
+    {
+      "id": "pk-annapurna-i",
+      "nameEn": "Annapurna I",
+      "nameNe": "अन्नपूर्ण",
+      "nameStatus": "attested",
+      "nameNeSource": null,
+      "elevation": 8091,
+      "prominence": 2984,
+      "range": "Annapurna Himal",
+      "massif": null,
+      "peakClass": "eight_thousander_main",
+      "nepalShare": "inside",
+      "borderCountries": null,
+      "provinceCodes": [
+        4
+      ],
+      "districtCodes": [
+        404
+      ],
+      "lng": 83.82,
+      "lat": 28.5958,
+      "coordSource": "S04",
+      "coordAccuracyM": null,
+      "officialList": "nepal-2025-14",
+      "firstAscentYear": "1950",
+      "reviewStatus": "approved",
+      "aliasesEn": [
+        "Annapurna"
+      ],
+      "notesEn": null
+    },
+    {
+      "id": "pk-yalung-kang",
+      "nameEn": "Yalung Kang",
+      "nameNe": "यालुङ काङ",
+      "nameStatus": "transliterated",
+      "nameNeSource": null,
+      "elevation": 8505,
+      "prominence": 135,
+      "range": "Kangchenjunga Himal",
+      "massif": "Kangchenjunga massif",
+      "peakClass": "eight_thousander_official_additional",
+      "nepalShare": "border",
+      "borderCountries": [
+        "India"
+      ],
+      "provinceCodes": [
+        1
+      ],
+      "districtCodes": [
+        101
+      ],
+      "lng": 88.1367,
+      "lat": 27.7052,
+      "coordSource": "S04",
+      "coordAccuracyM": null,
+      "officialList": "nepal-2025-14",
+      "firstAscentYear": "1973",
+      "reviewStatus": "approved",
+      "aliasesEn": null,
+      "notesEn": "Official additional summit"
+    },
+    {
+      "id": "pk-kanchenjunga-south",
+      "nameEn": "Kanchenjunga South",
+      "nameNe": "कञ्चनजङ्घा दक्षिण",
+      "nameStatus": "transliterated",
+      "nameNeSource": null,
+      "elevation": 8476,
+      "prominence": null,
+      "range": "Kangchenjunga Himal",
+      "massif": "Kangchenjunga massif",
+      "peakClass": "eight_thousander_official_additional",
+      "nepalShare": "border",
+      "borderCountries": [
+        "India"
+      ],
+      "provinceCodes": [
+        1
+      ],
+      "districtCodes": [
+        101
+      ],
+      "lng": 88.1543,
+      "lat": 27.6917,
+      "coordSource": "S04",
+      "coordAccuracyM": null,
+      "officialList": "nepal-2025-14",
+      "firstAscentYear": null,
+      "reviewStatus": "approved",
+      "aliasesEn": null,
+      "notesEn": "Official additional summit"
+    },
+    {
+      "id": "pk-kanchenjunga-central",
+      "nameEn": "Kanchenjunga Central",
+      "nameNe": "कञ्चनजङ्घा मध्य",
+      "nameStatus": "transliterated",
+      "nameNeSource": null,
+      "elevation": 8473,
+      "prominence": 57,
+      "range": "Kangchenjunga Himal",
+      "massif": "Kangchenjunga massif",
+      "peakClass": "eight_thousander_official_additional",
+      "nepalShare": "border",
+      "borderCountries": [
+        "India"
+      ],
+      "provinceCodes": [
+        1
+      ],
+      "districtCodes": [
+        101
+      ],
+      "lng": 88.1513,
+      "lat": 27.696,
+      "coordSource": "S02",
+      "coordAccuracyM": null,
+      "officialList": "nepal-2025-14",
+      "firstAscentYear": null,
+      "reviewStatus": "approved",
+      "aliasesEn": null,
+      "notesEn": "Official additional summit; prominence from secondary source"
+    },
+    {
+      "id": "pk-lhotse-middle",
+      "nameEn": "Lhotse Middle",
+      "nameNe": "ल्होत्से मध्य",
+      "nameStatus": "transliterated",
+      "nameNeSource": null,
+      "elevation": 8410,
+      "prominence": null,
+      "range": "Khumbu Mahalangur",
+      "massif": null,
+      "peakClass": "eight_thousander_official_additional",
+      "nepalShare": "border",
+      "borderCountries": [
+        "China"
+      ],
+      "provinceCodes": [
+        1
+      ],
+      "districtCodes": [
+        103
+      ],
+      "lng": 86.9389,
+      "lat": 27.9609,
+      "coordSource": "S04",
+      "coordAccuracyM": null,
+      "officialList": "nepal-2025-14",
+      "firstAscentYear": null,
+      "reviewStatus": "approved",
+      "aliasesEn": null,
+      "notesEn": "Official additional summit"
+    },
+    {
+      "id": "pk-lhotse-shar",
+      "nameEn": "Lhotse Shar",
+      "nameNe": "ल्होत्से शर",
+      "nameStatus": "transliterated",
+      "nameNeSource": null,
+      "elevation": 8400,
+      "prominence": null,
+      "range": "Khumbu Mahalangur",
+      "massif": null,
+      "peakClass": "eight_thousander_official_additional",
+      "nepalShare": "border",
+      "borderCountries": [
+        "China"
+      ],
+      "provinceCodes": [
+        1
+      ],
+      "districtCodes": [
+        103
+      ],
+      "lng": 86.9433,
+      "lat": 27.9583,
+      "coordSource": "S04",
+      "coordAccuracyM": null,
+      "officialList": "nepal-2025-14",
+      "firstAscentYear": null,
+      "reviewStatus": "approved",
+      "aliasesEn": null,
+      "notesEn": "Official additional summit; Wikidata elevation is 8383"
+    },
+    {
+      "id": "pk-yalung-kang-west",
+      "nameEn": "Yalung Kang West",
+      "nameNe": "यालुङ काङ पश्चिम",
+      "nameStatus": "transliterated",
+      "nameNeSource": null,
+      "elevation": 8077,
+      "prominence": null,
+      "range": "Kangchenjunga Himal",
+      "massif": "Kangchenjunga massif",
+      "peakClass": "eight_thousander_official_additional",
+      "nepalShare": "inside",
+      "borderCountries": null,
+      "provinceCodes": [
+        1
+      ],
+      "districtCodes": [
+        101
+      ],
+      "lng": 88.125,
+      "lat": 27.7062,
+      "coordSource": "S18",
+      "coordAccuracyM": "100",
+      "officialList": "nepal-2025-14",
+      "firstAscentYear": null,
+      "reviewStatus": "approved",
+      "aliasesEn": null,
+      "notesEn": "\"Candidate coordinate from Peakbook (UTM 45R 610914 3065161"
+    },
+    {
+      "id": "pk-gyachung-kang",
+      "nameEn": "Gyachung Kang",
+      "nameNe": "ग्याचुङ काङ",
+      "nameStatus": "attested",
+      "nameNeSource": null,
+      "elevation": 7952,
+      "prominence": 672,
+      "range": "Khumbu Mahalangur",
+      "massif": null,
+      "peakClass": "seven_thousander",
+      "nepalShare": "border",
+      "borderCountries": [
+        "China"
+      ],
+      "provinceCodes": [
+        1
+      ],
+      "districtCodes": [
+        103
+      ],
+      "lng": 86.7422,
+      "lat": 28.0981,
+      "coordSource": "S04",
+      "coordAccuracyM": null,
+      "officialList": null,
+      "firstAscentYear": "1964",
+      "reviewStatus": "approved",
+      "aliasesEn": null,
+      "notesEn": "Border status to verify"
+    },
+    {
+      "id": "pk-annapurna-ii",
+      "nameEn": "Annapurna II",
+      "nameNe": "अन्नपूर्ण दोस्रो",
+      "nameStatus": "attested",
+      "nameNeSource": "S14",
+      "elevation": 7937,
+      "prominence": 2437,
+      "range": "Annapurna Himal",
+      "massif": null,
+      "peakClass": "seven_thousander",
+      "nepalShare": "inside",
+      "borderCountries": null,
+      "provinceCodes": [
+        4
+      ],
+      "districtCodes": [
+        402
+      ],
+      "lng": 84.135,
+      "lat": 28.5381,
+      "coordSource": "S04",
+      "coordAccuracyM": null,
+      "officialList": null,
+      "firstAscentYear": "1960",
+      "reviewStatus": "approved",
+      "aliasesEn": null,
+      "notesEn": "Nepali name per S14; language review pending"
+    },
+    {
+      "id": "pk-himalchuli",
+      "nameEn": "Himalchuli",
+      "nameNe": "हिमालचुली",
+      "nameStatus": "attested",
+      "nameNeSource": null,
+      "elevation": 7893,
+      "prominence": 1633,
+      "range": "Mansiri Himal",
+      "massif": null,
+      "peakClass": "seven_thousander",
+      "nepalShare": "inside",
+      "borderCountries": null,
+      "provinceCodes": [
+        4
+      ],
+      "districtCodes": [
+        406
+      ],
+      "lng": 84.6394,
+      "lat": 28.4361,
+      "coordSource": "S04",
+      "coordAccuracyM": null,
+      "officialList": null,
+      "firstAscentYear": "1930",
+      "reviewStatus": "approved",
+      "aliasesEn": null,
+      "notesEn": null
+    },
+    {
+      "id": "pk-ngadi-chuli",
+      "nameEn": "Ngadi Chuli",
+      "nameNe": "गाडी चुली",
+      "nameStatus": "attested",
+      "nameNeSource": null,
+      "elevation": 7871,
+      "prominence": 1020,
+      "range": "Mansiri Himal",
+      "massif": null,
+      "peakClass": "seven_thousander",
+      "nepalShare": "inside",
+      "borderCountries": null,
+      "provinceCodes": [
+        4
+      ],
+      "districtCodes": [
+        401
+      ],
+      "lng": 84.5686,
+      "lat": 28.5033,
+      "coordSource": "S04",
+      "coordAccuracyM": null,
+      "officialList": null,
+      "firstAscentYear": "1970",
+      "reviewStatus": "approved",
+      "aliasesEn": null,
+      "notesEn": null
+    },
+    {
+      "id": "pk-nuptse",
+      "nameEn": "Nuptse",
+      "nameNe": "नुप्त्से",
+      "nameStatus": "attested",
+      "nameNeSource": null,
+      "elevation": 7861,
+      "prominence": 305,
+      "range": "Khumbu Mahalangur",
+      "massif": null,
+      "peakClass": "seven_thousander",
+      "nepalShare": "inside",
+      "borderCountries": null,
+      "provinceCodes": [
+        1
+      ],
+      "districtCodes": [
+        103
+      ],
+      "lng": 86.89,
+      "lat": 27.9664,
+      "coordSource": "S04",
+      "coordAccuracyM": null,
+      "officialList": null,
+      "firstAscentYear": "1961",
+      "reviewStatus": "approved",
+      "aliasesEn": null,
+      "notesEn": "Border status to verify"
+    },
+    {
+      "id": "pk-dhaulagiri-ii",
+      "nameEn": "Dhaulagiri II",
+      "nameNe": "धौलागिरी दोस्रो",
+      "nameStatus": "attested",
+      "nameNeSource": "S14",
+      "elevation": 7751,
+      "prominence": 2391,
+      "range": "Dhaulagiri Himal",
+      "massif": null,
+      "peakClass": "seven_thousander",
+      "nepalShare": "inside",
+      "borderCountries": null,
+      "provinceCodes": [
+        6
+      ],
+      "districtCodes": [
+        601
+      ],
+      "lng": 83.3883,
+      "lat": 28.7633,
+      "coordSource": "S04",
+      "coordAccuracyM": null,
+      "officialList": null,
+      "firstAscentYear": "1971",
+      "reviewStatus": "approved",
+      "aliasesEn": null,
+      "notesEn": "Nepali name per S14; language review pending"
+    },
+    {
+      "id": "pk-jannu",
+      "nameEn": "Jannu",
+      "nameNe": "कुम्भकर्ण हिमाल",
+      "nameStatus": "attested",
+      "nameNeSource": null,
+      "elevation": 7711,
+      "prominence": 1036,
+      "range": "Kangchenjunga Himal",
+      "massif": null,
+      "peakClass": "seven_thousander",
+      "nepalShare": "inside",
+      "borderCountries": null,
+      "provinceCodes": [
+        1
+      ],
+      "districtCodes": [
+        101
+      ],
+      "lng": 88.0333,
+      "lat": 27.6667,
+      "coordSource": "S04",
+      "coordAccuracyM": null,
+      "officialList": null,
+      "firstAscentYear": "1962",
+      "reviewStatus": "approved",
+      "aliasesEn": [
+        "Kumbhakarna"
+      ],
+      "notesEn": null
+    },
+    {
+      "id": "pk-dhaulagiri-iv",
+      "nameEn": "Dhaulagiri IV",
+      "nameNe": "धौलागिरी चौथा",
+      "nameStatus": "attested",
+      "nameNeSource": "S14",
+      "elevation": 7661,
+      "prominence": null,
+      "range": "Dhaulagiri Himal",
+      "massif": null,
+      "peakClass": "seven_thousander",
+      "nepalShare": "inside",
+      "borderCountries": null,
+      "provinceCodes": [
+        6
+      ],
+      "districtCodes": [
+        601
+      ],
+      "lng": 83.3148,
+      "lat": 28.7357,
+      "coordSource": "S04",
+      "coordAccuracyM": null,
+      "officialList": null,
+      "firstAscentYear": "1969",
+      "reviewStatus": "approved",
+      "aliasesEn": null,
+      "notesEn": "Nepali name per S14; language review pending"
+    },
+    {
+      "id": "pk-dhaulagiri-v",
+      "nameEn": "Dhaulagiri V",
+      "nameNe": "धौलागिरी पाँचौँ",
+      "nameStatus": "attested",
+      "nameNeSource": "S14",
+      "elevation": 7618,
+      "prominence": null,
+      "range": "Dhaulagiri Himal",
+      "massif": null,
+      "peakClass": "seven_thousander",
+      "nepalShare": "inside",
+      "borderCountries": null,
+      "provinceCodes": [
+        6
+      ],
+      "districtCodes": [
+        601
+      ],
+      "lng": 83.3621,
+      "lat": 28.734,
+      "coordSource": "S04",
+      "coordAccuracyM": null,
+      "officialList": null,
+      "firstAscentYear": "1970",
+      "reviewStatus": "approved",
+      "aliasesEn": null,
+      "notesEn": "Nepali name per S14; language review pending"
+    },
+    {
+      "id": "pk-annapurna-iii",
+      "nameEn": "Annapurna III",
+      "nameNe": "अन्नपूर्ण तेस्रो",
+      "nameStatus": "attested",
+      "nameNeSource": "S14",
+      "elevation": 7555,
+      "prominence": 703,
+      "range": "Annapurna Himal",
+      "massif": null,
+      "peakClass": "seven_thousander",
+      "nepalShare": "inside",
+      "borderCountries": null,
+      "provinceCodes": [
+        4
+      ],
+      "districtCodes": [
+        405
+      ],
+      "lng": 83.99,
+      "lat": 28.5853,
+      "coordSource": "S04",
+      "coordAccuracyM": null,
+      "officialList": null,
+      "firstAscentYear": "1961",
+      "reviewStatus": "approved",
+      "aliasesEn": null,
+      "notesEn": "Nepali name per S14; language review pending"
+    },
+    {
+      "id": "pk-jongsong-peak",
+      "nameEn": "Jongsong Peak",
+      "nameNe": "जोङ्सोङ् हिमाल",
+      "nameStatus": "attested",
+      "nameNeSource": null,
+      "elevation": 7462,
+      "prominence": 1256,
+      "range": "Kangchenjunga Himal",
+      "massif": null,
+      "peakClass": "seven_thousander",
+      "nepalShare": "border",
+      "borderCountries": [
+        "China",
+        "India"
+      ],
+      "provinceCodes": [
+        1
+      ],
+      "districtCodes": [
+        101
+      ],
+      "lng": 88.1358,
+      "lat": 27.8814,
+      "coordSource": "S04",
+      "coordAccuracyM": null,
+      "officialList": null,
+      "firstAscentYear": "1930",
+      "reviewStatus": "approved",
+      "aliasesEn": [
+        "Jonsong Peak"
+      ],
+      "notesEn": "Border peak at the India-Nepal-China tripoint; border countries updated per S15."
+    },
+    {
+      "id": "pk-gangapurna",
+      "nameEn": "Gangapurna",
+      "nameNe": "गङ्गापूर्ण",
+      "nameStatus": "attested",
+      "nameNeSource": null,
+      "elevation": 7455,
+      "prominence": 563,
+      "range": "Annapurna Himal",
+      "massif": null,
+      "peakClass": "seven_thousander",
+      "nepalShare": "inside",
+      "borderCountries": null,
+      "provinceCodes": [
+        4
+      ],
+      "districtCodes": [
+        405
+      ],
+      "lng": 83.9642,
+      "lat": 28.6047,
+      "coordSource": "S04",
+      "coordAccuracyM": null,
+      "officialList": null,
+      "firstAscentYear": "1965",
+      "reviewStatus": "approved",
+      "aliasesEn": null,
+      "notesEn": null
+    },
+    {
+      "id": "pk-yangra",
+      "nameEn": "Yangra",
+      "nameNe": "याङ्ग्रा हिमाल",
+      "nameStatus": "attested",
+      "nameNeSource": "S14",
+      "elevation": 7422,
+      "prominence": 2359,
+      "range": "Ganesh Himal",
+      "massif": null,
+      "peakClass": "seven_thousander",
+      "nepalShare": "border",
+      "borderCountries": [
+        "China"
+      ],
+      "provinceCodes": [
+        4
+      ],
+      "districtCodes": [
+        401
+      ],
+      "lng": 85.1272,
+      "lat": 28.3917,
+      "coordSource": "S04",
+      "coordAccuracyM": null,
+      "officialList": null,
+      "firstAscentYear": "1955",
+      "reviewStatus": "approved",
+      "aliasesEn": [
+        "Ganesh I"
+      ],
+      "notesEn": "Border peak; Nepali name याङ्ग्रा per S14; border status confirmed S15."
+    },
+    {
+      "id": "pk-kabru",
+      "nameEn": "Kabru",
+      "nameNe": "काब्रु",
+      "nameStatus": "attested",
+      "nameNeSource": null,
+      "elevation": 7412,
+      "prominence": 720,
+      "range": "Kangchenjunga Himal",
+      "massif": null,
+      "peakClass": "seven_thousander",
+      "nepalShare": "border",
+      "borderCountries": [
+        "India"
+      ],
+      "provinceCodes": [
+        1
+      ],
+      "districtCodes": [
+        101
+      ],
+      "lng": 88.1183,
+      "lat": 27.635,
+      "coordSource": "S04",
+      "coordAccuracyM": null,
+      "officialList": null,
+      "firstAscentYear": "1935",
+      "reviewStatus": "approved",
+      "aliasesEn": null,
+      "notesEn": "Border peak"
+    },
+    {
+      "id": "pk-churen-himal",
+      "nameEn": "Churen Himal",
+      "nameNe": "चुरेन हिमाल",
+      "nameStatus": "attested",
+      "nameNeSource": "S14",
+      "elevation": 7385,
+      "prominence": 590,
+      "range": "Dhaulagiri Himal",
+      "massif": null,
+      "peakClass": "seven_thousander",
+      "nepalShare": "inside",
+      "borderCountries": null,
+      "provinceCodes": [
+        4
+      ],
+      "districtCodes": [
+        404
+      ],
+      "lng": 83.2101,
+      "lat": 28.7316,
+      "coordSource": "S04",
+      "coordAccuracyM": null,
+      "officialList": null,
+      "firstAscentYear": "1958",
+      "reviewStatus": "approved",
+      "aliasesEn": null,
+      "notesEn": "Nepali name per S14; language review pending"
+    },
+    {
+      "id": "pk-kirat-chuli",
+      "nameEn": "Kirat Chuli",
+      "nameNe": "किरात चुली हिमाल",
+      "nameStatus": "attested",
+      "nameNeSource": null,
+      "elevation": 7365,
+      "prominence": 1168,
+      "range": "Kangchenjunga Himal",
+      "massif": null,
+      "peakClass": "seven_thousander",
+      "nepalShare": "border",
+      "borderCountries": [
+        "India"
+      ],
+      "provinceCodes": [
+        1
+      ],
+      "districtCodes": [
+        101
+      ],
+      "lng": 88.1944,
+      "lat": 27.7869,
+      "coordSource": "S04",
+      "coordAccuracyM": null,
+      "officialList": null,
+      "firstAscentYear": "1939",
+      "reviewStatus": "approved",
+      "aliasesEn": [
+        "Kirat Chuli Himal"
+      ],
+      "notesEn": "Border peak"
+    },
+    {
+      "id": "pk-nangpai-gosum",
+      "nameEn": "Nangpai Gosum",
+      "nameNe": "नङपाई हिमाल",
+      "nameStatus": "attested",
+      "nameNeSource": null,
+      "elevation": 7350,
+      "prominence": 426,
+      "range": "Khumbu Mahalangur",
+      "massif": null,
+      "peakClass": "seven_thousander",
+      "nepalShare": "border",
+      "borderCountries": [
+        "China"
+      ],
+      "provinceCodes": [
+        1
+      ],
+      "districtCodes": [
+        103
+      ],
+      "lng": 86.6144,
+      "lat": 28.0722,
+      "coordSource": "S04",
+      "coordAccuracyM": null,
+      "officialList": null,
+      "firstAscentYear": "1986",
+      "reviewStatus": "approved",
+      "aliasesEn": null,
+      "notesEn": "Border status to verify"
+    },
+    {
+      "id": "pk-gimmigela-chuli",
+      "nameEn": "Gimmigela Chuli",
+      "nameNe": "गिम्मीगेला चुली",
+      "nameStatus": "attested",
+      "nameNeSource": null,
+      "elevation": 7350,
+      "prominence": 432,
+      "range": "Kangchenjunga Himal",
+      "massif": null,
+      "peakClass": "seven_thousander",
+      "nepalShare": "border",
+      "borderCountries": [
+        "India"
+      ],
+      "provinceCodes": [
+        1
+      ],
+      "districtCodes": [
+        101
+      ],
+      "lng": 88.15,
+      "lat": 27.7333,
+      "coordSource": "S04",
+      "coordAccuracyM": null,
+      "officialList": null,
+      "firstAscentYear": "1994",
+      "reviewStatus": "approved",
+      "aliasesEn": null,
+      "notesEn": "Border peak"
+    },
+    {
+      "id": "pk-chamlang",
+      "nameEn": "Chamlang",
+      "nameNe": "चामलाङ हिमाल",
+      "nameStatus": "attested",
+      "nameNeSource": null,
+      "elevation": 7321,
+      "prominence": 1193,
+      "range": "Khumbu Mahalangur",
+      "massif": null,
+      "peakClass": "seven_thousander",
+      "nepalShare": "inside",
+      "borderCountries": null,
+      "provinceCodes": [
+        1
+      ],
+      "districtCodes": [
+        103
+      ],
+      "lng": 86.98,
+      "lat": 27.7758,
+      "coordSource": "S04",
+      "coordAccuracyM": null,
+      "officialList": null,
+      "firstAscentYear": "1962",
+      "reviewStatus": "approved",
+      "aliasesEn": null,
+      "notesEn": null
+    },
+    {
+      "id": "pk-dhaulagiri-vi",
+      "nameEn": "Dhaulagiri VI",
+      "nameNe": "धौलागिरी छैटौँ",
+      "nameStatus": "attested",
+      "nameNeSource": "S14",
+      "elevation": 7268,
+      "prominence": 518,
+      "range": "Dhaulagiri Himal",
+      "massif": null,
+      "peakClass": "seven_thousander",
+      "nepalShare": "inside",
+      "borderCountries": null,
+      "provinceCodes": [
+        4
+      ],
+      "districtCodes": [
+        404
+      ],
+      "lng": 83.2742,
+      "lat": 28.7086,
+      "coordSource": "S02",
+      "coordAccuracyM": null,
+      "officialList": null,
+      "firstAscentYear": "1970",
+      "reviewStatus": "approved",
+      "aliasesEn": null,
+      "notesEn": "Coordinate corrected from source table; prominence from secondary source"
+    },
+    {
+      "id": "pk-putha-hiunchuli",
+      "nameEn": "Putha Hiunchuli",
+      "nameNe": "पुथा हिउँचुली",
+      "nameStatus": "attested",
+      "nameNeSource": "S14",
+      "elevation": 7246,
+      "prominence": 1151,
+      "range": "Dhaulagiri Himal",
+      "massif": null,
+      "peakClass": "seven_thousander",
+      "nepalShare": "inside",
+      "borderCountries": null,
+      "provinceCodes": [
+        6
+      ],
+      "districtCodes": [
+        601
+      ],
+      "lng": 83.1458,
+      "lat": 28.7475,
+      "coordSource": "S04",
+      "coordAccuracyM": null,
+      "officialList": null,
+      "firstAscentYear": "1954",
+      "reviewStatus": "approved",
+      "aliasesEn": null,
+      "notesEn": "Nepali name per S14; language review pending"
+    },
+    {
+      "id": "pk-langtang-lirung",
+      "nameEn": "Langtang Lirung",
+      "nameNe": "लाङटाङ लिरुङ",
+      "nameStatus": "attested",
+      "nameNeSource": null,
+      "elevation": 7227,
+      "prominence": 1525,
+      "range": "Langtang Himal",
+      "massif": null,
+      "peakClass": "seven_thousander",
+      "nepalShare": "inside",
+      "borderCountries": null,
+      "provinceCodes": [
+        3
+      ],
+      "districtCodes": [
+        303
+      ],
+      "lng": 85.5194,
+      "lat": 28.2561,
+      "coordSource": "S04",
+      "coordAccuracyM": null,
+      "officialList": null,
+      "firstAscentYear": "1978",
+      "reviewStatus": "approved",
+      "aliasesEn": null,
+      "notesEn": null
+    },
+    {
+      "id": "pk-annapurna-south",
+      "nameEn": "Annapurna South",
+      "nameNe": "अन्नपूर्ण दक्षिण",
+      "nameStatus": "attested",
+      "nameNeSource": "S14",
+      "elevation": 7219,
+      "prominence": 775,
+      "range": "Annapurna Himal",
+      "massif": null,
+      "peakClass": "seven_thousander",
+      "nepalShare": "inside",
+      "borderCountries": null,
+      "provinceCodes": [
+        4
+      ],
+      "districtCodes": [
+        404
+      ],
+      "lng": 83.806,
+      "lat": 28.518,
+      "coordSource": "S04",
+      "coordAccuracyM": null,
+      "officialList": null,
+      "firstAscentYear": "1964",
+      "reviewStatus": "approved",
+      "aliasesEn": [
+        "Annapurna Dakshin"
+      ],
+      "notesEn": "Nepali name per S14; language review pending"
+    },
+    {
+      "id": "pk-langtang-ri",
+      "nameEn": "Langtang Ri",
+      "nameNe": "लाङटाङ री",
+      "nameStatus": "attested",
+      "nameNeSource": null,
+      "elevation": 7205,
+      "prominence": 650,
+      "range": "Langtang Himal",
+      "massif": null,
+      "peakClass": "seven_thousander",
+      "nepalShare": "border",
+      "borderCountries": [
+        "China"
+      ],
+      "provinceCodes": [
+        3
+      ],
+      "districtCodes": [
+        303
+      ],
+      "lng": 85.6836,
+      "lat": 28.3814,
+      "coordSource": "S04",
+      "coordAccuracyM": null,
+      "officialList": null,
+      "firstAscentYear": "1980",
+      "reviewStatus": "approved",
+      "aliasesEn": null,
+      "notesEn": "Border peak; border status confirmed S15."
+    },
+    {
+      "id": "pk-gurja-himal",
+      "nameEn": "Gurja Himal",
+      "nameNe": "गुर्जा हिमाल",
+      "nameStatus": "attested",
+      "nameNeSource": "S14",
+      "elevation": 7193,
+      "prominence": 493,
+      "range": "Dhaulagiri Himal",
+      "massif": null,
+      "peakClass": "seven_thousander",
+      "nepalShare": "inside",
+      "borderCountries": null,
+      "provinceCodes": [
+        4
+      ],
+      "districtCodes": [
+        404
+      ],
+      "lng": 83.2758,
+      "lat": 28.6744,
+      "coordSource": "S04",
+      "coordAccuracyM": null,
+      "officialList": null,
+      "firstAscentYear": "1969",
+      "reviewStatus": "approved",
+      "aliasesEn": null,
+      "notesEn": "Nepali name per S14; language review pending"
+    },
+    {
+      "id": "pk-chamar",
+      "nameEn": "Chamar",
+      "nameNe": "चामर",
+      "nameStatus": "attested",
+      "nameNeSource": "S14",
+      "elevation": 7187,
+      "prominence": 2061,
+      "range": "Mansiri Himal",
+      "massif": null,
+      "peakClass": "seven_thousander",
+      "nepalShare": "inside",
+      "borderCountries": null,
+      "provinceCodes": [
+        4
+      ],
+      "districtCodes": [
+        401
+      ],
+      "lng": 84.9453,
+      "lat": 28.5553,
+      "coordSource": "S04",
+      "coordAccuracyM": null,
+      "officialList": null,
+      "firstAscentYear": "1953",
+      "reviewStatus": "approved",
+      "aliasesEn": null,
+      "notesEn": "\"Nepali name चामर attested from the Nepali Wikipedia peak list (S14)"
+    },
+    {
+      "id": "pk-nepal-peak",
+      "nameEn": "Nepal Peak",
+      "nameNe": "नेपाल पिक",
+      "nameStatus": "attested",
+      "nameNeSource": "S21;S22;S15",
+      "elevation": 7177,
+      "prominence": null,
+      "range": "Kangchenjunga Himal",
+      "massif": null,
+      "peakClass": "seven_thousander",
+      "nepalShare": "border",
+      "borderCountries": [
+        "India"
+      ],
+      "provinceCodes": [
+        1
+      ],
+      "districtCodes": [
+        101
+      ],
+      "lng": 88.1829,
+      "lat": 27.7768,
+      "coordSource": "S04",
+      "coordAccuracyM": null,
+      "officialList": null,
+      "firstAscentYear": "1930",
+      "reviewStatus": "approved",
+      "aliasesEn": null,
+      "notesEn": "Proposed Nepali label नेपाल पिक; reviewer required. Nepali media use नेपाल पिक (S21) and a Nepali geography study blog places the peak in Taplejung (S22). Border status confirmed as the Nepal-Sikkim (India) border from the Wikidata entity description; the coordinate is Wikidata (S04)."
+    },
+    {
+      "id": "pk-pumori",
+      "nameEn": "Pumori",
+      "nameNe": "पुमोरी",
+      "nameStatus": "attested",
+      "nameNeSource": null,
+      "elevation": 7161,
+      "prominence": 1278,
+      "range": "Khumbu Mahalangur",
+      "massif": null,
+      "peakClass": "seven_thousander",
+      "nepalShare": "border",
+      "borderCountries": [
+        "China"
+      ],
+      "provinceCodes": [
+        1
+      ],
+      "districtCodes": [
+        103
+      ],
+      "lng": 86.8281,
+      "lat": 28.0156,
+      "coordSource": "S04",
+      "coordAccuracyM": null,
+      "officialList": null,
+      "firstAscentYear": "1962",
+      "reviewStatus": "approved",
+      "aliasesEn": null,
+      "notesEn": "Border status to verify"
+    },
+    {
+      "id": "pk-nemjung",
+      "nameEn": "Nemjung",
+      "nameNe": "नेमजुङ",
+      "nameStatus": "attested",
+      "nameNeSource": "S14",
+      "elevation": 7140,
+      "prominence": 2005,
+      "range": "Mansiri Himal",
+      "massif": null,
+      "peakClass": "seven_thousander",
+      "nepalShare": "inside",
+      "borderCountries": null,
+      "provinceCodes": [
+        4
+      ],
+      "districtCodes": [
+        402
+      ],
+      "lng": 84.4167,
+      "lat": 28.735,
+      "coordSource": "S04",
+      "coordAccuracyM": null,
+      "officialList": null,
+      "firstAscentYear": "1983",
+      "reviewStatus": "approved",
+      "aliasesEn": null,
+      "notesEn": "Nepali name per S14; language review pending"
+    },
+    {
+      "id": "pk-gaurishankar",
+      "nameEn": "Gaurishankar",
+      "nameNe": "गौरीशंकर हिमाल",
+      "nameStatus": "attested",
+      "nameNeSource": null,
+      "elevation": 7134,
+      "prominence": 1709,
+      "range": "Rolwaling Himal",
+      "massif": null,
+      "peakClass": "seven_thousander",
+      "nepalShare": "border",
+      "borderCountries": [
+        "China"
+      ],
+      "provinceCodes": [
+        3
+      ],
+      "districtCodes": [
+        301
+      ],
+      "lng": 86.3358,
+      "lat": 27.9533,
+      "coordSource": "S04",
+      "coordAccuracyM": null,
+      "officialList": null,
+      "firstAscentYear": "1979",
+      "reviewStatus": "approved",
+      "aliasesEn": [
+        "Gaurisankar"
+      ],
+      "notesEn": "Border peak; border status confirmed S15."
+    },
+    {
+      "id": "pk-tilicho-peak",
+      "nameEn": "Tilicho Peak",
+      "nameNe": "तिलिचो",
+      "nameStatus": "attested",
+      "nameNeSource": "S14",
+      "elevation": 7134,
+      "prominence": 734,
+      "range": "Annapurna Himal",
+      "massif": null,
+      "peakClass": "seven_thousander",
+      "nepalShare": "inside",
+      "borderCountries": null,
+      "provinceCodes": [
+        4
+      ],
+      "districtCodes": [
+        404
+      ],
+      "lng": 83.8044,
+      "lat": 28.6844,
+      "coordSource": "S04",
+      "coordAccuracyM": null,
+      "officialList": null,
+      "firstAscentYear": "1979",
+      "reviewStatus": "approved",
+      "aliasesEn": null,
+      "notesEn": "Nepali name per S14; language review pending"
+    },
+    {
+      "id": "pk-api",
+      "nameEn": "Api",
+      "nameNe": "अपी हिमाल",
+      "nameStatus": "attested",
+      "nameNeSource": null,
+      "elevation": 7132,
+      "prominence": 2040,
+      "range": "Api Himal",
+      "massif": null,
+      "peakClass": "seven_thousander",
+      "nepalShare": "inside",
+      "borderCountries": null,
+      "provinceCodes": [
+        7
+      ],
+      "districtCodes": [
+        703
+      ],
+      "lng": 80.9297,
+      "lat": 30.0053,
+      "coordSource": "S04",
+      "coordAccuracyM": null,
+      "officialList": null,
+      "firstAscentYear": "1960",
+      "reviewStatus": "approved",
+      "aliasesEn": [
+        "Api Himal"
+      ],
+      "notesEn": null
+    },
+    {
+      "id": "pk-baruntse",
+      "nameEn": "Baruntse",
+      "nameNe": "बरुन्त्से हिमाल",
+      "nameStatus": "attested",
+      "nameNeSource": "S14",
+      "elevation": 7129,
+      "prominence": 979,
+      "range": "Khumbu Mahalangur",
+      "massif": null,
+      "peakClass": "seven_thousander",
+      "nepalShare": "inside",
+      "borderCountries": null,
+      "provinceCodes": [
+        1
+      ],
+      "districtCodes": [
+        102
+      ],
+      "lng": 86.9833,
+      "lat": 27.8833,
+      "coordSource": "S04",
+      "coordAccuracyM": null,
+      "officialList": null,
+      "firstAscentYear": "1954",
+      "reviewStatus": "approved",
+      "aliasesEn": null,
+      "notesEn": "Nepali name per S14; language review pending"
+    },
+    {
+      "id": "pk-ganesh-ii",
+      "nameEn": "Ganesh II",
+      "nameNe": "गणेश-II",
+      "nameStatus": "attested",
+      "nameNeSource": "S14",
+      "elevation": 7118,
+      "prominence": 1198,
+      "range": "Ganesh Himal",
+      "massif": null,
+      "peakClass": "seven_thousander",
+      "nepalShare": "inside",
+      "borderCountries": null,
+      "provinceCodes": [
+        4
+      ],
+      "districtCodes": [
+        401
+      ],
+      "lng": 85.0567,
+      "lat": 28.3792,
+      "coordSource": "S04",
+      "coordAccuracyM": null,
+      "officialList": null,
+      "firstAscentYear": "1954",
+      "reviewStatus": "approved",
+      "aliasesEn": [
+        "Ganesh NW"
+      ],
+      "notesEn": "\"Ganesh II is the 7"
+    },
+    {
+      "id": "pk-pabil",
+      "nameEn": "Pabil",
+      "nameNe": "पविल",
+      "nameStatus": "attested",
+      "nameNeSource": "S14",
+      "elevation": 7104,
+      "prominence": null,
+      "range": "Ganesh Himal",
+      "massif": null,
+      "peakClass": "seven_thousander",
+      "nepalShare": "inside",
+      "borderCountries": null,
+      "provinceCodes": [
+        4
+      ],
+      "districtCodes": [
+        401
+      ],
+      "lng": 85.08,
+      "lat": 28.3458,
+      "coordSource": "S04",
+      "coordAccuracyM": null,
+      "officialList": null,
+      "firstAscentYear": "1979",
+      "reviewStatus": "approved",
+      "aliasesEn": [
+        "Ganesh IV"
+      ],
+      "notesEn": "\"Pabil is Ganesh IV (7"
+    },
+    {
+      "id": "pk-thulagi-chuli",
+      "nameEn": "Thulagi Chuli",
+      "nameNe": "थुलागी चुली",
+      "nameStatus": "transliterated",
+      "nameNeSource": "S15",
+      "elevation": 7059,
+      "prominence": 699,
+      "range": "Mansiri Himal",
+      "massif": null,
+      "peakClass": "seven_thousander",
+      "nepalShare": "inside",
+      "borderCountries": null,
+      "provinceCodes": [
+        4
+      ],
+      "districtCodes": [
+        402
+      ],
+      "lng": 84.5204,
+      "lat": 28.5275,
+      "coordSource": "S04",
+      "coordAccuracyM": null,
+      "officialList": null,
+      "firstAscentYear": "1959",
+      "reviewStatus": "approved",
+      "aliasesEn": null,
+      "notesEn": "\"Proposed Nepali label थुलागी चुली; reviewer required. No Nepali-language attestation was found; the label is a transliteration. English Wikipedia gives the district as Gorkha"
+    },
+    {
+      "id": "pk-ratna-chuli",
+      "nameEn": "Ratna Chuli",
+      "nameNe": "रत्नचुली",
+      "nameStatus": "attested",
+      "nameNeSource": "S14;S15;S23",
+      "elevation": 7035,
+      "prominence": 903,
+      "range": "Ganesh Himal",
+      "massif": null,
+      "peakClass": "seven_thousander",
+      "nepalShare": "border",
+      "borderCountries": [
+        "China"
+      ],
+      "provinceCodes": [
+        4
+      ],
+      "districtCodes": [
+        402
+      ],
+      "lng": 84.3772,
+      "lat": 28.8644,
+      "coordSource": "S04",
+      "coordAccuracyM": null,
+      "officialList": null,
+      "firstAscentYear": "1959",
+      "reviewStatus": "approved",
+      "aliasesEn": null,
+      "notesEn": "\"Border peak with China"
+    }
+  ]
+}

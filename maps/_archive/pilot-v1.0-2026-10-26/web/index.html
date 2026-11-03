@@ -1,0 +1,104 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+  <meta name="description" content="Bilingual, open-data pilot atlas of Nepal's 7 provinces, 77 districts and 753 local levels. Not survey-grade.">
+  <title>Nepal Local Level Atlas — Open-data pilot</title>
+  <link rel="stylesheet" href="assets/leaflet.css">
+  <link rel="stylesheet" href="style.css">
+</head>
+<body>
+  <div class="app">
+    <header class="topbar" id="topbar">
+      <button class="menu-toggle" id="menu-toggle" type="button" aria-label="Open places and layers" aria-expanded="false" aria-controls="sidebar">
+        <svg viewBox="0 0 24 24" aria-hidden="true"><path d="M3 6h18M3 12h18M3 18h18"/></svg>
+      </button>
+
+      <a class="brand" href="#" id="brand-home" aria-label="Nepal Local Level Atlas — national view">
+        <span class="brand-mark" aria-hidden="true"><b id="brand-count">753</b><i id="brand-unit">units</i></span>
+        <span class="brand-text">
+          <span class="brand-kicker" id="brand-kicker">Nepal · Local Level Atlas</span>
+          <span class="brand-title" id="brand-title">Provinces, districts &amp; local levels</span>
+        </span>
+      </a>
+
+      <div class="search-wrap" id="search-wrap">
+        <svg class="search-icon" viewBox="0 0 24 24" aria-hidden="true"><circle cx="11" cy="11" r="6.5"/><path d="m16 16 4.5 4.5"/></svg>
+        <input id="search-input" type="search" autocomplete="off" spellcheck="false"
+               placeholder="Search a place, district, or code…"
+               role="combobox" aria-expanded="false" aria-controls="search-results" aria-autocomplete="list">
+        <button class="search-clear" id="search-clear" type="button" aria-label="Clear search" hidden>&times;</button>
+        <div class="search-results" id="search-results" role="listbox" aria-label="Search results"></div>
+      </div>
+
+      <div class="top-actions">
+        <a class="sheets-link" id="sheets-link" href="#sheets">
+          <svg viewBox="0 0 24 24" aria-hidden="true"><path d="M6 3h9l4 4v14H6z"/><path d="M15 3v5h5M9 12h7M9 16h7"/></svg>
+          <span id="sheets-link-label">Print sheets</span>
+        </a>
+        <div class="lang-toggle" role="group" aria-label="Language / भाषा">
+          <button type="button" data-lang="en" aria-pressed="true">EN</button>
+          <button type="button" data-lang="ne" aria-pressed="false" lang="ne">नेपाली</button>
+        </div>
+      </div>
+    </header>
+
+    <div class="accuracy-strip" role="note" aria-label="Accuracy notice">
+      <span class="accuracy-dot" aria-hidden="true"></span>
+      <span class="accuracy-text" id="accuracy-text">Open-data pilot — generalised boundaries, not survey-grade or a legal boundary determination.</span>
+      <button class="accuracy-more" id="accuracy-more" type="button">Details</button>
+    </div>
+
+    <main class="main">
+      <aside class="sidebar" id="sidebar" aria-label="Places, layers and print sheets">
+        <div id="sidebar-content"></div>
+      </aside>
+      <div class="sidebar-backdrop" id="sidebar-backdrop" hidden></div>
+
+      <div class="map-shell" id="map-shell">
+        <div id="map" role="application" aria-label="Interactive map of Nepal's provinces, districts and local levels"></div>
+
+        <div class="map-title" id="map-title">
+          <div class="map-title-kicker"><span class="live-dot" aria-hidden="true"></span><span id="view-kicker">Current view · open-data pilot</span></div>
+          <div class="map-title-main" id="view-title">Nepal</div>
+          <div class="map-title-alt np" id="view-title-alt">नेपाल</div>
+          <div class="map-title-sub" id="view-sub">7 provinces · 77 districts · 753 local levels</div>
+        </div>
+
+        <button class="sidebar-open" id="sidebar-open" type="button" aria-controls="sidebar" aria-expanded="false">
+          <svg viewBox="0 0 24 24" aria-hidden="true"><path d="M4 5h16M4 12h16M4 19h16"/></svg>
+          <span id="sidebar-open-label">Places &amp; layers</span>
+        </button>
+
+        <div class="map-badge" id="map-badge">Pilot · not survey-grade</div>
+
+        <div class="map-hint" id="map-hint" aria-live="polite">
+          <span id="map-hint-text">Zoom in for districts and local levels</span>
+        </div>
+
+        <div class="legend" id="legend" aria-label="Map legend">
+          <div class="legend-head"><span id="legend-title">Legend</span><span class="legend-np np" id="legend-np">संकेत</span></div>
+          <div class="legend-row"><span class="lg-swatch province"></span><span id="legend-province">Province fill</span></div>
+          <div class="legend-row"><span class="lg-line district"></span><span id="legend-district">District boundary</span></div>
+          <div class="legend-row"><span class="lg-line local"></span><span id="legend-local">Local-level boundary</span></div>
+          <div class="legend-row"><span class="lg-gap"></span><span id="legend-gap">No local-level data</span></div>
+          <div class="legend-row"><span class="lg-star">★</span><span id="legend-capital">National capital</span></div>
+          <div class="legend-note" id="legend-note">Open-data geometry · not survey-grade</div>
+        </div>
+
+        <div class="loading" id="loading">
+          <div class="loading-mark" aria-hidden="true">753</div>
+          <div class="loading-title" id="loading-title">Preparing the atlas…</div>
+          <div class="loading-sub" id="loading-sub">7 provinces · 77 districts · 753 local levels</div>
+          <div class="spinner" aria-hidden="true"></div>
+        </div>
+      </div>
+    </main>
+  </div>
+
+  <script src="assets/leaflet.js"></script>
+  <script src="data/atlas.js"></script>
+  <script src="app.js"></script>
+</body>
+</html>

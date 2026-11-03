@@ -1,0 +1,64 @@
+{
+  "generated": "2026-10-29T05:04:17.318Z",
+  "files": {
+    "core": {
+      "rows": 22,
+      "columns": 33,
+      "federal_km2": 28741.94,
+      "provincial_km2": 498.4
+    },
+    "buffer": {
+      "rows": 14,
+      "columns": 33,
+      "buffer_km2": 5720.28
+    },
+    "peaks": {
+      "rows": 51,
+      "columns": 32,
+      "classes": {
+        "eight_thousander_main": 8,
+        "eight_thousander_official_additional": 6,
+        "seven_thousander": 37
+      },
+      "name_status": {
+        "attested": 43,
+        "transliterated": 8,
+        "pending": 0
+      },
+      "border_status": {
+        "border": 22,
+        "inside": 29
+      },
+      "missing_np": 0,
+      "missing_coord": 0,
+      "review_status": {
+        "approved": 51,
+        "draft": 0
+      }
+    },
+    "sources": {
+      "rows": 25,
+      "columns": 9
+    },
+    "evidence": {
+      "rows": 8,
+      "columns": 16,
+      "items": {
+        "name": 4,
+        "district_border": 4
+      },
+      "source_ids": [
+        "S14",
+        "S15",
+        "S21",
+        "S22",
+        "S23",
+        "S24",
+        "S25"
+      ],
+      "blank_reviewer_fields": 0,
+      "filled_reviewer_fields": 8
+    }
+  },
+  "issues": []
+}

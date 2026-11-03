@@ -1,0 +1,82 @@
+{
+  "generated": "2026-10-26T09:40:37.596Z",
+  "edition": "Open-data pilot edition",
+  "date": "October 2026",
+  "counts": {
+    "provinces": 7,
+    "districts": 77,
+    "local_levels": 753,
+    "protected_areas": 10,
+    "types": {
+      "Rural Municipality": 460,
+      "Urban Municipality": 276,
+      "Metropolitan City": 6,
+      "Sub-Metropolitan City": 11
+    }
+  },
+  "provinces": [
+    {
+      "code": 1,
+      "name": "Koshi Province",
+      "name_np": "कोशी प्रदेश",
+      "districts": 14,
+      "local_levels": 137,
+      "area_km2": 26110.91
+    },
+    {
+      "code": 2,
+      "name": "Madhesh Province",
+      "name_np": "मधेश प्रदेश",
+      "districts": 8,
+      "local_levels": 136,
+      "area_km2": 9609.54
+    },
+    {
+      "code": 3,
+      "name": "Bagmati Province",
+      "name_np": "बागमती प्रदेश",
+      "districts": 13,
+      "local_levels": 119,
+      "area_km2": 20333.69
+    },
+    {
+      "code": 4,
+      "name": "Gandaki Province",
+      "name_np": "गण्डकी प्रदेश",
+      "districts": 11,
+      "local_levels": 85,
+      "area_km2": 22014.06
+    },
+    {
+      "code": 5,
+      "name": "Lumbini Province",
+      "name_np": "लुम्बिनी प्रदेश",
+      "districts": 12,
+      "local_levels": 109,
+      "area_km2": 19295.96
+    },
+    {
+      "code": 6,
+      "name": "Karnali Province",
+      "name_np": "कर्णाली प्रदेश",
+      "districts": 10,
+      "local_levels": 79,
+      "area_km2": 30765.94
+    },
+    {
+      "code": 7,
+      "name": "Sudurpashchim Province",
+      "name_np": "सुदूरपश्चिम प्रदेश",
+      "districts": 9,
+      "local_levels": 88,
+      "area_km2": 20096.94
+    }
+  ],
+  "sources": {
+    "boundaries": "Open Knowledge Nepal, LocalBoundaries (CC BY 4.0)",
+    "codes": "Official local-unit code table supplied with the project (1695378470_83.xls)",
+    "edition": "Open-data pilot edition",
+    "date": "October 2026"
+  },
+  "accuracy_note": "Open-data geometry. Not survey-grade and not a legal boundary determination."
+}
