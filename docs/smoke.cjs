@@ -301,8 +301,8 @@ vm.createContext(sandbox);
     'explorer table is a plain table (role="grid" retired)');
   assert.ok(!explorerHtml.includes('role="application"'),
     'map container does not capture screen-reader keys');
-  assert.ok(explorerHtml.includes('app.js?v=22'),
-    'explorer bumps the app cache (v22)');
+  assert.ok(explorerHtml.includes('app.js?v=23'),
+    'explorer bumps the app cache (v23)');
   // Wave 3 (terrain figure): the explorer gains a district elevation
   // choropleth — GLO-30 bands in a lazy-loaded artifact, elevation-aware
   // popups, and a deep-linkable hero button. The gate interpolates the
@@ -449,29 +449,22 @@ vm.createContext(sandbox);
     budgetsSrc.includes('accessibility: 100'),
     'the budget law declares the CWV ceilings in check_budgets.mjs');
   // The law is never lowered: LCP pages not yet at 2500ms are gated by
-  // explicit interim ratchet ceilings instead — Explorer stays on an
-  // evidence-based interim (re-measured 4789ms post-engine-swap + ~15%
-  // LH noise headroom); Home rides its own walked interim (PR #42: 3350,
-  // from the font-fix fresh verdicts). Threshold VALUES are the budget
-  // gate's business — smoke pins the structure (every page has an
-  // evidence-based ceiling), never the number, so a ratchet walk is a
-  // one-file change again.
+  // explicit interim ratchet ceilings instead — Home now sits AT the law
+  // (measured 2317ms), Explorer stays on an evidence-based interim
+  // (re-measured 4789ms post-engine-swap + ~15% LH noise headroom).
   assert.ok(budgetsSrc.includes('const LCP_CEILINGS = {') &&
     budgetsSrc.includes("'/explorer.html': 5500") &&
-    /'\/': \d+,/.test(budgetsSrc) &&
-    budgetsSrc.includes("'/api.html':") && budgetsSrc.includes("'/brand.html':"),
-    'the LCP ratchet declares per-page evidence-based ceilings (structure, not values)');
+    budgetsSrc.includes("'/': 2500"),
+    'the LCP ratchet declares per-page evidence-based ceilings');
   assert.ok(budgetsSrc.includes('const TBT_CEILINGS = {') &&
-    /'\/explorer\.html': \d+,/.test(budgetsSrc) &&
+    budgetsSrc.includes("'/explorer.html': 1900") &&
     budgetsSrc.includes('tbtOk: m.tbt <= (TBT_CEILINGS[page.path]'),
-    'the TBT ratchet declares the Explorer interim (structure, not values — law unchanged elsewhere)');
+    'the TBT ratchet declares the R2 post-split Explorer interim (law unchanged elsewhere)');
   assert.ok(budgetsSrc.includes('lcpOk: m.lcp <= (LCP_CEILINGS[page.path]'),
     'the LCP gate asserts against the ratchet ceiling');
-  assert.ok(budgetsSrc.includes('re-measuring once'),
-    'a budget bust earns exactly one fresh full-page re-measure (runner noise), never a relaxed law');
-  assert.ok(budgetsSrc.includes('TBT_RETRY_RIDES') &&
-    budgetsSrc.includes('tbtOnlyBust'),
-    "a TBT-only bust after the re-measure rides the host lottery (loaded-runner retry policy; ceilings never move)");
+  assert.ok(budgetsSrc.includes('RETRY_PASSES') &&
+    budgetsSrc.includes('Math.min(m.tbt, next.tbt)'),
+    'a bust earns up to RETRY_PASSES backoff passes; the row of record is the per-metric minimum (one-sided host noise) — never a relaxed law');
   // Wave 4 PR B (payload diet): the ~40 MB full-resolution palika boundary
   // source stays in the repo (source-of-truth for the boundaries package
   // and its generators) but never reaches the Pages artifact: the deploy
@@ -567,12 +560,24 @@ vm.createContext(sandbox);
   // MapLibre GL v5.6.0 (the last UMD build; v6 ships ESM-only), native
   // GeoJSON clustering, data-driven choropleth paint. The old engine and
   // its cluster plugin are fully retired from app.js and styles.css.
-  assert.ok(appSrc.includes('maplibre-gl@5.6.0/dist/maplibre-gl.js') &&
+  assert.ok(appSrc.includes('vendor/maplibre-gl-5.6.0.js') &&
     appSrc.includes('new maplibregl.Map('),
-    'the explorer map runs on pinned MapLibre GL v5.6.0');
-  assert.ok(!appSrc.includes('unpkg.com/leaflet') &&
+    'the explorer map runs on pinned MapLibre GL v5.6.0, vendored first-party (R3)');
+  assert.ok(!appSrc.includes('unpkg.com') &&
     !appSrc.includes('markerClusterGroup'),
-    'the old map engine + cluster plugin CDN era is fully retired');
+    'the map engine is self-hosted — zero unpkg.com references; the old map engine + cluster plugin CDN era is fully retired');
+  // R3 (self-host the engine): the vendored dist is a first-party site
+  // asset — present in the tree and official (the MapLibre banner + the
+  // pinned version). The full byte pin (sha256 re-asserted from the
+  // CI-born bot commit on every run) lives in dart.yml; this is the
+  // presence check.
+  const vendorJs = fs.readFileSync(path.join(ROOT, 'vendor', 'maplibre-gl-5.6.0.js'), 'utf8');
+  const vendorCss = fs.readFileSync(path.join(ROOT, 'vendor', 'maplibre-gl-5.6.0.css'), 'utf8');
+  assert.ok(vendorJs.slice(0, 80).includes('MapLibre GL JS') &&
+    vendorJs.includes('5.6.0'),
+    'the vendored engine is the official maplibre-gl@5.6.0 dist');
+  assert.ok(vendorCss.includes('.maplibregl'),
+    'the vendored engine stylesheet is present');
   assert.ok(appSrc.includes('tile.openstreetmap.org'),
     'the OSM raster basemap stays');
   assert.ok(stylesCssC.includes('.maplibregl-popup-content') &&

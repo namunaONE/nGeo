@@ -590,16 +590,23 @@ var SAVE_DATA = (function () {
 // last UMD build (v6 ships ESM-only, unusable from a plain script tag).
 // Leaflet + markercluster retire: one engine, native GeoJSON clustering,
 // same OSM raster basemap, same lazy arm, same overlay registry.
+// R3 (self-host the engine): the pinned dist is vendored at
+// docs/vendor/ (born in CI from the npm tarball whose sha512 integrity
+// was verified before extraction — see vendor-maplibre.yml), so the
+// arm fetches it same-origin: no third-party DNS/TLS hop on the arm's
+// critical path, no unpkg availability coupling. Versioned filenames
+// mean the browser caches them forever; the dart.yml integrity gate
+// re-asserts their sha256 on every CI run.
 function loadMapLibre() {
   if (_mapLibreReady) return _mapLibreReady;
   _mapLibreReady = new Promise((resolve, reject) => {
     if (window.maplibregl) { resolve(); return; }
     const css = document.createElement('link');
     css.rel = 'stylesheet';
-    css.href = 'https://unpkg.com/maplibre-gl@5.6.0/dist/maplibre-gl.css';
+    css.href = 'vendor/maplibre-gl-5.6.0.css';
     document.head.appendChild(css);
     const s = document.createElement('script');
-    s.src = 'https://unpkg.com/maplibre-gl@5.6.0/dist/maplibre-gl.js';
+    s.src = 'vendor/maplibre-gl-5.6.0.js';
     s.defer = true;
     s.onload = () => resolve();
     s.onerror = () => reject(new Error('maplibre-gl failed to load'));
@@ -1650,7 +1657,8 @@ var _mapArmIdle = false; // R2: a scroll-arm defers the engine half to the first
 // R2 (arm-chain split, walking the budgets toward the law): the arm
 // chain is now two halves, scheduled separately.
 //   engine half: the maplibre-gl stylesheet (render-blocking while it
-//     loads), the 758 KB UMD script, its parse and the WebGL context
+//     loads), the 939 KB UMD script (R3: vendored same-origin at
+//     docs/vendor/ — no unpkg hop), its parse and the WebGL context
 //     init — the R1 TBT whale;
 //   data half: the 476 KB boundary fetch, the parse, the name join and
 //     setData.

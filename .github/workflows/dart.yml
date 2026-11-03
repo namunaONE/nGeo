@@ -90,6 +90,24 @@ jobs:
           fi
       - name: Verify site truth (versions and stats)
         run: dart run tool/check_site_truth.dart
+      # R3 (self-host the engine): the vendored maplibre-gl@5.6.0 dist is
+      # a first-party site asset now — pin its bytes the same way the
+      # data gates pin theirs. The sha256 values below were recorded by
+      # the vendor-maplibre.yml bot commit (born in CI from the npm
+      # tarball whose sha512 integrity was verified before extraction);
+      # this gate re-asserts them on every run so a swapped or corrupted
+      # engine can never pass silently.
+      - name: Verify the vendored engine (pinned sha256)
+        run: |
+          expected_js='07e6ca71a5b6d835a7c3803fb484f0a6e5f0dcbfa131407666edb9e9316564f9'
+          expected_css='792ac997dcf6ae6f643eb4e2dee4630c85e7056526bd8fb85ffe83c67d6c41b4'
+          got_js=$(sha256sum docs/vendor/maplibre-gl-5.6.0.js | cut -d' ' -f1)
+          got_css=$(sha256sum docs/vendor/maplibre-gl-5.6.0.css | cut -d' ' -f1)
+          if [ "$got_js" != "$expected_js" ] || [ "$got_css" != "$expected_css" ]; then
+            echo "::error::vendored engine integrity mismatch (js $got_js / css $got_css) — re-vendor via vendor-maplibre.yml and re-pin during review"
+            exit 1
+          fi
+          echo "::notice::vendored maplibre-gl@5.6.0 verified (sha256 pinned, 939269 + 69422 bytes)"
       - name: Regenerate design tokens (brand/tokens.json -> docs/brand-tokens.css)
         run: dart run tool/generate_design_tokens.dart
       - name: Verify no brand token drift (CSS is generated, never hand-edited)
@@ -441,8 +459,10 @@ jobs:
       - name: Keep the full-resolution source out of the site artifact
         run: rm -f docs/palika-boundaries-highres.geojson
       # The size budget is a feature: nothing heavier than this may leak
-      # into docs/ unnoticed. Baseline after the diet: ~7.3 MB; the 9 MB
-      # ceiling carries headroom for the data files staged above.
+      # into docs/ unnoticed. Baseline after the diet: ~7.3 MB; the R3
+      # vendored MapLibre engine adds ~1.0 MB (939 KB js + 69 KB css)
+      # → ~8.3 MB; the 9 MB ceiling still carries headroom for the
+      # data files staged above.
       - name: Enforce the site artifact size budget
         run: |
           max=$((9*1024*1024))
