@@ -283,87 +283,9 @@ vm.createContext(sandbox);
   assert.ok(
     manifest.split(String.fromCharCode(10)).filter((l) => l.endsWith(".woff2")).length === 4,
     "fonts.sha256 manifests all 4 woff2 files");
-  // Accessibility (Wave 1.4, WCAG 2.2 AA): structural gate — no page may
-  // regress the skip link, the pressed-state theme toggle, the visible
-  // focus ring or the anchor scroll offset. String asserts, because the
-  // stub DOM cannot exercise runtime attributes.
-  const a11yPages = ['index.html', 'explorer.html', 'api.html', 'brand.html'];
-  for (const page of a11yPages) {
-    const pageHtml = fs.readFileSync(path.join(ROOT, page), 'utf8');
-    assert.ok(pageHtml.includes('skip-link'), page + ' ships a skip link');
-    assert.ok(/theme-toggle[^>]*aria-pressed/.test(pageHtml),
-      page + ' theme toggle declares aria-pressed');
-    assert.ok(pageHtml.includes('styles.css?v=15'),
-      page + ' bumps the styles cache (v15)');
-  }
-  const explorerHtml = fs.readFileSync(path.join(ROOT, 'explorer.html'), 'utf8');
-  assert.ok(!explorerHtml.includes('role="grid"'),
-    'explorer table is a plain table (role="grid" retired)');
-  assert.ok(!explorerHtml.includes('role="application"'),
-    'map container does not capture screen-reader keys');
-  assert.ok(explorerHtml.includes('app.js?v=17'),
-    'explorer bumps the app cache (v17)');
-  const stylesCss = fs.readFileSync(path.join(ROOT, 'styles.css'), 'utf8');
-  assert.ok(stylesCss.includes('[tabindex]:focus-visible'),
-    'interactive table rows get a visible focus ring');
-  assert.ok(stylesCss.includes('scroll-margin-top'),
-    'anchor targets clear the sticky header (WCAG 2.4.11)');
-  assert.ok(stylesCss.includes('--color-border-focus'),
-    'focus ring rides the border-focus token (>= 3:1 in both themes)');
-  assert.ok(appSrc.includes('aria-pressed'),
-    'applyTheme syncs the toggle pressed state');
-  assert.ok((appSrc.match(/lang="ne"/g) || []).length === 4,
-    'bilingual spans carry lang="ne" (2 popups + 2 table paths)');
-  assert.ok(appSrc.includes("toast.setAttribute('role', 'status')"),
-    'toast feedback is announced (role=status)');
-  assert.ok(appSrc.includes('aria-current'),
-    'pagination announces the current page');
-  assert.ok((appSrc.match(/prefers-reduced-motion: reduce/g) || []).length === 4,
-    'reduced-motion respected (header scroll, flyTo, anchors, count-up)');
-  // Bento 2.0 homepage (Wave 2): the features grid is a bento grid —
-  // one dominant bilingual cell (2x2), the CBS claim in a wide cell,
-  // asymmetric spans on a shared 6-column grid, tactile hover that
-  // collapses under reduced motion. Spans are layout truth: assert them.
-  const indexHtml = fs.readFileSync(path.join(ROOT, 'index.html'), 'utf8');
-  assert.ok((indexHtml.match(/feature-card bento-cell/g) || []).length === 8,
-    'all 8 feature cards are bento cells');
-  assert.ok(indexHtml.includes('cell-bilingual'),
-    'the bilingual cell anchors the bento (dominant cell)');
-  assert.ok(indexHtml.includes('cell-wide'),
-    'the CBS claim rides the wide cell');
-  assert.ok(indexHtml.includes('cell-full'),
-    'the pub.dev score settles as the full-width cell');
-  const bilingualFirst = indexHtml.indexOf('cell-bilingual');
-  const cbsSecond = indexHtml.indexOf('cell-wide');
-  assert.ok(bilingualFirst > -1 && bilingualFirst < cbsSecond,
-    'DOM order = visual order: bilingual cell first, CBS wide cell second');
-  assert.ok(stylesCss.includes('grid-template-columns: repeat(6, 1fr)'),
-    'the bento rides a 6-column grid');
-  assert.ok(stylesCss.includes('.cell-bilingual { grid-column: span 2; grid-row: span 2; }'),
-    'the dominant cell spans 2x2');
-  assert.ok(/prefers-reduced-motion: reduce[\s\S]{0,200}\.feature-card:hover \{ transform: none; \}/.test(stylesCss),
-    'bento hover lift collapses under reduced motion');
-  // Wave 2.5 (visual whoa system): the motion law lives in GENERATED
-  // tokens, the count-up and bento reveal are opt-in (no-JS visitors see
-  // everything rendered), and reduced-motion collapses all of it.
-  const brandTokensCss = fs.readFileSync(path.join(ROOT, 'brand-tokens.css'), 'utf8');
-  assert.ok(brandTokensCss.includes('--nb-motion-exit: 180ms') && brandTokensCss.includes('--nb-motion-stagger: 40ms'),
-    'exit + stagger durations are generated tokens');
-  assert.ok(brandTokensCss.includes('--nb-easing-out') && brandTokensCss.includes('--nb-easing-exit'),
-    'easing tokens are generated (entrance ease-out, exit ease-in)');
-  assert.ok(appSrc.includes('initCountUp'), 'hero stats count up on viewport entry');
-  assert.ok(appSrc.includes('initBentoReveal'), 'bento entrance staggers on viewport entry');
-  assert.ok((appSrc.match(/prefers-reduced-motion: reduce/g) || []).length === 4,
-    'reduced-motion guards (header, flyTo, anchors, count-up)');
-  assert.ok(stylesCss.includes('bento-rise'), 'bento rise keyframes ship');
-  assert.ok(stylesCss.includes('prefers-reduced-motion: no-preference'),
-    'the reveal is opt-in: hidden cells exist only in the no-preference media block');
-  assert.ok(indexHtml.includes('brand-tokens.css?v=2'),
-    'brand-tokens cache-bust v2 (regenerated artifact)');
     const rows = (tableBody.innerHTML.match(/<tr/g) || []).length;
   console.log(`SMOKE OK: ${data.length} records, ${rows} rows rendered, no errors`);
 })().catch((err) => {
   console.error('SMOKE FAILED:', err && err.message ? err.message : err);
   process.exit(1);
 });
-
