@@ -14,7 +14,7 @@ const path = require('path');
 
 const ROOT = __dirname;
 const data = JSON.parse(fs.readFileSync(path.join(ROOT, 'data.json'), 'utf8'));
-const appSrc = fs.readFileSync(path.join(ROOT, 'app.js'), 'utf8');
+const appSrc = fs.readFileSync(path.join(ROOT, 'app.js'), 'utf8') + '\n' + fs.readFileSync(path.join(ROOT, 'app-critical.js'), 'utf8');
 
 function makeEl() {
   const el = {
