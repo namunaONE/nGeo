@@ -114,6 +114,8 @@ jobs:
         run: dart run tool/check_boundary_join.dart
       - name: Boundary topology validation gate
         run: dart run tool/check_boundary_topology.dart
+      - name: RFC 7946 conformance gate
+        run: dart run tool/check_rfc7946.dart
       # Same principle as the formatting gate above: a bare "N issues found"
       # is useless when the log is out of reach, so on failure the full
       # analyzer output is attached to the run's step summary - file, line
@@ -408,6 +410,10 @@ jobs:
       # Pages artifact at build time rather than duplicating them in the repo.
       - name: Stage downloadable data files for the site
         run: |
+          rm -f docs/palika-boundaries-highres.geojson
+          max=$((9*1024*1024))
+          size=$(du -sb docs | cut -f1)
+          if [ "$size" -gt "$max" ]; then echo "::error::docs/ artifact $size bytes exceeds 9 MB budget"; exit 1; fi
           mkdir -p docs/downloads
           cp bindings/csv/*.csv docs/downloads/
           cp bindings/geojson/*.geojson docs/downloads/
