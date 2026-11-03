@@ -205,13 +205,16 @@ void main(List<String> args) {
     final props = raw['properties'] as Map<String, dynamic>;
     final geom = raw['geometry'] as Map<String, dynamic>;
     final coords = geom['coordinates'] as List<dynamic>;
-    final rawPolys = geom['type'] == 'Polygon'
+    // Normalize to a list of polygons, each a list of rings. A Polygon has a
+    // single polygon (coords is [ring][point][x,y]); a MultiPolygon has many
+    // (coords is [polygon][ring][point][x,y]).
+    final polygons = geom['type'] == 'Polygon'
         ? <dynamic>[coords]
-        : coords.expand((p) => p as List<dynamic>).toList();
+        : coords;
     final polys = List<List<List<List<double>>>>.empty(growable: true);
-    for (final rawPoly in rawPolys) {
+    for (final poly in polygons) {
       final rings = List<List<List<double>>>.empty(growable: true);
-      for (final rawRing in rawPoly as List<dynamic>) {
+      for (final rawRing in poly as List<dynamic>) {
         final ring = List<List<double>>.empty(growable: true);
         for (final v in rawRing as List<dynamic>) {
           final c = v as List<dynamic>;
