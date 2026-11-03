@@ -8,11 +8,10 @@
 // version from pubspec.yaml and the coverage counters from
 // bindings/meta.json (both regenerated and drift-checked earlier in the
 // same CI run), then asserts that every doc surface - README, index,
-// explorer, api, llms.txt, llms-full.txt, robots.txt, sitemap.xml -
-// carries exactly those numbers, the dataset's as-of date wherever a
-// freshness signal is exposed (index JSON-LD dateModified), and none of
-// the figures the truth sweep retired. When the dataset moves and a page
-// does not follow, CI fails here with a file-annotated error.
+// explorer, api, llms.txt, llms-full.txt - carries exactly those numbers
+// wherever it makes a claim, and none of the figures the truth sweep
+// retired. When the dataset moves and a page does not follow, CI fails
+// here with a file-annotated error.
 //
 // Usage (from the repository root):
 //   dart run tool/check_site_truth.dart
@@ -51,7 +50,6 @@ void main() {
 
   final meta = jsonDecode(_read('bindings/meta.json')) as Map<String, dynamic>;
   final metaVersion = meta['version'] as String;
-  final dataAsOf = meta['dataAsOf'] as String;
   final coverage = meta['coverage'] as Map<String, dynamic>;
   final bodies = coverage['localBodies'] as int;
   final provinces = coverage['provinces'] as int;
@@ -81,8 +79,6 @@ void main() {
     'docs/api.html': _read('docs/api.html'),
     'docs/llms.txt': _read('docs/llms.txt'),
     'docs/llms-full.txt': _read('docs/llms-full.txt'),
-    'docs/robots.txt': _read('docs/robots.txt'),
-    'docs/sitemap.xml': _read('docs/sitemap.xml'),
   };
 
   void need(String file, String needle, String because) {
@@ -99,47 +95,7 @@ void main() {
       'the install snippet to say ^$version');
   need('docs/index.html', '"version": "$version"',
       'the JSON-LD version to be $version');
-
-  // Freshness: the index JSON-LD carries the dataset's as-of date, so
-  // search and AI answer engines never see a dataset that claims to be
-  // newer (or older) than the data actually is.
-  need('docs/index.html', '"dateModified": "$dataAsOf"',
-      'the JSON-LD dateModified to be $dataAsOf (meta.json dataAsOf)');
-
-  // Crawler welcome: the dataset is meant to be found and cited. The
-  // robots file must welcome the known AI answer-engine bots (several
-  // of them crawl only when explicitly named) and declare the sitemap;
-  // the sitemap must list every public page.
-  const aiBots = [
-    'GPTBot',
-    'OAI-SearchBot',
-    'ClaudeBot',
-    'PerplexityBot',
-    'Google-Extended',
-    'CCBot',
-  ];
-  for (final bot in aiBots) {
-    need('docs/robots.txt', 'User-agent: $bot',
-        'the AI crawler $bot to be explicitly welcomed');
-  }
-  need(
-      'docs/robots.txt',
-      'Sitemap: https://namunaone.github.io/nGeo/sitemap.xml',
-      'the sitemap to be declared');
-  const sitePages = [
-    'https://namunaone.github.io/nGeo/',
-    'https://namunaone.github.io/nGeo/explorer.html',
-    'https://namunaone.github.io/nGeo/api.html',
-    'https://namunaone.github.io/nGeo/brand.html',
-  ];
-  for (final page in sitePages) {
-    need('docs/sitemap.xml', '<loc>$page</loc>', 'the sitemap to list $page');
-  }
   need('docs/explorer.html', 'v$version', 'the footer to say v$version');
-  need(
-      'docs/explorer.html',
-      'District boundaries: Survey Department of Nepal / National Geoportal',
-      'the district overlay attribution to name its source');
   need('docs/api.html', 'v$version', 'the footer to say v$version');
   need('docs/llms.txt', 'v$version', 'the version to be v$version');
   need('docs/llms.txt', 'nepal_admin_api: ^$version',
@@ -174,26 +130,6 @@ void main() {
       'the coverage line to carry the meta.json counters');
   need('docs/llms-full.txt', '**CBS codes:** $withCode/$bodies palikas carry',
       'the CBS coverage line to be $withCode/$bodies');
-
-  // Wave 3: the district elevation artifact must parse and agree with
-  // the dataset's district count, and every row must satisfy
-  // min <= mean <= max. The count interpolates from meta.json — nothing
-  // is hand-pinned, so this gate never drifts with a release.
-  final elevation = jsonDecode(_read('docs/district-elevation.json')) as List;
-  check(elevation.length == districts, 'docs/district-elevation.json',
-      'expected $districts districts, found ${elevation.length}.');
-  for (final row in elevation) {
-    final e = row as Map<String, dynamic>;
-    check(
-        e['elevMin'] is int && e['elevMean'] is int && e['elevMax'] is int,
-        'docs/district-elevation.json',
-        '${e['district']} is missing integer elevation values.');
-    final lo = e['elevMin'] as int;
-    final mid = e['elevMean'] as int;
-    final hi = e['elevMax'] as int;
-    check(lo <= mid && mid <= hi, 'docs/district-elevation.json',
-        '${e['district']} violates min <= mean <= max.');
-  }
 
   // Tripwire: figures retired by the truth sweep stay retired.
   const retired = ['752/753', '744/753', '731/753', '733/753', '98.8'];

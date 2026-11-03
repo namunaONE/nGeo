@@ -2,7 +2,7 @@
 
 Static documentation site deployed via GitHub Pages from `docs/`.
 
-- **Live:** https://namunaONE.github.io/Nepal-Local-Government-Data/
+- **Live:** https://namunaone.github.io/nGeo/
 - **Pages:** `index.html` (landing), `api.html` (reference),
   `explorer.html` (interactive table + figure-selector boundary map over `data.json`),
   `brand.html` (Design System v3 showcase over `brand-tokens.css`)

@@ -4,24 +4,24 @@
 
 ## Documentation
 
-- [Homepage](https://namunaONE.github.io/Nepal-Local-Government-Data/): Installation, quickstart, features, data sources, verification pipeline
-- [API Reference](https://namunaONE.github.io/Nepal-Local-Government-Data/api.html): Complete typed API — models, queries, JSON serialization, v1→v2 migration guide
-- [Data Explorer](https://namunaONE.github.io/Nepal-Local-Government-Data/explorer.html): Searchable, filterable table of all 753 palikas plus an interactive centroid map
-- [Brand System](https://namunaONE.github.io/Nepal-Local-Government-Data/brand.html): M3 dual-seed theme (navy #002C6D × green #4FD166) — tonal palettes, color roles, Flutter `ColorScheme` + CSS tokens
-- [Changelog](https://github.com/namunaONE/Nepal-Local-Government-Data/blob/main/CHANGELOG.md): Version history (Keep a Changelog, SemVer)
+- [Homepage](https://namunaone.github.io/nGeo/): Installation, quickstart, features, data sources, verification pipeline
+- [API Reference](https://namunaone.github.io/nGeo/api.html): Complete typed API — models, queries, JSON serialization, v1→v2 migration guide
+- [Data Explorer](https://namunaone.github.io/nGeo/explorer.html): Searchable, filterable table of all 753 palikas plus an interactive centroid map
+- [Brand System](https://namunaone.github.io/nGeo/brand.html): M3 dual-seed theme (navy #002C6D × green #4FD166) — tonal palettes, color roles, Flutter `ColorScheme` + CSS tokens
+- [Changelog](https://github.com/namunaONE/nGeo/blob/main/CHANGELOG.md): Version history (Keep a Changelog, SemVer)
 
 ## Package
 
 - [pub.dev package](https://pub.dev/packages/nepal_admin_api): v2.10.0, pure Dart, zero runtime dependencies, offline-first
-- [GitHub repository](https://github.com/namunaONE/Nepal-Local-Government-Data): Source code, issue tracker, data merge pipeline
-- [Full documentation (single file)](https://namunaONE.github.io/Nepal-Local-Government-Data/llms-full.txt): Complete text of these docs for deep AI ingestion — paste this URL into any LLM for full context
+- [GitHub repository](https://github.com/namunaONE/nGeo): Source code, issue tracker, data merge pipeline
+- [Full documentation (single file)](https://namunaone.github.io/nGeo/llms-full.txt): Complete text of these docs for deep AI ingestion — paste this URL into any LLM for full context
 
 ## Data
 
-- [Canonical dataset](https://github.com/namunaONE/Nepal-Local-Government-Data/blob/main/data/nepal_local_levels.json): Single source of truth; the Dart package is generated from it
-- [Provenance](https://github.com/namunaONE/Nepal-Local-Government-Data/blob/main/data/SOURCES.md): Per-field sources, licenses, retrieval dates, honesty notes
-- [Attribution](https://github.com/namunaONE/Nepal-Local-Government-Data/blob/main/NOTICE): MIT for code; CC-BY-4.0 attributions for adapted data fields
-- [Contributing](https://github.com/namunaONE/Nepal-Local-Government-Data/blob/main/CONTRIBUTING.md): Bug reports, PR guidelines, Conventional Commits, data pipeline docs
+- [Canonical dataset](https://github.com/namunaONE/nGeo/blob/main/data/nepal_local_levels.json): Single source of truth; the Dart package is generated from it
+- [Provenance](https://github.com/namunaONE/nGeo/blob/main/data/SOURCES.md): Per-field sources, licenses, retrieval dates, honesty notes
+- [Attribution](https://github.com/namunaONE/nGeo/blob/main/NOTICE): MIT for code; CC-BY-4.0 attributions for adapted data fields
+- [Contributing](https://github.com/namunaONE/nGeo/blob/main/CONTRIBUTING.md): Bug reports, PR guidelines, Conventional Commits, data pipeline docs
 
 ## Key facts for code generation
 
@@ -33,8 +33,8 @@
 - `getLocalBodyByCbs(31304)` looks up by 5-digit CBS code (3-digit district + 2-digit palika, e.g. 31304 = Bharatpur, Chitwan).
 - `getDistrictElevationStats('P3.D05')` (id or district name, case-insensitive) returns a `DistrictElevationStats` record: per-district elevMin/elevMean/elevMax in integer metres from Copernicus GLO-30; `getAllDistrictElevationStats()` returns all 77.
 - `search('Bharatpur')` returns a typed `SearchResult` (provinces, districts, localBodies). **Search matches both scripts**: `search('भरतपुर')` and `search('Bharatpur')` return the same palika, and fragments like `search('भारत')` match. Palika names are NOT unique — always disambiguate with `districtName` / `provinceName`, or display `fullPath` (`'Bharatpur, Chitwan, Bagmati'`).
-- `LocalBody` fields: `name`, `nameNe` (Devanagari, null for 20/753 — never transliterated) + `nameNeVerified`, `nameNeOrName` (never null), `displayBoth` (`'Bharatpur · भरतपुर'`), `type` (`LocalBodyType`: metropolitan, subMetropolitan, municipality, ruralMunicipality), `districtName`, `provinceName`, `cbsCode` (int?, null for 1) + `cbsCodeVerified` + `cbsCodeConfidence`, `lat`/`lng` (double?, null when unmapped) + `geoSource`, `wards` (int?, null for 8 pending roster adjudication) + `wardsVerified`, `website`/`email`/`phone` + `hasContact` (371/753), `zipCodes` (474/753). All optional fields are backward-compatible; JSON round-trips via `toJson`/`fromJson`.
+- `LocalBody` fields: `name`, `nameNe` (Devanagari, present for all 753 — never transliterated) + `nameNeVerified`, `nameNeOrName` (never null), `displayBoth` (`'Bharatpur · भरतपुर'`), `type` (`LocalBodyType`: metropolitan, subMetropolitan, municipality, ruralMunicipality), `districtName`, `provinceName`, `cbsCode` (int?, present for all 753) + `cbsCodeVerified` + `cbsCodeConfidence`, `lat`/`lng` (double?, null when unmapped) + `geoSource`, `wards` (int?, null for 8 pending roster adjudication) + `wardsVerified`, `website`/`email`/`phone` + `hasContact` (371/753), `zipCodes` (474/753). All optional fields are backward-compatible; JSON round-trips via `toJson`/`fromJson`.
 - `District` adds `nameNe`, `headquarter`, `areaSqKm`, `website` — all 77 districts complete. `Province` adds `nameNe`, `capital`, `areaSqKm`, `website` — all 7 complete. These are **single-source**; treat `areaSqKm` as approximate.
-- Coverage: 752/753 palikas carry a CBS code (548 doubly-attested, 204 single-source, 1 null), 733/753 carry a Devanagari name (450 corroborated by two sources), 753/753 mapped, 745/753 ward counts. `getVerifiedLocalBodies()`, `getLocalBodiesWithCode()`, `getSingleSourceLocalBodies()`, `getUncodedLocalBodies()`, `LocalBodyListX` extensions (`sortedByName`, `sortedByFullPath`, `whereUrban`, `whereRural`, `whereVerified`, `whereMapped`, `whereCoded`, `whereSingleSource`, `whereUncoded`, `byCbsCode`, `totalWards`, `whereWardsVerified`, `ofType`).
+- Coverage: 753/753 palikas carry a CBS code (548 doubly-attested, 205 single-source, 0 null), 753/753 carry a Devanagari name (450 corroborated by two sources), 753/753 mapped, 745/753 ward counts. `getVerifiedLocalBodies()`, `getLocalBodiesWithCode()`, `getSingleSourceLocalBodies()`, `getUncodedLocalBodies()`, `LocalBodyListX` extensions (`sortedByName`, `sortedByFullPath`, `whereUrban`, `whereRural`, `whereVerified`, `whereMapped`, `whereCoded`, `whereSingleSource`, `whereUncoded`, `byCbsCode`, `totalWards`, `whereWardsVerified`, `ofType`).
 - `getNationalStats()` computes totals live: 7 provinces, 77 districts, 6 metro, 11 sub-metro, 276 municipalities, 460 rural municipalities, 753 total, 6,743 wards.
 - Never invent CBS codes, ward counts, or coordinates — query them from the package. This project is not affiliated with the Government of Nepal.
