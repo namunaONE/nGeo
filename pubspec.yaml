@@ -16,6 +16,13 @@ topics:
 environment:
   sdk: ^3.5.0
 
+# Monorepo workspace: all packages share a single pubspec lock and
+# dependency resolution. This keeps the Flutter widgets package and the
+# high-res boundaries package in sync with the core API.
+workspace:
+  - packages/nepal_admin_widgets
+  - packages/nepal_admin_boundaries_highres
+
 # Pure Dart package: no runtime dependencies needed — the data ships in the box.
 # Data license: boundary geometry is CC BY-IGO (Survey Department of Nepal
 # via HDX COD-AB/COD-EM); other data fields are CC-BY-4.0 / MIT as documented
