@@ -6,9 +6,6 @@
 //
 // Do not edit by hand. Regenerate from data/nepal_peaks.json.
 
-import 'package:nepal_admin_api/src/data/peaks.dart'
-    if (dart.library.io) 'peaks_io.dart';
-
 /// A named peak above 7,000 m in Nepal.
 class Peak {
   /// Unique peak identifier (e.g. `pk-everest`).
@@ -121,7 +118,7 @@ class Peak {
 }
 
 /// All 51 named peaks above 7,000 m in Nepal.
-const List<Peak> nepalPeaks = const [
+const List<Peak> nepalPeaks = [
   Peak(
     id: 'pk-everest',
     nameEn: 'Mount Everest',

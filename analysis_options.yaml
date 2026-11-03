@@ -13,6 +13,10 @@ analyzer:
     # Whether the analyzer picks up its nested context or not, it belongs to
     # `flutter-widgets`, not to this one.
     - packages/**
+    # Map/atlas PR packages and generated Dart bindings live outside the
+    # published package; they have their own (or no) analysis context and must
+    # not be analyzed by the root package's `dart analyze`.
+    - maps/**
 
 linter:
   rules:
