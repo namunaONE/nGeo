@@ -1,0 +1,1389 @@
+{
+  "type": "FeatureCollection",
+  "name": "Nepal peaks (51 named summits above 7,000 m)",
+  "crs": {
+    "type": "name",
+    "properties": {
+      "name": "urn:ogc:def:crs:OGC:1.3:CRS84"
+    }
+  },
+  "features": [
+    {
+      "type": "Feature",
+      "id": "pk-everest",
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          86.925,
+          27.9881
+        ]
+      },
+      "properties": {
+        "nameEn": "Mount Everest",
+        "nameNe": "सगरमाथा",
+        "nameStatus": "attested",
+        "elevation": 8848.86,
+        "peakClass": "eight_thousander_main",
+        "nepalShare": "border",
+        "provinceCodes": [
+          1
+        ],
+        "districtCodes": [
+          103
+        ],
+        "coordSource": "S04",
+        "reviewStatus": "approved"
+      }
+    },
+    {
+      "type": "Feature",
+      "id": "pk-kanchenjunga",
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          88.1474,
+          27.703
+        ]
+      },
+      "properties": {
+        "nameEn": "Kanchenjunga",
+        "nameNe": "कञ्चनजङ्घा",
+        "nameStatus": "attested",
+        "elevation": 8586,
+        "peakClass": "eight_thousander_main",
+        "nepalShare": "border",
+        "provinceCodes": [
+          1
+        ],
+        "districtCodes": [
+          101
+        ],
+        "coordSource": "S04",
+        "reviewStatus": "approved"
+      }
+    },
+    {
+      "type": "Feature",
+      "id": "pk-lhotse",
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          86.9331,
+          27.9617
+        ]
+      },
+      "properties": {
+        "nameEn": "Lhotse",
+        "nameNe": "ल्होत्से",
+        "nameStatus": "transliterated",
+        "elevation": 8516,
+        "peakClass": "eight_thousander_main",
+        "nepalShare": "border",
+        "provinceCodes": [
+          1
+        ],
+        "districtCodes": [
+          103
+        ],
+        "coordSource": "S02",
+        "reviewStatus": "approved"
+      }
+    },
+    {
+      "type": "Feature",
+      "id": "pk-makalu",
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          87.0886,
+          27.8892
+        ]
+      },
+      "properties": {
+        "nameEn": "Makalu",
+        "nameNe": "मकालु",
+        "nameStatus": "attested",
+        "elevation": 8485,
+        "peakClass": "eight_thousander_main",
+        "nepalShare": "border",
+        "provinceCodes": [
+          1
+        ],
+        "districtCodes": [
+          102
+        ],
+        "coordSource": "S04",
+        "reviewStatus": "approved"
+      }
+    },
+    {
+      "type": "Feature",
+      "id": "pk-cho-oyu",
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          86.6608,
+          28.0942
+        ]
+      },
+      "properties": {
+        "nameEn": "Cho Oyu",
+        "nameNe": "चोयु",
+        "nameStatus": "attested",
+        "elevation": 8188,
+        "peakClass": "eight_thousander_main",
+        "nepalShare": "border",
+        "provinceCodes": [
+          1
+        ],
+        "districtCodes": [
+          103
+        ],
+        "coordSource": "S04",
+        "reviewStatus": "approved"
+      }
+    },
+    {
+      "type": "Feature",
+      "id": "pk-dhaulagiri-i",
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          83.49,
+          28.6967
+        ]
+      },
+      "properties": {
+        "nameEn": "Dhaulagiri I",
+        "nameNe": "धौलागिरी",
+        "nameStatus": "attested",
+        "elevation": 8167,
+        "peakClass": "eight_thousander_main",
+        "nepalShare": "inside",
+        "provinceCodes": [
+          4
+        ],
+        "districtCodes": [
+          404
+        ],
+        "coordSource": "S04",
+        "reviewStatus": "approved"
+      }
+    },
+    {
+      "type": "Feature",
+      "id": "pk-manaslu",
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          84.5597,
+          28.55
+        ]
+      },
+      "properties": {
+        "nameEn": "Manaslu",
+        "nameNe": "मनास्लु",
+        "nameStatus": "attested",
+        "elevation": 8163,
+        "peakClass": "eight_thousander_main",
+        "nepalShare": "inside",
+        "provinceCodes": [
+          4
+        ],
+        "districtCodes": [
+          401
+        ],
+        "coordSource": "S04",
+        "reviewStatus": "approved"
+      }
+    },
+    {
+      "type": "Feature",
+      "id": "pk-annapurna-i",
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          83.82,
+          28.5958
+        ]
+      },
+      "properties": {
+        "nameEn": "Annapurna I",
+        "nameNe": "अन्नपूर्ण",
+        "nameStatus": "attested",
+        "elevation": 8091,
+        "peakClass": "eight_thousander_main",
+        "nepalShare": "inside",
+        "provinceCodes": [
+          4
+        ],
+        "districtCodes": [
+          404
+        ],
+        "coordSource": "S04",
+        "reviewStatus": "approved"
+      }
+    },
+    {
+      "type": "Feature",
+      "id": "pk-yalung-kang",
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          88.1367,
+          27.7052
+        ]
+      },
+      "properties": {
+        "nameEn": "Yalung Kang",
+        "nameNe": "यालुङ काङ",
+        "nameStatus": "transliterated",
+        "elevation": 8505,
+        "peakClass": "eight_thousander_official_additional",
+        "nepalShare": "border",
+        "provinceCodes": [
+          1
+        ],
+        "districtCodes": [
+          101
+        ],
+        "coordSource": "S04",
+        "reviewStatus": "approved"
+      }
+    },
+    {
+      "type": "Feature",
+      "id": "pk-kanchenjunga-south",
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          88.1543,
+          27.6917
+        ]
+      },
+      "properties": {
+        "nameEn": "Kanchenjunga South",
+        "nameNe": "कञ्चनजङ्घा दक्षिण",
+        "nameStatus": "transliterated",
+        "elevation": 8476,
+        "peakClass": "eight_thousander_official_additional",
+        "nepalShare": "border",
+        "provinceCodes": [
+          1
+        ],
+        "districtCodes": [
+          101
+        ],
+        "coordSource": "S04",
+        "reviewStatus": "approved"
+      }
+    },
+    {
+      "type": "Feature",
+      "id": "pk-kanchenjunga-central",
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          88.1513,
+          27.696
+        ]
+      },
+      "properties": {
+        "nameEn": "Kanchenjunga Central",
+        "nameNe": "कञ्चनजङ्घा मध्य",
+        "nameStatus": "transliterated",
+        "elevation": 8473,
+        "peakClass": "eight_thousander_official_additional",
+        "nepalShare": "border",
+        "provinceCodes": [
+          1
+        ],
+        "districtCodes": [
+          101
+        ],
+        "coordSource": "S02",
+        "reviewStatus": "approved"
+      }
+    },
+    {
+      "type": "Feature",
+      "id": "pk-lhotse-middle",
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          86.9389,
+          27.9609
+        ]
+      },
+      "properties": {
+        "nameEn": "Lhotse Middle",
+        "nameNe": "ल्होत्से मध्य",
+        "nameStatus": "transliterated",
+        "elevation": 8410,
+        "peakClass": "eight_thousander_official_additional",
+        "nepalShare": "border",
+        "provinceCodes": [
+          1
+        ],
+        "districtCodes": [
+          103
+        ],
+        "coordSource": "S04",
+        "reviewStatus": "approved"
+      }
+    },
+    {
+      "type": "Feature",
+      "id": "pk-lhotse-shar",
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          86.9433,
+          27.9583
+        ]
+      },
+      "properties": {
+        "nameEn": "Lhotse Shar",
+        "nameNe": "ल्होत्से शर",
+        "nameStatus": "transliterated",
+        "elevation": 8400,
+        "peakClass": "eight_thousander_official_additional",
+        "nepalShare": "border",
+        "provinceCodes": [
+          1
+        ],
+        "districtCodes": [
+          103
+        ],
+        "coordSource": "S04",
+        "reviewStatus": "approved"
+      }
+    },
+    {
+      "type": "Feature",
+      "id": "pk-yalung-kang-west",
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          88.125,
+          27.7062
+        ]
+      },
+      "properties": {
+        "nameEn": "Yalung Kang West",
+        "nameNe": "यालुङ काङ पश्चिम",
+        "nameStatus": "transliterated",
+        "elevation": 8077,
+        "peakClass": "eight_thousander_official_additional",
+        "nepalShare": "inside",
+        "provinceCodes": [
+          1
+        ],
+        "districtCodes": [
+          101
+        ],
+        "coordSource": "S18",
+        "reviewStatus": "approved"
+      }
+    },
+    {
+      "type": "Feature",
+      "id": "pk-gyachung-kang",
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          86.7422,
+          28.0981
+        ]
+      },
+      "properties": {
+        "nameEn": "Gyachung Kang",
+        "nameNe": "ग्याचुङ काङ",
+        "nameStatus": "attested",
+        "elevation": 7952,
+        "peakClass": "seven_thousander",
+        "nepalShare": "border",
+        "provinceCodes": [
+          1
+        ],
+        "districtCodes": [
+          103
+        ],
+        "coordSource": "S04",
+        "reviewStatus": "approved"
+      }
+    },
+    {
+      "type": "Feature",
+      "id": "pk-annapurna-ii",
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          84.135,
+          28.5381
+        ]
+      },
+      "properties": {
+        "nameEn": "Annapurna II",
+        "nameNe": "अन्नपूर्ण दोस्रो",
+        "nameStatus": "attested",
+        "elevation": 7937,
+        "peakClass": "seven_thousander",
+        "nepalShare": "inside",
+        "provinceCodes": [
+          4
+        ],
+        "districtCodes": [
+          402
+        ],
+        "coordSource": "S04",
+        "reviewStatus": "approved"
+      }
+    },
+    {
+      "type": "Feature",
+      "id": "pk-himalchuli",
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          84.6394,
+          28.4361
+        ]
+      },
+      "properties": {
+        "nameEn": "Himalchuli",
+        "nameNe": "हिमालचुली",
+        "nameStatus": "attested",
+        "elevation": 7893,
+        "peakClass": "seven_thousander",
+        "nepalShare": "inside",
+        "provinceCodes": [
+          4
+        ],
+        "districtCodes": [
+          406
+        ],
+        "coordSource": "S04",
+        "reviewStatus": "approved"
+      }
+    },
+    {
+      "type": "Feature",
+      "id": "pk-ngadi-chuli",
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          84.5686,
+          28.5033
+        ]
+      },
+      "properties": {
+        "nameEn": "Ngadi Chuli",
+        "nameNe": "गाडी चुली",
+        "nameStatus": "attested",
+        "elevation": 7871,
+        "peakClass": "seven_thousander",
+        "nepalShare": "inside",
+        "provinceCodes": [
+          4
+        ],
+        "districtCodes": [
+          401
+        ],
+        "coordSource": "S04",
+        "reviewStatus": "approved"
+      }
+    },
+    {
+      "type": "Feature",
+      "id": "pk-nuptse",
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          86.89,
+          27.9664
+        ]
+      },
+      "properties": {
+        "nameEn": "Nuptse",
+        "nameNe": "नुप्त्से",
+        "nameStatus": "attested",
+        "elevation": 7861,
+        "peakClass": "seven_thousander",
+        "nepalShare": "inside",
+        "provinceCodes": [
+          1
+        ],
+        "districtCodes": [
+          103
+        ],
+        "coordSource": "S04",
+        "reviewStatus": "approved"
+      }
+    },
+    {
+      "type": "Feature",
+      "id": "pk-dhaulagiri-ii",
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          83.3883,
+          28.7633
+        ]
+      },
+      "properties": {
+        "nameEn": "Dhaulagiri II",
+        "nameNe": "धौलागिरी दोस्रो",
+        "nameStatus": "attested",
+        "elevation": 7751,
+        "peakClass": "seven_thousander",
+        "nepalShare": "inside",
+        "provinceCodes": [
+          6
+        ],
+        "districtCodes": [
+          601
+        ],
+        "coordSource": "S04",
+        "reviewStatus": "approved"
+      }
+    },
+    {
+      "type": "Feature",
+      "id": "pk-jannu",
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          88.0333,
+          27.6667
+        ]
+      },
+      "properties": {
+        "nameEn": "Jannu",
+        "nameNe": "कुम्भकर्ण हिमाल",
+        "nameStatus": "attested",
+        "elevation": 7711,
+        "peakClass": "seven_thousander",
+        "nepalShare": "inside",
+        "provinceCodes": [
+          1
+        ],
+        "districtCodes": [
+          101
+        ],
+        "coordSource": "S04",
+        "reviewStatus": "approved"
+      }
+    },
+    {
+      "type": "Feature",
+      "id": "pk-dhaulagiri-iv",
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          83.3148,
+          28.7357
+        ]
+      },
+      "properties": {
+        "nameEn": "Dhaulagiri IV",
+        "nameNe": "धौलागिरी चौथा",
+        "nameStatus": "attested",
+        "elevation": 7661,
+        "peakClass": "seven_thousander",
+        "nepalShare": "inside",
+        "provinceCodes": [
+          6
+        ],
+        "districtCodes": [
+          601
+        ],
+        "coordSource": "S04",
+        "reviewStatus": "approved"
+      }
+    },
+    {
+      "type": "Feature",
+      "id": "pk-dhaulagiri-v",
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          83.3621,
+          28.734
+        ]
+      },
+      "properties": {
+        "nameEn": "Dhaulagiri V",
+        "nameNe": "धौलागिरी पाँचौँ",
+        "nameStatus": "attested",
+        "elevation": 7618,
+        "peakClass": "seven_thousander",
+        "nepalShare": "inside",
+        "provinceCodes": [
+          6
+        ],
+        "districtCodes": [
+          601
+        ],
+        "coordSource": "S04",
+        "reviewStatus": "approved"
+      }
+    },
+    {
+      "type": "Feature",
+      "id": "pk-annapurna-iii",
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          83.99,
+          28.5853
+        ]
+      },
+      "properties": {
+        "nameEn": "Annapurna III",
+        "nameNe": "अन्नपूर्ण तेस्रो",
+        "nameStatus": "attested",
+        "elevation": 7555,
+        "peakClass": "seven_thousander",
+        "nepalShare": "inside",
+        "provinceCodes": [
+          4
+        ],
+        "districtCodes": [
+          405
+        ],
+        "coordSource": "S04",
+        "reviewStatus": "approved"
+      }
+    },
+    {
+      "type": "Feature",
+      "id": "pk-jongsong-peak",
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          88.1358,
+          27.8814
+        ]
+      },
+      "properties": {
+        "nameEn": "Jongsong Peak",
+        "nameNe": "जोङ्सोङ् हिमाल",
+        "nameStatus": "attested",
+        "elevation": 7462,
+        "peakClass": "seven_thousander",
+        "nepalShare": "border",
+        "provinceCodes": [
+          1
+        ],
+        "districtCodes": [
+          101
+        ],
+        "coordSource": "S04",
+        "reviewStatus": "approved"
+      }
+    },
+    {
+      "type": "Feature",
+      "id": "pk-gangapurna",
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          83.9642,
+          28.6047
+        ]
+      },
+      "properties": {
+        "nameEn": "Gangapurna",
+        "nameNe": "गङ्गापूर्ण",
+        "nameStatus": "attested",
+        "elevation": 7455,
+        "peakClass": "seven_thousander",
+        "nepalShare": "inside",
+        "provinceCodes": [
+          4
+        ],
+        "districtCodes": [
+          405
+        ],
+        "coordSource": "S04",
+        "reviewStatus": "approved"
+      }
+    },
+    {
+      "type": "Feature",
+      "id": "pk-yangra",
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          85.1272,
+          28.3917
+        ]
+      },
+      "properties": {
+        "nameEn": "Yangra",
+        "nameNe": "याङ्ग्रा हिमाल",
+        "nameStatus": "attested",
+        "elevation": 7422,
+        "peakClass": "seven_thousander",
+        "nepalShare": "border",
+        "provinceCodes": [
+          4
+        ],
+        "districtCodes": [
+          401
+        ],
+        "coordSource": "S04",
+        "reviewStatus": "approved"
+      }
+    },
+    {
+      "type": "Feature",
+      "id": "pk-kabru",
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          88.1183,
+          27.635
+        ]
+      },
+      "properties": {
+        "nameEn": "Kabru",
+        "nameNe": "काब्रु",
+        "nameStatus": "attested",
+        "elevation": 7412,
+        "peakClass": "seven_thousander",
+        "nepalShare": "border",
+        "provinceCodes": [
+          1
+        ],
+        "districtCodes": [
+          101
+        ],
+        "coordSource": "S04",
+        "reviewStatus": "approved"
+      }
+    },
+    {
+      "type": "Feature",
+      "id": "pk-churen-himal",
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          83.2101,
+          28.7316
+        ]
+      },
+      "properties": {
+        "nameEn": "Churen Himal",
+        "nameNe": "चुरेन हिमाल",
+        "nameStatus": "attested",
+        "elevation": 7385,
+        "peakClass": "seven_thousander",
+        "nepalShare": "inside",
+        "provinceCodes": [
+          4
+        ],
+        "districtCodes": [
+          404
+        ],
+        "coordSource": "S04",
+        "reviewStatus": "approved"
+      }
+    },
+    {
+      "type": "Feature",
+      "id": "pk-kirat-chuli",
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          88.1944,
+          27.7869
+        ]
+      },
+      "properties": {
+        "nameEn": "Kirat Chuli",
+        "nameNe": "किरात चुली हिमाल",
+        "nameStatus": "attested",
+        "elevation": 7365,
+        "peakClass": "seven_thousander",
+        "nepalShare": "border",
+        "provinceCodes": [
+          1
+        ],
+        "districtCodes": [
+          101
+        ],
+        "coordSource": "S04",
+        "reviewStatus": "approved"
+      }
+    },
+    {
+      "type": "Feature",
+      "id": "pk-nangpai-gosum",
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          86.6144,
+          28.0722
+        ]
+      },
+      "properties": {
+        "nameEn": "Nangpai Gosum",
+        "nameNe": "नङपाई हिमाल",
+        "nameStatus": "attested",
+        "elevation": 7350,
+        "peakClass": "seven_thousander",
+        "nepalShare": "border",
+        "provinceCodes": [
+          1
+        ],
+        "districtCodes": [
+          103
+        ],
+        "coordSource": "S04",
+        "reviewStatus": "approved"
+      }
+    },
+    {
+      "type": "Feature",
+      "id": "pk-gimmigela-chuli",
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          88.15,
+          27.7333
+        ]
+      },
+      "properties": {
+        "nameEn": "Gimmigela Chuli",
+        "nameNe": "गिम्मीगेला चुली",
+        "nameStatus": "attested",
+        "elevation": 7350,
+        "peakClass": "seven_thousander",
+        "nepalShare": "border",
+        "provinceCodes": [
+          1
+        ],
+        "districtCodes": [
+          101
+        ],
+        "coordSource": "S04",
+        "reviewStatus": "approved"
+      }
+    },
+    {
+      "type": "Feature",
+      "id": "pk-chamlang",
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          86.98,
+          27.7758
+        ]
+      },
+      "properties": {
+        "nameEn": "Chamlang",
+        "nameNe": "चामलाङ हिमाल",
+        "nameStatus": "attested",
+        "elevation": 7321,
+        "peakClass": "seven_thousander",
+        "nepalShare": "inside",
+        "provinceCodes": [
+          1
+        ],
+        "districtCodes": [
+          103
+        ],
+        "coordSource": "S04",
+        "reviewStatus": "approved"
+      }
+    },
+    {
+      "type": "Feature",
+      "id": "pk-dhaulagiri-vi",
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          83.2742,
+          28.7086
+        ]
+      },
+      "properties": {
+        "nameEn": "Dhaulagiri VI",
+        "nameNe": "धौलागिरी छैटौँ",
+        "nameStatus": "attested",
+        "elevation": 7268,
+        "peakClass": "seven_thousander",
+        "nepalShare": "inside",
+        "provinceCodes": [
+          4
+        ],
+        "districtCodes": [
+          404
+        ],
+        "coordSource": "S02",
+        "reviewStatus": "approved"
+      }
+    },
+    {
+      "type": "Feature",
+      "id": "pk-putha-hiunchuli",
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          83.1458,
+          28.7475
+        ]
+      },
+      "properties": {
+        "nameEn": "Putha Hiunchuli",
+        "nameNe": "पुथा हिउँचुली",
+        "nameStatus": "attested",
+        "elevation": 7246,
+        "peakClass": "seven_thousander",
+        "nepalShare": "inside",
+        "provinceCodes": [
+          6
+        ],
+        "districtCodes": [
+          601
+        ],
+        "coordSource": "S04",
+        "reviewStatus": "approved"
+      }
+    },
+    {
+      "type": "Feature",
+      "id": "pk-langtang-lirung",
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          85.5194,
+          28.2561
+        ]
+      },
+      "properties": {
+        "nameEn": "Langtang Lirung",
+        "nameNe": "लाङटाङ लिरुङ",
+        "nameStatus": "attested",
+        "elevation": 7227,
+        "peakClass": "seven_thousander",
+        "nepalShare": "inside",
+        "provinceCodes": [
+          3
+        ],
+        "districtCodes": [
+          303
+        ],
+        "coordSource": "S04",
+        "reviewStatus": "approved"
+      }
+    },
+    {
+      "type": "Feature",
+      "id": "pk-annapurna-south",
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          83.806,
+          28.518
+        ]
+      },
+      "properties": {
+        "nameEn": "Annapurna South",
+        "nameNe": "अन्नपूर्ण दक्षिण",
+        "nameStatus": "attested",
+        "elevation": 7219,
+        "peakClass": "seven_thousander",
+        "nepalShare": "inside",
+        "provinceCodes": [
+          4
+        ],
+        "districtCodes": [
+          404
+        ],
+        "coordSource": "S04",
+        "reviewStatus": "approved"
+      }
+    },
+    {
+      "type": "Feature",
+      "id": "pk-langtang-ri",
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          85.6836,
+          28.3814
+        ]
+      },
+      "properties": {
+        "nameEn": "Langtang Ri",
+        "nameNe": "लाङटाङ री",
+        "nameStatus": "attested",
+        "elevation": 7205,
+        "peakClass": "seven_thousander",
+        "nepalShare": "border",
+        "provinceCodes": [
+          3
+        ],
+        "districtCodes": [
+          303
+        ],
+        "coordSource": "S04",
+        "reviewStatus": "approved"
+      }
+    },
+    {
+      "type": "Feature",
+      "id": "pk-gurja-himal",
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          83.2758,
+          28.6744
+        ]
+      },
+      "properties": {
+        "nameEn": "Gurja Himal",
+        "nameNe": "गुर्जा हिमाल",
+        "nameStatus": "attested",
+        "elevation": 7193,
+        "peakClass": "seven_thousander",
+        "nepalShare": "inside",
+        "provinceCodes": [
+          4
+        ],
+        "districtCodes": [
+          404
+        ],
+        "coordSource": "S04",
+        "reviewStatus": "approved"
+      }
+    },
+    {
+      "type": "Feature",
+      "id": "pk-chamar",
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          84.9453,
+          28.5553
+        ]
+      },
+      "properties": {
+        "nameEn": "Chamar",
+        "nameNe": "चामर",
+        "nameStatus": "attested",
+        "elevation": 7187,
+        "peakClass": "seven_thousander",
+        "nepalShare": "inside",
+        "provinceCodes": [
+          4
+        ],
+        "districtCodes": [
+          401
+        ],
+        "coordSource": "S04",
+        "reviewStatus": "approved"
+      }
+    },
+    {
+      "type": "Feature",
+      "id": "pk-nepal-peak",
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          88.1829,
+          27.7768
+        ]
+      },
+      "properties": {
+        "nameEn": "Nepal Peak",
+        "nameNe": "नेपाल पिक",
+        "nameStatus": "attested",
+        "elevation": 7177,
+        "peakClass": "seven_thousander",
+        "nepalShare": "border",
+        "provinceCodes": [
+          1
+        ],
+        "districtCodes": [
+          101
+        ],
+        "coordSource": "S04",
+        "reviewStatus": "approved"
+      }
+    },
+    {
+      "type": "Feature",
+      "id": "pk-pumori",
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          86.8281,
+          28.0156
+        ]
+      },
+      "properties": {
+        "nameEn": "Pumori",
+        "nameNe": "पुमोरी",
+        "nameStatus": "attested",
+        "elevation": 7161,
+        "peakClass": "seven_thousander",
+        "nepalShare": "border",
+        "provinceCodes": [
+          1
+        ],
+        "districtCodes": [
+          103
+        ],
+        "coordSource": "S04",
+        "reviewStatus": "approved"
+      }
+    },
+    {
+      "type": "Feature",
+      "id": "pk-nemjung",
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          84.4167,
+          28.735
+        ]
+      },
+      "properties": {
+        "nameEn": "Nemjung",
+        "nameNe": "नेमजुङ",
+        "nameStatus": "attested",
+        "elevation": 7140,
+        "peakClass": "seven_thousander",
+        "nepalShare": "inside",
+        "provinceCodes": [
+          4
+        ],
+        "districtCodes": [
+          402
+        ],
+        "coordSource": "S04",
+        "reviewStatus": "approved"
+      }
+    },
+    {
+      "type": "Feature",
+      "id": "pk-gaurishankar",
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          86.3358,
+          27.9533
+        ]
+      },
+      "properties": {
+        "nameEn": "Gaurishankar",
+        "nameNe": "गौरीशंकर हिमाल",
+        "nameStatus": "attested",
+        "elevation": 7134,
+        "peakClass": "seven_thousander",
+        "nepalShare": "border",
+        "provinceCodes": [
+          3
+        ],
+        "districtCodes": [
+          301
+        ],
+        "coordSource": "S04",
+        "reviewStatus": "approved"
+      }
+    },
+    {
+      "type": "Feature",
+      "id": "pk-tilicho-peak",
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          83.8044,
+          28.6844
+        ]
+      },
+      "properties": {
+        "nameEn": "Tilicho Peak",
+        "nameNe": "तिलिचो",
+        "nameStatus": "attested",
+        "elevation": 7134,
+        "peakClass": "seven_thousander",
+        "nepalShare": "inside",
+        "provinceCodes": [
+          4
+        ],
+        "districtCodes": [
+          404
+        ],
+        "coordSource": "S04",
+        "reviewStatus": "approved"
+      }
+    },
+    {
+      "type": "Feature",
+      "id": "pk-api",
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          80.9297,
+          30.0053
+        ]
+      },
+      "properties": {
+        "nameEn": "Api",
+        "nameNe": "अपी हिमाल",
+        "nameStatus": "attested",
+        "elevation": 7132,
+        "peakClass": "seven_thousander",
+        "nepalShare": "inside",
+        "provinceCodes": [
+          7
+        ],
+        "districtCodes": [
+          703
+        ],
+        "coordSource": "S04",
+        "reviewStatus": "approved"
+      }
+    },
+    {
+      "type": "Feature",
+      "id": "pk-baruntse",
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          86.9833,
+          27.8833
+        ]
+      },
+      "properties": {
+        "nameEn": "Baruntse",
+        "nameNe": "बरुन्त्से हिमाल",
+        "nameStatus": "attested",
+        "elevation": 7129,
+        "peakClass": "seven_thousander",
+        "nepalShare": "inside",
+        "provinceCodes": [
+          1
+        ],
+        "districtCodes": [
+          102
+        ],
+        "coordSource": "S04",
+        "reviewStatus": "approved"
+      }
+    },
+    {
+      "type": "Feature",
+      "id": "pk-ganesh-ii",
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          85.0567,
+          28.3792
+        ]
+      },
+      "properties": {
+        "nameEn": "Ganesh II",
+        "nameNe": "गणेश-II",
+        "nameStatus": "attested",
+        "elevation": 7118,
+        "peakClass": "seven_thousander",
+        "nepalShare": "inside",
+        "provinceCodes": [
+          4
+        ],
+        "districtCodes": [
+          401
+        ],
+        "coordSource": "S04",
+        "reviewStatus": "approved"
+      }
+    },
+    {
+      "type": "Feature",
+      "id": "pk-pabil",
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          85.08,
+          28.3458
+        ]
+      },
+      "properties": {
+        "nameEn": "Pabil",
+        "nameNe": "पविल",
+        "nameStatus": "attested",
+        "elevation": 7104,
+        "peakClass": "seven_thousander",
+        "nepalShare": "inside",
+        "provinceCodes": [
+          4
+        ],
+        "districtCodes": [
+          401
+        ],
+        "coordSource": "S04",
+        "reviewStatus": "approved"
+      }
+    },
+    {
+      "type": "Feature",
+      "id": "pk-thulagi-chuli",
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          84.5204,
+          28.5275
+        ]
+      },
+      "properties": {
+        "nameEn": "Thulagi Chuli",
+        "nameNe": "थुलागी चुली",
+        "nameStatus": "transliterated",
+        "elevation": 7059,
+        "peakClass": "seven_thousander",
+        "nepalShare": "inside",
+        "provinceCodes": [
+          4
+        ],
+        "districtCodes": [
+          402
+        ],
+        "coordSource": "S04",
+        "reviewStatus": "approved"
+      }
+    },
+    {
+      "type": "Feature",
+      "id": "pk-ratna-chuli",
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          84.3772,
+          28.8644
+        ]
+      },
+      "properties": {
+        "nameEn": "Ratna Chuli",
+        "nameNe": "रत्नचुली",
+        "nameStatus": "attested",
+        "elevation": 7035,
+        "peakClass": "seven_thousander",
+        "nepalShare": "border",
+        "provinceCodes": [
+          4
+        ],
+        "districtCodes": [
+          402
+        ],
+        "coordSource": "S04",
+        "reviewStatus": "approved"
+      }
+    }
+  ]
+}

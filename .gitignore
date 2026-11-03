@@ -1,0 +1,43 @@
+# --- Bytecode / cache ---
+__pycache__/
+*.py[cod]
+*.pyo
+*.pyd
+
+# --- Python virtualenv / libs copied locally ---
+_libs/
+_wheels3/
+_mpl/
+_geo/
+_tmp/
+
+# --- Python packages / wheels ---
+*.whl
+*.egg-info/
+*.dist-info/
+
+# --- Binaries / media / documents ---
+*.pdf
+*.docx
+*.mp4
+*.png
+*.jpg
+*.jpeg
+*.gif
+*.zip
+*.onnx
+*.pyd
+*.dll
+*.so
+
+# --- Node dependencies ---
+node_modules/
+
+# --- Environment / OS ---
+.env
+.env.local
+.DS_Store
+Thumbs.db
+
+# --- Logs ---
+*.log

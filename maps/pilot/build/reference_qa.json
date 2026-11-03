@@ -1,0 +1,41 @@
+{
+  "generated": "2026-10-29T05:03:43.779Z",
+  "edition": "DNPWC-deferred draft",
+  "counts": {
+    "core_rows": 22,
+    "buffer_rows": 14,
+    "peak_rows": 51,
+    "source_rows": 25,
+    "evidence_rows": 8
+  },
+  "peaks": {
+    "rows": 51,
+    "classes": {
+      "eight_thousander_main": 8,
+      "eight_thousander_official_additional": 6,
+      "seven_thousander": 37
+    },
+    "name_status": {
+      "attested": 43,
+      "transliterated": 8
+    },
+    "border_status": {
+      "border": 22,
+      "inside": 29
+    },
+    "review_status": {
+      "approved": 51
+    },
+    "missing_np": 0,
+    "missing_coord": 0
+  },
+  "areas": {
+    "federal_core_km2": 28741.94,
+    "provincial_km2": 498.4,
+    "buffer_km2": 5720.28,
+    "core_plus_buffer_km2": 34462.22,
+    "all_three_layers_km2": 34960.62
+  },
+  "open_issues": [],
+  "validation_issues": []
+}

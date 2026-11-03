@@ -1,0 +1,52 @@
+  function buildReferenceSection() {
+    const paRows = (REFERENCE ? REFERENCE.protected_areas : []).map((r) => {
+      const name = state.lang === 'ne' ? (r.name_np || r.name_en) : r.name_en;
+      const alt = state.lang === 'ne' ? r.name_en : (r.name_np || '');
+      const altClass = hasDevanagari(alt) ? ' np' : '';
+      return `<tr>
+        <td class="ref-name">${esc(name)}${alt ? `<span class="ref-alt${altClass}">${esc(alt)}</span>` : ''}</td>
+        <td class="ref-area">${esc(r.area_published_km2)}</td>
+        <td class="ref-status">boundary pending</td>
+      </tr>`;
+    }).join('');
+    const bzRows = (REFERENCE ? REFERENCE.buffer_zones : []).map((r) => {
+      const name = state.lang === 'ne' ? (r.name_np || r.name_en) : r.name_en;
+      const alt = state.lang === 'ne' ? r.name_en : (r.name_np || '');
+      const altClass = hasDevanagari(alt) ? ' np' : '';
+      return `<tr>
+        <td class="ref-name">${esc(name)}${alt ? `<span class="ref-alt${altClass}">${esc(alt)}</span>` : ''}</td>
+        <td class="ref-area">${esc(r.area_published_km2)}</td>
+        <td class="ref-status">boundary pending</td>
+      </tr>`;
+    }).join('');
+    const peakCount = PEAKS.features ? PEAKS.features.length : 0;
+    const mainCount = PEAKS.features ? PEAKS.features.filter((f) => f.properties.peak_class === 'eight_thousander_main').length : 0;
+    const offCount = PEAKS.features ? PEAKS.features.filter((f) => f.properties.peak_class === 'eight_thousander_official_additional').length : 0;
+    const sevenCount = PEAKS.features ? PEAKS.features.filter((f) => f.properties.peak_class === 'seven_thousander').length : 0;
+    return `
+      <section class="side-section" id="reference">
+        <div class="side-section-head"><h2>${esc(t('referenceTitle'))}</h2></div>
+        <p class="side-note" style="margin:0 0 6px">${esc(t('referenceNote'))}</p>
+        <div class="ref-counts">
+          <div class="ref-count"><b>${formatNum(peakCount)}</b><span>${esc(t('referencePeakCount'))}</span><small>${formatNum(mainCount)} + ${formatNum(offCount)} + ${formatNum(sevenCount)}</small></div>
+          <div class="ref-count"><b>${formatNum(REFERENCE ? REFERENCE.protected_areas.length : 0)}</b><span>${esc(t('referencePaCount'))}</span></div>
+          <div class="ref-count"><b>${formatNum(REFERENCE ? REFERENCE.buffer_zones.length : 0)}</b><span>${esc(t('referenceBzCount'))}</span></div>
+        </div>
+        <details class="ref-details">
+          <summary>${esc(t('referenceShow'))}</summary>
+          <div class="ref-table-wrap">
+            <div class="ref-table-title">Protected areas (22)</div>
+            <table class="ref-table">
+              <thead><tr><th>Name</th><th>km²</th><th>Status</th></tr></thead>
+              <tbody>${paRows}</tbody>
+            </table>
+            <div class="ref-table-title" style="margin-top:8px">Buffer zones (14)</div>
+            <table class="ref-table">
+              <thead><tr><th>Name</th><th>km²</th><th>Status</th></tr></thead>
+              <tbody>${bzRows}</tbody>
+            </table>
+          </div>
+        </details>
+      </section>`;
+  }
+
