@@ -216,14 +216,6 @@ function initExplorer() {
   // Bump when data.json shape changes.
   const DATA_URL = 'data.json?v=4';
 
-  // The elevation metric and its popups ride a separate lazy artifact;
-  // kick the fetch off early so bands are usually ready before a
-  // visitor ever switches the figure. Wave 4-C: under Save-Data the
-  // prefetch waits until the figure is actually picked (setMapMetric
-  // awaits the same memoized promise — nothing is lost, only the
-  // eager copy is skipped).
-  if (!SAVE_DATA) ensureDistrictElevation();
-
   // Load data
   fetch(DATA_URL)
     .then(res => {
@@ -536,17 +528,6 @@ const TYPE_COLORS = {
 let _map = null;
 let _cluster = null;
 let _leafletReady = null;
-// Save-Data (Wave 4-C): honor the OS/browser data-saver switch. Checked
-// once, honored where a fetch or animation is optional polish — never for
-// the data the page exists to show.
-var SAVE_DATA = (function () {
-  try {
-    var c = navigator.connection;
-    return !!(c && c.saveData);
-  } catch (e) {
-    return false;
-  }
-})();
 
 function loadLeaflet() {
   if (_leafletReady) return _leafletReady;
@@ -706,19 +687,6 @@ var MAP_METRICS = {
       { label: '— No code', color: '#D97706' },
     ],
   },
-  elevation: {
-    // Terrain band ramp (amber 100 → 800): Terai yellow to high-Himalaya
-    // brown, one district-wide figure per palika (its district's mean).
-    label: 'District mean elevation (GLO-30)',
-    entries: [
-      { label: '< 500 m', color: '#FDE68A' },
-      { label: '500–1,500 m', color: '#FCD34D' },
-      { label: '1,500–2,500 m', color: '#F59E0B' },
-      { label: '2,500–3,500 m', color: '#B45309' },
-      { label: '3,500+ m', color: '#7C2D12' },
-      { label: 'n/a', color: '#E7E5E4' },
-    ],
-  },
 };
 var DOTS_LEGEND_HTML =
   '<span class="legend-chip"><i class="dot dot-metro"></i>Metro</span>' +
@@ -735,30 +703,6 @@ var _boundaryByKey = null;     // districtId|normName -> feature
 var _boundaryLayer = null;     // L.geoJSON layer
 var _boundaryDataAdded = false;
 var _activeRows = new Set();
-var _districtElev = null;      // district -> {elevMin, elevMean, elevMax}
-var _districtElevReady = null; // in-flight load promise
-
-// District elevation bands (Copernicus GLO-30-derived, 77 districts):
-// a lazy-loaded artifact, fetched only when the terrain metric (or a
-// popup that quotes it) is first needed. A failed or malformed fetch
-// resolves null and the map degrades to the n/a grey — never an error.
-function ensureDistrictElevation() {
-  if (_districtElevReady) return _districtElevReady;
-  _districtElevReady = fetch('district-elevation.json?v=1')
-    .then(function (res) { return res.ok ? res.json() : null; })
-    .then(function (data) {
-      if (!Array.isArray(data) || !data.length ||
-          typeof data[0].elevMean !== 'number') return null;
-      var map = {};
-      for (var i = 0; i < data.length; i++) {
-        map[data[i].district] = data[i];
-      }
-      _districtElev = map;
-      return map;
-    })
-    .catch(function () { return null; });
-  return _districtElevReady;
-}
 
 var MAP_OVERLAYS = [
   // K2 — protected areas. The 20 core units on the official DNPWC roster
@@ -859,14 +803,6 @@ function setMapMetric(metric) {
   if (metric !== 'dots' && !MAP_METRICS[metric]) return;
   _mapMetric = metric;
   renderMapLegend();
-  if (metric === 'elevation') {
-    // The bands arrive async; once they land, restyle whatever is on
-    // screen so switching metrics never shows a stale n/a grey map.
-    ensureDistrictElevation().then(function () {
-      if (_mapMetric !== 'elevation') return;
-      if (_boundaryLayer) restyleBoundaryLayer();
-    });
-  }
   if (_boundaryLayer) restyleBoundaryLayer();
 }
 
@@ -1029,15 +965,6 @@ function itemPopupHtml(item) {
   else html += '<br>';
   html += escapeHtmlAttr(item.district) + ', ' + escapeHtmlAttr(item.province) + '<br>';
   html += 'CBS: ' + cbs + ' (' + tierShort + ') · ' + wards;
-  const elev = _districtElev && _districtElev[item.district];
-  if (elev) {
-    html += '<br><span style="color:#64748b;font-size:12px">Rises from ' +
-      elev.elevMin.toLocaleString('en-US') + ' m to ' +
-      elev.elevMax.toLocaleString('en-US') +
-      ' m above sea level (mean ~' +
-      elev.elevMean.toLocaleString('en-US') +
-      ' m · Copernicus GLO-30)</span>';
-  }
   if (item.lat != null && item.lng != null) {
     html += '<br><span style="color:#64748b;font-size:12px">' +
       item.lat.toFixed(3) + ', ' + item.lng.toFixed(3) + ' · ' +
@@ -1053,16 +980,6 @@ function metricColorFor(item) {
   if (_mapMetric === 'cbs') {
     const tier = confidenceMeta(item);
     return tier.cls === 'verified' ? '#1D4ED8' : tier.cls === 'singleSource' ? '#A8A29E' : '#D97706';
-  }
-  if (_mapMetric === 'elevation') {
-    const e = _districtElev && _districtElev[item.district];
-    if (!e) return '#E7E5E4';
-    const m = e.elevMean;
-    if (m >= 3500) return '#7C2D12';
-    if (m >= 2500) return '#B45309';
-    if (m >= 1500) return '#F59E0B';
-    if (m >= 500) return '#FCD34D';
-    return '#FDE68A';
   }
   var w = item.wards;
   if (w == null) return '#E7E5E4';
@@ -1112,9 +1029,7 @@ function wireBoundaryFeature(feature, layer) {
     direction: 'top',
   });
   if (feature.__row) {
-    // Function content: the popup builds at open time, so the elevation
-    // sentence appears even when its fetch resolves after bind.
-    layer.bindPopup(function () { return itemPopupHtml(feature.__row); });
+    layer.bindPopup(itemPopupHtml(feature.__row));
   } else {
     const p = feature.properties || {};
     layer.bindPopup('<strong>' + escapeHtmlAttr(p.nameEn || 'Palika') + '</strong>' +
@@ -1303,43 +1218,13 @@ function syncChoropleth(items) {
 }
 
 
-// Wave 4-C (lazy figure): booting Leaflet + boundary geometry at
-// DOMContentLoaded put CDN scripts, a 476 KB fetch and long main-thread
-// tasks inside the LCP window (Explorer measured 4573ms mobile). The
-// figure sits below the fold; it now arms when its section approaches
-// the viewport — immediately for deep links (?cbs= / ?metric=), which
-// target the map by definition. Until armed, syncMap just keeps the
-// latest rows; filtering stays free.
-var _mapArmed = false;
-var _mapArmIo = null;
-
-function renderArmedMap() {
-  if (!_lastMapItems) return;
-  if (_mapMetric === 'dots') { syncDotsMap(_lastMapItems); return; }
-  syncChoropleth(_lastMapItems);
-}
-
 function syncMap(items) {
+  // Dispatcher: render the map per the selected figure metric — the
+  // palika-boundary choropleth (wards / type / cbs) or the classic dots.
   if (!document.getElementById('map')) return;
   _lastMapItems = items;
-  if (_mapArmed) { renderArmedMap(); return; }
-  const params = new URLSearchParams(window.location.search);
-  if (params.get('cbs') || params.get('metric')) {
-    _mapArmed = true;
-    renderArmedMap();
-    return;
-  }
-  if (_mapArmIo) return;
-  _mapArmIo = new IntersectionObserver(function (entries) {
-    for (let i = 0; i < entries.length; i++) {
-      if (!entries[i].isIntersecting) continue;
-      _mapArmIo.disconnect();
-      _mapArmIo = null;
-      _mapArmed = true;
-      renderArmedMap();
-    }
-  }, { rootMargin: '300px 0px' });
-  _mapArmIo.observe(document.getElementById('map'));
+  if (_mapMetric === 'dots') { syncDotsMap(items); return; }
+  syncChoropleth(items);
 }
 
 function syncDotsMap(items) {
@@ -1360,7 +1245,7 @@ function syncDotsMap(items) {
         fillColor: color,
         fillOpacity: item.cbsCode != null ? 0.85 : 0.2,
       });
-      m.bindPopup(function () { return itemPopupHtml(item); });
+      m.bindPopup(itemPopupHtml(item));
       return m;
     });
     _cluster.addLayers(markers);
@@ -1423,67 +1308,11 @@ function initHeaderScroll() {
   }, { passive: true });
 }
 
-// Wave 2.5: count-up hero stats when they enter the viewport ("motion
-// that explains"). Reduced-motion or no IntersectionObserver: the text
-// stays exactly as authored. The numbers are read from the DOM itself,
-// so the source HTML keeps the exact needle strings.
-function initCountUp() {
-  const stats = document.querySelector('.hero-stats');
-  if (!stats || typeof IntersectionObserver === 'undefined') return;
-  const targets = stats.querySelectorAll('.stat-value');
-  if (!targets.length) return;
-  const reduced = window.matchMedia('(prefers-reduced-motion: reduce)').matches;
-  // Wave 4-C: Save-Data visitors keep the authored numbers — no frames
-  // spent on counting.
-  if (SAVE_DATA) return;
-  const animate = (el) => {
-    if (reduced) return;
-    const finalText = el.textContent || '';
-    const num = parseInt(finalText.replace(/,/g, ''), 10);
-    if (!Number.isFinite(num) || num <= 0) return;
-    const duration = 700; // Emil ceiling: well under 1000ms
-    const started = performance.now();
-    const fmt = (v) => v.toLocaleString('en-US');
-    const tick = (now) => {
-      const t = Math.min(1, (now - started) / duration);
-      const eased = 1 - Math.pow(1 - t, 3); // ease-out cubic
-      el.textContent = fmt(Math.round(num * eased));
-      if (t < 1) requestAnimationFrame(tick);
-      else el.textContent = fmt(num);
-    };
-    requestAnimationFrame(tick);
-  };
-  const io = new IntersectionObserver((entries, obs) => {
-    entries.forEach((entry) => {
-      if (entry.isIntersecting) { animate(entry.target); obs.unobserve(entry.target); }
-    });
-  }, { threshold: 0.4 });
-  targets.forEach((el) => io.observe(el));
-}
-
-// Wave 2.5: bento entrance stagger — cells rise 12px and fade in, offset
-// by the --nb-motion-stagger token (40ms) per cell. Opt-in: JS adds
-// reveal-ready first (no-JS visitors see a fully rendered grid), then
-// in-view triggers the rise. Reduced-motion collapses it via CSS media.
-function initBentoReveal() {
-  const grid = document.querySelector('.features-grid');
-  if (!grid || typeof IntersectionObserver === 'undefined') return;
-  grid.classList.add('reveal-ready');
-  const io = new IntersectionObserver((entries, obs) => {
-    entries.forEach((entry) => {
-      if (entry.isIntersecting) { grid.classList.add('in-view'); obs.disconnect(); }
-    });
-  }, { threshold: 0.15 });
-  io.observe(grid);
-}
-
 // Initialize theme + nav + header on load
 document.addEventListener('DOMContentLoaded', () => {
   initTheme();
   initNav();
   initHeaderScroll();
-  initCountUp();
-  initBentoReveal();
 });
 
 // API docs nav highlighting
@@ -1503,5 +1332,4 @@ if (document.querySelector('.api-nav')) {
 
   sections.forEach(section => observer.observe(section));
 }
-
 
