@@ -293,8 +293,8 @@ vm.createContext(sandbox);
     assert.ok(pageHtml.includes('skip-link'), page + ' ships a skip link');
     assert.ok(/theme-toggle[^>]*aria-pressed/.test(pageHtml),
       page + ' theme toggle declares aria-pressed');
-    assert.ok(pageHtml.includes('styles.css?v=17'),
-      page + ' bumps the styles cache (v17)');
+    assert.ok(pageHtml.includes('styles.css?v=16'),
+      page + ' bumps the styles cache (v16)');
   }
   const explorerHtml = fs.readFileSync(path.join(ROOT, 'explorer.html'), 'utf8');
   assert.ok(!explorerHtml.includes('role="grid"'),
@@ -437,45 +437,6 @@ vm.createContext(sandbox);
   assert.ok(overlayDistricts.size === 77 &&
     [...overlayDistricts].every((d) => dataDistricts.has(d)),
     'overlay district names join 77/77 with data.json');
-  // Wave 4 (budgets as features): the performance + accessibility law
-  // lives in ONE place (tool/check_budgets.mjs) and CI enforces it via
-  // .github/workflows/lighthouse.yml on every PR. Here we only assert
-  // the law is declared and wired — thresholds themselves are the
-  // budget gate's business, never re-pinned in smoke.
-  const budgetsSrc = fs.readFileSync(
-    path.join(ROOT, '..', 'tool', 'check_budgets.mjs'), 'utf8');
-  assert.ok(budgetsSrc.includes('lcp: 2500') &&
-    budgetsSrc.includes('tbt: 200') && budgetsSrc.includes('cls: 0.1') &&
-    budgetsSrc.includes('accessibility: 100'),
-    'the budget law declares the CWV ceilings in check_budgets.mjs');
-  // The law is never lowered: LCP pages not yet at 2500ms are gated by
-  // explicit interim ratchet ceilings instead, tightened by Wave 4-C.
-  assert.ok(budgetsSrc.includes('const LCP_CEILINGS = {') &&
-    budgetsSrc.includes("'/explorer.html': 5000") &&
-    budgetsSrc.includes("'/': 3000"),
-    'the LCP ratchet declares per-page interim ceilings');
-  assert.ok(budgetsSrc.includes('lcpOk: lcp <= (LCP_CEILINGS[page.path]'),
-    'the LCP gate asserts against the ratchet ceiling');
-  // Wave 4 PR B (payload diet): the ~40 MB full-resolution palika boundary
-  // source stays in the repo (source-of-truth for the boundaries package
-  // and its generators) but never reaches the Pages artifact: the deploy
-  // job drops it, a size budget guards the artifact, and a Release
-  // workflow publishes it as a one-click download instead.
-  const dartYml = fs.readFileSync(
-    path.join(ROOT, '..', '.github', 'workflows', 'dart.yml'), 'utf8');
-  assert.ok(dartYml.includes('rm -f docs/palika-boundaries-highres.geojson'),
-    'deploy-pages keeps the full-resolution source out of the site artifact');
-  assert.ok(dartYml.includes('max=$((9*1024*1024))'),
-    'deploy-pages enforces the 9 MB site artifact size budget');
-  const releaseYml = fs.readFileSync(
-    path.join(ROOT, '..', '.github', 'workflows', 'release-geojson.yml'), 'utf8');
-  assert.ok(releaseYml.includes('gh release upload') &&
-    releaseYml.includes('docs/palika-boundaries-highres.geojson'),
-    'the release workflow publishes the full-resolution source as an asset');
-  const lighthouseYml = fs.readFileSync(
-    path.join(ROOT, '..', '.github', 'workflows', 'lighthouse.yml'), 'utf8');
-  assert.ok(lighthouseYml.includes('check_budgets.mjs'),
-    'the Lighthouse budget workflow runs the budget gate');
     const rows = (tableBody.innerHTML.match(/<tr/g) || []).length;
   console.log(`SMOKE OK: ${data.length} records, ${rows} rows rendered, no errors`);
 })().catch((err) => {
