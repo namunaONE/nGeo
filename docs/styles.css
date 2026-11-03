@@ -379,28 +379,6 @@ section { padding: var(--space-16) 0; }
   .features-grid { grid-template-columns: 1fr; }
   .cell-bilingual, .cell-wide, .cell-full { grid-column: span 1; }
 }
-
-/* ---- Wave 2.5: motion law (Emil bands) + bento reveal + iconography ----
-   Motion law: micro 150-250ms, reveal 200-350ms, exits faster than
-   entrances (180ms), stagger 40ms per item, hard ceiling 1000ms. Only
-   transform and opacity ever animate. The durations and easings are
-   GENERATED tokens (--nb-motion-*, --nb-easing-* in brand-tokens.css,
-   born in brand/tokens.json) so web and Flutter share one rhythm.
-   Iconography charter: UI icons are inline SVG on a 24x24 grid,
-   stroke-width 2, currentColor, round caps; the Himalayan ridge motif
-   is decorative (aria-hidden) — abstract peaks, never a map claim. */
-@media (prefers-reduced-motion: no-preference) {
-  .features-grid.reveal-ready .bento-cell { opacity: 0; transform: translateY(12px); }
-  .features-grid.in-view .bento-cell { animation: bento-rise var(--nb-motion-emphasized) var(--nb-easing-out) forwards; }
-  .features-grid.in-view .bento-cell:nth-child(2) { animation-delay: var(--nb-motion-stagger); }
-  .features-grid.in-view .bento-cell:nth-child(3) { animation-delay: calc(var(--nb-motion-stagger) * 2); }
-  .features-grid.in-view .bento-cell:nth-child(4) { animation-delay: calc(var(--nb-motion-stagger) * 3); }
-  .features-grid.in-view .bento-cell:nth-child(5) { animation-delay: calc(var(--nb-motion-stagger) * 4); }
-  .features-grid.in-view .bento-cell:nth-child(6) { animation-delay: calc(var(--nb-motion-stagger) * 5); }
-  .features-grid.in-view .bento-cell:nth-child(7) { animation-delay: calc(var(--nb-motion-stagger) * 6); }
-  .features-grid.in-view .bento-cell:nth-child(8) { animation-delay: calc(var(--nb-motion-stagger) * 7); }
-  @keyframes bento-rise { to { opacity: 1; transform: translateY(0); } }
-}
 .feature-card { padding: var(--space-6); background: var(--color-bg-secondary); border: 1px solid var(--color-border); border-radius: var(--radius-lg); transition: all var(--transition); }
 .feature-card:hover { border-color: color-mix(in srgb, var(--color-primary) 45%, transparent); box-shadow: var(--shadow-lg); transform: translateY(-4px); }
 .feature-icon { width: 48px; height: 48px; border-radius: var(--radius-full); background: var(--color-primary-light); color: var(--color-primary); display: flex; align-items: center; justify-content: center; margin-bottom: var(--space-4); }
@@ -638,19 +616,5 @@ html.dark .leaflet-popup-content code, html[data-theme="dark"] .leaflet-popup-co
   .hero-actions { gap: var(--space-3); }
   .hero-actions .btn { flex: 1 1 100%; }
 }
-
-/* ---- Loading skeleton + empty state (Wave 3 PR B) ---- */
-/* The skeleton is honest structure (it matches the table's 8 columns),
-   muted ink, one slow pulse; reduced-motion gets a static grey.
-   Rows are aria-hidden in JS — a skeleton must never be announced. */
-.skeleton { display: inline-block; height: 14px; border-radius: var(--radius-sm); background: var(--color-border); animation: skeleton-pulse 1.6s ease-in-out infinite; }
-.skeleton-row td { padding: 14px 12px; }
-@keyframes skeleton-pulse { 0%, 100% { opacity: 1; } 50% { opacity: 0.45; } }
-@media (prefers-reduced-motion: reduce) { .skeleton { animation: none; } }
-
-.empty-state-cell { text-align: center; padding: 48px 24px; }
-.empty-state-title { color: var(--color-text); font-weight: 600; margin-bottom: 8px; }
-.empty-state-hint { color: var(--color-text-muted); font-size: 0.875rem; margin-bottom: 16px; }
-
 
 

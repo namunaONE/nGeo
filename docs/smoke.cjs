@@ -293,16 +293,16 @@ vm.createContext(sandbox);
     assert.ok(pageHtml.includes('skip-link'), page + ' ships a skip link');
     assert.ok(/theme-toggle[^>]*aria-pressed/.test(pageHtml),
       page + ' theme toggle declares aria-pressed');
-    assert.ok(pageHtml.includes('styles.css?v=15'),
-      page + ' bumps the styles cache (v15)');
+    assert.ok(pageHtml.includes('styles.css?v=14'),
+      page + ' bumps the styles cache (v14)');
   }
   const explorerHtml = fs.readFileSync(path.join(ROOT, 'explorer.html'), 'utf8');
   assert.ok(!explorerHtml.includes('role="grid"'),
     'explorer table is a plain table (role="grid" retired)');
   assert.ok(!explorerHtml.includes('role="application"'),
     'map container does not capture screen-reader keys');
-  assert.ok(explorerHtml.includes('app.js?v=17'),
-    'explorer bumps the app cache (v17)');
+  assert.ok(explorerHtml.includes('app.js?v=16'),
+    'explorer bumps the app cache (v16)');
   const stylesCss = fs.readFileSync(path.join(ROOT, 'styles.css'), 'utf8');
   assert.ok(stylesCss.includes('[tabindex]:focus-visible'),
     'interactive table rows get a visible focus ring');
@@ -318,8 +318,8 @@ vm.createContext(sandbox);
     'toast feedback is announced (role=status)');
   assert.ok(appSrc.includes('aria-current'),
     'pagination announces the current page');
-  assert.ok((appSrc.match(/prefers-reduced-motion: reduce/g) || []).length === 4,
-    'reduced-motion respected (header scroll, flyTo, anchors, count-up)');
+  assert.ok((appSrc.match(/prefers-reduced-motion: reduce/g) || []).length === 3,
+    'reduced-motion respected (header scroll, flyTo/anchors)');
   // Bento 2.0 homepage (Wave 2): the features grid is a bento grid —
   // one dominant bilingual cell (2x2), the CBS claim in a wide cell,
   // asymmetric spans on a shared 6-column grid, tactile hover that
@@ -343,45 +343,6 @@ vm.createContext(sandbox);
     'the dominant cell spans 2x2');
   assert.ok(/prefers-reduced-motion: reduce[\s\S]{0,200}\.feature-card:hover \{ transform: none; \}/.test(stylesCss),
     'bento hover lift collapses under reduced motion');
-  // Wave 2.5 (visual whoa system): the motion law lives in GENERATED
-  // tokens, the count-up and bento reveal are opt-in (no-JS visitors see
-  // everything rendered), and reduced-motion collapses all of it.
-  const brandTokensCss = fs.readFileSync(path.join(ROOT, 'brand-tokens.css'), 'utf8');
-  assert.ok(brandTokensCss.includes('--nb-motion-exit: 180ms') && brandTokensCss.includes('--nb-motion-stagger: 40ms'),
-    'exit + stagger durations are generated tokens');
-  assert.ok(brandTokensCss.includes('--nb-easing-out') && brandTokensCss.includes('--nb-easing-exit'),
-    'easing tokens are generated (entrance ease-out, exit ease-in)');
-  assert.ok(appSrc.includes('initCountUp'), 'hero stats count up on viewport entry');
-  assert.ok(appSrc.includes('initBentoReveal'), 'bento entrance staggers on viewport entry');
-  assert.ok((appSrc.match(/prefers-reduced-motion: reduce/g) || []).length === 4,
-    'reduced-motion guards (header, flyTo, anchors, count-up)');
-  assert.ok(stylesCss.includes('bento-rise'), 'bento rise keyframes ship');
-  assert.ok(stylesCss.includes('prefers-reduced-motion: no-preference'),
-    'the reveal is opt-in: hidden cells exist only in the no-preference media block');
-  assert.ok(indexHtml.includes('brand-tokens.css?v=2'),
-    'brand-tokens cache-bust v2 (regenerated artifact)');
-  // GEO quick-win: the dataset is meant to be found, cited, and used by
-  // people AND answer engines. robots.txt welcomes the AI crawlers by
-  // name, the sitemap lists every public page, and the index JSON-LD
-  // carries a freshness date. The exact date is pinned to meta.json's
-  // dataAsOf by tool/check_site_truth.dart; here we only assert the
-  // signal exists, so this gate never drifts with a release.
-  const robotsTxt = fs.readFileSync(path.join(ROOT, 'robots.txt'), 'utf8');
-  assert.ok(robotsTxt.includes('User-agent: GPTBot'),
-    'GPTBot is explicitly welcomed');
-  assert.ok(robotsTxt.includes('User-agent: ClaudeBot'),
-    'ClaudeBot is explicitly welcomed');
-  assert.ok(robotsTxt.includes('User-agent: PerplexityBot'),
-    'PerplexityBot is explicitly welcomed');
-  assert.ok(robotsTxt.includes('User-agent: Google-Extended'),
-    'Google-Extended is explicitly welcomed');
-  assert.ok(robotsTxt.includes('Sitemap: https://namunaone.github.io/nGeo/sitemap.xml'),
-    'robots.txt declares the sitemap');
-  const sitemapXml = fs.readFileSync(path.join(ROOT, 'sitemap.xml'), 'utf8');
-  assert.ok((sitemapXml.match(/<url>/g) || []).length === 4,
-    'the sitemap lists all 4 public pages');
-  assert.ok(/"dateModified": "\d{4}-\d{2}-\d{2}"/.test(indexHtml),
-    'the index JSON-LD carries a dateModified freshness date');
     const rows = (tableBody.innerHTML.match(/<tr/g) || []).length;
   console.log(`SMOKE OK: ${data.length} records, ${rows} rows rendered, no errors`);
 })().catch((err) => {
