@@ -293,16 +293,16 @@ vm.createContext(sandbox);
     assert.ok(pageHtml.includes('skip-link'), page + ' ships a skip link');
     assert.ok(/theme-toggle[^>]*aria-pressed/.test(pageHtml),
       page + ' theme toggle declares aria-pressed');
-    assert.ok(pageHtml.includes('styles.css?v=19'),
-      page + ' bumps the styles cache (v19)');
+    assert.ok(pageHtml.includes('styles.css?v=20'),
+      page + ' bumps the styles cache (v20)');
   }
   const explorerHtml = fs.readFileSync(path.join(ROOT, 'explorer.html'), 'utf8');
   assert.ok(!explorerHtml.includes('role="grid"'),
     'explorer table is a plain table (role="grid" retired)');
   assert.ok(!explorerHtml.includes('role="application"'),
     'map container does not capture screen-reader keys');
-  assert.ok(explorerHtml.includes('app.js?v=22'),
-    'explorer bumps the app cache (v22)');
+  assert.ok(explorerHtml.includes('app.js?v=23'),
+    'explorer bumps the app cache (v23)');
   // Wave 3 (terrain figure): the explorer gains a district elevation
   // choropleth — GLO-30 bands in a lazy-loaded artifact, elevation-aware
   // popups, and a deep-linkable hero button. The gate interpolates the

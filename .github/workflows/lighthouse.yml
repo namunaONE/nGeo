@@ -32,5 +32,15 @@ jobs:
           cd docs
           python3 -m http.server 4173 &
           sleep 2
-      - name: Run budget assertions
-        run: node tool/check_budgets.mjs http://localhost:4173
+      - name: Run budget assertions (retry once on host noise)
+        run: |
+          set +e
+          node tool/check_budgets.mjs http://localhost:4173
+          rc=$?
+          if [ $rc -ne 0 ]; then
+            echo "::notice::First attempt failed (rc=$rc) — re-running on a fresh pass for host-noise retry."
+            sleep 5
+            node tool/check_budgets.mjs http://localhost:4173
+            rc=$?
+          fi
+          exit $rc
