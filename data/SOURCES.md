@@ -25,8 +25,6 @@ re-fetchable from the URLs below. Integrity is verified against
 | 5 | opendatanepal `geographical-codes-for-states-districts-and-local-bodies` (CBS harvest) | CKAN resource IDs, see §6 | **CC-BY** (`license_id: cc-by`, re-verified at fetch) | **Yes — via NOTICE** | 2026-10-11 |
 | 7 | Nepal Post local-level code list (giwmscdnone.gov.np portal PDFs) | n/a — referenced, not vendored | Government of Nepal publication (no stated licence) | No | 2026-10-25 |
 | 8 | Government of Nepal administrative code table (`1695378470_83.xls`, user-provided) | n/a — vendored workbook + pinned TSV exports | Government of Nepal administrative data; redistribution with attribution per the provider's direction | **Yes — via NOTICE** | 2026-10-27 |
-| 9 | HDX COD-AB (Survey Department of Nepal) | v02 (reviewed 2025-10-30) | **CC BY-IGO** | **Yes — via NOTICE** | 2026-10-30 |
-| 10 | HDX COD-EM (Survey Department + OCHA FISS + ITOS) | 2024-04-03 | **CC BY-IGO** | **Yes — via NOTICE** | 2026-10-30 |
 
 ## File-level pins and blob SHAs
 
@@ -300,30 +298,6 @@ Per-record evidence for all 753 palikas is written to
     applied. Adopting a rename needs a Gazette confirmation
     (`doc/REVIEW-codes.md` §8).
 
-## CBS administrative atlas — referenced, not vendored (2026-11-01)
-
-- File: `1695376827_32.pdf` — a 9-page administrative atlas prepared by
-  the GIS Section of the Central Bureau of Statistics (every page:
-  "Prepared by GIS Section, CBS; Map Source: Topographic Zonal Map
-  (1:125,000), Department of Survey"), user-provided 2026-11-01. Maps
-  1–2 index the provinces and districts; Maps 3–9 list every district's
-  palikas with their PDDPP code and an (U)/(R) tag.
-- Provides: a second official printing of the CBS code roster, used as a
-  corroboration audit (doc/REVIEW-codes.md §9): 741/753 exact code
-  agreement with the dataset, 0/741 urban/rural disagreements, and the
-  code adjudications ledger corroborated directly (Bheri Malika (U) at
-  60706). The remaining 12 sit on the Province-2 page whose printed code
-  column OCR-shifted; all are present by name with the correct district
-  and type.
-- Limits: CBS is the issuer of source #5's harvest, so this is the same
-  attestation family — corroborating evidence, never an independent
-  second vote, and never a tier promotion. Licence unstated (no in-file
-  notice; official portals block automated reads), so it is a factual
-  reference, not vendored data — the same treatment as source #7. The
-  old province naming dates the printing between the 2017 restructuring
-  and the ~2023 renames; the filename timestamp (2023-09-22) sits two
-  minutes from the GoN code table's workbook — same origin day.
-
 ## Boundaries — removed (v2.7.2)
 
 Boundary polygons were investigated (`opentechcommunity/map-of-nepal`, 777
@@ -457,48 +431,6 @@ Human decision: Janakpurdham 25 (sub-metro official; geo-pro-max stale 24).
 > (`NationalStats.wards` vs `verifiedWards`, `Province.unreconciledWards`)
 > rather than publishing one number that silently disagrees with the other.
 > Only Lumbini reconciles exactly (109 units, 983 wards).
-
-## Palika boundary geometry (official source — HDX COD-AB/COD-EM)
-
-As of v2.10.0, palika (and district/province) boundary geometry comes
-from the **Humanitarian Data Exchange (HDX) COD-AB/COD-EM** dataset,
-published by the **Survey Department of Nepal** (official government
-source) and quality-assured by OCHA FISS.
-
-- **COD-AB (authoritative):** 7 provinces, 77 districts, 775 ADM3 units
-  (753 palikas + 22 protected areas). License: **CC BY-IGO**
-  (Creative Commons Attribution for Intergovernmental Organisations).
-  URL: https://data.humdata.org/dataset/cod-ab-npl
-  Retrieved: 2026-10-30. Version: 02 (reviewed 2025-10-30).
-  P-codes: NP0101301 (NP + 2-digit province + 2-digit district + 3-digit palika).
-  Official area_sqkm and center_lat/lon per unit.
-- **COD-EM (edge-matched):** Same 775 units, edge-matched (shared arcs,
-  topologically correct — no gaps/overlaps). License: **CC BY-IGO**.
-  URL: https://data.humdata.org/dataset/cod-em-npl
-  Retrieved: 2026-10-30.
-  Caveat: "COD-EM does not replace COD-AB; preferred for cartographic
-  purposes." Used for the explorer's high-detail toggle and topology-correct
-  rendering. COD-AB remains the authoritative source for area/centroid data.
-- **Attribution (CC BY-IGO):** (c) Survey Department of Nepal
-  (http://ngiip.gov.np/index.php), UN Resident Coordinators Office in Nepal
-  (https://un.org.np/), OCHA Field Information Services Section (FISS).
-- **Adaptation:** boundaries are quantised to 1e-4 degrees (~11 m),
-  simplified (Douglas-Peucker), and encoded as pure-Dart data. Protected
-  areas (22 ADM3 units) are excluded from the palika layer and published
-  as a separate overlay (K2). English names, CBS codes, attributes, and
-  Devanagari names come from our own roster, not from HDX.
-- **Join:** HDX ADM3 → our 753 palikas by name + district (fuzzy fallback
-  for renamed palikas). Match rate: 753/753 (100%). Join report:
-  `data/_stage/hdx_join_report.json`. Validation report:
-  `data/_stage/hdx_validation_report.json`.
-- **Previous source (superseded):** sthaniya.gov.np via Acesmndr/nepal-geojson
-  (MIT). Used through v2.9.x; replaced by HDX in v2.10.0. The old generator
-  (`tool/generate_palika_boundaries.dart`) is retained for reference but no
-  longer used in CI; the live generator is
-  `tool/generate_palika_boundaries_hdx.dart`. The sthaniya-lineage highres
-  tools (`tool/convert_highres_palikas.js`, the
-  `tool/generate_palika_boundaries_highres*.dart` pair) are retained for
-  reference only, each carrying a superseded banner (2026-11-01).
 
 ## Palika boundary geometry (explorer choropleth)
 
@@ -640,41 +572,3 @@ and pin the four files.
 - Regenerate: dart run tool/generate_district_boundaries.dart (input:
   docs/district-boundaries.geojson; lossless VLQ encoding identical to the
   palika layer - the quantised round trip is bit-exact).
-
-## District elevation statistics (Copernicus GLO-30) - added 2026-10-29
-
-- Source: Copernicus GLO-30 (Copernicus Digital Elevation Model, 30 m),
-  frozen 2021 release - the DEM never changes upstream, so this layer
-  has no scheduled drift watch; it is rebuilt only when the tool or the
-  district polygons change.
-- Distribution: public AWS Open Data bucket `copernicus-dem-30m`
-  (`https://copernicus-dem-30m.s3.amazonaws.com`), no account required,
-  plain HTTPS. Tiles are 1-degree COGs in EPSG:4326 - computed against
-  the WGS 84 district polygons with no reprojection.
-- License: Copernicus licence for GLO-30 - free use, including
-  commercial, **with attribution**. Attribution string (also embedded in
-  the artifact metadata and NOTICE): "(c) DLR e.V. 2010-2014 and (c)
-  Airbus Defence and Space GmbH 2014-2018 provided under COPERNICUS by
-  the European Union and ESA".
-- Stats convention: zonal min/mean/max over the pixels inside each of
-  the 77 official district polygons (all_touched=False, source nodata
-  masked), rounded to integer metres. Computed in CI only (a ~1.5 GB
-  tile download lives on the Actions runner, never in the repo).
-- Committed artifact: `bindings/geojson/districts.elevation.geojson` -
-  77 geometry-free feature records (properties districtId / nameEn /
-  nameNe / elevMin / elevMean / elevMax), plus a metadata block carrying
-  the covering tile list, its SHA-256, the stats convention, the
-  license and the attribution. Generated by
-  `tool/elevation/build_elevation_stats.py` via
-  `.github/workflows/elevation-stats.yml` - never hand-edited.
-- Validation anchors (hard-fail in the build, printed in the run log):
-  Solukhumbu elevMax >= 8,700 m (Everest 8,848.86); Taplejung elevMax >=
-  8,400 m (Kangchenjunga 8,586); Myagdi elevMax >= 7,900 m (Annapurna I
-  8,091); national minimum in 50-100 m (Kechana Kalan, Jhapa ~70 m);
-  pixel-weighted national mean in 1,800-2,700 m (published ~2,112 m;
-  GLO-30 is a surface model, so the band allows headroom); Mustang
-  elevMin >= 1,300 m (Kali Gandaki gorge - catches a grossly wrong
-  tile).
-- Retrieved: 2026-10-29 by the first workflow run; the tile list and its
-  SHA-256 are recorded inside the artifact, so any later rebuild is
-  reproducible against the same pinned tile set.

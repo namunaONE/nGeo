@@ -1,0 +1,9 @@
+Warning: Package resolution error when reading "analysis_options.yaml" file for "packages/nepal_admin_widgets/example/lib/main.dart":
+Failed to resolve package URI "package:flutter_lints/flutter.yaml" in include at "/home/runner/work/nGeo/nGeo/packages/nepal_admin_widgets/analysis_options.yaml".
+Warning: Package resolution error when reading "analysis_options.yaml" file for "packages/nepal_admin_widgets/lib/nepal_admin_widgets.dart":
+Failed to resolve package URI "package:flutter_lints/flutter.yaml" in include at "/home/runner/work/nGeo/nGeo/packages/nepal_admin_widgets/analysis_options.yaml".
+Warning: Package resolution error when reading "analysis_options.yaml" file for "packages/nepal_admin_widgets/lib/src/administrative_cascade.dart":
+Failed to resolve package URI "package:flutter_lints/flutter.yaml" in include at "/home/runner/work/nGeo/nGeo/packages/nepal_admin_widgets/analysis_options.yaml".
+Warning: Package resolution error when reading "analysis_options.yaml" file for "packages/nepal_admin_widgets/test/administrative_cascade_test.dart":
+Failed to resolve package URI "package:flutter_lints/flutter.yaml" in include at "/home/runner/work/nGeo/nGeo/packages/nepal_admin_widgets/analysis_options.yaml".
+Formatted 66 files (0 changed) in 0.20 seconds.

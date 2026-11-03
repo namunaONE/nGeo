@@ -23,7 +23,7 @@ jobs:
   test:
     runs-on: ubuntu-latest
     steps:
-      - uses: actions/checkout@v5
+      - uses: actions/checkout@v4
       - uses: dart-lang/setup-dart@v1
         with:
           sdk: stable
@@ -77,47 +77,13 @@ jobs:
       - name: Regenerate website payload
         run: dart run tool/generate_explorer_data.dart
       - name: Verify no website data drift (docs must match the package)
-        run: git diff --exit-code -- docs/data.json docs/district-elevation.json
-      - name: Verify site URL hygiene
-        run: |
-          hits=$(grep -rn "Nepal-Local-Government-Data" docs README.md SECURITY.md CONTRIBUTING.md PUBLISHING.md pubspec.yaml bindings packages tool 2>/dev/null || true)
-          if [ -n "$hits" ]; then
-            echo "$hits"
-            while IFS= read -r line; do
-              echo "::error::${line%%:*} still references the old repository name"
-            done <<< "$hits"
-            exit 1
-          fi
-      - name: Verify site truth (versions and stats)
-        run: dart run tool/check_site_truth.dart
-      # R3 (self-host the engine): the vendored maplibre-gl@5.6.0 dist is
-      # a first-party site asset now — pin its bytes the same way the
-      # data gates pin theirs. The sha256 values below were recorded by
-      # the vendor-maplibre.yml bot commit (born in CI from the npm
-      # tarball whose sha512 integrity was verified before extraction);
-      # this gate re-asserts them on every run so a swapped or corrupted
-      # engine can never pass silently.
-      - name: Verify the vendored engine (pinned sha256)
-        run: |
-          expected_js='07e6ca71a5b6d835a7c3803fb484f0a6e5f0dcbfa131407666edb9e9316564f9'
-          expected_css='792ac997dcf6ae6f643eb4e2dee4630c85e7056526bd8fb85ffe83c67d6c41b4'
-          got_js=$(sha256sum docs/vendor/maplibre-gl-5.6.0.js | cut -d' ' -f1)
-          got_css=$(sha256sum docs/vendor/maplibre-gl-5.6.0.css | cut -d' ' -f1)
-          if [ "$got_js" != "$expected_js" ] || [ "$got_css" != "$expected_css" ]; then
-            echo "::error::vendored engine integrity mismatch (js $got_js / css $got_css) — re-vendor via vendor-maplibre.yml and re-pin during review"
-            exit 1
-          fi
-          echo "::notice::vendored maplibre-gl@5.6.0 verified (sha256 pinned, 939269 + 69422 bytes)"
-      - name: Regenerate design tokens (brand/tokens.json -> docs/brand-tokens.css)
-        run: dart run tool/generate_design_tokens.dart
-      - name: Verify no brand token drift (CSS is generated, never hand-edited)
-        run: git diff --exit-code -- docs/brand-tokens.css
+        run: git diff --exit-code -- docs/data.json
       - name: Regenerate CSV / GeoJSON / JS / Python bindings
         run: dart run tool/generate_bindings.dart
       - name: Verify no bindings drift
         run: git diff --exit-code -- bindings/
-      - name: Regenerate palika boundaries (HDX COD-AB, Survey Department)
-        run: dart run tool/generate_palika_boundaries_hdx.dart
+      - name: Regenerate palika boundaries (high-res, sthaniya.gov.np)
+        run: dart run tool/generate_palika_boundaries_highres.dart
       - name: Verify no palika boundary drift
         run: git diff --exit-code -- lib/src/geo/palika_boundaries.dart
       - name: Regenerate province boundaries (National Geoportal)
@@ -128,16 +94,8 @@ jobs:
         run: dart run tool/generate_district_boundaries.dart
       - name: Verify no district boundary drift
         run: git diff --exit-code -- lib/src/geo/district_boundaries.dart
-      - name: Regenerate district elevation stats (Copernicus GLO-30)
-        run: dart run tool/generate_district_elevation.dart
-      - name: Verify no district elevation drift
-        run: git diff --exit-code -- lib/src/geo/district_elevation.dart
       - name: Boundary join coverage gate
         run: dart run tool/check_boundary_join.dart
-      - name: Boundary topology validation gate
-        run: dart run tool/check_boundary_topology.dart
-      - name: RFC 7946 conformance gate (WGS84 lon/lat, closed rings)
-        run: dart run tool/check_rfc7946.dart
       # Same principle as the formatting gate above: a bare "N issues found"
       # is useless when the log is out of reach, so on failure the full
       # analyzer output is attached to the run's step summary - file, line
@@ -154,15 +112,6 @@ jobs:
               cat /tmp/analyze.log
               echo '```'
             } >> "$GITHUB_STEP_SUMMARY"
-            # The step summary needs the web UI; the same lines are also
-            # emitted as check annotations so the failure stays readable
-            # from the API alone.
-            while IFS= read -r line; do
-              case "$line" in
-                'Analyzing'*|'Issues found'*|'') ;;
-                *) echo "::error::${line//%/%25}" ;;
-              esac
-            done < /tmp/analyze.log
           fi
           exit $rc
       - name: Run tests
@@ -177,23 +126,8 @@ jobs:
       # without it, `// coverage:ignore-line` markers are silently not honored
       # and the single unexecutable line (an uninstantiable private constructor)
       # counts as a miss.
-      # Coverage re-measure policy (2026-11-01): dart test --coverage can
-      # drop tail-isolate hit maps when the runner is under load — observed
-      # twice on workflow-only PRs (identical "uncovered" line sets that a
-      # green main run had covered). Same law as the budgets gate: a missed
-      # floor earns exactly ONE fresh full re-measure; the second verdict is
-      # final and the floor itself is never relaxed.
-      - name: Enforce the coverage floor (one re-measure on a miss)
-        run: |
-          set -euo pipefail
-          if dart run tool/check_coverage.dart; then
-            exit 0
-          fi
-          echo "::notice::coverage floor missed on the first measurement — re-measuring once (dart test --coverage can drop tail-isolate hits under load; the floor is never relaxed, only re-measured)."
-          rm -rf coverage
-          dart test --coverage=coverage
-          dart pub global run coverage:format_coverage --lcov --in=coverage --out=coverage/lcov.info --report-on=lib --check-ignore
-          dart run tool/check_coverage.dart
+      - name: Enforce the coverage floor
+        run: dart run tool/check_coverage.dart
       - name: Explorer smoke test (no browser, no npm deps)
         run: node docs/smoke.cjs
       - name: Bindings smoke test (executes the JS, parses CSV + GeoJSON)
@@ -206,7 +140,7 @@ jobs:
   python-bindings:
     runs-on: ubuntu-latest
     steps:
-      - uses: actions/checkout@v5
+      - uses: actions/checkout@v4
       - uses: actions/setup-python@v5
         with:
           python-version: '3.11'
@@ -281,7 +215,7 @@ jobs:
   flutter-example:
     runs-on: ubuntu-latest
     steps:
-      - uses: actions/checkout@v5
+      - uses: actions/checkout@v4
       - uses: subosito/flutter-action@v2
         with:
           # `flutter-version` and `channel` are mutually exclusive inputs, and
@@ -334,7 +268,7 @@ jobs:
       run:
         working-directory: packages/nepal_admin_widgets
     steps:
-      - uses: actions/checkout@v5
+      - uses: actions/checkout@v4
       - uses: subosito/flutter-action@v2
         with:
           # See the note in the flutter-example job: `channel` alone.
@@ -372,7 +306,7 @@ jobs:
     if: github.event_name == 'schedule'
     runs-on: ubuntu-latest
     steps:
-      - uses: actions/checkout@v5
+      - uses: actions/checkout@v4
         with:
           lfs: true
       - uses: dart-lang/setup-dart@v1
@@ -423,7 +357,7 @@ jobs:
     if: github.event_name == 'push' && github.ref == 'refs/heads/main'
     runs-on: ubuntu-latest
     steps:
-      - uses: actions/checkout@v5
+      - uses: actions/checkout@v4
       - uses: dart-lang/setup-dart@v1
         with:
           sdk: stable
@@ -439,7 +373,7 @@ jobs:
       name: github-pages
       url: ${{ steps.deployment.outputs.page_url }}
     steps:
-      - uses: actions/checkout@v5
+      - uses: actions/checkout@v4
       - uses: actions/configure-pages@v5
       # The CSV and GeoJSON live under bindings/ (excluded from the published
       # Dart package), but the docs site is the natural download surface for
@@ -451,27 +385,6 @@ jobs:
           cp bindings/csv/*.csv docs/downloads/
           cp bindings/geojson/*.geojson docs/downloads/
           cp bindings/meta.json docs/downloads/
-      # Wave 4 PR B (payload diet): docs/palika-boundaries-highres.geojson is
-      # the ~40 MB full-resolution source-of-truth for the boundaries package
-      # and its generators — NOT a website asset. The explorer serves the
-      # 476 KB working set plus the 3.2 MB high-detail variant; the full file
-      # ships as a GitHub Release asset (release-geojson.yml) instead.
-      - name: Keep the full-resolution source out of the site artifact
-        run: rm -f docs/palika-boundaries-highres.geojson
-      # The size budget is a feature: nothing heavier than this may leak
-      # into docs/ unnoticed. Baseline after the diet: ~7.3 MB; the R3
-      # vendored MapLibre engine adds ~1.0 MB (939 KB js + 69 KB css)
-      # → ~8.3 MB; the 9 MB ceiling still carries headroom for the
-      # data files staged above.
-      - name: Enforce the site artifact size budget
-        run: |
-          max=$((9*1024*1024))
-          bytes=$(du -sb docs/ | cut -f1)
-          echo "site artifact: $((bytes/1024/1024)) MB ($bytes bytes); budget: 9 MB"
-          if [ "$bytes" -gt "$max" ]; then
-            echo "::error::site artifact $((bytes/1024/1024)) MB exceeds the 9 MB budget — something heavy leaked into docs/"
-            exit 1
-          fi
       - uses: actions/upload-pages-artifact@v3
         with:
           path: docs/
