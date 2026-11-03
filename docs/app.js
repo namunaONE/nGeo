@@ -216,34 +216,10 @@ function initExplorer() {
   // Bump when data.json shape changes.
   const DATA_URL = 'data.json?v=4';
 
-  // Loading skeleton (Wave 3 PR B): the table is born empty while
-  // data.json loads; give waiting eyes the final shape (8 columns,
-  // page-sized rows, muted pulse) instead of a blank panel. Replaced
-  // whole by the first renderTable/error; rows are aria-hidden so
-  // screen readers never hear "loading"; the stats strip stays empty
-  // (it is a live region — announcing a skeleton would be noise).
-  renderTableSkeleton();
-
-  function renderTableSkeleton() {
-    const widths = ['62', '34', '48', '44', '58', '44', '48', '32'];
-    let html = '';
-    for (let r = 0; r < 10; r++) {
-      html += '<tr class="skeleton-row" aria-hidden="true">';
-      for (const w of widths) {
-        html += '<td><span class="skeleton" style="width:' + w + '%"></span></td>';
-      }
-      html += '</tr>';
-    }
-    tableBody.innerHTML = html;
-  }
-
   // The elevation metric and its popups ride a separate lazy artifact;
   // kick the fetch off early so bands are usually ready before a
-  // visitor ever switches the figure. Wave 4-C: under Save-Data the
-  // prefetch waits until the figure is actually picked (setMapMetric
-  // awaits the same memoized promise — nothing is lost, only the
-  // eager copy is skipped).
-  if (!SAVE_DATA) ensureDistrictElevation();
+  // visitor ever switches the figure.
+  ensureDistrictElevation();
 
   // Load data
   fetch(DATA_URL)
@@ -413,24 +389,7 @@ function initExplorer() {
     }
   function renderTable(pageData) {
     if (pageData.length === 0) {
-      // Empty state (Wave 3 PR B): say it, explain it, offer the way
-      // out — a plain "No matching records" cell leaves the visitor
-      // stuck with the filters that caused it.
-      tableBody.innerHTML = `<tr><td colspan="8" class="empty-state-cell">
-        <div class="empty-state-title">No matching records</div>
-        <div class="empty-state-hint">Search matches English and देवनागरी names — try fewer letters, or loosen a filter.</div>
-        <button class="btn btn-secondary btn-sm" id="reset-filters" type="button">Reset filters</button>
-      </td></tr>`;
-      const reset = document.getElementById('reset-filters');
-      if (reset) {
-        reset.addEventListener('click', () => {
-          searchInput.value = '';
-          provinceFilter.value = '';
-          districtFilter.value = '';
-          typeFilter.value = '';
-          applyFilters();
-        });
-      }
+      tableBody.innerHTML = '<tr><td colspan="8" style="text-align:center; padding: 48px; color: var(--color-text-muted);">No matching records</td></tr>';
     } else {
       tableBody.innerHTML = pageData.map(item => `
         <tr data-cbs="${item.cbsCode ?? ''}" data-lat="${item.lat ?? ''}" data-lng="${item.lng ?? ''}" data-name="${escapeHtml(item.name)}" tabindex="0" title="${item.lat != null ? 'Click to locate on map' : 'No coordinates available'}">
@@ -545,8 +504,8 @@ function debounce(fn, delay) {
   };
 }
 
-// ---- Centroid map (MapLibre GL + OSM Standard, no API key) ----
-// Single tiles object so the basemap source is defined in exactly one place.
+// ---- Centroid map (Leaflet + OSM Standard, no API key) ----
+// Single tile factory so the tile source is defined in exactly one place.
 const MAP_TILES = {
   url: 'https://tile.openstreetmap.org/{z}/{x}/{y}.png',
   maxZoom: 19,
@@ -572,267 +531,83 @@ const TYPE_COLORS = {
   ruralMunicipality: cssColor('--map-rural', '#15803D'),
 };
 let _map = null;
-let _mapLibreReady = null; // engine script/css load promise
-let _mapReady = null;      // engine + style load promise
-// Save-Data (Wave 4-C): honor the OS/browser data-saver switch. Checked
-// once, honored where a fetch or animation is optional polish — never for
-// the data the page exists to show.
-var SAVE_DATA = (function () {
-  try {
-    var c = navigator.connection;
-    return !!(c && c.saveData);
-  } catch (e) {
-    return false;
-  }
-})();
+let _cluster = null;
+let _leafletReady = null;
 
-// Wave R1 (map experience leap): MapLibre GL JS, pinned v5.6.0 — the
-// last UMD build (v6 ships ESM-only, unusable from a plain script tag).
-// Leaflet + markercluster retire: one engine, native GeoJSON clustering,
-// same OSM raster basemap, same lazy arm, same overlay registry.
-// R3 (self-host the engine): the pinned dist is vendored at
-// docs/vendor/ (born in CI from the npm tarball whose sha512 integrity
-// was verified before extraction — see vendor-maplibre.yml), so the
-// arm fetches it same-origin: no third-party DNS/TLS hop on the arm's
-// critical path, no unpkg availability coupling. Versioned filenames
-// mean the browser caches them forever; the dart.yml integrity gate
-// re-asserts their sha256 on every CI run.
-function loadMapLibre() {
-  if (_mapLibreReady) return _mapLibreReady;
-  _mapLibreReady = new Promise((resolve, reject) => {
-    if (window.maplibregl) { resolve(); return; }
-    const css = document.createElement('link');
-    css.rel = 'stylesheet';
-    css.href = 'vendor/maplibre-gl-5.6.0.css';
-    document.head.appendChild(css);
-    const s = document.createElement('script');
-    s.src = 'vendor/maplibre-gl-5.6.0.js';
-    s.defer = true;
-    s.onload = () => resolve();
-    s.onerror = () => reject(new Error('maplibre-gl failed to load'));
-    document.head.appendChild(s);
+function loadLeaflet() {
+  if (_leafletReady) return _leafletReady;
+  _leafletReady = new Promise((resolve, reject) => {
+    if (window.L && window.L.markerClusterGroup) { resolve(); return; }
+    const css = (href) => {
+      if (document.querySelector(`link[href="${href}"]`)) return;
+      const l = document.createElement('link');
+      l.rel = 'stylesheet'; l.href = href;
+      document.head.appendChild(l);
+    };
+    css('https://unpkg.com/leaflet@1.9.4/dist/leaflet.css');
+    css('https://unpkg.com/leaflet.markercluster@1.5.3/dist/MarkerCluster.css');
+    css('https://unpkg.com/leaflet.markercluster@1.5.3/dist/MarkerCluster.Default.css');
+    const js = (src) => new Promise((res, rej) => {
+      const s = document.createElement('script');
+      s.src = src; s.defer = true;
+      s.onload = res; s.onerror = rej;
+      document.head.appendChild(s);
+    });
+    js('https://unpkg.com/leaflet@1.9.4/dist/leaflet.js')
+      .then(() => js('https://unpkg.com/leaflet.markercluster@1.5.3/dist/leaflet.markercluster.js'))
+      .then(resolve)
+      .catch(reject);
   });
-  return _mapLibreReady;
+  return _leafletReady;
 }
 
-function emptyFC() {
-  return { type: 'FeatureCollection', features: [] };
+function createTileLayer() {
+  return window.L.tileLayer(MAP_TILES.url, {
+    maxZoom: MAP_TILES.maxZoom,
+    attribution: MAP_TILES.attribution,
+  });
 }
 
-// Hover tooltip (the Leaflet-era .palika-tip) and the click popup both
-// build at event time from source data. queryRenderedFeatures returns
-// COPIES of the features — the __key property is the handle back to the
-// joined row, so popups stay live: the elevation sentence lands even
-// when its fetch resolves after render.
-var _mapTipEl = null;
-function mapTip() {
-  if (_mapTipEl) return _mapTipEl;
-  _mapTipEl = document.createElement('div');
-  _mapTipEl.className = 'palika-tip';
-  _mapTipEl.setAttribute('role', 'tooltip');
-  _mapTipEl.style.display = 'none';
-  const host = (_map && _map.getContainer()) || document.body;
-  host.appendChild(_mapTipEl);
-  return _mapTipEl;
-}
-
-function showMapTip(html, point) {
-  const tip = mapTip();
-  tip.innerHTML = html;
-  tip.style.display = 'block';
-  const host = _map.getContainer();
-  const left = Math.min(point.x + 14, host.clientWidth - tip.offsetWidth - 8);
-  tip.style.left = Math.max(8, left) + 'px';
-  tip.style.top = Math.max(8, point.y - tip.offsetHeight - 12) + 'px';
-}
-
-function hideMapTip() {
-  if (_mapTipEl) _mapTipEl.style.display = 'none';
-}
-
-var _mapPopup = null;
-function showMapPopup(lngLat, html) {
-  const maplibregl = window.maplibregl;
-  if (!maplibregl || !_map) return;
-  if (_mapPopup) { _mapPopup.remove(); _mapPopup = null; }
-  _mapPopup = new maplibregl.Popup({ closeButton: true, closeOnClick: true, maxWidth: '320px' })
-    .setLngLat(lngLat)
-    .setHTML(html)
-    .addTo(_map);
-}
-
-// Layer z-order contract: choropleth on the basemap, overlays frame it,
-// dots and clusters ride on top. The dots layers are born at map load,
-// so every overlay layer inserts before 'dots-clusters'.
 function ensureMap() {
   const el = document.getElementById('map');
-  if (!el || _mapReady) return _mapReady || Promise.resolve(_map);
-  _mapReady = loadMapLibre().then(() => new Promise((resolve) => {
-    const maplibregl = window.maplibregl;
-    _map = new maplibregl.Map({
-      container: 'map',
-      style: {
-        version: 8,
-        sources: {
-          osm: {
-            type: 'raster',
-            tiles: [MAP_TILES.url],
-            tileSize: 256,
-            maxzoom: MAP_TILES.maxZoom,
-            attribution: MAP_TILES.attribution,
-          },
-        },
-        layers: [{
-          id: 'osm-tiles',
-          type: 'raster',
-          source: 'osm',
-          minzoom: 4,
-          maxzoom: MAP_TILES.maxZoom,
-        }],
-      },
-      center: [84.12, 28.39],
-      zoom: 7,
-      attributionControl: { compact: true },
+  if (!el || _map) return Promise.resolve(_map);
+  return loadLeaflet().then(() => {
+    const status = document.getElementById('map-status');
+    _map = window.L.map('map', {
+      preferCanvas: true,
+      scrollWheelZoom: false,
+      tap: true,
+    }).setView([28.39, 84.12], 7);
+    _map.on('focus', () => _map.scrollWheelZoom.enable());
+    _map.on('blur', () => _map.scrollWheelZoom.disable());
+    createTileLayer().addTo(_map);
+    // Overlay pane (z-index 450) sits above the default overlay pane
+    // (400) so context layers always draw above the choropleth/dots,
+    // whatever order layers are added or re-added in.
+    const overlayPane = _map.createPane('map-overlays');
+    overlayPane.style.zIndex = '450';
+    _cluster = window.L.markerClusterGroup({
+      chunkedLoading: true,
+      removeOutsideVisibleBounds: true,
+      showCoverageOnHover: false,
+      maxClusterRadius: 48,
     });
-    // Same UX law as the Leaflet era: the wheel only zooms once the map
-    // canvas has focus — the page never hijacks scrolling on the way
-    // past. (Tab to the map first.)
-    _map.scrollZoom.disable();
-    _map.getCanvas().addEventListener('focus', () => _map.scrollZoom.enable());
-    _map.getCanvas().addEventListener('blur', () => _map.scrollZoom.disable());
-    _map.on('error', (e) => { console.error('MapLibre:', e && e.error); });
-    _map.on('load', () => {
-      _map.addSource('palika', { type: 'geojson', data: emptyFC() });
-      _map.addSource('dots', {
-        type: 'geojson', data: emptyFC(),
-        cluster: true, clusterMaxZoom: 12, clusterRadius: 48,
-      });
-      _map.addLayer({
-        id: 'palika-fill', type: 'fill', source: 'palika',
-        paint: {
-          'fill-color': ['get', '__fill'],
-          'fill-opacity': ['get', '__fo'],
-          'fill-outline-color': ['get', '__stroke'],
-        },
-      });
-      _map.addLayer({
-        id: 'palika-line', type: 'line', source: 'palika',
-        paint: { 'line-color': ['get', '__stroke'], 'line-width': ['get', '__sw'] },
-      });
-      _map.addLayer({
-        id: 'dots-clusters', type: 'circle', source: 'dots',
-        filter: ['has', 'point_count'],
-        paint: {
-          'circle-color': '#94a3b8', 'circle-opacity': 0.9,
-          'circle-stroke-width': 2, 'circle-stroke-color': '#ffffff',
-          'circle-radius': ['step', ['get', 'point_count'], 12, 10, 16, 25, 20, 50, 26],
-        },
-      });
-      _map.addLayer({
-        id: 'dots-points', type: 'circle', source: 'dots',
-        filter: ['!', ['has', 'point_count']],
-        paint: {
-          'circle-radius': ['get', 'r'],
-          'circle-color': ['get', 'color'],
-          'circle-opacity': ['get', 'fo'],
-          'circle-stroke-width': 2, 'circle-stroke-color': ['get', 'color'],
-        },
-      });
-      wireMapEvents();
-      initMapOverlays();
-      initBoundaryDetailToggle();
-      const status = document.getElementById('map-status');
-      if (status) status.textContent = '';
-      // Deep link: explorer.html?cbs=31304
-      const cbs = new URLSearchParams(window.location.search).get('cbs');
-      if (cbs && window.__explorerByCbs) {
-        const hit = window.__explorerByCbs(cbs);
-        if (hit && hit.lat != null) focusMarker(hit.lat, hit.lng, hit.name);
-      }
-      resolve(_map);
-    });
-  })).catch((err) => {
+    _map.addLayer(_cluster);
+    initMapOverlays();
+    initBoundaryDetailToggle();
+    if (status) status.textContent = '';
+    // Deep link: explorer.html?cbs=31304
+    const cbs = new URLSearchParams(window.location.search).get('cbs');
+    if (cbs && window.__explorerByCbs) {
+      const hit = window.__explorerByCbs(cbs);
+      if (hit && hit.lat != null) focusMarker(hit.lat, hit.lng, hit.name);
+    }
+    return _map;
+  }).catch((err) => {
     console.error('Map failed to load:', err);
-    _mapReady = null;
     const status = document.getElementById('map-status');
     if (status) status.textContent = 'Map unavailable offline — table still works.';
-    return null;
   });
-  return _mapReady;
-}
-
-function wireMapEvents() {
-  // Choropleth boundaries: hover tooltip, click popup, pointer cursor.
-  _map.on('mousemove', 'palika-fill', (e) => {
-    const f = e.features && e.features[0];
-    if (!f) return;
-    const row = f.properties.__key ? _rowByKey.get(f.properties.__key) : null;
-    showMapTip(boundaryTip({ properties: f.properties, __row: row }), e.point);
-    _map.getCanvas().style.cursor = 'pointer';
-  });
-  _map.on('mouseleave', 'palika-fill', () => {
-    hideMapTip();
-    _map.getCanvas().style.cursor = '';
-  });
-  _map.on('click', 'palika-fill', (e) => {
-    const f = e.features && e.features[0];
-    if (!f) return;
-    const row = f.properties.__key ? _rowByKey.get(f.properties.__key) : null;
-    if (row) {
-      showMapPopup(e.lngLat, itemPopupHtml(row));
-    } else {
-      showMapPopup(e.lngLat,
-        '<strong>' + escapeHtmlAttr(f.properties.nameEn || 'Palika') + '</strong>' +
-        '<br><span style="color:#64748b;font-size:12px">Boundary not matched to a table row</span>');
-    }
-  });
-  // Centroid dots: click popup, pointer cursor.
-  _map.on('click', 'dots-points', (e) => {
-    const f = e.features && e.features[0];
-    if (!f) return;
-    const row = f.properties.__key ? _rowByKey.get(f.properties.__key) : null;
-    if (row) showMapPopup(e.lngLat, itemPopupHtml(row));
-  });
-  _map.on('mousemove', 'dots-points', () => { _map.getCanvas().style.cursor = 'pointer'; });
-  _map.on('mouseleave', 'dots-points', () => { _map.getCanvas().style.cursor = ''; });
-  // Clusters: expand on click, count on hover.
-  _map.on('click', 'dots-clusters', (e) => {
-    const f = e.features && e.features[0];
-    if (!f) return;
-    _map.getSource('dots').getClusterExpansionZoom(f.properties.cluster_id)
-      .then((z) => _map.easeTo({ center: f.geometry.coordinates, zoom: z }))
-      .catch(() => { /* keep the current view */ });
-  });
-  _map.on('mousemove', 'dots-clusters', (e) => {
-    const f = e.features && e.features[0];
-    if (!f) return;
-    showMapTip('<strong>' + f.properties.point_count + ' palikas</strong>', e.point);
-    _map.getCanvas().style.cursor = 'pointer';
-  });
-  _map.on('mouseleave', 'dots-clusters', () => {
-    hideMapTip();
-    _map.getCanvas().style.cursor = '';
-  });
-}
-
-// Bounding box of a FeatureCollection, as [[west, south], [east, north]].
-function boundsOf(fc) {
-  let minX = Infinity, minY = Infinity, maxX = -Infinity, maxY = -Infinity;
-  function walk(coords) {
-    if (typeof coords[0] === 'number') {
-      if (coords[0] < minX) minX = coords[0];
-      if (coords[0] > maxX) maxX = coords[0];
-      if (coords[1] < minY) minY = coords[1];
-      if (coords[1] > maxY) maxY = coords[1];
-      return;
-    }
-    for (const c of coords) walk(c);
-  }
-  for (const f of fc.features) {
-    if (f.geometry) walk(f.geometry.coordinates);
-  }
-  if (minX === Infinity) throw new Error('no geometry to bound');
-  return [[minX, minY], [maxX, maxY]];
 }
 
 function markerColor(item) {
@@ -943,7 +718,7 @@ var _boundariesReady = null;   // in-flight load promise
 var _boundaryDetailHigh = (localStorage.getItem('boundaryDetail') === 'high');
 var _lastMapItems = null;     // last items passed to syncMap, for detail swaps
 var _boundaryByKey = null;     // districtId|normName -> feature
-var _rowByKey = new Map();    // __key -> row (rendered feature copies need the join back)
+var _boundaryLayer = null;     // L.geoJSON layer
 var _boundaryDataAdded = false;
 var _activeRows = new Set();
 var _districtElev = null;      // district -> {elevMin, elevMean, elevMax}
@@ -1049,24 +824,6 @@ var MAP_OVERLAYS = [
       '<br>Kakarbhitta (Jhapa) — Bhim Datta (Kanchanpur) · ~1,047 km' +
       '<br><span style="color:#64748b;font-size:12px">Geometry: OpenStreetMap (ODbL 1.0) — © OpenStreetMap contributors</span>',
   },
-  // Wave 3 PR B — district boundaries. All 77 districts from the official
-  // portal district boundary export (Survey Department of Nepal /
-  // National Geoportal lineage, WGS 84), vendored same-origin as
-  // docs/district-boundaries.geojson — the same geometry the Dart
-  // package tests against (tool/generate_district_boundaries.dart
-  // re-derives lib/src/geo/district_boundaries.dart from it). Off by
-  // default: dashed stone lines — administrative context above the
-  // figure, never a competitor to it. Tooltips and popups quote the
-  // GLO-30 elevation bands when the elevation artifact has landed.
-  {
-    id: 'district-boundaries',
-    label: 'District boundaries (77)',
-    urls: ['district-boundaries.geojson?v=1'],
-    enabledByDefault: false,
-    style: { color: '#57534E', weight: 1.2, opacity: 0.85, fill: false, dashArray: '4 3' },
-    tooltip: (feature) => districtBoundaryTip(feature),
-    popup: (feature) => districtBoundaryPopup(feature),
-  },
 ];
 var _overlayLayers = {};  // id -> { def, layer, loaded, visible, ready }
 var _overlaysInited = false;
@@ -1082,8 +839,7 @@ var _overlaysInited = false;
 //     tooltip: fn(feature) -> html (pre-escaped), popup: fn(feature) -> html }
 // The loader below uses the same fallback-chain pattern as
 // PALIKA_BOUNDARIES_URLS; an unfetchable overlay never breaks the map —
-// R2 lazy overlays: an unloaded overlay is a checked-away, retryable
-// toggle (its fetch re-arms on the next ask), never a boot-time cost.
+// it degrades to a disabled "(unavailable)" toggle.
 
 function setMapMetric(metric) {
   if (metric !== 'dots' && !MAP_METRICS[metric]) return;
@@ -1094,10 +850,10 @@ function setMapMetric(metric) {
     // screen so switching metrics never shows a stale n/a grey map.
     ensureDistrictElevation().then(function () {
       if (_mapMetric !== 'elevation') return;
-      if (_map && _boundaryDataAdded) restyleBoundaryLayer();
+      if (_boundaryLayer) restyleBoundaryLayer();
     });
   }
-  if (_map && _boundaryDataAdded) restyleBoundaryLayer();
+  if (_boundaryLayer) restyleBoundaryLayer();
 }
 
 // Join keys normalize both scripts: lowercase, fold dashes, keep [a-z0-9]
@@ -1167,14 +923,6 @@ function parseBoundaryModule(text) {
   return JSON.parse(text.slice(start, end + 1).replace(/,\s*([\]}])/g, '$1'));
 }
 
-// Feature copies handed back by queryRenderedFeatures carry properties
-// only — __key is the handle back to the joined row at event time.
-function stampBoundaryKey(f, row) {
-  const p = f.properties || (f.properties = {});
-  p.__key = (districtIdFor(row) || '') + '|' + normPalikaName(row.name);
-  _rowByKey.set(p.__key, row);
-}
-
 function buildBoundaryIndex(rows) {
   if (!_boundaries) return;
   if (!_boundaryByKey) {
@@ -1189,7 +937,7 @@ function buildBoundaryIndex(rows) {
   for (const r of rows) {
     if (r.__feature) continue;
     const f = _boundaryByKey.get((districtIdFor(r) || '') + '|' + normPalikaName(r.name));
-    if (f && !f.__row) { r.__feature = f; f.__row = r; stampBoundaryKey(f, r); }
+    if (f && !f.__row) { r.__feature = f; f.__row = r; }
   }
   // 2) centroid-in-own-polygon fallback, same district first
   for (const r of rows) {
@@ -1207,7 +955,7 @@ function buildBoundaryIndex(rows) {
         if (pointInGeometry(r.lng, r.lat, f.geometry)) { hit = f; break; }
       }
     }
-    if (hit) { r.__feature = hit; hit.__row = r; stampBoundaryKey(hit, r); }
+    if (hit) { r.__feature = hit; hit.__row = r; }
   }
 }
 
@@ -1242,9 +990,9 @@ function resetBoundaryState() {
   _boundaries = null;
   _boundariesReady = null;
   _boundaryByKey = null;
-  _rowByKey = new Map();
   _boundaryDataAdded = false;
-  if (_map && _map.getSource('palika')) _map.getSource('palika').setData(emptyFC());
+  if (_boundaryLayer && _map && _map.hasLayer(_boundaryLayer)) _map.removeLayer(_boundaryLayer);
+  _boundaryLayer = null;
 }
 
 function setBoundaryDetail(high) {
@@ -1254,35 +1002,6 @@ function setBoundaryDetail(high) {
   resetBoundaryState();
   const items = _lastMapItems || (window.__explorerAll && window.__explorerAll()) || [];
   syncMap(items);
-}
-
-// District overlay (Wave 3 PR B): quiet stone lines with bilingual
-// tooltips and a popup that quotes the roster (HQ, province) plus the
-// GLO-30 elevation bands when they have landed.
-function districtBoundaryTip(feature) {
-  const p = feature.properties || {};
-  let html = '<strong>' + escapeHtmlAttr(p.nameEn || '') + '</strong>';
-  if (p.nameNe) html += '<span class="popup-ne" lang="ne">' + escapeHtmlAttr(p.nameNe) + '</span>';
-  return html;
-}
-
-function districtBoundaryPopup(feature) {
-  const p = feature.properties || {};
-  let html = '<strong>' + escapeHtmlAttr(p.nameEn || 'District') + '</strong>';
-  if (p.nameNe) html += '<span class="popup-ne" lang="ne">' + escapeHtmlAttr(p.nameNe) + '</span>';
-  if (p.hq) html += '<br>HQ: ' + escapeHtmlAttr(p.hq);
-  if (p.provinceCode) html += ' · Province ' + escapeHtmlAttr(String(p.provinceCode));
-  const elev = _districtElev && _districtElev[p.nameEn];
-  if (elev) {
-    html += '<br><span style="color:#64748b;font-size:12px">Rises from ' +
-      elev.elevMin.toLocaleString('en-US') + ' m to ' +
-      elev.elevMax.toLocaleString('en-US') +
-      ' m above sea level (mean ~' +
-      elev.elevMean.toLocaleString('en-US') +
-      ' m · Copernicus GLO-30)</span>';
-  }
-  html += '<br><span style="color:#64748b;font-size:12px">Boundary: Survey Department of Nepal / National Geoportal</span>';
-  return html;
 }
 
 // Shared popup for boundaries and dots, so both views tell the same story.
@@ -1340,31 +1059,22 @@ function metricColorFor(item) {
   return '#DBEAFE';
 }
 
-// Wave R1: Leaflet restyled layer handles; MapLibre paints from data.
-// Every metric/filter change re-stamps __fill/__stroke/__sw/__fo on the
-// in-memory features and hands the collection back to the source — the
-// layer paints are pure ['get', ...] expressions, nothing drifts.
-function paintBoundaryFeatures() {
-  for (const f of _boundaries.features) {
-    const row = f.__row;
-    const active = row && _activeRows.has(row);
-    const p = f.properties || (f.properties = {});
-    if (!row || !active) {
-      // Filtered out (or not matched to a row): dim instead of hide, so
-      // the national figure keeps its context.
-      p.__fill = '#d6d3d1'; p.__fo = 0.08;
-      p.__stroke = '#a8a29e'; p.__sw = 0.5;
-    } else {
-      p.__fill = metricColorFor(row); p.__fo = 0.85;
-      p.__stroke = '#57534e'; p.__sw = 0.8;
-    }
+function boundaryStyle(feature) {
+  const row = feature && feature.__row;
+  const active = row && _activeRows.has(row);
+  if (!row || !active) {
+    // Filtered out (or not matched to a row): dim instead of hide, so the
+    // national figure keeps its context.
+    return { color: '#a8a29e', weight: 0.5, opacity: 0.6, fillColor: '#d6d3d1', fillOpacity: 0.08 };
   }
+  return { color: '#57534e', weight: 0.8, opacity: 0.9, fillColor: metricColorFor(row), fillOpacity: 0.85 };
 }
 
 function restyleBoundaryLayer() {
-  if (!_map || !_boundaries || !_map.getSource('palika')) return;
-  paintBoundaryFeatures();
-  _map.getSource('palika').setData(_boundaries);
+  if (!_boundaryLayer) return;
+  _boundaryLayer.eachLayer((layer) => {
+    if (layer.feature) layer.setStyle(boundaryStyle(layer.feature));
+  });
 }
 
 function boundaryTip(feature) {
@@ -1381,6 +1091,23 @@ function boundaryTip(feature) {
   return html;
 }
 
+function wireBoundaryFeature(feature, layer) {
+  layer.bindTooltip(boundaryTip(feature), {
+    className: 'palika-tip',
+    sticky: true,
+    direction: 'top',
+  });
+  if (feature.__row) {
+    // Function content: the popup builds at open time, so the elevation
+    // sentence appears even when its fetch resolves after bind.
+    layer.bindPopup(function () { return itemPopupHtml(feature.__row); });
+  } else {
+    const p = feature.properties || {};
+    layer.bindPopup('<strong>' + escapeHtmlAttr(p.nameEn || 'Palika') + '</strong>' +
+      '<br><span style="color:#64748b;font-size:12px">Boundary not matched to a table row</span>');
+  }
+}
+
 function initBoundaryDetailToggle() {
   const box = document.getElementById('boundary-detail-toggle');
   if (!box) return;
@@ -1391,23 +1118,14 @@ function initBoundaryDetailToggle() {
 function initMapOverlays() {
   if (_overlaysInited) return;
   _overlaysInited = true;
-  // R2 (arm-chain diet): overlays no longer preload at engine boot —
-  // five off-by-default GeoJSONs (~2.5 MB: outline, parks, NH01,
-  // districts, provinces) used to ride the arm chain, fetching and
-  // parsing on the main thread while the figure itself was still
-  // loading. The toggles wire now; each overlay fetches on its first
-  // ask (see updateOverlayToggles). enabledByDefault entries excepted.
+  for (const def of MAP_OVERLAYS) loadOverlay(def);
   updateOverlayToggles();
-  for (const def of MAP_OVERLAYS) {
-    if (def.enabledByDefault) loadOverlay(def);
-  }
 }
 
-function loadOverlay(def, opts) {
+function loadOverlay(def) {
   const state = _overlayLayers[def.id];
   if (state) return state.ready;
-  const visible = (opts && opts.visible) || !!def.enabledByDefault;
-  const s = { def: def, layer: null, loaded: false, visible: visible, ready: null };
+  const s = { def: def, layer: null, loaded: false, visible: !!def.enabledByDefault, ready: null };
   _overlayLayers[def.id] = s;
   s.ready = (async () => {
     let lastErr = null;
@@ -1419,24 +1137,20 @@ function loadOverlay(def, opts) {
         if (!fc || !Array.isArray(fc.features) || !fc.features.length) {
           throw new Error('overlay ' + def.id + ' parsed to 0 features');
         }
-        // The map may still be booting (overlay fetches start first);
-        // wait for it, then add the source + layers above the
-        // choropleth and below the dots.
-        await ensureMap();
-        if (!_map || !_map.getSource('palika')) {
-          throw new Error('map unavailable for overlay ' + def.id);
-        }
-        const srcId = 'overlay-' + def.id;
-        if (!_map.getSource(srcId)) _map.addSource(srcId, { type: 'geojson', data: fc });
-        for (const layer of overlayLayersFor(def)) {
-          if (!_map.getLayer(layer.id)) {
-            layer.layout = { visibility: s.visible ? 'visible' : 'none' };
-            _map.addLayer(layer, 'dots-clusters');
-            wireOverlayEvents(def, layer.id);
-          }
-        }
-        s.layer = true; // MapLibre: source + layers live on the map
+        s.layer = window.L.geoJSON(fc, {
+          pane: 'map-overlays',
+          style: def.style || {},
+          onEachFeature: (feature, layer) => {
+            const tip = def.tooltip && def.tooltip(feature);
+            if (tip) {
+              layer.bindTooltip(tip, { className: 'palika-tip', sticky: true, direction: 'top' });
+            }
+            const pop = def.popup && def.popup(feature);
+            if (pop) layer.bindPopup(pop);
+          },
+        });
         s.loaded = true;
+        if (s.visible && _map && !_map.hasLayer(s.layer)) _map.addLayer(s.layer);
         updateOverlayToggles();
         return s;
       } catch (err) {
@@ -1451,81 +1165,19 @@ function loadOverlay(def, opts) {
   return s.ready;
 }
 
-// Leaflet-era path options in MAP_OVERLAYS style entries translate to
-// MapLibre paint properties here — the registry keeps its old shape.
-function overlayLayersFor(def) {
-  const st = def.style || {};
-  const layers = [];
-  if (st.fill !== false) {
-    layers.push({
-      id: 'overlay-' + def.id + '-fill',
-      type: 'fill',
-      source: 'overlay-' + def.id,
-      paint: {
-        'fill-color': st.fillColor || st.color || '#3388ff',
-        'fill-opacity': st.fillOpacity != null ? st.fillOpacity : 0.2,
-      },
-    });
-  }
-  const line = {
-    id: 'overlay-' + def.id + '-line',
-    type: 'line',
-    source: 'overlay-' + def.id,
-    paint: {
-      'line-color': st.color || '#3388ff',
-      'line-width': st.weight != null ? st.weight : 2,
-      'line-opacity': st.opacity != null ? st.opacity : 1,
-    },
-  };
-  if (st.dashArray) {
-    line.paint['line-dasharray'] = st.dashArray.split(' ').map((x) => parseFloat(x));
-  }
-  layers.push(line);
-  return layers;
-}
-
-function wireOverlayEvents(def, layerId) {
-  if (def.tooltip) {
-    _map.on('mousemove', layerId, (e) => {
-      const f = e.features && e.features[0];
-      if (!f) return;
-      const tip = def.tooltip({ properties: f.properties });
-      if (tip) {
-        showMapTip(tip, e.point);
-        _map.getCanvas().style.cursor = 'pointer';
-      }
-    });
-    _map.on('mouseleave', layerId, () => {
-      hideMapTip();
-      _map.getCanvas().style.cursor = '';
-    });
-  }
-  if (def.popup) {
-    _map.on('click', layerId, (e) => {
-      const f = e.features && e.features[0];
-      if (!f) return;
-      showMapPopup(e.lngLat, def.popup({ properties: f.properties }));
-    });
-  }
-}
-
 function setOverlayVisible(id, visible) {
   const s = _overlayLayers[id];
-  if (!s || !s.loaded || !_map) return;
+  if (!s || !s.loaded || !s.layer) return;
   s.visible = visible;
-  for (const layer of overlayLayersFor(s.def)) {
-    if (_map.getLayer(layer.id)) {
-      _map.setLayoutProperty(layer.id, 'visibility', visible ? 'visible' : 'none');
-    }
-  }
+  if (!_map) return;
+  if (visible && !_map.hasLayer(s.layer)) _map.addLayer(s.layer);
+  if (!visible && _map.hasLayer(s.layer)) _map.removeLayer(s.layer);
 }
 
 function overlayToggleLabel(def) {
   const s = _overlayLayers[def.id];
-  // R2 (lazy overlays): an unloaded overlay is TOGGLEABLE, not
-  // unavailable — asking for it starts its fetch. "Loading…" shows only
-  // while an ask is in flight.
-  if (s && !s.loaded) return def.label + ' (loading\u2026)';
+  if (!s) return def.label + ' (unavailable)';
+  if (!s.loaded) return def.label + ' (loading\u2026)';
   return def.label;
 }
 
@@ -1542,26 +1194,15 @@ function updateOverlayToggles() {
   for (const def of MAP_OVERLAYS) {
     const s = _overlayLayers[def.id];
     const label = document.createElement('label');
-    label.className = 'overlay-toggle' + (s && !s.loaded ? ' overlay-loading' : '');
+    label.className = 'overlay-toggle' + (s ? (s.loaded ? '' : ' overlay-loading') : ' overlay-unavailable');
     const box = document.createElement('input');
     box.type = 'checkbox';
     box.id = 'overlay-' + def.id;
     if (s && s.loaded) {
       box.checked = s.visible;
       box.addEventListener('change', () => setOverlayVisible(def.id, box.checked));
-    } else if (s) {
-      // First ask in flight: checked per its intent, inert until it lands.
-      box.checked = s.visible;
-      box.disabled = true;
     } else {
-      // R2 (lazy overlays): the toggle IS the loader — the fetch starts
-      // on the first ask, never at engine boot.
-      box.addEventListener('change', () => {
-        if (!box.checked) return;
-        box.disabled = true;
-        loadOverlay(def, { visible: true });
-        updateOverlayToggles();
-      });
+      box.disabled = true;
     }
     const text = document.createElement('span');
     text.textContent = overlayToggleLabel(def);
@@ -1604,30 +1245,34 @@ function syncChoropleth(items) {
   _activeRows = new Set(items);
   const status = document.getElementById('map-status');
   if (status && !_boundaryDataAdded) status.textContent = 'Loading palika boundaries…';
-  mapEngineReady()
+  ensureMap()
     .then(() => {
       if (!_map) return null;
-      // Data half (R2): the basemap is up; the boundary fetch + parse +
-      // name join + setData run in the first idle slot after it, so
-      // their long tasks never stack on the engine boot.
-      return new Promise((resolve) => { scheduleIdle(() => resolve()); })
-        .then(() => (_map ? loadBoundaries() : null));
+      return loadBoundaries();
     })
     .then((fc) => {
-      if (!fc || !_map || !_map.getSource('palika')) return;
+      if (!fc || !_map) return;
+      if (_map.hasLayer(_cluster)) _map.removeLayer(_cluster);
       buildBoundaryIndex((window.__explorerAll && window.__explorerAll()) || items);
-      paintBoundaryFeatures();
-      _map.getSource('palika').setData(_boundaries);
-      _boundaryDataAdded = true;
-      _map.setLayoutProperty('palika-fill', 'visibility', 'visible');
-      _map.setLayoutProperty('palika-line', 'visibility', 'visible');
-      _map.setLayoutProperty('dots-clusters', 'visibility', 'none');
-      _map.setLayoutProperty('dots-points', 'visibility', 'none');
-      renderMapLegend();
-      if (!_map.__fitted) {
-        _map.__fitted = true;
-        try { _map.fitBounds(boundsOf(_boundaries), { padding: 24 }); } catch (e) { /* keep default view */ }
+      if (!_boundaryLayer) {
+        _boundaryLayer = window.L.geoJSON(null, {
+          style: boundaryStyle,
+          onEachFeature: wireBoundaryFeature,
+        });
       }
+      if (!_boundaryDataAdded) {
+        _boundaryLayer.addData(_boundaries);
+        _boundaryDataAdded = true;
+        if (!_map.hasLayer(_boundaryLayer)) _map.addLayer(_boundaryLayer);
+        if (!_map.__fitted) {
+          _map.__fitted = true;
+          try { _map.fitBounds(_boundaryLayer.getBounds().pad(0.05)); } catch (e) { /* keep default view */ }
+        }
+      } else if (!_map.hasLayer(_boundaryLayer)) {
+        _map.addLayer(_boundaryLayer);
+      }
+      renderMapLegend();
+      restyleBoundaryLayer();
       updateChoroplethStatus(items);
     })
     .catch((err) => {
@@ -1643,116 +1288,47 @@ function syncChoropleth(items) {
     });
 }
 
-// Wave 4-C (lazy figure): booting the map engine + boundary geometry at
-// DOMContentLoaded put CDN scripts, a 476 KB fetch and long main-thread
-// tasks inside the LCP window (Explorer measured 4573ms mobile). The
-// figure sits below the fold; it now arms when its section approaches
-// the viewport — immediately for deep links (?cbs= / ?metric=), which
-// target the map by definition. Until armed, syncMap just keeps the
-// latest rows; filtering stays free.
-var _mapArmed = false;
-var _mapArmIo = null;
-var _mapArmIdle = false; // R2: a scroll-arm defers the engine half to the first idle slot
-
-// R2 (arm-chain split, walking the budgets toward the law): the arm
-// chain is now two halves, scheduled separately.
-//   engine half: the maplibre-gl stylesheet (render-blocking while it
-//     loads), the 939 KB UMD script (R3: vendored same-origin at
-//     docs/vendor/ — no unpkg hop), its parse and the WebGL context
-//     init — the R1 TBT whale;
-//   data half: the 476 KB boundary fetch, the parse, the name join and
-//     setData.
-// A scroll-arm boots the engine in the FIRST idle slot after the arm,
-// so the render-blocking stylesheet link and the long parse land after
-// the initial paint — the hero subtitle is the LCP element and it must
-// win that race (R1 verdicts: LCP 4789/4784ms, TBT 2373/2509ms). The
-// rIC timeout keeps the boot bounded on a busy main thread; setTimeout
-// is the fallback where rIC is missing. Deep links (?cbs= / ?metric=)
-// target the map by definition (the W4-C contract): they boot the
-// engine immediately. The data half always idles once more AFTER the
-// basemap is up: the raster basemap paints first, the choropleth fills
-// in a beat later, and neither half ever stacks on the boot.
-function scheduleIdle(fn) {
-  if (typeof requestIdleCallback === 'function') {
-    requestIdleCallback(fn, { timeout: 1500 });
-    return;
-  }
-  setTimeout(fn, 0);
-}
-
-function mapEngineReady() {
-  if (_mapArmIdle && !_mapReady) {
-    return new Promise((resolve) => {
-      scheduleIdle(() => { ensureMap().then(resolve, resolve); });
-    });
-  }
-  return ensureMap();
-}
-
-function renderArmedMap() {
-  if (!_lastMapItems) return;
-  if (_mapMetric === 'dots') { syncDotsMap(_lastMapItems); return; }
-  syncChoropleth(_lastMapItems);
-}
 
 function syncMap(items) {
+  // Dispatcher: render the map per the selected figure metric — the
+  // palika-boundary choropleth (wards / type / cbs) or the classic dots.
   if (!document.getElementById('map')) return;
   _lastMapItems = items;
-  if (_mapArmed) { renderArmedMap(); return; }
-  const params = new URLSearchParams(window.location.search);
-  if (params.get('cbs') || params.get('metric')) {
-    _mapArmed = true;
-    _mapArmIdle = false; // deep link: the map IS the destination — engine now (W4-C)
-    renderArmedMap();
-    return;
-  }
-  if (_mapArmIo) return;
-  _mapArmIo = new IntersectionObserver(function (entries) {
-    for (let i = 0; i < entries.length; i++) {
-      if (!entries[i].isIntersecting) continue;
-      _mapArmIo.disconnect();
-      _mapArmIo = null;
-      _mapArmed = true;
-      _mapArmIdle = true; // scroll-arm: engine half defers to the first idle slot (R2)
-      renderArmedMap();
-    }
-  }, { rootMargin: '300px 0px' });
-  _mapArmIo.observe(document.getElementById('map'));
+  if (_mapMetric === 'dots') { syncDotsMap(items); return; }
+  syncChoropleth(items);
 }
 
 function syncDotsMap(items) {
   if (!document.getElementById('map')) return;
-  mapEngineReady().then(() => {
-    if (!_map || !_map.getSource('dots')) return;
-    _map.setLayoutProperty('palika-fill', 'visibility', 'none');
-    _map.setLayoutProperty('palika-line', 'visibility', 'none');
-    _map.setLayoutProperty('dots-clusters', 'visibility', 'visible');
-    _map.setLayoutProperty('dots-points', 'visibility', 'visible');
+  ensureMap().then(() => {
+    if (!_map || !_cluster) return;
+    if (_boundaryLayer && _map.hasLayer(_boundaryLayer)) _map.removeLayer(_boundaryLayer);
+    if (!_map.hasLayer(_cluster)) _map.addLayer(_cluster);
+    _cluster.clearLayers();
     const pts = items.filter(d => d.lat != null && d.lng != null);
-    const features = pts.map((item) => ({
-      type: 'Feature',
-      geometry: { type: 'Point', coordinates: [item.lng, item.lat] },
-      properties: {
-        r: item.type === 'metropolitan' ? 9 : item.type === 'sub-metropolitan' ? 8 : 6,
-        color: markerColor(item),
-        fo: item.cbsCode != null ? 0.85 : 0.2,
-        __key: 'pt|' + (item.cbsCode != null ? item.cbsCode : (item.district + '/' + item.name)),
-      },
-    }));
-    for (const item of pts) {
-      _rowByKey.set('pt|' + (item.cbsCode != null ? item.cbsCode : (item.district + '/' + item.name)), item);
-    }
-    const fc = { type: 'FeatureCollection', features: features };
-    _map.getSource('dots').setData(fc);
+    const markers = pts.map((item) => {
+      const color = markerColor(item);
+      const m = window.L.circleMarker([item.lat, item.lng], {
+        radius: item.type === 'metropolitan' ? 9 : item.type === 'sub-metropolitan' ? 8 : 6,
+        color,
+        weight: 2,
+        opacity: 1,
+        fillColor: color,
+        fillOpacity: item.cbsCode != null ? 0.85 : 0.2,
+      });
+      m.bindPopup(function () { return itemPopupHtml(item); });
+      return m;
+    });
+    _cluster.addLayers(markers);
     const status = document.getElementById('map-status');
     if (status) {
       const total = items.length;
-      status.textContent = pts.length + ' of ' + total + ' shown on map' +
-        (total - pts.length > 0 ? ' (' + (total - pts.length) + ' without coordinates — table only)' : '');
+      status.textContent = `${pts.length} of ${total} shown on map` +
+        (total - pts.length > 0 ? ` (${total - pts.length} without coordinates — table only)` : '');
     }
     if (pts.length > 0 && !_map.__fitted) {
       _map.__fitted = true;
-      try { _map.fitBounds(boundsOf(fc), { padding: 24 }); } catch (e) { /* keep default view */ }
+      _map.fitBounds(_cluster.getBounds().pad(0.15));
     }
   });
 }
@@ -1761,8 +1337,11 @@ function focusMarker(lat, lng, name) {
   ensureMap().then(() => {
     if (!_map) return;
     const reduced = window.matchMedia('(prefers-reduced-motion: reduce)').matches;
-    _map.flyTo({ center: [lng, lat], zoom: Math.max(_map.getZoom(), 10), duration: reduced ? 0 : 800, essential: false });
-    showMapPopup([lng, lat], '<strong>' + escapeHtmlAttr(name || 'Selected') + '</strong>');
+    _map.flyTo([lat, lng], Math.max(_map.getZoom(), 10), { duration: reduced ? 0 : 0.8 });
+    window.L.popup()
+      .setLatLng([lat, lng])
+      .setContent(`<strong>${escapeHtmlAttr(name || 'Selected')}</strong>`)
+      .openOn(_map);
     document.getElementById('map')?.scrollIntoView({ behavior: reduced ? 'auto' : 'smooth', block: 'nearest' });
   });
 }
@@ -1810,9 +1389,6 @@ function initCountUp() {
   const targets = stats.querySelectorAll('.stat-value');
   if (!targets.length) return;
   const reduced = window.matchMedia('(prefers-reduced-motion: reduce)').matches;
-  // Wave 4-C: Save-Data visitors keep the authored numbers — no frames
-  // spent on counting.
-  if (SAVE_DATA) return;
   const animate = (el) => {
     if (reduced) return;
     const finalText = el.textContent || '';
@@ -1880,5 +1456,4 @@ if (document.querySelector('.api-nav')) {
 
   sections.forEach(section => observer.observe(section));
 }
-
 
