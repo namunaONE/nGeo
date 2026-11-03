@@ -171,6 +171,24 @@ class LocalBody {
   /// Provenance of the coordinates, e.g. 'open-admin-data', 'osm-nominatim'.
   final String? geoSource;
 
+  /// HDX COD-AB p-code for this local body (e.g. 'NP0101301').
+  /// Null when not yet joined to the HDX dataset. From the Survey Department
+  /// of Nepal via HDX COD-AB (CC BY-IGO).
+  final String? hdxPcode;
+
+  /// Official area in square kilometres from the Survey Department (HDX
+  /// COD-AB area_sqkm). Null when not yet joined. More authoritative than
+  /// the district-level areaSqKm.
+  final double? areaSqKmOfficial;
+
+  /// Official centroid latitude from the Survey Department (HDX COD-AB
+  /// center_lat). Null when not yet joined.
+  final double? latHdx;
+
+  /// Official centroid longitude from the Survey Department (HDX COD-AB
+  /// center_lon). Null when not yet joined.
+  final double? lngHdx;
+
   /// Number of wards in this local body. Null when not verified against
   /// ward-count sources (see `wardsVerified`).
   final int? wards;
@@ -212,6 +230,10 @@ class LocalBody {
     this.lat,
     this.lng,
     this.geoSource,
+    this.hdxPcode,
+    this.areaSqKmOfficial,
+    this.latHdx,
+    this.lngHdx,
     this.wards,
     this.wardsVerified = false,
     this.website,
@@ -244,6 +266,9 @@ class LocalBody {
 
   /// Whether approximate map coordinates are available.
   bool get hasCoordinates => lat != null && lng != null;
+
+  /// Whether HDX official data (pcode, area, centroid) is available.
+  bool get hasHdxData => hdxPcode != null;
 
   /// Whether this local body carries a CBS code at all, of any confidence.
   ///
@@ -286,6 +311,10 @@ class LocalBody {
         if (lat != null) 'lat': lat,
         if (lng != null) 'lng': lng,
         if (geoSource != null) 'geoSource': geoSource,
+        if (hdxPcode != null) 'hdxPcode': hdxPcode,
+        if (areaSqKmOfficial != null) 'areaSqKmOfficial': areaSqKmOfficial,
+        if (latHdx != null) 'latHdx': latHdx,
+        if (lngHdx != null) 'lngHdx': lngHdx,
         if (wards != null) 'wards': wards,
         if (wardsVerified) 'wardsVerified': wardsVerified,
         if (website != null) 'website': website,
@@ -319,6 +348,10 @@ class LocalBody {
       lat: (json['lat'] as num?)?.toDouble(),
       lng: (json['lng'] as num?)?.toDouble(),
       geoSource: json['geoSource'] as String?,
+      hdxPcode: json['hdxPcode'] as String?,
+      areaSqKmOfficial: (json['areaSqKmOfficial'] as num?)?.toDouble(),
+      latHdx: (json['latHdx'] as num?)?.toDouble(),
+      lngHdx: (json['lngHdx'] as num?)?.toDouble(),
       wards: json['wards'] as int?,
       wardsVerified: json['wardsVerified'] as bool? ?? false,
       website: json['website'] as String?,
@@ -375,6 +408,26 @@ class District {
   /// approximate figure for anything load-bearing.
   final double? areaSqKm;
 
+  /// HDX COD-AB p-code for this district (e.g. 'NP0101'). Null when not
+  /// yet joined. From the Survey Department of Nepal via HDX (CC BY-IGO).
+  final String? hdxPcode;
+
+  /// Official area in square kilometres from the Survey Department (HDX
+  /// COD-AB area_sqkm). Null when not yet joined.
+  final double? areaSqKmOfficial;
+
+  /// Official centroid latitude from the Survey Department (HDX COD-AB
+  /// center_lat). Null when not yet joined.
+  final double? latHdx;
+
+  /// Official centroid longitude from the Survey Department (HDX COD-AB
+  /// center_lon). Null when not yet joined.
+  final double? lngHdx;
+
+  /// Population from the CBS National Population and Housing Census 2021.
+  /// **Single-source** (CBS 2021, transcribed); null until sourced.
+  final int? population;
+
   /// The district's official website. **Single-source** (sagautam5).
   final String? website;
 
@@ -390,6 +443,11 @@ class District {
     this.cbsCode,
     this.headquarter,
     this.areaSqKm,
+    this.hdxPcode,
+    this.areaSqKmOfficial,
+    this.latHdx,
+    this.lngHdx,
+    this.population,
     this.website,
     required List<LocalBody> units,
     String provinceName = '',
@@ -459,6 +517,9 @@ class District {
           if (b.cbsCodeVerified) b
       ];
 
+  /// Whether HDX official data (pcode, area, centroid) is available.
+  bool get hasHdxData => hdxPcode != null;
+
   /// Serializes this district, including its local bodies.
   Map<String, dynamic> toJson() => <String, dynamic>{
         'name': name,
@@ -468,6 +529,11 @@ class District {
         if (cbsCode != null) 'cbsCode': cbsCode,
         if (headquarter != null) 'headquarter': headquarter,
         if (areaSqKm != null) 'areaSqKm': areaSqKm,
+        if (hdxPcode != null) 'hdxPcode': hdxPcode,
+        if (areaSqKmOfficial != null) 'areaSqKmOfficial': areaSqKmOfficial,
+        if (latHdx != null) 'latHdx': latHdx,
+        if (lngHdx != null) 'lngHdx': lngHdx,
+        if (population != null) 'population': population,
         if (website != null) 'website': website,
         'localBodies': [for (final b in _units) b.toJson()],
       };
@@ -484,6 +550,11 @@ class District {
         cbsCode: json['cbsCode'] as int?,
         headquarter: json['headquarter'] as String?,
         areaSqKm: (json['areaSqKm'] as num?)?.toDouble(),
+        hdxPcode: json['hdxPcode'] as String?,
+        areaSqKmOfficial: (json['areaSqKmOfficial'] as num?)?.toDouble(),
+        latHdx: (json['latHdx'] as num?)?.toDouble(),
+        lngHdx: (json['lngHdx'] as num?)?.toDouble(),
+        population: json['population'] as int?,
         website: json['website'] as String?,
         provinceName: json['province'] as String? ?? '',
         units: [
@@ -528,6 +599,26 @@ class Province {
   /// Area in square kilometres. **Single-source** (sagautam5).
   final double? areaSqKm;
 
+  /// HDX COD-AB p-code for this province (e.g. 'NP01'). Null when not
+  /// yet joined. From the Survey Department of Nepal via HDX (CC BY-IGO).
+  final String? hdxPcode;
+
+  /// Official area in square kilometres from the Survey Department (HDX
+  /// COD-AB area_sqkm). Null when not yet joined.
+  final double? areaSqKmOfficial;
+
+  /// Official centroid latitude from the Survey Department (HDX COD-AB
+  /// center_lat). Null when not yet joined.
+  final double? latHdx;
+
+  /// Official centroid longitude from the Survey Department (HDX COD-AB
+  /// center_lon). Null when not yet joined.
+  final double? lngHdx;
+
+  /// Population from the CBS National Population and Housing Census 2021.
+  /// **Single-source** (CBS 2021, transcribed); null until sourced.
+  final int? population;
+
   /// The province's official website. **Single-source** (sagautam5).
   final String? website;
 
@@ -548,6 +639,11 @@ class Province {
     required this.cbsCode,
     this.capital,
     this.areaSqKm,
+    this.hdxPcode,
+    this.areaSqKmOfficial,
+    this.latHdx,
+    this.lngHdx,
+    this.population,
     this.website,
     required this.isoCode,
     required this.stats,
@@ -595,6 +691,67 @@ class Province {
   /// palika's count reconciles.
   int get unreconciledWards => declaredWards - verifiedWards;
 
+  /// Minimum elevation across this province's districts, in metres
+  /// (Copernicus GLO-30). Derived from [DistrictElevations]; null when no
+  /// district in the province has elevation stats.
+  int? get elevMin {
+    final vals = <int>[];
+    for (final d in districts) {
+      final s = DistrictElevations.byName(d.name);
+      if (s != null) vals.add(s.elevMin);
+    }
+    if (vals.isEmpty) return null;
+    return vals.reduce((a, b) => a < b ? a : b);
+  }
+
+  /// Maximum elevation across this province's districts, in metres
+  /// (Copernicus GLO-30). Derived from [DistrictElevations].
+  int? get elevMax {
+    final vals = <int>[];
+    for (final d in districts) {
+      final s = DistrictElevations.byName(d.name);
+      if (s != null) vals.add(s.elevMax);
+    }
+    if (vals.isEmpty) return null;
+    return vals.reduce((a, b) => a > b ? a : b);
+  }
+
+  /// Area-weighted mean elevation across this province's districts, in
+  /// metres (Copernicus GLO-30). Districts without elevation stats are
+  /// skipped; districts without an area fall back to equal weighting.
+  /// Derived (not measured) — label as such in any UI.
+  int? get elevMean {
+    var weightedSum = 0.0;
+    var weightTotal = 0.0;
+    var simpleSum = 0;
+    var simpleCount = 0;
+    for (final d in districts) {
+      final s = DistrictElevations.byName(d.name);
+      if (s == null) continue;
+      final area = d.areaSqKmOfficial ?? d.areaSqKm;
+      if (area != null && area > 0) {
+        weightedSum += area * s.elevMean;
+        weightTotal += area;
+      } else {
+        simpleSum += s.elevMean;
+        simpleCount++;
+      }
+    }
+    if (weightTotal > 0 && simpleCount == 0) {
+      return (weightedSum / weightTotal).round();
+    }
+    if (weightTotal > 0 && simpleCount > 0) {
+      // Mix: weighted part + simple part (equal 1 km² weight for unweighted).
+      weightedSum += simpleSum.toDouble();
+      weightTotal += simpleCount;
+      return (weightedSum / weightTotal).round();
+    }
+    if (simpleCount > 0) {
+      return (simpleSum / simpleCount).round();
+    }
+    return null;
+  }
+
   /// Whether this province's declared total reconciles against its rows.
   bool get wardsReconcile => unreconciledWards == 0;
 
@@ -606,11 +763,19 @@ class Province {
         'cbsCode': cbsCode,
         if (capital != null) 'capital': capital,
         if (areaSqKm != null) 'areaSqKm': areaSqKm,
+        if (hdxPcode != null) 'hdxPcode': hdxPcode,
+        if (areaSqKmOfficial != null) 'areaSqKmOfficial': areaSqKmOfficial,
+        if (latHdx != null) 'latHdx': latHdx,
+        if (lngHdx != null) 'lngHdx': lngHdx,
+        if (population != null) 'population': population,
         if (website != null) 'website': website,
         'isoCode': isoCode,
         'stats': stats.toJson(),
         'districts': [for (final d in districts) d.toJson()],
       };
+
+  /// Whether HDX official data (pcode, area, centroid) is available.
+  bool get hasHdxData => hdxPcode != null;
 
   /// Rebuilds a [Province] from [toJson] output. The constructor re-attaches
   /// each district's province context, so the result is fully wired.
@@ -622,6 +787,11 @@ class Province {
         cbsCode: json['cbsCode'] as int,
         capital: json['capital'] as String?,
         areaSqKm: (json['areaSqKm'] as num?)?.toDouble(),
+        hdxPcode: json['hdxPcode'] as String?,
+        areaSqKmOfficial: (json['areaSqKmOfficial'] as num?)?.toDouble(),
+        latHdx: (json['latHdx'] as num?)?.toDouble(),
+        lngHdx: (json['lngHdx'] as num?)?.toDouble(),
+        population: json['population'] as int?,
         website: json['website'] as String?,
         isoCode: json['isoCode'] as String,
         stats: const ProvinceStats(
