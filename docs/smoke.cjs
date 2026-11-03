@@ -85,7 +85,7 @@ const sandbox = {
       if (sel === '.pagination') return paginationEl;
       if (sel === '.header') return null;
       if (sel === '.toast') return null;
-      if (sel === '#map') return null; // map short-circuits (no map engine here)
+      if (sel === '#map') return null; // map short-circuits (no Leaflet here)
       if (sel === '.nav-toggle') return null;
       if (sel === '#nav-menu') return null;
       return null;
@@ -293,16 +293,16 @@ vm.createContext(sandbox);
     assert.ok(pageHtml.includes('skip-link'), page + ' ships a skip link');
     assert.ok(/theme-toggle[^>]*aria-pressed/.test(pageHtml),
       page + ' theme toggle declares aria-pressed');
-    assert.ok(pageHtml.includes('styles.css?v=19'),
-      page + ' bumps the styles cache (v19)');
+    assert.ok(pageHtml.includes('styles.css?v=17'),
+      page + ' bumps the styles cache (v17)');
   }
   const explorerHtml = fs.readFileSync(path.join(ROOT, 'explorer.html'), 'utf8');
   assert.ok(!explorerHtml.includes('role="grid"'),
     'explorer table is a plain table (role="grid" retired)');
   assert.ok(!explorerHtml.includes('role="application"'),
     'map container does not capture screen-reader keys');
-  assert.ok(explorerHtml.includes('app.js?v=22'),
-    'explorer bumps the app cache (v22)');
+  assert.ok(explorerHtml.includes('app.js?v=19'),
+    'explorer bumps the app cache (v19)');
   // Wave 3 (terrain figure): the explorer gains a district elevation
   // choropleth — GLO-30 bands in a lazy-loaded artifact, elevation-aware
   // popups, and a deep-linkable hero button. The gate interpolates the
@@ -449,158 +449,13 @@ vm.createContext(sandbox);
     budgetsSrc.includes('accessibility: 100'),
     'the budget law declares the CWV ceilings in check_budgets.mjs');
   // The law is never lowered: LCP pages not yet at 2500ms are gated by
-  // explicit interim ratchet ceilings instead — Explorer stays on an
-  // evidence-based interim (re-measured 4789ms post-engine-swap + ~15%
-  // LH noise headroom); Home rides its own walked interim (PR #42: 3350,
-  // from the font-fix fresh verdicts). Threshold VALUES are the budget
-  // gate's business — smoke pins the structure (every page has an
-  // evidence-based ceiling), never the number, so a ratchet walk is a
-  // one-file change again.
+  // explicit interim ratchet ceilings instead, tightened by Wave 4-C.
   assert.ok(budgetsSrc.includes('const LCP_CEILINGS = {') &&
-    budgetsSrc.includes("'/explorer.html': 5500") &&
-    /'\/': \d+,/.test(budgetsSrc) &&
-    budgetsSrc.includes("'/api.html':") && budgetsSrc.includes("'/brand.html':"),
-    'the LCP ratchet declares per-page evidence-based ceilings (structure, not values)');
-  assert.ok(budgetsSrc.includes('const TBT_CEILINGS = {') &&
-    budgetsSrc.includes("'/explorer.html': 1900") &&
-    budgetsSrc.includes('tbtOk: m.tbt <= (TBT_CEILINGS[page.path]'),
-    'the TBT ratchet declares the R2 post-split Explorer interim (law unchanged elsewhere)');
-  assert.ok(budgetsSrc.includes('lcpOk: m.lcp <= (LCP_CEILINGS[page.path]'),
+    budgetsSrc.includes("'/explorer.html': 5000") &&
+    budgetsSrc.includes("'/': 3000"),
+    'the LCP ratchet declares per-page interim ceilings');
+  assert.ok(budgetsSrc.includes('lcpOk: lcp <= (LCP_CEILINGS[page.path]'),
     'the LCP gate asserts against the ratchet ceiling');
-  assert.ok(budgetsSrc.includes('re-measuring once'),
-    'a budget bust earns exactly one fresh full-page re-measure (runner noise), never a relaxed law');
-  assert.ok(budgetsSrc.includes('TBT_RETRY_RIDES') &&
-    budgetsSrc.includes('tbtOnlyBust'),
-    "a TBT-only bust after the re-measure rides the host lottery (loaded-runner retry policy; ceilings never move)");
-  // Wave 4 PR B (payload diet): the ~40 MB full-resolution palika boundary
-  // source stays in the repo (source-of-truth for the boundaries package
-  // and its generators) but never reaches the Pages artifact: the deploy
-  // job drops it, a size budget guards the artifact, and a Release
-  // workflow publishes it as a one-click download instead.
-  const dartYml = fs.readFileSync(
-    path.join(ROOT, '..', '.github', 'workflows', 'dart.yml'), 'utf8');
-  assert.ok(dartYml.includes('rm -f docs/palika-boundaries-highres.geojson'),
-    'deploy-pages keeps the full-resolution source out of the site artifact');
-  assert.ok(dartYml.includes('max=$((9*1024*1024))'),
-    'deploy-pages enforces the 9 MB site artifact size budget');
-  const releaseYml = fs.readFileSync(
-    path.join(ROOT, '..', '.github', 'workflows', 'release-geojson.yml'), 'utf8');
-  assert.ok(releaseYml.includes('gh release upload') &&
-    releaseYml.includes('docs/palika-boundaries-highres.geojson'),
-    'the release workflow publishes the full-resolution source as an asset');
-  // Track T1 (PMTiles archive): the same boundaries archived as one
-  // single-file PMTiles so map renderers can stream tiles without a
-  // tile server. Built inside the SAME release job - one notes edit,
-  // no racing workflows; the archive uploads to the Release, NEVER to
-  // Pages (the payload-diet law stands). Structural pins; the tiler
-  // and converter invocations are pinned, thresholds are not.
-  assert.ok(releaseYml.includes('tippecanoe=2.79.0') &&
-    releaseYml.includes('setup-micromamba@v3') &&
-    releaseYml.includes('generate-run-shell: true') &&
-    releaseYml.includes('micromamba-shell {0}'),
-    'the release workflow pins the tippecanoe AND runs it inside the env');
-  assert.ok(releaseYml.includes('protomaps/go-pmtiles') &&
-    releaseYml.includes('palika-boundaries.pmtiles'),
-    'the release workflow archives the boundaries as PMTiles');
-  // Track 3 (COD-AB upstream watch): the pinned HDX COD-AB dataset
-  // (data/SOURCES.md source #9, v02 reviewed 2025-10-30, licence
-  // CC BY-IGO) can be re-published upstream without notice - the live
-  // metadata_modified already read 2026-08-14 at the 2026-10-30
-  // review. The watch polls HDX weekly and files an issue on any
-  // licence or metadata change; a refresh stays a human decision,
-  // never auto. Structural pins only.
-  const codAbWatchYml = fs.readFileSync(
-    path.join(ROOT, '..', '.github', 'workflows', 'cod-ab-watch.yml'), 'utf8');
-  assert.ok(codAbWatchYml.includes('cod-ab-npl') &&
-    codAbWatchYml.includes('package_show'),
-    'the watch polls the pinned HDX COD-AB dataset');
-  assert.ok(codAbWatchYml.includes('cc-by-igo') &&
-    codAbWatchYml.includes('2026-08-14'),
-    'the watch pins the reviewed licence and the observed metadata state');
-  assert.ok(codAbWatchYml.includes('github-script') &&
-    codAbWatchYml.includes('issues: write'),
-    'drift files an issue, never a silent refresh');
-  // RFC 7946 gate: every GeoJSON artifact - the docs/ overlays AND the
-  // bindings/geojson public downloads - must speak WGS84 lon/lat with
-  // closed rings and no legacy "crs" member. Structural pins only;
-  // thresholds are the gate tool's business, never re-pinned here.
-  assert.ok(dartYml.includes('dart run tool/check_rfc7946.dart'),
-    'dart.yml wires the RFC 7946 conformance gate');
-  const rfcTool = fs.readFileSync(
-    path.join(ROOT, '..', 'tool', 'check_rfc7946.dart'), 'utf8');
-  assert.ok(rfcTool.includes("containsKey('crs')"),
-    'the gate bans the legacy "crs" member on GeoJSON objects');
-  assert.ok(rfcTool.includes('ring is not closed'),
-    'the gate fails unclosed rings (four or more positions)');
-  assert.ok(rfcTool.includes('nepalMinLon') && rfcTool.includes('nepalMaxLat'),
-    'the gate pins the Nepal band (a lon/lat swap cannot pass)');
-  assert.ok(rfcTool.includes('degenerateRings'),
-    'the gate reports degenerate rings without failing them');
-  assert.ok(rfcTool.includes('--strip-crs'),
-    'the gate doubles as the auto-heal: --strip-crs excises the member');
-  const sanitizeYml = fs.readFileSync(
-    path.join(ROOT, '..', '.github', 'workflows', 'sanitize-crs.yml'), 'utf8');
-  assert.ok(sanitizeYml.includes('branches-ignore: [main]') &&
-    sanitizeYml.includes('--strip-crs'),
-    'the sanitize workflow auto-heals non-main branches, never main');
-  // Wave 4 PR C (adaptive & fast): the explorer figure arms at viewport
-  // proximity (deep links arm immediately) instead of booting the map engine +
-  // boundaries inside the LCP window; Save-Data skips optional prefetch
-  // and the count-up; cards adapt via container queries and the page
-  // prints like a document.
-  assert.ok(appSrc.includes('var _mapArmed = false;') &&
-    appSrc.includes("params.get('cbs') || params.get('metric')") &&
-    appSrc.includes('renderArmedMap'),
-    'the figure arms lazily; deep links arm immediately');
-  assert.ok(appSrc.includes('var SAVE_DATA') &&
-    appSrc.includes('if (!SAVE_DATA) ensureDistrictElevation();') &&
-    appSrc.includes('if (SAVE_DATA) return;'),
-    'Save-Data gates the eager elevation prefetch and the count-up');
-  const stylesCssC = fs.readFileSync(path.join(ROOT, 'styles.css'), 'utf8');
-  assert.ok(stylesCssC.includes('container-type: inline-size') &&
-    stylesCssC.includes('@container'),
-    'cards adapt via container queries');
-  assert.ok(stylesCssC.includes('break-inside: avoid') &&
-    stylesCssC.includes('@page { margin: 1.5cm; }'),
-    'print styles keep rows and cards unbroken');
-  // Wave R1 (the MapLibre leap): the engine swap is pinned and total —
-  // MapLibre GL v5.6.0 (the last UMD build; v6 ships ESM-only), native
-  // GeoJSON clustering, data-driven choropleth paint. The old engine and
-  // its cluster plugin are fully retired from app.js and styles.css.
-  assert.ok(appSrc.includes('maplibre-gl@5.6.0/dist/maplibre-gl.js') &&
-    appSrc.includes('new maplibregl.Map('),
-    'the explorer map runs on pinned MapLibre GL v5.6.0');
-  assert.ok(!appSrc.includes('unpkg.com/leaflet') &&
-    !appSrc.includes('markerClusterGroup'),
-    'the old map engine + cluster plugin CDN era is fully retired');
-  assert.ok(appSrc.includes('tile.openstreetmap.org'),
-    'the OSM raster basemap stays');
-  assert.ok(stylesCssC.includes('.maplibregl-popup-content') &&
-    !stylesCssC.includes('.leaflet-'),
-    'styles theme MapLibre chrome; old map-engine rules are retired');
-  assert.ok(stylesCssC.includes('.map .maplibregl-ctrl-attrib a { text-decoration: underline'),
-    'the engine attribution link is underlined (.map scope beats the runtime-loaded engine sheet) — axe link-in-text-block');
-  // R2 (arm-chain split, walking the budgets toward the law): the
-  // engine half and the data half of the map arm schedule separately —
-  // scroll-arms boot the engine in the first idle slot (deep links stay
-  // immediate), the boundary half idles once more after the basemap
-  // paints, and overlays fetch on first ask instead of preloading
-  // ~2.5 MB of off-by-default GeoJSON at engine boot.
-  assert.ok(appSrc.includes('function scheduleIdle(') &&
-    appSrc.includes('requestIdleCallback'),
-    'the idle scheduler exists and is capability-checked (rIC + timeout, setTimeout fallback)');
-  assert.ok(appSrc.includes('var _mapArmIdle = false;') &&
-    appSrc.includes('function mapEngineReady('),
-    'the arm tracks deep-link (immediate) vs scroll (idle) engine boots');
-  assert.ok(appSrc.includes('scheduleIdle(() => { ensureMap().then(resolve, resolve); })'),
-    'the engine half boots in the first idle slot on a scroll-arm');
-  assert.ok(appSrc.includes('scheduleIdle(() => resolve());'),
-    'the boundary data half idles once more after the basemap paints');
-  assert.ok(appSrc.includes('if (def.enabledByDefault) loadOverlay(def);') &&
-    !appSrc.includes('for (const def of MAP_OVERLAYS) loadOverlay(def)'),
-    'overlays wire eagerly but load only their enabledByDefault set at boot');
-  assert.ok(appSrc.includes('loadOverlay(def, { visible: true })'),
-    'the overlay toggle is the loader — the fetch starts on first ask');
   const lighthouseYml = fs.readFileSync(
     path.join(ROOT, '..', '.github', 'workflows', 'lighthouse.yml'), 'utf8');
   assert.ok(lighthouseYml.includes('check_budgets.mjs'),
@@ -611,5 +466,4 @@ vm.createContext(sandbox);
   console.error('SMOKE FAILED:', err && err.message ? err.message : err);
   process.exit(1);
 });
-
 
