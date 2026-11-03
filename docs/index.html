@@ -49,6 +49,12 @@
         <a href="https://github.com/namunaONE/nGeo" class="nav-link" target="_blank" rel="noopener">GitHub</a>
       </div>
       <div class="nav-actions">
+      <select id="lang-select" aria-label="Language" style="padding: 6px 10px; border: 1px solid var(--color-border); border-radius: var(--radius-full); background: var(--color-bg); color: var(--color-text); font-size: var(--text-sm); cursor: pointer;">
+        <option value="en">EN</option>
+        <option value="ne">NE</option>
+        <option value="mai">MAI</option>
+        <option value="bho">BHO</option>
+      </select>
       <button class="theme-toggle" id="theme-toggle" aria-label="Toggle dark mode" aria-pressed="false" title="Toggle theme">
         <svg class="theme-icon sun" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
           <circle cx="12" cy="12" r="5"/>
@@ -399,6 +405,7 @@ void main() {
   }
   </script>
   <script src="app-critical.js?v=1" defer></script>
+  <script src="i18n.js" defer></script>
   <script src="app.js?v=23" defer></script>
   <script>
     if ('serviceWorker' in navigator) {

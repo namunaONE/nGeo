@@ -14,16 +14,30 @@ import 'dart:io';
 
 const jsonPath = 'data/nepal_local_levels.json';
 const outputPath = 'lib/src/nepal_data.dart';
+const hashPath = 'tool/.generate_hash';
 
-void main() {
+void main(List<String> args) {
+  final incremental = args.contains('--incremental');
+
   final jsonFile = File(jsonPath);
   if (!jsonFile.existsSync()) {
     stderr.writeln('ERROR: $jsonPath not found — run from the package root.');
     exit(1);
   }
 
+  final jsonContent = jsonFile.readAsStringSync();
+  final currentHash = jsonContent.hashCode.toString();
+
+  if (incremental) {
+    final hashFile = File(hashPath);
+    if (hashFile.existsSync() && hashFile.readAsStringSync() == currentHash) {
+      stdout.writeln('No changes detected — skipping generation (incremental).');
+      return;
+    }
+  }
+
   final Map<String, dynamic> json =
-      jsonDecode(jsonFile.readAsStringSync()) as Map<String, dynamic>;
+      jsonDecode(jsonContent) as Map<String, dynamic>;
   final List<Map<String, dynamic>> provinces =
       (json['provinces'] as List).cast<Map<String, dynamic>>();
   final Map<String, int> totals =
@@ -37,6 +51,9 @@ void main() {
   stdout.write(formatted.stdout as String);
   stderr.write(formatted.stderr as String);
   if (formatted.exitCode != 0) exit(formatted.exitCode);
+
+  // Save hash for incremental mode
+  File(hashPath).writeAsStringSync(currentHash);
 
   stdout.writeln('Generated $outputPath from $jsonPath.');
 }
