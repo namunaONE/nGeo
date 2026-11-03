@@ -18,8 +18,37 @@ packages/
 data/_raw/
 data/_stage/
 
-# Documentation
+# Documentation (review notes; not part of published package)
 doc/
+
+# Python tooling / venv (local only, not part of the Dart package)
+_libs/
+_wheels3/
+_mpl/
+_geo/
+_tmp/
+bootstrap_libs.py
+make_atlas.py
+prep_data.py
+validate_outputs.py
+
+# Node tooling (local only)
+node_modules/
+package.json
+package-lock.json
+
+# Maps / web atlas (published separately, not part of the Dart package)
+maps/
+Nepal_Local_Level_Atlas.pdf
+
+# Ninth Bell media project (unrelated to this package)
+the_ninth_bell/
+
+# Selected data dumps / scratch
+selected.geojson
+selected.kml
+selected.wkt
+xls_dump.json
 
 # Temporary files
 *.dart_tool/
@@ -33,8 +62,9 @@ coverage/
 .vscode/
 .DS_Store
 
-# Test files (optional - can be included for reference)
-# test/
+# Git metadata
+.git/
+.gitignore
 
-# Example files (optional - can be included)
-# example/
+# Logs
+*.log
