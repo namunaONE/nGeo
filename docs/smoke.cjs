@@ -301,8 +301,8 @@ vm.createContext(sandbox);
     'explorer table is a plain table (role="grid" retired)');
   assert.ok(!explorerHtml.includes('role="application"'),
     'map container does not capture screen-reader keys');
-  assert.ok(explorerHtml.includes('app.js?v=25'),
-    'explorer bumps the app cache (v23)');
+  assert.ok(explorerHtml.includes('app.js?v=26'),
+    'explorer bumps the app cache (v26)');
   // Wave 3 (terrain figure): the explorer gains a district elevation
   // choropleth — GLO-30 bands in a lazy-loaded artifact, elevation-aware
   // popups, and a deep-linkable hero button. The gate interpolates the
@@ -344,8 +344,8 @@ vm.createContext(sandbox);
     'toast feedback is announced (role=status)');
   assert.ok(appSrc.includes('aria-current'),
     'pagination announces the current page');
-  assert.ok((appSrc.match(/prefers-reduced-motion: reduce/g) || []).length === 4,
-    'reduced-motion respected (header scroll, flyTo, anchors, count-up)');
+  assert.ok((appSrc.match(/prefers-reduced-motion: reduce/g) || []).length === 5,
+    'reduced-motion respected (header scroll, flyTo, anchors, count-up, home flight)');
   // Bento 2.0 homepage (Wave 2): the features grid is a bento grid —
   // one dominant bilingual cell (2x2), the CBS claim in a wide cell,
   // asymmetric spans on a shared 6-column grid, tactile hover that
@@ -379,8 +379,8 @@ vm.createContext(sandbox);
     'easing tokens are generated (entrance ease-out, exit ease-in)');
   assert.ok(appSrc.includes('initCountUp'), 'hero stats count up on viewport entry');
   assert.ok(appSrc.includes('initBentoReveal'), 'bento entrance staggers on viewport entry');
-  assert.ok((appSrc.match(/prefers-reduced-motion: reduce/g) || []).length === 4,
-    'reduced-motion guards (header, flyTo, anchors, count-up)');
+  assert.ok((appSrc.match(/prefers-reduced-motion: reduce/g) || []).length === 5,
+    'reduced-motion guards (header, flyTo, anchors, count-up, home flight)');
   assert.ok(stylesCss.includes('bento-rise'), 'bento rise keyframes ship');
   assert.ok(stylesCss.includes('prefers-reduced-motion: no-preference'),
     'the reveal is opt-in: hidden cells exist only in the no-preference media block');
@@ -597,6 +597,36 @@ vm.createContext(sandbox);
     path.join(ROOT, '..', '.github', 'workflows', 'lighthouse.yml'), 'utf8');
   assert.ok(lighthouseYml.includes('check_budgets.mjs'),
     'the Lighthouse budget workflow runs the budget gate');
+  // Wave R5 (advanced basemaps, Nepal focus, terrain realism): the
+  // basemap registry ships streets (OSM default), Esri World Imagery
+  // (latest satellite, continuously refreshed), a hybrid with labels,
+  // and NASA GIBS VIIRS true color dated at RUNTIME — the latest pass,
+  // literally. All of it rides the same first-engagement arm as the
+  // 3D terrain; unpainted raster sources load zero tiles, so offering
+  // a world never costs the boot window.
+  assert.ok(appSrc.includes('var BASEMAPS = {') &&
+    typeof sandbox.setBasemap === 'function',
+    'R5: the basemap registry + switcher ship (classic script globals)');
+  assert.ok(appSrc.includes('World_Imagery/MapServer/tile') &&
+    appSrc.includes('VIIRS_SNPP_CorrectedReflectance_TrueColor'),
+    'R5: the latest satellite sources are Esri World Imagery + NASA GIBS VIIRS');
+  assert.ok(appSrc.includes('function gibsLatestDate') &&
+    appSrc.includes('GoogleMapsCompatible_Level9'),
+    'R5: the NASA daily layer is dated at runtime (the latest pass)');
+  assert.ok(appSrc.includes('maxBounds: NEPAL_MAX_BOUNDS') &&
+    appSrc.includes('var NEPAL_FOCUS_BOUNDS'),
+    'R5: the map stays focused on Nepal (camera clamp + home flight)');
+  assert.ok(appSrc.includes('applySky') &&
+    appSrc.includes('terrain-hillshade'),
+    'R5: sky atmosphere + relief shading ride the terrain arm');
+  assert.ok(appSrc.includes('function setTerrainExaggeration') &&
+    appSrc.includes('var _terrainExaggeration = 1.5;'),
+    'R5: the terrain exaggeration dial is live');
+  assert.ok(explorerHtml.includes('basemap-select') &&
+    explorerHtml.includes('terrain-x') &&
+    explorerHtml.includes('hillshade-toggle') &&
+    explorerHtml.includes('map-home'),
+    'R5: the explorer exposes the basemap, relief and home controls');
     const rows = (tableBody.innerHTML.match(/<tr/g) || []).length;
   console.log(`SMOKE OK: ${data.length} records, ${rows} rows rendered, no errors`);
 })().catch((err) => {
