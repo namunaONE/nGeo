@@ -11,7 +11,7 @@ const STATIC_ASSETS = [
   '/brand-tokens.css?v=2',
   '/fonts.css?v=1',
   '/app-critical.js?v=1',
-  '/app.js?v=25',
+  '/app.js?v=26',
   '/favicon.svg',
   '/logo.svg',
   '/logo-full.svg',

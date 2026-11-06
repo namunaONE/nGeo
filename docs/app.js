@@ -480,6 +480,162 @@ const MAP_TILES = {
   maxZoom: 19,
   attribution: '© <a href="https://www.openstreetmap.org/copyright" target="_blank" rel="noopener">OpenStreetMap</a> contributors',
 };
+
+// ---- Wave R5 (advanced basemaps, Nepal focus, terrain realism) ----
+// The basemap registry is declarative data: every source is declared in
+// the style at construction, but a raster source loads ZERO tiles until
+// a visible layer paints it — so offering satellite imagery of the
+// latest passes costs nothing until a visitor asks for it.
+//   streets   — OSM raster, the classic default
+//   satellite — Esri World Imagery: Maxar + Earthstar Geographics,
+//     continuously refreshed — the latest high-res pass per zoom
+//   hybrid    — the same imagery with Esri's reference labels on top
+//   nasa      — NASA EOSDIS GIBS VIIRS true color (~375 m/px, z0-9),
+//     dated at RUNTIME by gibsLatestDate() — literally the latest
+//     daily pass, hours after the satellite saw it
+// The choice persists in localStorage; switching toggles layer
+// visibility, so it is instant and lazy by construction.
+var BASEMAPS = {
+  streets: { label: 'Streets (OSM)', layers: ['osm-tiles'] },
+  satellite: { label: 'Satellite (Esri World Imagery)', layers: ['esri-imagery-tiles'] },
+  hybrid: { label: 'Satellite + labels', layers: ['esri-imagery-tiles', 'esri-reference-tiles'] },
+  nasa: { label: 'NASA daily (VIIRS)', layers: ['gibs-viirs-tiles'] },
+};
+var ESRI_IMAGERY_TILES = 'https://server.arcgisonline.com/ArcGIS/restServices/World_Imagery/MapServer/tile/{z}/{y}/{x}';
+var ESRI_REFERENCE_TILES = 'https://server.arcgisonline.com/ArcGIS/restServices/Reference/World_Boundaries_and_Places/MapServer/tile/{z}/{y}/{x}';
+var ESRI_ATTRIBUTION = 'Esri, Maxar, Earthstar Geographics, and the GIS User Community';
+// GIBS publishes a pass shortly after UTC midnight; ask for yesterday so
+// the layer never 404s on the morning of a fresh date.
+function gibsLatestDate() {
+  try {
+    var d = new Date(Date.now() - 86400000);
+    return d.toISOString().slice(0, 10);
+  } catch (e) {
+    return '2026-01-01';
+  }
+}
+function gibsTileUrl() {
+  return 'https://gibs.earthdata.nasa.gov/wmts/epsg3857/best/VIIRS_SNPP_CorrectedReflectance_TrueColor/default/' +
+    gibsLatestDate() + '/GoogleMapsCompatible_Level9/{z}/{y}/{x}.jpg';
+}
+// Nepal focus: clamp the camera to Nepal's neighborhood (generous — the
+// chuche outline plus Tarai context, never a hard border) and give the
+// home button a canonical national view to fly back to.
+var NEPAL_MAX_BOUNDS = [[77.8, 25.2], [89.5, 31.7]];
+var NEPAL_FOCUS_BOUNDS = [[80.06, 26.35], [88.20, 30.42]];
+var _terrainExaggeration = 1.5;
+
+function applySky() {
+  // MapLibre >= 4.5 atmosphere: the horizon stops being a hard edge —
+  // realism the terrain arm already paid for. Older builds: no-op.
+  if (_map && typeof _map.setSky === 'function') {
+    try {
+      _map.setSky({
+        'sky-color': '#88C6FC',
+        'sky-horizon-blend': 0.5,
+        'horizon-color': '#ffffff',
+        'horizon-fog-blend': 0.5,
+        'fog-color': '#ffffff',
+        'fog-ground-blend': 0.5,
+        'atmosphere-blend': ['interpolate', ['linear'], ['zoom'], 0, 0.5, 10, 0.8],
+      });
+    } catch (e) { /* sky spec changed: keep the map alive */ }
+  }
+}
+
+function addHillshadeLayer() {
+  // Relief shading from the SAME terrarium DEM the 3D terrain rides —
+  // one hillshade layer under the choropleth (exaggeration 0.35: subtle
+  // depth, never a second figure). Slots in before 'palika-fill' so
+  // boundaries always paint above it.
+  if (!_map || !_map.getSource('terrain') || _map.getLayer('terrain-hillshade')) return;
+  try {
+    _map.addLayer({
+      id: 'terrain-hillshade',
+      type: 'hillshade',
+      source: 'terrain',
+      paint: {
+        'hillshade-exaggeration': 0.35,
+        'hillshade-shadow-color': '#473B33',
+        'hillshade-highlight-color': '#ffffff',
+        'hillshade-accent-color': '#7a6a5b',
+      },
+    }, 'palika-fill');
+  } catch (e) { /* layer contract changed: keep the map alive */ }
+}
+
+function setTerrainExaggeration(v) {
+  // Live dial (x0.5-x3). Before the arm there is no terrain yet: the
+  // value is remembered and the arm itself builds with it.
+  var n = Math.max(0.5, Math.min(3, Number(v) || 1.5));
+  _terrainExaggeration = n;
+  if (_map && typeof _map.getTerrain === 'function' && _map.getTerrain()) {
+    try { _map.setTerrain({ source: 'terrain', exaggeration: n }); } catch (e) { /* not armed */ }
+  }
+  return n;
+}
+
+function setHillshade(on) {
+  if (!_map || !_map.getLayer('terrain-hillshade')) return;
+  try {
+    _map.setLayoutProperty('terrain-hillshade', 'visibility', on ? 'visible' : 'none');
+  } catch (e) { /* ignore */ }
+}
+
+function setBasemap(name) {
+  var def = BASEMAPS[name];
+  if (!def || !_map) return name;
+  var all = ['osm-tiles', 'esri-imagery-tiles', 'esri-reference-tiles', 'gibs-viirs-tiles'];
+  for (var i = 0; i < all.length; i++) {
+    if (!_map.getLayer(all[i])) continue;
+    var on = def.layers.indexOf(all[i]) !== -1;
+    try {
+      _map.setLayoutProperty(all[i], 'visibility', on ? 'visible' : 'none');
+    } catch (e) { /* ignore */ }
+  }
+  try { localStorage.setItem('ngeoBasemap', name); } catch (e) { /* private mode */ }
+  return name;
+}
+
+function flyHomeToNepal() {
+  // The home button. Same motion law as focusMarker(): reduced-motion
+  // visitors get an instant reframe, never a camera ride.
+  if (!_map) return;
+  var reduced = window.matchMedia('(prefers-reduced-motion: reduce)').matches;
+  _map.fitBounds(NEPAL_FOCUS_BOUNDS, {
+    padding: 24,
+    duration: reduced ? 0 : 900,
+    essential: false,
+  });
+}
+
+function initMapControls() {
+  // Wires the R5 controls once the map has loaded — the same place the
+  // overlays wire, so none of this is boot-path work.
+  var sel = document.getElementById('basemap-select');
+  if (sel) {
+    var saved = null;
+    try { saved = localStorage.getItem('ngeoBasemap'); } catch (e) { /* private mode */ }
+    if (saved && BASEMAPS[saved]) sel.value = saved;
+    sel.addEventListener('change', function () { setBasemap(sel.value); });
+    if (saved && BASEMAPS[saved]) setBasemap(saved);
+  }
+  var dial = document.getElementById('terrain-x');
+  var lbl = document.getElementById('terrain-x-value');
+  if (dial && lbl) {
+    dial.value = String(_terrainExaggeration);
+    lbl.textContent = '×' + _terrainExaggeration;
+    dial.addEventListener('input', function () {
+      var n = setTerrainExaggeration(parseFloat(dial.value));
+      lbl.textContent = '×' + n;
+    });
+  }
+  var hs = document.getElementById('hillshade-toggle');
+  if (hs) hs.addEventListener('change', function () { setHillshade(hs.checked); });
+  var home = document.getElementById('map-home');
+  if (home) home.addEventListener('click', flyHomeToNepal);
+}
+
 // Type palette — one legend source: read live from the --map-* tokens in
 // brand-tokens.css (v3) so dots, choropleth and page legend never drift
 // apart. Falls back to the v3 hexes when CSS custom properties are
@@ -609,6 +765,27 @@ function ensureMap() {
             maxzoom: 14,
             encoding: 'terrarium',
           },
+          'esri-imagery': {
+            type: 'raster',
+            tiles: [ESRI_IMAGERY_TILES],
+            tileSize: 256,
+            maxzoom: 19,
+            attribution: ESRI_ATTRIBUTION,
+          },
+          'esri-reference': {
+            type: 'raster',
+            tiles: [ESRI_REFERENCE_TILES],
+            tileSize: 256,
+            maxzoom: 16,
+            attribution: ESRI_ATTRIBUTION,
+          },
+          'gibs-viirs': {
+            type: 'raster',
+            tiles: [gibsTileUrl()],
+            tileSize: 256,
+            maxzoom: 9,
+            attribution: 'NASA EOSDIS GIBS (VIIRS)',
+          },
         },
         layers: [{
           id: 'osm-tiles',
@@ -616,6 +793,27 @@ function ensureMap() {
           source: 'osm',
           minzoom: 4,
           maxzoom: MAP_TILES.maxZoom,
+        },
+        {
+          id: 'esri-imagery-tiles',
+          type: 'raster',
+          source: 'esri-imagery',
+          minzoom: 4,
+          layout: { visibility: 'none' },
+        },
+        {
+          id: 'esri-reference-tiles',
+          type: 'raster',
+          source: 'esri-reference',
+          minzoom: 4,
+          layout: { visibility: 'none' },
+        },
+        {
+          id: 'gibs-viirs-tiles',
+          type: 'raster',
+          source: 'gibs-viirs',
+          minzoom: 4,
+          layout: { visibility: 'none' },
         }],
       },
       center: [84.12, 28.39],
@@ -623,6 +821,8 @@ function ensureMap() {
       pitch: 45,
       bearing: 0,
       attributionControl: { compact: true },
+      maxBounds: NEPAL_MAX_BOUNDS,
+      minZoom: 5,
     });
     // Same UX law as the Leaflet era: the wheel only zooms once the map
     // canvas has focus — the page never hijacks scrolling on the way
@@ -644,7 +844,9 @@ function ensureMap() {
       if (!_map || !_map.isStyleLoaded()) return;
       TERRAIN_ARM_EVENTS.forEach((ev) =>
         _map.getContainer().removeEventListener(ev, enable3dTerrain));
-      _map.setTerrain({ source: 'terrain', exaggeration: 1.5 });
+      _map.setTerrain({ source: 'terrain', exaggeration: _terrainExaggeration });
+      applySky();
+      addHillshadeLayer();
     };
     TERRAIN_ARM_EVENTS.forEach((ev) =>
       _map.getContainer().addEventListener(ev, enable3dTerrain, { passive: true }));
@@ -689,6 +891,7 @@ function ensureMap() {
       wireMapEvents();
       initMapOverlays();
       initBoundaryDetailToggle();
+      initMapControls();
       const status = document.getElementById('map-status');
       if (status) status.textContent = '';
       // Deep link: explorer.html?cbs=31304
