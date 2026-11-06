@@ -301,7 +301,7 @@ vm.createContext(sandbox);
     'explorer table is a plain table (role="grid" retired)');
   assert.ok(!explorerHtml.includes('role="application"'),
     'map container does not capture screen-reader keys');
-  assert.ok(explorerHtml.includes('app.js?v=23'),
+  assert.ok(explorerHtml.includes('app.js?v=24'),
     'explorer bumps the app cache (v23)');
   // Wave 3 (terrain figure): the explorer gains a district elevation
   // choropleth — GLO-30 bands in a lazy-loaded artifact, elevation-aware

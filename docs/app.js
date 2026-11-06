@@ -623,7 +623,6 @@ function ensureMap() {
       pitch: 45,
       bearing: 0,
       attributionControl: { compact: true },
-      terrain: { source: 'terrain', exaggeration: 1.5 },
     });
     // Same UX law as the Leaflet era: the wheel only zooms once the map
     // canvas has focus — the page never hijacks scrolling on the way
@@ -632,6 +631,20 @@ function ensureMap() {
     _map.getCanvas().addEventListener('focus', () => _map.scrollZoom.enable());
     _map.getCanvas().addEventListener('blur', () => _map.scrollZoom.disable());
     _map.on('error', (e) => { console.error('MapLibre:', e && e.error); });
+    // 3D terrain is a post-boot upgrade, never a construction-time
+    // cost: the eager terrain DEM decode pulled terrarium tile work
+    // into the FCP->TTI window and was the biggest Explorer TBT adder
+    // (budgets gate, tool/check_budgets.mjs). The flat basemap stays
+    // fully usable; the 3D layer attaches in the first idle slot after
+    // the map settles.
+    const enable3dTerrain = () => {
+      _map.off('idle', enable3dTerrain);
+      scheduleIdle(() => {
+        if (_map) _map.setTerrain({ source: 'terrain', exaggeration: 1.5 });
+      });
+    };
+    _map.on('idle', enable3dTerrain);
+
     _map.on('load', () => {
       _map.addSource('palika', { type: 'geojson', data: emptyFC() });
       _map.addSource('dots', {
