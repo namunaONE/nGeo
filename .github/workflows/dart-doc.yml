@@ -1,15 +1,28 @@
-# .github/workflows/dart-doc.yml — Generate and deploy API documentation
+# .github/workflows/dart-doc.yml - Generate API documentation
+#
+# DISABLED AS AN AUTOMATIC PAGES DEPLOY (2026-11-06). Two reasons,
+# both from the Nov 3 incident that left the live site serving dartdoc
+# (the "repo shows a README" report):
+#  1. This workflow and dart.yml/deploy-pages both deployed to the SAME
+#     GitHub Pages site. Every deploy-pages call replaces the whole
+#     site, so a green dartdoc run here ERASED the freshly-deployed
+#     website (Nov 3: website shipped 08:48, dartdoc overwrote it at
+#     08:55). One Pages URL must have ONE deployer - that is dart.yml.
+#  2. Since the monorepo workspace restructure (d5d5c0c), `dart doc` at
+#     the workspace root fails (Dart Docs runs #4-#6 red, 26-40s). It
+#     needs a workspace-aware invocation (or a Flutter SDK install)
+#     before it can run again.
+# The workflow now runs only manually (workflow_dispatch), never
+# deploys to Pages, and leaves the docs as a downloadable artifact.
+# To re-enable automatic API docs: generate them into docs/api/ inside
+# the dart.yml deploy-pages artifact instead of deploying separately.
 name: Dart Docs
 
 on:
-  push:
-    branches: [main]
   workflow_dispatch:
 
 permissions:
   contents: read
-  pages: write
-  id-token: write
 
 concurrency:
   group: "pages-docs"
@@ -28,12 +41,7 @@ jobs:
       - name: Generate API documentation
         run: dart doc --output=doc/api
       - name: Upload documentation artifact
-        uses: actions/upload-pages-artifact@v3
+        uses: actions/upload-artifact@v4
         with:
-          path: doc/api
           name: github-pages-docs
-      - name: Deploy to GitHub Pages
-        id: deployment
-        uses: actions/deploy-pages@v4
-        with:
-          artifact_name: github-pages-docs
+          path: doc/api
