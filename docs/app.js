@@ -623,7 +623,6 @@ function ensureMap() {
       pitch: 45,
       bearing: 0,
       attributionControl: { compact: true },
-      terrain: { source: 'terrain', exaggeration: 1.5 },
     });
     // Same UX law as the Leaflet era: the wheel only zooms once the map
     // canvas has focus — the page never hijacks scrolling on the way
@@ -632,6 +631,24 @@ function ensureMap() {
     _map.getCanvas().addEventListener('focus', () => _map.scrollZoom.enable());
     _map.getCanvas().addEventListener('blur', () => _map.scrollZoom.disable());
     _map.on('error', (e) => { console.error('MapLibre:', e && e.error); });
+    // 3D terrain is an on-first-engagement upgrade, never a boot cost.
+    // Eager construction put the DEM decode inside the FCP->TTI window
+    // (verdicts 4403-5087ms); attaching on the first idle re-rastered
+    // the whole viewport inside the same window (10066-13405ms) — both
+    // measured by the budgets gate (tool/check_budgets.mjs). The flat
+    // basemap stays fully usable; the 3D layer attaches when the user
+    // first engages the map (drag, zoom, touch, or keyboard pan).
+    const TERRAIN_ARM_EVENTS = ['pointerdown', 'wheel', 'touchstart', 'keydown'];
+    const enable3dTerrain = () => {
+      // Style still loading? Retry on the next engagement, never throw.
+      if (!_map || !_map.isStyleLoaded()) return;
+      TERRAIN_ARM_EVENTS.forEach((ev) =>
+        _map.getContainer().removeEventListener(ev, enable3dTerrain));
+      _map.setTerrain({ source: 'terrain', exaggeration: 1.5 });
+    };
+    TERRAIN_ARM_EVENTS.forEach((ev) =>
+      _map.getContainer().addEventListener(ev, enable3dTerrain, { passive: true }));
+
     _map.on('load', () => {
       _map.addSource('palika', { type: 'geojson', data: emptyFC() });
       _map.addSource('dots', {

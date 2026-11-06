@@ -31,7 +31,8 @@ void main(List<String> args) {
   if (incremental) {
     final hashFile = File(hashPath);
     if (hashFile.existsSync() && hashFile.readAsStringSync() == currentHash) {
-      stdout.writeln('No changes detected — skipping generation (incremental).');
+      stdout
+          .writeln('No changes detected — skipping generation (incremental).');
       return;
     }
   }

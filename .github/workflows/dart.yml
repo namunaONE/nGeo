@@ -145,10 +145,18 @@ jobs:
           exit $rc
       - name: Run tests
         run: dart test
-      - name: Flutter analyze (packages)
+      # Flutter analyze (packages) lived here until 2026-11-06. This job
+      # installs only the Dart SDK (same constraint as publish-dry-run
+      # below), so `flutter` is not on PATH and the step failed every
+      # run since a8213f0 - which skipped deploy-pages (needs: test) and
+      # took the website offline for three days. The packages' Flutter
+      # coverage lives in the flutter-widgets / flutter-example jobs below.
+      # Do not call flutter in this job.
+      - name: Analyze the pure-Dart boundaries package
         run: |
-          cd packages/nepal_admin_widgets && flutter pub get && flutter analyze --fatal-infos
-          cd ../nepal_admin_boundaries_highres && flutter pub get && flutter analyze --fatal-infos
+          cd packages/nepal_admin_boundaries_highres
+          dart pub get
+          dart analyze --fatal-infos
       - name: Coverage report
         run: dart test --coverage=coverage && dart pub global activate coverage && dart pub global run coverage:format_coverage --lcov --in=coverage --out=coverage/lcov.info --report-on=lib --check-ignore
       # The step above has always produced a report that nothing acted on.

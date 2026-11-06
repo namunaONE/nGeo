@@ -4,7 +4,6 @@ description: >-
   77 districts, 753 local bodies. Bilingual, offline, backed by the
   verified nepal_admin_api dataset.
 version: 0.2.0
-resolution: workspace
 
 homepage: https://github.com/namunaONE/nGeo/tree/main/packages/nepal_admin_widgets
 repository: https://github.com/namunaONE/nGeo

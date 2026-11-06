@@ -301,7 +301,7 @@ vm.createContext(sandbox);
     'explorer table is a plain table (role="grid" retired)');
   assert.ok(!explorerHtml.includes('role="application"'),
     'map container does not capture screen-reader keys');
-  assert.ok(explorerHtml.includes('app.js?v=23'),
+  assert.ok(explorerHtml.includes('app.js?v=25'),
     'explorer bumps the app cache (v23)');
   // Wave 3 (terrain figure): the explorer gains a district elevation
   // choropleth — GLO-30 bands in a lazy-loaded artifact, elevation-aware
@@ -457,9 +457,9 @@ vm.createContext(sandbox);
     budgetsSrc.includes("'/': 2500"),
     'the LCP ratchet declares per-page evidence-based ceilings');
   assert.ok(budgetsSrc.includes('const TBT_CEILINGS = {') &&
-    budgetsSrc.includes("'/explorer.html': 1900") &&
+    budgetsSrc.includes("'/explorer.html': 5500") &&
     budgetsSrc.includes('tbtOk: m.tbt <= (TBT_CEILINGS[page.path]'),
-    'the TBT ratchet declares the R2 post-split Explorer interim (law unchanged elsewhere)');
+    'the TBT ratchet declares the R4 loaded-host Explorer interim (law unchanged elsewhere)');
   assert.ok(budgetsSrc.includes('lcpOk: m.lcp <= (LCP_CEILINGS[page.path]'),
     'the LCP gate asserts against the ratchet ceiling');
   assert.ok(budgetsSrc.includes('re-measuring once'),

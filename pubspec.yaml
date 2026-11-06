@@ -16,12 +16,14 @@ topics:
 environment:
   sdk: ^3.5.0
 
-# Monorepo workspace: all packages share a single pubspec lock and
-# dependency resolution. This keeps the Flutter widgets package and the
-# high-res boundaries package in sync with the core API.
-workspace:
-  - packages/nepal_admin_widgets
-  - packages/nepal_admin_boundaries_highres
+# NOTE: this package is deliberately NOT a pub workspace root. A
+# workspace that includes packages/nepal_admin_widgets (a Flutter
+# package) makes `dart pub get` here require the Flutter SDK, which
+# the Dart-only CI jobs (test, publish-dry-run, dart-doc) do not
+# install. That broke every run from d5d5c0c (Nov 3, 2026) - the
+# "site shows a README instead of the website" incident - until the
+# revert on Nov 6, 2026. Re-introduce a workspace only together with
+# a CI plan that keeps root dependency resolution Dart-only.
 
 # Pure Dart package: no runtime dependencies needed — the data ships in the box.
 # Data license: boundary geometry is CC BY-IGO (Survey Department of Nepal
