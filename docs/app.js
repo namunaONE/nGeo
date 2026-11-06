@@ -631,19 +631,23 @@ function ensureMap() {
     _map.getCanvas().addEventListener('focus', () => _map.scrollZoom.enable());
     _map.getCanvas().addEventListener('blur', () => _map.scrollZoom.disable());
     _map.on('error', (e) => { console.error('MapLibre:', e && e.error); });
-    // 3D terrain is a post-boot upgrade, never a construction-time
-    // cost: the eager terrain DEM decode pulled terrarium tile work
-    // into the FCP->TTI window and was the biggest Explorer TBT adder
-    // (budgets gate, tool/check_budgets.mjs). The flat basemap stays
-    // fully usable; the 3D layer attaches in the first idle slot after
-    // the map settles.
+    // 3D terrain is an on-first-engagement upgrade, never a boot cost.
+    // Eager construction put the DEM decode inside the FCP->TTI window
+    // (verdicts 4403-5087ms); attaching on the first idle re-rastered
+    // the whole viewport inside the same window (10066-13405ms) — both
+    // measured by the budgets gate (tool/check_budgets.mjs). The flat
+    // basemap stays fully usable; the 3D layer attaches when the user
+    // first engages the map (drag, zoom, touch, or keyboard pan).
+    const TERRAIN_ARM_EVENTS = ['pointerdown', 'wheel', 'touchstart', 'keydown'];
     const enable3dTerrain = () => {
-      _map.off('idle', enable3dTerrain);
-      scheduleIdle(() => {
-        if (_map) _map.setTerrain({ source: 'terrain', exaggeration: 1.5 });
-      });
+      // Style still loading? Retry on the next engagement, never throw.
+      if (!_map || !_map.isStyleLoaded()) return;
+      TERRAIN_ARM_EVENTS.forEach((ev) =>
+        _map.getContainer().removeEventListener(ev, enable3dTerrain));
+      _map.setTerrain({ source: 'terrain', exaggeration: 1.5 });
     };
-    _map.on('idle', enable3dTerrain);
+    TERRAIN_ARM_EVENTS.forEach((ev) =>
+      _map.getContainer().addEventListener(ev, enable3dTerrain, { passive: true }));
 
     _map.on('load', () => {
       _map.addSource('palika', { type: 'geojson', data: emptyFC() });
