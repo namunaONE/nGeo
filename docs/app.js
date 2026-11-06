@@ -556,6 +556,8 @@ function addHillshadeLayer() {
       source: 'terrain',
       paint: {
         'hillshade-exaggeration': 0.35,
+        'hillshade-method': 'multidirectional',
+        'hillshade-illumination-anchor': 'map',
         'hillshade-shadow-color': '#473B33',
         'hillshade-highlight-color': '#ffffff',
         'hillshade-accent-color': '#7a6a5b',
@@ -634,6 +636,149 @@ function initMapControls() {
   if (hs) hs.addEventListener('change', function () { setHillshade(hs.checked); });
   var home = document.getElementById('map-home');
   if (home) home.addEventListener('click', flyHomeToNepal);
+}
+
+// --- Wave R6 (Google Earth feel): globe projection, OSM 3D buildings,
+// real-sun relief lighting and a DEM elevation readout. Same law as
+// R5: declarative + lazy. The OpenFreeMap vector source loads zero
+// tiles until the buildings layer paints (visibility none until asked
+// for); the globe is a post-load projection switch; the sun is pure
+// math; the elevation readout reads the DEM the terrain arm already
+// fetched. Nothing new touches the boot window.
+var OPENFREEMAP_PLANET_URL = 'https://tiles.openfreemap.org/planet';
+var OPENFREEMAP_ATTRIBUTION = 'OpenFreeMap · © OpenStreetMap contributors (ODbL)';
+
+function sunPositionForNepal(nowMs) {
+  // NOAA fractional-year solar position (~1° accuracy — plenty for
+  // lighting) for the current map center, in NPT local time.
+  var lat = 28.4, lng = 84.13;
+  try {
+    if (_map && _map.getCenter) {
+      var c = _map.getCenter();
+      lat = c.lat;
+      lng = c.lng;
+    }
+  } catch (e) { /* map not armed yet: Kathmandu fallback */ }
+  var nptMs = (nowMs || Date.now()) + 20700000; // UTC+5:45 (NPT)
+  var d = new Date(nptMs);
+  var dayOfYear = Math.floor((nptMs - Date.UTC(d.getUTCFullYear(), 0, 0)) / 86400000);
+  var hoursNpt = d.getUTCHours() + d.getUTCMinutes() / 60 + d.getUTCSeconds() / 3600;
+  var fy = (2 * Math.PI / 365) * (dayOfYear - 1 + (hoursNpt - 12) / 24);
+  var decl =
+    0.006918 - 0.399912 * Math.cos(fy) + 0.070257 * Math.sin(fy) -
+    0.006758 * Math.cos(2 * fy) + 0.000907 * Math.sin(2 * fy) -
+    0.002697 * Math.cos(3 * fy) + 0.00148 * Math.sin(3 * fy);
+  var eqtime = 229.18 * (0.000075 + 0.001868 * Math.cos(fy) -
+    0.032077 * Math.sin(fy) - 0.014615 * Math.cos(2 * fy) -
+    0.040849 * Math.sin(2 * fy));
+  // True solar time (min) = NPT wall + equation of time + 4°lon − 60×5.75
+  var ha = (hoursNpt * 60 + eqtime + 4 * lng - 345) / 4 - 180; // hour angle
+  var latR = lat * Math.PI / 180;
+  var haR = ha * Math.PI / 180;
+  var up = Math.sin(latR) * Math.sin(decl) + Math.cos(latR) * Math.cos(decl) * Math.cos(haR);
+  var east = -Math.cos(decl) * Math.sin(haR);
+  var north = Math.cos(latR) * Math.sin(decl) - Math.sin(latR) * Math.cos(decl) * Math.cos(haR);
+  var altitude = Math.asin(Math.max(-1, Math.min(1, up))) * 180 / Math.PI;
+  var azimuth = Math.atan2(east, north) * 180 / Math.PI;
+  if (azimuth < 0) azimuth += 360;
+  return { azimuth: azimuth, altitude: altitude };
+}
+
+function applyRealSun() {
+  // Lights the scene from where the sun ACTUALLY is over Nepal right
+  // now: extruded buildings and the relief shading share the real
+  // azimuth/altitude, with a warm tint at dawn and dusk. Guarded per
+  // feature — an old build keeps the flat defaults.
+  if (!_map) return;
+  var sun = sunPositionForNepal(Date.now());
+  var polar = Math.max(0, Math.min(90, 90 - Math.max(sun.altitude, 6)));
+  var color = '#FFFFFF';
+  if (sun.altitude < 8) color = '#FFB870';
+  else if (sun.altitude < 22) color = '#FFD9A8';
+  if (typeof _map.setLight === 'function') {
+    try {
+      _map.setLight({ anchor: 'map', position: [1.15, sun.azimuth, polar], color: color, intensity: 0.4 });
+    } catch (e) { /* light spec changed: keep the map alive */ }
+  }
+  try {
+    if (_map.getLayer('terrain-hillshade')) {
+      _map.setPaintProperty('terrain-hillshade', 'hillshade-illumination-anchor', 'map');
+      _map.setPaintProperty('terrain-hillshade', 'hillshade-illumination-direction', Math.round(sun.azimuth));
+    }
+  } catch (e) { /* hillshade keeps its default light */ }
+}
+
+function setGlobe(enabled) {
+  // The Google Earth moment: the map becomes a planet. Globe mode
+  // unclamps the Nepal camera (maxBounds null, minZoom 1) so you can
+  // zoom out to space; switching off restores the clamp. Reduced-motion
+  // visitors get an instant reframe, never a camera ride.
+  if (!_map || typeof _map.setProjection !== 'function') return;
+  var reduced = window.matchMedia('(prefers-reduced-motion: reduce)').matches;
+  try {
+    if (enabled) {
+      _map.setMaxBounds(null);
+      if (typeof _map.setMinZoom === 'function') _map.setMinZoom(1);
+      _map.setProjection({ type: 'globe' });
+      var to = { center: [84.12, 28.39], zoom: 2.4, pitch: 0, duration: reduced ? 0 : 1200, essential: false };
+      if (reduced || typeof _map.easeTo !== 'function') _map.jumpTo(to);
+      else _map.easeTo(to);
+    } else {
+      _map.setProjection({ type: 'mercator' });
+      if (typeof _map.setMinZoom === 'function') _map.setMinZoom(5);
+      _map.setMaxBounds(NEPAL_MAX_BOUNDS);
+    }
+  } catch (e) { /* projection unsupported: the flat map keeps working */ }
+  try { localStorage.setItem('ngeoGlobe', enabled ? '1' : '0'); } catch (e) { /* private mode */ }
+}
+
+function setBuildings(enabled) {
+  // OSM 3D buildings (OpenFreeMap weekly planet build — no API key,
+  // no view caps, commercial use allowed). The layer stays
+  // visibility:none until asked, so the vector source loads zero tiles
+  // on boot and for everyone who never toggles it.
+  if (!_map) return;
+  try {
+    if (_map.getLayer('buildings-3d')) {
+      _map.setLayoutProperty('buildings-3d', 'visibility', enabled ? 'visible' : 'none');
+    }
+  } catch (e) { /* layer contract changed: keep the map alive */ }
+  try { localStorage.setItem('ngeoBuildings', enabled ? '1' : '0'); } catch (e) { /* private mode */ }
+}
+
+function initRealismControls() {
+  // Wires the R6 controls on the same lazy arm as R5 (map 'load').
+  var globe = document.getElementById('globe-toggle');
+  if (globe) {
+    globe.addEventListener('change', function () { setGlobe(globe.checked); });
+    var savedGlobe = null;
+    try { savedGlobe = localStorage.getItem('ngeoGlobe'); } catch (e) { /* private mode */ }
+    if (savedGlobe === '1') { globe.checked = true; setGlobe(true); }
+  }
+  var bld = document.getElementById('buildings-toggle');
+  if (bld) {
+    bld.addEventListener('change', function () { setBuildings(bld.checked); });
+    var savedBld = null;
+    try { savedBld = localStorage.getItem('ngeoBuildings'); } catch (e) { /* private mode */ }
+    if (savedBld === '1') { bld.checked = true; setBuildings(true); }
+  }
+  var readout = document.getElementById('elevation-readout');
+  if (readout) {
+    var last = 0;
+    _map.on('mousemove', function (e) {
+      var now = Date.now();
+      if (now - last < 120) return; // throttle to ~8 reads/sec
+      last = now;
+      var m = null;
+      try {
+        if (typeof _map.queryTerrainElevation === 'function') m = _map.queryTerrainElevation(e.lngLat);
+      } catch (err) { m = null; }
+      readout.textContent = (m === null || m === undefined || isNaN(m))
+        ? 'Elevation: arm 3D relief to read terrain'
+        : 'Elevation here: ≈ ' + Math.round(m) + ' m';
+    });
+  }
+  applyRealSun();
 }
 
 // Type palette — one legend source: read live from the --map-* tokens in
@@ -786,6 +931,11 @@ function ensureMap() {
             maxzoom: 9,
             attribution: 'NASA EOSDIS GIBS (VIIRS)',
           },
+          'openfreemap': {
+            type: 'vector',
+            url: OPENFREEMAP_PLANET_URL,
+            attribution: OPENFREEMAP_ATTRIBUTION,
+          },
         },
         layers: [{
           id: 'osm-tiles',
@@ -814,6 +964,21 @@ function ensureMap() {
           source: 'gibs-viirs',
           minzoom: 4,
           layout: { visibility: 'none' },
+        },
+        {
+          id: 'buildings-3d',
+          type: 'fill-extrusion',
+          source: 'openfreemap',
+          'source-layer': 'building',
+          minzoom: 14,
+          layout: { visibility: 'none' },
+          filter: ['!=', ['get', 'hide_3d'], true],
+          paint: {
+            'fill-extrusion-color': '#E8E2D6',
+            'fill-extrusion-opacity': 0.85,
+            'fill-extrusion-height': ['interpolate', ['linear'], ['zoom'], 14, 0, 15.5, ['get', 'render_height']],
+            'fill-extrusion-base': ['interpolate', ['linear'], ['zoom'], 14, 0, 15.5, ['get', 'render_min_height']],
+          },
         }],
       },
       center: [84.12, 28.39],
@@ -847,6 +1012,7 @@ function ensureMap() {
       _map.setTerrain({ source: 'terrain', exaggeration: _terrainExaggeration });
       applySky();
       addHillshadeLayer();
+      applyRealSun();
     };
     TERRAIN_ARM_EVENTS.forEach((ev) =>
       _map.getContainer().addEventListener(ev, enable3dTerrain, { passive: true }));
@@ -892,6 +1058,7 @@ function ensureMap() {
       initMapOverlays();
       initBoundaryDetailToggle();
       initMapControls();
+      initRealismControls();
       const status = document.getElementById('map-status');
       if (status) status.textContent = '';
       // Deep link: explorer.html?cbs=31304

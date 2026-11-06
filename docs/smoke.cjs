@@ -301,8 +301,8 @@ vm.createContext(sandbox);
     'explorer table is a plain table (role="grid" retired)');
   assert.ok(!explorerHtml.includes('role="application"'),
     'map container does not capture screen-reader keys');
-  assert.ok(explorerHtml.includes('app.js?v=26'),
-    'explorer bumps the app cache (v26)');
+  assert.ok(explorerHtml.includes('app.js?v=27'),
+    'explorer bumps the app cache (v27)');
   // Wave 3 (terrain figure): the explorer gains a district elevation
   // choropleth — GLO-30 bands in a lazy-loaded artifact, elevation-aware
   // popups, and a deep-linkable hero button. The gate interpolates the
@@ -344,8 +344,8 @@ vm.createContext(sandbox);
     'toast feedback is announced (role=status)');
   assert.ok(appSrc.includes('aria-current'),
     'pagination announces the current page');
-  assert.ok((appSrc.match(/prefers-reduced-motion: reduce/g) || []).length === 5,
-    'reduced-motion respected (header scroll, flyTo, anchors, count-up, home flight)');
+  assert.ok((appSrc.match(/prefers-reduced-motion: reduce/g) || []).length === 6,
+    'reduced-motion respected (header scroll, flyTo, anchors, count-up, home + globe flights)');
   // Bento 2.0 homepage (Wave 2): the features grid is a bento grid —
   // one dominant bilingual cell (2x2), the CBS claim in a wide cell,
   // asymmetric spans on a shared 6-column grid, tactile hover that
@@ -379,8 +379,8 @@ vm.createContext(sandbox);
     'easing tokens are generated (entrance ease-out, exit ease-in)');
   assert.ok(appSrc.includes('initCountUp'), 'hero stats count up on viewport entry');
   assert.ok(appSrc.includes('initBentoReveal'), 'bento entrance staggers on viewport entry');
-  assert.ok((appSrc.match(/prefers-reduced-motion: reduce/g) || []).length === 5,
-    'reduced-motion guards (header, flyTo, anchors, count-up, home flight)');
+  assert.ok((appSrc.match(/prefers-reduced-motion: reduce/g) || []).length === 6,
+    'reduced-motion guards (header, flyTo, anchors, count-up, home + globe flights)');
   assert.ok(stylesCss.includes('bento-rise'), 'bento rise keyframes ship');
   assert.ok(stylesCss.includes('prefers-reduced-motion: no-preference'),
     'the reveal is opt-in: hidden cells exist only in the no-preference media block');
@@ -627,6 +627,28 @@ vm.createContext(sandbox);
     explorerHtml.includes('hillshade-toggle') &&
     explorerHtml.includes('map-home'),
     'R5: the explorer exposes the basemap, relief and home controls');
+  // Wave R6 (Google Earth feel): globe projection, OSM 3D buildings on
+  // keyless OpenFreeMap planet tiles, real-sun relief lighting, and a
+  // DEM elevation readout — every piece lazy and off the boot path.
+  assert.ok(appSrc.includes('var OPENFREEMAP_PLANET_URL') &&
+    appSrc.includes('https://tiles.openfreemap.org/planet'),
+    'R6: 3D buildings ride the keyless OpenFreeMap planet tiles');
+  assert.ok(appSrc.includes("id: 'buildings-3d'") &&
+    appSrc.includes('fill-extrusion'),
+    'R6: buildings extrude in 3D (visibility none until toggled)');
+  assert.ok(typeof sandbox.setGlobe === 'function' &&
+    appSrc.includes("setProjection({ type: 'globe' })"),
+    'R6: the globe view toggle ships (classic script globals)');
+  assert.ok(typeof sandbox.applyRealSun === 'function' &&
+    appSrc.includes('hillshade-illumination-anchor'),
+    'R6: relief is lit from the real sun (azimuth + altitude)');
+  assert.ok(appSrc.includes('queryTerrainElevation') &&
+    appSrc.includes('elevation-readout'),
+    'R6: the elevation readout queries the terrain DEM');
+  assert.ok(explorerHtml.includes('globe-toggle') &&
+    explorerHtml.includes('buildings-toggle') &&
+    explorerHtml.includes('elevation-readout'),
+    'R6: the explorer exposes the globe, buildings and elevation controls');
     const rows = (tableBody.innerHTML.match(/<tr/g) || []).length;
   console.log(`SMOKE OK: ${data.length} records, ${rows} rows rendered, no errors`);
 })().catch((err) => {
