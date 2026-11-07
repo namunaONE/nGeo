@@ -1,0 +1,131 @@
+{
+  "$schema_note": "Machine-readable provenance manifest for the website explorer's MAP LAYERS. Complements data/SOURCES.md, which owns the package + boundary-layer provenance. Every layer the explorer renders must appear here with source, license, date policy and known limits. Never hand-wave a field: if unknown, write \"unknown\".",
+  "schemaVersion": 1,
+  "generated": "2026-11-07",
+  "generatedBy": "Phase 0 layer audit (sources extracted from docs/app.js as of commit 3153ab9)",
+  "engine": {
+    "name": "maplibre-gl-js",
+    "version": "5.6.0",
+    "load": "https://unpkg.com/maplibre-gl@5.6.0/dist/maplibre-gl.js",
+    "license": "BSD-3-Clause",
+    "knownLimit": "v6 line is ESM-only and WebGL2-only; pinned to 5.6 until the migration is planned"
+  },
+  "layers": [
+    {
+      "id": "basemap-osm",
+      "kind": "raster-xyz",
+      "url": "https://tile.openstreetmap.org/{z}/{x}/{y}.png",
+      "provider": "OpenStreetMap Foundation",
+      "license": "ODbL 1.0",
+      "attribution": "© OpenStreetMap contributors",
+      "datePolicy": "continuous",
+      "dateDetail": "Rendered from live OSM data; no single capture date applies",
+      "knownLimits": "tile usage policy applies; dark mode is a CSS filter over the same tiles"
+    },
+    {
+      "id": "basemap-esri-imagery",
+      "kind": "raster-xyz",
+      "url": "https://server.arcgisonline.com/ArcGIS/restServices/World_Imagery/MapServer/tile/{z}/{y}/{x}",
+      "provider": "Esri",
+      "license": "Esri Master Agreement / World Imagery terms (free use with required attribution)",
+      "attribution": "Esri, Maxar, Earthstar Geographics, and the GIS User Community",
+      "datePolicy": "undated-mosaic",
+      "dateDetail": "Per-tile capture dates are not exposed by this endpoint; different tiles are from different dates",
+      "knownLimits": "Resolution varies by region; no freshness guarantee. Dated alternative: Esri World Imagery Wayback releases are the same tile pyramid with a date label",
+      "driftWatch": "none"
+    },
+    {
+      "id": "basemap-esri-reference",
+      "kind": "raster-xyz",
+      "url": "https://server.arcgisonline.com/ArcGIS/restServices/Reference/World_Boundaries_and_Places/MapServer/tile/{z}/{y}/{x}",
+      "provider": "Esri",
+      "license": "Esri Master Agreement terms",
+      "attribution": "Esri",
+      "datePolicy": "undated-mosaic",
+      "knownLimits": "Reference labels, not authoritative boundaries"
+    },
+    {
+      "id": "satellite-gibs-viirs",
+      "kind": "raster-wmts",
+      "url": "https://gibs.earthdata.nasa.gov/wmts/epsg3875/best/VIIRS_SNPP_CorrectedReflectance_TrueColor/default/{date}/GoogleMapsCompatible_Level9/{z}/{y}/{x}.jpg",
+      "urlNote": "Actual EPSG is 3857 in app.js; {date} is bound at runtime by gibsLatestDate()",
+      "provider": "NASA EOSDIS GIBS",
+      "license": "Public domain (US Government work); attribution requested: ' imagery courtesy of NASA EOSDIS GIBS'",
+      "attribution": "NASA EOSDIS GIBS / VIIRS SNPP",
+      "datePolicy": "live-daily",
+      "dateDetail": "Runtime-dated to the latest available daily pass at view time",
+      "knownLimits": "~375 m/px (z0-9 only): weather-scale context, not ground detail; a pre-dawn pass means yesterday's scene"
+    },
+    {
+      "id": "basemap-openfreemap",
+      "kind": "vector-tiles",
+      "url": "https://tiles.openfreemap.org/planet",
+      "provider": "OpenFreeMap",
+      "license": "Free/open; data © OpenStreetMap contributors (ODbL)",
+      "attribution": "© OpenStreetMap contributors",
+      "datePolicy": "continuous",
+      "knownLimits": "Third-party free service; no uptime guarantee"
+    },
+    {
+      "id": "terrain-terrarium-dem",
+      "kind": "raster-dem",
+      "url": "https://s3.amazonaws.com/elevation-tiles-prod/terrarium/{z}/{x}/{y}.png",
+      "provider": "Registry of Open Data on AWS (elevation-tiles-prod, Mapzen terrain tiles)",
+      "license": "Open data; hosted on AWS Open Data",
+      "datePolicy": "frozen",
+      "dateDetail": "Built from SRTM (Feb 2000 flight), GMTED2010, ETOPO1, USGS 3DEP and national models; static dataset",
+      "knownLimits": "THIS IS NOT COPERNICUS GLO-30. SRTM-era surface model: canopy and buildings baked into elevations. In Nepal's forested mid-hills ridgelines read high by roughly canopy height. Feeds both the 3D terrain and the runtime multidirectional hillshade (exaggeration 0.35). The district elevation stats (district-elevation.json) use GLO-30 — a DIFFERENT DEM; on-screen terrain heights and published district stats can legitimately disagree",
+      "maxzoom": 14,
+      "driftWatch": "none"
+    }
+  ],
+  "firstPartyGeojson": {
+    "note": "Same-origin artifacts served from this site; full provenance, pins and CI gates in data/SOURCES.md — listed here with pointers only",
+    "layers": [
+      {
+        "file": "palika-boundaries.geojson",
+        "provenance": "data/SOURCES.md § 'Palika boundary geometry'",
+        "gate": "check_boundary_join.dart: 753/753 join coverage in CI"
+      },
+      {
+        "file": "district-boundaries.geojson",
+        "provenance": "data/SOURCES.md § 'District boundaries (77 districts)' (retrieved 2026-10-28, Survey Dept / National Geoportal lineage)",
+        "gate": "77/77 name join, 5 ground-truth point-in-polygon checks at ingestion"
+      },
+      {
+        "file": "province-boundaries.geojson",
+        "provenance": "data/SOURCES.md § 'Province boundaries (high-res)' (retrieved 2026-10-26, National Geoportal)",
+        "gate": "7/7"
+      },
+      {
+        "file": "national-outline.geojson",
+        "provenance": "data/SOURCES.md",
+        "gate": "see doc"
+      },
+      {
+        "file": "protected-areas.geojson",
+        "provenance": "data/SOURCES.md",
+        "gate": "see doc"
+      },
+      {
+        "file": "nh01-highway.geojson",
+        "provenance": "data/SOURCES.md § 'Website basemap' — OSM relations 339449, 15086072, ODbL, metadata embedded in artifact",
+        "gate": "extract_nh01.cjs structural gates (termini, length, way count)"
+      }
+    ]
+  },
+  "derivedStats": [
+    {
+      "file": "district-elevation.json",
+      "source": "Copernicus GLO-30 (frozen 2021 release), zonal min/mean/max over the 77 official district polygons",
+      "provenance": "data/SOURCES.md § 'District elevation statistics'",
+      "validationAnchors": "Solukhumbu elevMax>=8700; Taplejung >=8400; Myagdi >=7900; national min 50-100m; weighted mean 1800-2700m; Mustang elevMin >=1300 — hard-fail in .github/workflows/elevation-stats.yml"
+    }
+  ],
+  "auditFindings2026-11-07": [
+    "The provenance contract (data/SOURCES.md + PROVENANCE.sha256) covers the package, boundaries and elevation stats rigorously, but NONE of the remote map layers in docs/app.js were covered by any manifest. This file closes that gap.",
+    "Two different DEMs are user-visible simultaneously: terrain display uses the terrarium (SRTM-blend) tiles, district elevation stats use GLO-30. Any future on-screen elevation readout must state which DEM it sampled.",
+    "Esri World Imagery is an undated mosaic — the only explorer layer with no date policy at all. Wayback releases are the dated form of the same pyramid.",
+    "GIBS VIIRS is already genuinely live (runtime-dated daily). The freshness gap is high-resolution imagery, not satellite data in general."
+  ]
+}
