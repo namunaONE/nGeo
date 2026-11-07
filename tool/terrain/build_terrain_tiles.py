@@ -216,6 +216,9 @@ def build():
                 tiles += 1
                 total += os.path.getsize(path)
                 PROGRESS.update(tiles=tiles, bytes=total)
+                if tiles % 256 == 0:
+                    print("progress: z=%02d tiles=%d %.1f MB"
+                          % (z, tiles, total / 1e6))
         print("z%02d done (%d tiles so far, %.1f MB)"
               % (z, tiles, total / 1e6))
 

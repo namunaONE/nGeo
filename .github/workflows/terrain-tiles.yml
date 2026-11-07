@@ -33,6 +33,8 @@ jobs:
         run: pip install rasterio numpy
       # Diagnostics travel as ::error annotations (readable without
       # authentication) because raw logs are not reachable from outside.
+      # Silence-proofing: no set -e landmines, verdict-first order (tac),
+      # and the full log is uploaded as an artifact on any failure.
       - name: Build FABDEM terrain tiles and run the anchor gates
         run: |
           set +e
@@ -40,30 +42,36 @@ jobs:
           python -m py_compile tool/terrain/build_terrain_tiles.py >> terrain-build.log 2>&1
           comp=$?
           if [ "$comp" -ne 0 ]; then
-            tail -n 20 terrain-build.log | while IFS= read -r line; do
-              line=${'$'}{line//%/%25}
-              echo "::error title=py_compile::${'$'}{line:0:470}"
+            tail -n 20 terrain-build.log | tac | while IFS= read -r line; do
+              msg=$(printf '%s' "$line" | sed 's/%/%25/g' | cut -c1-470)
+              echo "::error title=py_compile::$msg"
             done
-            cat terrain-build.log
+            cat terrain-build.log || true
             exit "$comp"
           fi
           python -u tool/terrain/build_terrain_tiles.py >> terrain-build.log 2>&1
           rc=$?
-          set -e
-          cat terrain-build.log
+          cat terrain-build.log || true
           if [ "$rc" -ne 0 ]; then
-            tail -n 6 terrain-build.log | while IFS= read -r line; do
-              line=${'$'}{line//%/%25}
-              echo "::error title=tool::${'$'}{line:0:470}"
+            tail -n 6 terrain-build.log | tac | while IFS= read -r line; do
+              msg=$(printf '%s' "$line" | sed 's/%/%25/g' | cut -c1-470)
+              echo "::error title=tool::$msg"
             done
             {
               echo '## Terrain build failed - last tool output'
               echo '```'
               tail -c 6000 terrain-build.log
               echo '```'
-            } >> "$GITHUB_STEP_SUMMARY"
+            } >> "$GITHUB_STEP_SUMMARY" || true
             exit "$rc"
           fi
+      - name: Upload build log on failure
+        if: failure()
+        uses: actions/upload-artifact@v4
+        with:
+          name: terrain-build-log
+          path: terrain-build.log
+          retention-days: 7
       # Binary artifact, generated in CI only - committed, never
       # hand-edited. [skip ci] keeps the bot commit from re-triggering.
       - name: Commit when the artifact changed
@@ -80,12 +88,11 @@ jobs:
           git commit -m 'data: rebuild FABDEM terrain tiles (z0-11) [skip ci]'
           git push > terrain-push.log 2>&1
           rc=$?
-          set -e
-          cat terrain-push.log
+          cat terrain-push.log || true
           if [ "$rc" -ne 0 ]; then
-            tail -n 10 terrain-push.log | while IFS= read -r line; do
-              line=${'$'}{line//%/%25}
-              echo "::error title=git push::${'$'}{line:0:470}"
+            tail -n 10 terrain-push.log | tac | while IFS= read -r line; do
+              msg=$(printf '%s' "$line" | sed 's/%/%25/g' | cut -c1-470)
+              echo "::error title=git push::$msg"
             done
             exit "$rc"
           fi
