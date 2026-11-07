@@ -301,8 +301,11 @@ vm.createContext(sandbox);
     'explorer table is a plain table (role="grid" retired)');
   assert.ok(!explorerHtml.includes('role="application"'),
     'map container does not capture screen-reader keys');
-  assert.ok(explorerHtml.includes('app.js?v=27'),
-    'explorer bumps the app cache (v27)');
+  assert.ok(explorerHtml.includes('app.js?v=28'),
+    'explorer bumps the app cache (v28)');
+  assert.ok(appSrc.includes('fabdem-terrain') &&
+    appSrc.includes('FABDEM v1.2'),
+    'R7: the terrain DEM is FABDEM v1.2 with on-source attribution');
   // Wave 3 (terrain figure): the explorer gains a district elevation
   // choropleth — GLO-30 bands in a lazy-loaded artifact, elevation-aware
   // popups, and a deep-linkable hero button. The gate interpolates the

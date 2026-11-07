@@ -20,7 +20,6 @@
   <link rel="preload" href="fonts/inter-latin-wght-normal.woff2" as="font" type="font/woff2" crossorigin fetchpriority="high"
   <link rel="stylesheet" href="fonts.css?v=1">
   <link rel="manifest" href="manifest.json">
-  <link rel="stylesheet" href="sources-panel.css?v=1">
 </head>
 <body>
   <a class="skip-link" href="#main">Skip to main content</a>
@@ -129,18 +128,9 @@
           </label>
           <span id="elevation-readout" style="display:block;font-size:0.75rem;color:#57534E;min-height:1.2em;"></span>
           <button class="btn btn-secondary btn-sm" id="map-home" type="button" title="Reset to the Nepal view">⌂ Nepal</button>
-          <button class="btn btn-secondary btn-sm" id="data-sources-toggle" type="button" aria-expanded="false" aria-controls="data-sources-panel" title="What each map layer is, and how fresh it is">Data &amp; sources</button>
         </div>
         <div id="map" class="map" aria-label="Interactive map of Nepal local bodies — arrow keys pan, plus and minus zoom"></div>
-              <section id="data-sources-panel" hidden aria-label="Map layer sources, licenses and dates">
-        <div class="sources-panel-head">
-          <h3 class="sources-panel-title">What this map is made of</h3>
-          <p class="sources-panel-sub">Every layer with its source, license, date policy and known limits — machine-readable in <a href="https://github.com/namunaONE/nGeo/blob/main/docs/sources.json" target="_blank" rel="noopener">sources.json</a>, verified provenance in <a href="https://github.com/namunaONE/nGeo/blob/main/data/SOURCES.md" target="_blank" rel="noopener">data/SOURCES.md</a>.</p>
-        </div>
-        <p class="sources-panel-empty">Loading layer provenance…</p>
-      </section>
-
-      <p class="map-attrib-note">Palika boundaries: Survey Department of Nepal (CC BY-IGO) via HDX COD-AB — official map. Centroids: open-admin-data vendored extract (see SOURCES). Basemap © <a href="https://www.openstreetmap.org/copyright" target="_blank" rel="noopener">OpenStreetMap</a> contributors. Protected areas overlay: WDPA (UNEP-WCMC &amp; IUCN) via the WWF Nepal Biodiversity Areas dataset. National outline: Acesmndr/nepal-geojson (MIT) — official <span lang="ne">चुच्चे map (Kalapani</span> · Lipulekh · Limpiyadhura). NH01 highway overlay: <a href="https://www.openstreetmap.org/copyright" target="_blank" rel="noopener">OpenStreetMap</a> (ODbL 1.0) — © OpenStreetMap contributors. District elevation: Copernicus GLO-30. District boundaries: Survey Department of Nepal / National Geoportal. Satellite basemap: Esri World Imagery (Maxar, Earthstar Geographics). Daily imagery: NASA EOSDIS GIBS (VIIRS). 3D buildings: OpenFreeMap · © OpenStreetMap contributors (ODbL).</p>
+        <p class="map-attrib-note">Palika boundaries: Survey Department of Nepal (CC BY-IGO) via HDX COD-AB — official map. Centroids: open-admin-data vendored extract (see SOURCES). Basemap © <a href="https://www.openstreetmap.org/copyright" target="_blank" rel="noopener">OpenStreetMap</a> contributors. Protected areas overlay: WDPA (UNEP-WCMC &amp; IUCN) via the WWF Nepal Biodiversity Areas dataset. National outline: Acesmndr/nepal-geojson (MIT) — official <span lang="ne">चुच्चे map (Kalapani</span> · Lipulekh · Limpiyadhura). NH01 highway overlay: <a href="https://www.openstreetmap.org/copyright" target="_blank" rel="noopener">OpenStreetMap</a> (ODbL 1.0) — © OpenStreetMap contributors. District elevation: Copernicus GLO-30. District boundaries: Survey Department of Nepal / National Geoportal. Satellite basemap: Esri World Imagery (Maxar, Earthstar Geographics). Daily imagery: NASA EOSDIS GIBS (VIIRS). 3D buildings: OpenFreeMap · © OpenStreetMap contributors (ODbL).</p>
       </section>
 
       <div class="explorer-toolbar">
@@ -191,8 +181,7 @@
   </footer>
 
   <script defer src="app-critical.js?v=1"></script>
-  <script defer src="app.js?v=27"></script>
-  <script defer src="sources-panel.js?v=1"></script>
+  <script defer src="app.js?v=28"></script>
   <script>
     if ('serviceWorker' in navigator) {
       navigator.serviceWorker.register('/sw.js').catch(() => {});
