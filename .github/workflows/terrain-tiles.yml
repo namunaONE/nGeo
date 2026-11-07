@@ -41,8 +41,8 @@ jobs:
           comp=$?
           if [ "$comp" -ne 0 ]; then
             tail -n 20 terrain-build.log | while IFS= read -r line; do
-              line=${line//%/%25}
-              echo "::error title=py_compile::${line:0:470}"
+              line=${'$'}{line//%/%25}
+              echo "::error title=py_compile::${'$'}{line:0:470}"
             done
             cat terrain-build.log
             exit "$comp"
@@ -52,9 +52,9 @@ jobs:
           set -e
           cat terrain-build.log
           if [ "$rc" -ne 0 ]; then
-            tail -n 60 terrain-build.log | while IFS= read -r line; do
-              line=${line//%/%25}
-              echo "::error title=tool::${line:0:470}"
+            tail -n 6 terrain-build.log | while IFS= read -r line; do
+              line=${'$'}{line//%/%25}
+              echo "::error title=tool::${'$'}{line:0:470}"
             done
             {
               echo '## Terrain build failed - last tool output'
@@ -84,8 +84,8 @@ jobs:
           cat terrain-push.log
           if [ "$rc" -ne 0 ]; then
             tail -n 10 terrain-push.log | while IFS= read -r line; do
-              line=${line//%/%25}
-              echo "::error title=git push::${line:0:470}"
+              line=${'$'}{line//%/%25}
+              echo "::error title=git push::${'$'}{line:0:470}"
             done
             exit "$rc"
           fi

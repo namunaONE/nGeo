@@ -11,6 +11,10 @@ timestamps inside the PNGs - a rerun over the same source produces
 byte-identical tiles, so rebuilds only commit when something upstream
 actually changed (the elevation-stats pattern).
 
+Diagnostics law: every failure exits through fail(), which carries the
+full progress numbers (zoom, tiles, MB, gate values) in the message - so
+the workflow's tail dump always shows the verdict, never warning spam.
+
 Gates (fail the build, never the map):
   - Everest anchor: elevation at 86.9250E, 27.9881N must be 7900-8899 m
     (FABDEM is bare-earth circa 2020; the official high point is 8848.86 m).
@@ -22,12 +26,20 @@ import json
 import math
 import os
 import sys
+import traceback
+import warnings
 
 import numpy as np
 import rasterio
 from rasterio.enums import Resampling
+from rasterio.errors import NotGeoreferencedWarning
 from rasterio.transform import from_bounds
 from rasterio.warp import reproject
+
+# PNG tiles are consumed by MapLibre via {z}/{x}/{y} paths - geo-referencing
+# is meaningless for them, and the warning would otherwise flood two log
+# lines per tile write, burying the real diagnostics in the tail dump.
+warnings.filterwarnings("ignore", category=NotGeoreferencedWarning)
 
 Z_MIN, Z_MAX = 0, 11
 TILE = 256
@@ -40,6 +52,14 @@ EVEREST = (86.9250, 27.9881)
 NODATA = -9999.0
 BUDGET = 80 * 1024 * 1024
 WORLD = 20037508.342789244
+
+# Progress readout for failure diagnostics (updated inside the build loop).
+PROGRESS = {"z": None, "x": None, "y": None, "tiles": 0, "bytes": 0}
+
+
+def fail(msg):
+    print("TERRAIN FAIL: %s" % msg)
+    sys.exit(1)
 
 
 def block_for(la, lo):
@@ -134,14 +154,14 @@ def terrarium(arr):
     return np.dstack([r, g, b]).astype(np.uint8), a, valid
 
 
-def main():
+def build():
     # Nepal band source tiles: N26..N30 (Nepal reaches 30.42N) x
     # E079..E088 (the bbox spans 79.9E..88.4E). All 50 verified in the
     # links-ads/fabdem-v12 STAC catalog.
     lats = range(26, 31)
     lons = range(79, 89)
     srcs = []
-    with rasterio.Env(GDAL_HTTP_MAX_RETRY="5",
+    with rasterio.Env(GDAL_HTTP_MAX_RETRY="10",
                       GDAL_HTTP_RETRY_DELAY="2",
                       VSI_CACHE="TRUE", VSI_CACHE_SIZE="5000000"):
         for la in lats:
@@ -171,6 +191,7 @@ def main():
         for x in range(x0, x1 + 1):
             os.makedirs(os.path.join(OUT, str(z), str(x)), exist_ok=True)
             for y in range(y0, y1 + 1):
+                PROGRESS.update(z=z, x=x, y=y, tiles=tiles, bytes=total)
                 w, s, e, nlat = lonlat(z, x, y)
                 if e <= BBOX[0] or w >= BBOX[2] or nlat <= BBOX[1] or s >= BBOX[3]:
                     continue
@@ -194,19 +215,27 @@ def main():
                               indexes=[1, 2, 3])
                 tiles += 1
                 total += os.path.getsize(path)
-        print("z%02d done (%d tiles so far)" % (z, tiles))
+                PROGRESS.update(tiles=tiles, bytes=total)
+        print("z%02d done (%d tiles so far, %.1f MB)"
+              % (z, tiles, total / 1e6))
+
+    print("GATE REPORT: tiles=%d totalMB=%.2f everest=%s gmin=%s gmax=%s"
+          % (tiles, total / 1e6,
+             "None" if everest_sample is None else "%.1f" % everest_sample,
+             "inf" if gmin == math.inf else "%.1f" % gmin,
+             "-inf" if gmax == -math.inf else "%.1f" % gmax))
 
     if everest_sample is None:
-        sys.exit("GATE: Everest tile not built - bbox or zoom range is wrong")
+        fail("GATE: Everest tile not built - bbox or zoom range is wrong")
     if not (7900 <= everest_sample <= 8899):
-        sys.exit("GATE: Everest sample %.1f m outside 7900-8899" % everest_sample)
+        fail("GATE: Everest sample %.1f m outside 7900-8899" % everest_sample)
     if not (30 < gmin < 300):
-        sys.exit("GATE: band min %.1f m outside 30-300" % gmin)
+        fail("GATE: band min %.1f m outside 30-300" % gmin)
     if not (gmax < 8899):
-        sys.exit("GATE: band max %.1f m above 8899" % gmax)
+        fail("GATE: band max %.1f m above 8899" % gmax)
     if total > BUDGET:
-        sys.exit("GATE: tile payload %.1f MB over the 80 MB budget"
-                 % (total / 1e6))
+        fail("GATE: tile payload %.1f MB over the 80 MB budget (%d tiles)"
+             % (total / 1e6, tiles))
 
     meta = {
         "layer": "fabdem-terrain",
@@ -231,6 +260,19 @@ def main():
         f.write("\n")
     print("OK: %d tiles, %.1f MB, everest %.1f m, band %.1f-%.1f m"
           % (tiles, total / 1e6, everest_sample, gmin, gmax))
+
+
+def main():
+    try:
+        build()
+    except SystemExit:
+        raise
+    except Exception:
+        tb = traceback.format_exc().strip().splitlines()
+        fail("exception at z=%s x=%s y=%s after %d tiles / %.1f MB: %s"
+             % (PROGRESS["z"], PROGRESS["x"], PROGRESS["y"],
+                PROGRESS["tiles"], PROGRESS["bytes"] / 1e6,
+                " | ".join(tb[-3:])))
 
 
 if __name__ == "__main__":
