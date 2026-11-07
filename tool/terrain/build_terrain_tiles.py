@@ -26,7 +26,8 @@ import sys
 import numpy as np
 import rasterio
 from rasterio.enums import Resampling
-from rasterio.merge import merge as rio_merge
+from rasterio.transform import from_bounds
+from rasterio.warp import reproject
 
 Z_MIN, Z_MAX = 0, 11
 TILE = 256
@@ -79,6 +80,36 @@ def overlapping(srcs, w, s, e, n):
     return [d for d in srcs
             if not (d.bounds[0] >= e or d.bounds[2] <= w or
                     d.bounds[1] >= n or d.bounds[3] <= s)]
+
+
+def tile_band(sub, mw, ms, me, mn):
+    """Composite the EPSG:4326 sources into one EPSG:3857 256 px band.
+
+    rasterio.merge does not reproject (dst_crs was never a merge kwarg),
+    so each source is warped directly into the destination grid with a
+    single bilinear resample (rasterio.warp.reproject). Sources partition
+    the plane, so a destination pixel has at most one valid contributor;
+    first-valid-wins compositing in fixed source order keeps the build
+    deterministic and matches merge()'s default 'first' semantics.
+    """
+    band = np.full((TILE, TILE), NODATA, dtype=np.float32)
+    dst_transform = from_bounds(mw, ms, me, mn, TILE, TILE)
+    for d in sub:
+        tmp = np.full((TILE, TILE), NODATA, dtype=np.float32)
+        reproject(
+            source=rasterio.band(d, 1),
+            destination=tmp,
+            src_transform=d.transform,
+            src_crs=d.crs,
+            dst_transform=dst_transform,
+            dst_crs="EPSG:3857",
+            src_nodata=NODATA,
+            dst_nodata=NODATA,
+            resampling=Resampling.bilinear,
+        )
+        m = (band == NODATA) & (tmp != NODATA)
+        band[m] = tmp[m]
+    return band
 
 
 def terrarium(arr):
@@ -147,12 +178,7 @@ def main():
                 if not sub:
                     continue
                 mw, ms, me, mn = merc(z, x, y)
-                res = (me - mw) / TILE
-                arr, _ = rio_merge(sub, bounds=(mw, ms, me, mn),
-                                   dst_crs="EPSG:3857", res=res,
-                                   nodata=NODATA,
-                                   resampling=Resampling.bilinear)
-                band = arr[0]
+                band = tile_band(sub, mw, ms, me, mn)
                 if z == Z_MAX and w <= EVEREST[0] < e and s <= EVEREST[1] < nlat:
                     px = int((EVEREST[0] - w) / (e - w) * TILE)
                     py = int((nlat - EVEREST[1]) / (nlat - s) * TILE)
