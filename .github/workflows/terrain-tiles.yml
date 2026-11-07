@@ -30,7 +30,9 @@ jobs:
         with:
           python-version: '3.11'
       - name: Install the raster stack
-        run: pip install rasterio numpy
+        run: |
+          pip install rasterio numpy
+          sudo apt-get update -qq && sudo apt-get install -y -qq optipng
       # Diagnostics travel as ::error annotations (readable without
       # authentication) because raw logs are not reachable from outside.
       # Silence-proofing: no set -e landmines, verdict-first order (tac),

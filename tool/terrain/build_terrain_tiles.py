@@ -7,9 +7,12 @@ to web-mercator XYZ tiles at z0-z11 (256 px, terrarium PNG) and writes
 docs/tiles/fabdem-terrain/{z}/{x}/{y}.png plus meta.json.
 
 Deterministic by construction: integer rounding, fixed iteration order, no
-timestamps inside the PNGs - a rerun over the same source produces
-byte-identical tiles, so rebuilds only commit when something upstream
-actually changed (the elevation-stats pattern).
+timestamps inside the PNGs, and a pinned lossless re-encode (optipng -o2)
+- a rerun over the same source produces byte-identical tiles, so rebuilds
+only commit when something upstream actually changed (the
+elevation-stats pattern). The one known drift source is an optipng
+version bump on the runner image: it re-encodes once, commits once, then
+stabilises again.
 
 Diagnostics law: every failure exits through fail(), which carries the
 full progress numbers (zoom, tiles, MB, gate values) in the message - so
@@ -19,12 +22,26 @@ Gates (fail the build, never the map):
   - Everest anchor: elevation at 86.9250E, 27.9881N must be 7900-8899 m
     (FABDEM is bare-earth circa 2020; the official high point is 8848.86 m).
   - Band sanity: min > 30 m, max < 8899 m over the built tiles.
-  - Size budget: < 80 MB total - the repo stays lean and the Pages
-    artifact never sees these files (payload-diet law, dart.yml rm).
+  - Size budget: < 80 MB total, measured AFTER the lossless optipng pass -
+    the repo stays lean and the Pages artifact never sees these files
+    (payload-diet law, dart.yml rm).
+
+Run 5 verdict (2026-11-07, the reason this rework exists): the build was
+healthy (everest 8710.4 m, band 37.1-8726.0 m) but the payload measured
+102.59 MB - 22% over the budget. Fixes, by effect: (1) the bbox is now
+Nepal's true extent plus a thin border buffer - the old box paid for
+~10% of Ganges-plain and Tibetan pixels that no map view ever renders,
+and it dragged the band-min gate margin down to 37 m of Bangladesh
+lowlands; (2) every tile is losslessly re-encoded with optipng -o2 - the
+GDAL PNG driver does no filter search, and terrarium's B channel is all
+zeros, which per-row Up filtering collapses.
 """
+import concurrent.futures
+import glob
 import json
 import math
 import os
+import subprocess
 import sys
 import traceback
 import warnings
@@ -43,7 +60,12 @@ warnings.filterwarnings("ignore", category=NotGeoreferencedWarning)
 
 Z_MIN, Z_MAX = 0, 11
 TILE = 256
-BBOX = (79.9, 26.1, 88.4, 30.6)  # generous Nepal band (W, S, E, N)
+# Nepal's true extent: 80.058-88.199 E, 26.353-30.423 N (Kalapani west tip,
+# Kanchenjunga east side, Kechana Kalan south tip). The build band keeps a
+# thin ~0.05-0.1 deg border/hillshade buffer beyond that. The old
+# (79.9, 26.1, 88.4, 30.6) box rendered nothing extra for Nepal but paid
+# for India, Bangladesh and Tibet in both payload and gate margin.
+BBOX = (79.96, 26.30, 88.25, 30.47)  # (W, S, E, N)
 BASE = ("https://huggingface.co/buckets/links-ads/fabdem/"
         "resolve/tiles/")
 OUT = os.path.join("docs", "tiles", "fabdem-terrain")
@@ -154,9 +176,50 @@ def terrarium(arr):
     return np.dstack([r, g, b]).astype(np.uint8), a, valid
 
 
+def optimize_all():
+    """Losslessly re-encode every built tile with optipng -o2 (in place).
+
+    The GDAL PNG driver writes with fixed settings and no filter search;
+    optipng tries per-row filter combinations at zlib 9, which on
+    terrarium data (one all-zero channel, smooth elevation gradients)
+    typically cuts 20-40% of the bytes without touching a single pixel.
+    The re-encode is lossless, so no data gate can move - only the size
+    budget, which is measured after this pass. Deterministic for a given
+    optipng build (the runner's apt pin); a version bump re-encodes once.
+    """
+    files = sorted(glob.glob(os.path.join(OUT, "**", "*.png"),
+                             recursive=True))
+    if not files:
+        fail("optipng: no PNG tiles found under %s" % OUT)
+    workers = max(1, (os.cpu_count() or 2) - 1)
+
+    def one(path):
+        return subprocess.run(["optipng", "-o2", "-quiet", path]).returncode
+
+    bad = []
+    with concurrent.futures.ThreadPoolExecutor(max_workers=workers) as ex:
+        for path, rc in zip(files, ex.map(one, files)):
+            if rc != 0:
+                bad.append("%s (rc=%d)" % (path, rc))
+    if bad:
+        fail("optipng: %d tile(s) failed to re-encode, first: %s"
+             % (len(bad), bad[0]))
+    print("optipng: losslessly re-encoded %d tiles" % len(files))
+
+
+def measure():
+    """Post-optimization (tiles, bytes) over the output tree."""
+    tiles, total = 0, 0
+    for path in sorted(glob.glob(os.path.join(OUT, "**", "*.png"),
+                                 recursive=True)):
+        tiles += 1
+        total += os.path.getsize(path)
+    return tiles, total
+
+
 def build():
     # Nepal band source tiles: N26..N30 (Nepal reaches 30.42N) x
-    # E079..E088 (the bbox spans 79.9E..88.4E). All 50 verified in the
+    # E079..E088 (the bbox spans 79.96E..88.25E). All 50 verified in the
     # links-ads/fabdem-v12 STAC catalog.
     lats = range(26, 31)
     lons = range(79, 89)
@@ -222,6 +285,10 @@ def build():
         print("z%02d done (%d tiles so far, %.1f MB)"
               % (z, tiles, total / 1e6))
 
+    print("built %d tiles, %.1f MB before optimization"
+          % (tiles, total / 1e6))
+    optimize_all()
+    tiles, total = measure()
     print("GATE REPORT: tiles=%d totalMB=%.2f everest=%s gmin=%s gmax=%s"
           % (tiles, total / 1e6,
              "None" if everest_sample is None else "%.1f" % everest_sample,
@@ -255,6 +322,7 @@ def build():
         "everestSampleM": round(everest_sample, 1),
         "bandMinM": round(gmin, 1),
         "bandMaxM": round(gmax, 1),
+        "optimizer": "optipng -o2 (lossless, in-place re-encode)",
         "deterministic": True,
         "generatedBy": "tool/terrain/build_terrain_tiles.py",
     }
