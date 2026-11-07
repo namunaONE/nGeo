@@ -1,0 +1,75 @@
+/* docs/sources-panel.css — "Data & sources" panel styling (Phase 0
+   provenance UI). Rides the site's brand tokens; nothing here touches
+   engine or runtime-loaded styles. No animations — nothing for
+   reduced-motion to collapse. */
+
+#data-sources-panel {
+  margin-top: 16px;
+  padding: 16px;
+  border: 1px solid var(--color-border);
+  border-radius: 8px;
+  background: var(--color-bg);
+}
+
+#data-sources-panel[hidden] { display: none; }
+
+.sources-panel-title { margin: 0 0 4px; font-size: 1.05rem; }
+.sources-panel-sub { margin: 0 0 12px; color: var(--color-text-secondary); font-size: var(--text-sm); }
+
+.src-group {
+  margin: 14px 0 4px;
+  font-size: 0.8rem;
+  text-transform: uppercase;
+  letter-spacing: 0.04em;
+  color: var(--color-text-secondary);
+}
+
+.src-item { border-top: 1px solid var(--color-border); }
+.src-item summary {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 8px;
+  padding: 8px 2px;
+  cursor: pointer;
+  font-size: 0.9rem;
+}
+.src-item summary:focus-visible {
+  outline: 2px solid var(--color-border-focus);
+  outline-offset: 2px;
+}
+.src-name { font-weight: 600; overflow-wrap: anywhere; }
+
+.src-badge {
+  flex: none;
+  font-size: 0.7rem;
+  padding: 2px 8px;
+  border: 1px solid var(--color-border);
+  border-radius: var(--radius-full);
+  white-space: nowrap;
+}
+.policy-live { color: var(--color-success); border-color: currentColor; }
+.policy-continuous { color: #1D4ED8; border-color: currentColor; }
+.policy-undated { color: #B45309; border-color: currentColor; }
+.policy-frozen { color: var(--color-text-secondary); }
+.policy-firstparty { color: var(--color-text-secondary); }
+.policy-unknown { color: var(--color-text-secondary); }
+
+.src-item dl { margin: 0 0 10px; }
+.src-row {
+  display: grid;
+  grid-template-columns: 110px 1fr;
+  gap: 8px;
+  margin: 0 0 6px;
+  font-size: 0.82rem;
+}
+.src-row dt { margin: 0; color: var(--color-text-secondary); }
+.src-row dd { margin: 0; overflow-wrap: anywhere; }
+
+.src-foot {
+  margin: 14px 0 0;
+  padding-top: 10px;
+  border-top: 1px solid var(--color-border);
+  color: var(--color-text-secondary);
+  font-size: 0.78rem;
+}
