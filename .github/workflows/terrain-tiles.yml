@@ -1,0 +1,98 @@
+name: Terrain tiles (FABDEM v1.2)
+
+# Rebuilds docs/tiles/fabdem-terrain (z0-z11, terrarium encoding) from
+# FABDEM v1.2 and commits it when it changes. FABDEM is a frozen dataset,
+# so no cron: the only reasons to rebuild are a tool change or a FABDEM
+# version bump. The build is deterministic - pixel-identical reruns commit
+# nothing (the elevation-stats pattern).
+on:
+  workflow_dispatch:
+  push:
+    paths:
+      - 'tool/terrain/**'
+      - '.github/workflows/terrain-tiles.yml'
+
+permissions:
+  contents: write
+
+concurrency:
+  group: terrain-tiles
+  # Deterministic artifact: the latest tool version always wins.
+  cancel-in-progress: true
+
+jobs:
+  build:
+    runs-on: ubuntu-latest
+    timeout-minutes: 45
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-python@v5
+        with:
+          python-version: '3.11'
+      - name: Install the raster stack
+        run: pip install rasterio numpy
+      # Diagnostics travel as ::error annotations (readable without
+      # authentication) because raw logs are not reachable from outside.
+      # Silence-proofing: no set -e landmines, verdict-first order (tac),
+      # and the full log is uploaded as an artifact on any failure.
+      - name: Build FABDEM terrain tiles and run the anchor gates
+        run: |
+          set +e
+          python -V > terrain-build.log 2>&1
+          python -m py_compile tool/terrain/build_terrain_tiles.py >> terrain-build.log 2>&1
+          comp=$?
+          if [ "$comp" -ne 0 ]; then
+            tail -n 20 terrain-build.log | tac | while IFS= read -r line; do
+              msg=$(printf '%s' "$line" | sed 's/%/%25/g' | cut -c1-470)
+              echo "::error title=py_compile::$msg"
+            done
+            cat terrain-build.log || true
+            exit "$comp"
+          fi
+          python -u tool/terrain/build_terrain_tiles.py >> terrain-build.log 2>&1
+          rc=$?
+          cat terrain-build.log || true
+          if [ "$rc" -ne 0 ]; then
+            tail -n 6 terrain-build.log | tac | while IFS= read -r line; do
+              msg=$(printf '%s' "$line" | sed 's/%/%25/g' | cut -c1-470)
+              echo "::error title=tool::$msg"
+            done
+            {
+              echo '## Terrain build failed - last tool output'
+              echo '```'
+              tail -c 6000 terrain-build.log
+              echo '```'
+            } >> "$GITHUB_STEP_SUMMARY" || true
+            exit "$rc"
+          fi
+      - name: Upload build log on failure
+        if: failure()
+        uses: actions/upload-artifact@v4
+        with:
+          name: terrain-build-log
+          path: terrain-build.log
+          retention-days: 7
+      # Binary artifact, generated in CI only - committed, never
+      # hand-edited. [skip ci] keeps the bot commit from re-triggering.
+      - name: Commit when the artifact changed
+        run: |
+          set +e
+          git config user.name 'github-actions[bot]'
+          git config user.email '41898282+github-actions[bot]@users.noreply.github.com'
+          git add docs/tiles/fabdem-terrain
+          git diff --cached --quiet
+          if [ $? -eq 0 ]; then
+            echo 'terrain tiles unchanged - nothing to commit.'
+            exit 0
+          fi
+          git commit -m 'data: rebuild FABDEM terrain tiles (z0-11) [skip ci]'
+          git push > terrain-push.log 2>&1
+          rc=$?
+          cat terrain-push.log || true
+          if [ "$rc" -ne 0 ]; then
+            tail -n 10 terrain-push.log | tac | while IFS= read -r line; do
+              msg=$(printf '%s' "$line" | sed 's/%/%25/g' | cut -c1-470)
+              echo "::error title=git push::$msg"
+            done
+            exit "$rc"
+          fi

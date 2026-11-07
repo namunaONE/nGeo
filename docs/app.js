@@ -544,7 +544,7 @@ function applySky() {
 }
 
 function addHillshadeLayer() {
-  // Relief shading from the SAME terrarium DEM the 3D terrain rides —
+  // Relief shading from the SAME FABDEM DEM the 3D terrain rides —
   // one hillshade layer under the choropleth (exaggeration 0.35: subtle
   // depth, never a second figure). Slots in before 'palika-fill' so
   // boundaries always paint above it.
@@ -905,10 +905,11 @@ function ensureMap() {
           },
           terrain: {
             type: 'raster-dem',
-            tiles: ['https://s3.amazonaws.com/elevation-tiles-prod/terrarium/{z}/{x}/{y}.png'],
+            tiles: ['https://cdn.jsdelivr.net/gh/namunaONE/nGeo@main/docs/tiles/fabdem-terrain/{z}/{x}/{y}.png'],
             tileSize: 256,
-            maxzoom: 14,
+            maxzoom: 11, // FABDEM 30 m ~= z11 native; MapLibre overzooms above
             encoding: 'terrarium',
+            attribution: 'FABDEM v1.2 — University of Bristol (CC BY-NC-SA 4.0), bare-earth terrain; tiles built in-repo',
           },
           'esri-imagery': {
             type: 'raster',
