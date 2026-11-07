@@ -31,15 +31,27 @@ from rasterio.merge import merge as rio_merge
 Z_MIN, Z_MAX = 0, 11
 TILE = 256
 BBOX = (79.9, 26.1, 88.4, 30.6)  # generous Nepal band (W, S, E, N)
-BLOCK = "N20E080-N30E090_FABDEM_V1-2"
 BASE = ("https://huggingface.co/buckets/links-ads/fabdem/"
-        "resolve/tiles/" + BLOCK + "/")
+        "resolve/tiles/")
 OUT = os.path.join("docs", "tiles", "fabdem-terrain")
 META = os.path.join(OUT, "meta.json")
 EVEREST = (86.9250, 27.9881)
 NODATA = -9999.0
 BUDGET = 80 * 1024 * 1024
 WORLD = 20037508.342789244
+
+
+def block_for(la, lo):
+    """10-degree block folder that holds the 1-degree tile (la, lo).
+
+    The bucket groups tiles into block folders labelled by their SW
+    corner: N26E079 lives in N20E070-N30E080, N30E088 in
+    N30E080-N40E090 (verified against the links-ads/fabdem-v12 STAC
+    catalog - every STAC item asset href follows exactly this rule).
+    """
+    return "N%02dE%03d-N%02dE%03d_FABDEM_V1-2" % (
+        la // 10 * 10, lo // 10 * 10,
+        la // 10 * 10 + 10, lo // 10 * 10 + 10)
 
 
 def merc(z, x, y):
@@ -92,15 +104,18 @@ def terrarium(arr):
 
 
 def main():
+    # Nepal band source tiles: N26..N30 (Nepal reaches 30.42N) x
+    # E079..E088 (the bbox spans 79.9E..88.4E). All 50 verified in the
+    # links-ads/fabdem-v12 STAC catalog.
     lats = range(26, 31)
-    lons = range(79, 88)
+    lons = range(79, 89)
     srcs = []
     with rasterio.Env(GDAL_HTTP_MAX_RETRY="5",
                       GDAL_HTTP_RETRY_DELAY="2",
                       VSI_CACHE="TRUE", VSI_CACHE_SIZE="5000000"):
         for la in lats:
             for lo in lons:
-                url = "%sN%dE%03d_FABDEM_V1-2.tif" % (BASE, la, lo)
+                url = "%s%s/N%dE%03d_FABDEM_V1-2.tif" % (BASE, block_for(la, lo), la, lo)
                 ds = rasterio.open("/vsicurl/" + url)
                 srcs.append(ds)
     print("opened %d FABDEM tiles" % len(srcs))
