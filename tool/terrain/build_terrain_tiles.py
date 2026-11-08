@@ -3,7 +3,7 @@
 
 Reads the FABDEM v1.2 COG tiles covering the Nepal band from the public
 links-ads/fabdem bucket (plain HTTPS, no auth, GDAL /vsicurl/), resamples
-to web-mercator XYZ tiles at z0-z11 (256 px, terrarium PNG) and writes
+to web-mercator XYZ tiles at z0-z10 (256 px, terrarium PNG) and writes
 docs/tiles/fabdem-terrain/{z}/{x}/{y}.png plus meta.json.
 
 Deterministic by construction: integer rounding, fixed iteration order, no
@@ -58,7 +58,13 @@ from rasterio.warp import reproject
 # lines per tile write, burying the real diagnostics in the tail dump.
 warnings.filterwarnings("ignore", category=NotGeoreferencedWarning)
 
-Z_MIN, Z_MAX = 0, 11
+# Run 6 verdict (2026-11-07): 96.32 MB post-optipng, still over the
+# 80 MB budget - and z11 alone was ~80 MB of it (1372 of 1901 tiles,
+# ~68 m/px at Nepal latitudes: not the 30 m native resolution anyway,
+# z12 would be ~34 m/px). Capped at z10 (~529 tiles, ~16 MB); MapLibre
+# overzooms above the source maxzoom, so higher zooms still render
+# from the z10 tiles - the payload law wins over an invisible step.
+Z_MIN, Z_MAX = 0, 10
 TILE = 256
 # Nepal's true extent: 80.058-88.199 E, 26.353-30.423 N (Kalapani west tip,
 # Kanchenjunga east side, Kechana Kalan south tip). The build band keeps a

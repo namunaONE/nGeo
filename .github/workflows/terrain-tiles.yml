@@ -1,6 +1,6 @@
 name: Terrain tiles (FABDEM v1.2)
 
-# Rebuilds docs/tiles/fabdem-terrain (z0-z11, terrarium encoding) from
+# Rebuilds docs/tiles/fabdem-terrain (z0-z10, terrarium encoding) from
 # FABDEM v1.2 and commits it when it changes. FABDEM is a frozen dataset,
 # so no cron: the only reasons to rebuild are a tool change or a FABDEM
 # version bump. The build is deterministic - pixel-identical reruns commit
@@ -87,7 +87,7 @@ jobs:
             echo 'terrain tiles unchanged - nothing to commit.'
             exit 0
           fi
-          git commit -m 'data: rebuild FABDEM terrain tiles (z0-11) [skip ci]'
+          git commit -m 'data: rebuild FABDEM terrain tiles (z0-10) [skip ci]'
           git push > terrain-push.log 2>&1
           rc=$?
           cat terrain-push.log || true

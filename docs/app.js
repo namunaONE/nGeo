@@ -907,7 +907,7 @@ function ensureMap() {
             type: 'raster-dem',
             tiles: ['https://cdn.jsdelivr.net/gh/namunaONE/nGeo@main/docs/tiles/fabdem-terrain/{z}/{x}/{y}.png'],
             tileSize: 256,
-            maxzoom: 11, // FABDEM 30 m ~= z11 native; MapLibre overzooms above
+            maxzoom: 10, // z0-10 built (80 MB payload law); MapLibre overzooms above
             encoding: 'terrarium',
             attribution: 'FABDEM v1.2 — University of Bristol (CC BY-NC-SA 4.0), bare-earth terrain; tiles built in-repo',
           },
