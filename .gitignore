@@ -64,3 +64,9 @@ ci-diagnostics/
 # --- Editors ---
 .idea/
 .vscode/
+# --- Terrain tiles: the one deliberate binary exception. The global
+# *.png rule above exists to keep binaries/media out of the repo; these
+# are CI-generated raster-dem artifacts that MUST be committed (jsDelivr
+# serves them straight from the repo). Scoped negation so nothing else
+# re-enters through this hole. See tool/terrain/build_terrain_tiles.py.
+!docs/tiles/fabdem-terrain/**

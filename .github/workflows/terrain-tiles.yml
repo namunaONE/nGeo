@@ -76,12 +76,14 @@ jobs:
           retention-days: 7
       # Binary artifact, generated in CI only - committed, never
       # hand-edited. [skip ci] keeps the bot commit from re-triggering.
+      # -f is load-bearing: the repo-wide *.png ignore rule would
+      # silently eat the tiles (run 7 committed only meta.json).
       - name: Commit when the artifact changed
         run: |
           set +e
           git config user.name 'github-actions[bot]'
           git config user.email '41898282+github-actions[bot]@users.noreply.github.com'
-          git add docs/tiles/fabdem-terrain
+          git add -f docs/tiles/fabdem-terrain
           git diff --cached --quiet
           if [ $? -eq 0 ]; then
             echo 'terrain tiles unchanged - nothing to commit.'
