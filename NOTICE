@@ -55,4 +55,21 @@ data/SOURCES.md.
    Adaptation: only zonal statistics computed against the official district
             polygons are redistributed; no DEM pixels, tiles or derived
             meshes ship in the package.
+4. FABDEM v1.2 (terrain tiles)
+   Source:  FABDEM (Forest And Buildings removed Copernicus DEM) V1-2,
+            University of Bristol / Fathom,
+            https://data.bris.ac.uk/data/dataset/s5hqmjcdj8yo2ibzi9b4ew3sn
+            Consumed via the public mirror links-ads/fabdem (Hugging Face,
+            plain-HTTPS cloud-optimised GeoTIFFs).
+   License: CC BY-NC-SA 4.0 (non-commercial, share-alike),
+            https://creativecommons.org/licenses/by-nc-sa/4.0/
+            This file satisfies the attribution requirement; the derived
+            tiles inherit the same terms: non-commercial use only.
+   Used for: bare-earth digital terrain (Copernicus GLO-30 with forest and
+            building biases removed) powering the website explorer's 3D
+            terrain, relief shading and elevation readout. Website-only:
+            docs/tiles/fabdem-terrain, never shipped in the Dart package.
+   Built by tool/terrain/build_terrain_tiles.py (deterministic; CI-committed,
+            pixel-identical rebuilds commit nothing).
+
 No other CC-BY-4.0 material is currently shipped.

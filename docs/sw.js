@@ -1,6 +1,6 @@
 // docs/sw.js — Service worker for offline-first Nepal Administrative Data
 // Cache-first for static assets, network-first for data.json.
-const CACHE_NAME = 'ngeo-v2.15.0';
+const CACHE_NAME = 'ngeo-v2.15.0-terrain';
 const STATIC_ASSETS = [
   '/',
   '/index.html',
@@ -11,7 +11,7 @@ const STATIC_ASSETS = [
   '/brand-tokens.css?v=2',
   '/fonts.css?v=1',
   '/app-critical.js?v=1',
-  '/app.js?v=27',
+  '/app.js?v=28',
   '/favicon.svg',
   '/logo.svg',
   '/logo-full.svg',

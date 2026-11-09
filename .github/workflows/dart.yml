@@ -423,6 +423,7 @@ jobs:
       - name: Stage downloadable data files for the site
         run: |
           rm -f docs/palika-boundaries-highres.geojson
+          rm -rf docs/tiles  # FABDEM terrain tiles ride the repo (jsDelivr), never the 9 MB Pages artifact
           max=$((9*1024*1024))
           size=$(du -sb docs | cut -f1)
           if [ "$size" -gt "$max" ]; then echo "::error::docs/ artifact $size bytes exceeds 9 MB budget"; exit 1; fi

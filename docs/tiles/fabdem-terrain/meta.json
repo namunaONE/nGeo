@@ -1,0 +1,27 @@
+{
+  "access": "https://huggingface.co/buckets/links-ads/fabdem/resolve/tiles/",
+  "attribution": "FABDEM v1.2 - University of Bristol, CC BY-NC-SA 4.0",
+  "bandMaxM": 8702.0,
+  "bandMinM": 38.3,
+  "bbox": [
+    79.96,
+    26.3,
+    88.25,
+    30.47
+  ],
+  "deterministic": true,
+  "encoding": "terrarium",
+  "everestSampleM": 8669.0,
+  "generatedBy": "tool/terrain/build_terrain_tiles.py",
+  "layer": "fabdem-terrain",
+  "license": "CC BY-NC-SA 4.0 (non-commercial, share-alike)",
+  "optimizer": "optipng -o2 (lossless, in-place re-encode)",
+  "source": "FABDEM V1-2 (University of Bristol / Fathom)",
+  "tileSize": 256,
+  "tiles": 529,
+  "totalBytes": 30788751,
+  "zooms": [
+    0,
+    10
+  ]
+}
